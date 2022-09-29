@@ -22,7 +22,7 @@ export class App {
     }
 
     public start(): void {
-        this.getApp().listen(this.getPort(), () => Logger.info(`App has started on port: ${this.getPort()}`));
+        this.getApp().listen(this.getPort(), () => Logger.info(`App has started on: ${process.env.URL}:${this.getPort()}/`));
     }
 
     public getApp(): Express {
