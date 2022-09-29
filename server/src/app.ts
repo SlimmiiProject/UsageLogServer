@@ -9,7 +9,6 @@ import { Environment } from "./utils/Environment";
 const cors = require("cors");
 const config = Environment.CONFIG;
 
-
 export class App {
 
     public static readonly INSTANCE = new App();
