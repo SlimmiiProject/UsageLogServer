@@ -1,6 +1,9 @@
 import express from "express";
 import { Express } from "express-serve-static-core";
 import { Logger } from "./utils/logger";
+import dotenv from "dotenv";
+
+const cors = require("cors");
 
 export class App {
 
@@ -9,11 +12,13 @@ export class App {
 
     constructor() {
         this.app = express();
+        dotenv.config();
         this.setup();
     }
 
     private setup() {
         this.app.set("port", process.env.PORT);
+        this.app.use(cors());
     }
 
     public start(): void {
