@@ -3,12 +3,19 @@ import { Converter } from "./Converter";
 
 export class Environment {
 
-    public static readonly CONFIG = this.setupConfig();
+    public static get CONFIG() { return this.setupConfig(); }
 
+    /**
+     * @returns If we're currently working in a dev environment
+     */
     public static isDev(): boolean {
         return this.CONFIG.developmentEnv;
     }
 
+    /**
+     * It reads the .env file and returns an object with the values from the .env file.
+     * @returns An object with our .env properties:
+     */
     private static setupConfig() {
         dotenv.config();
 

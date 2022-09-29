@@ -12,12 +12,17 @@ const config = Environment.CONFIG;
 export class App {
 
     public static readonly INSTANCE = new App();
+    
     private _app: Express;
 
-    constructor() {
+    public get App(): Express {
+        return this._app;
+    }
+
+    private constructor() {
         this._app = express();
-        this.appSetup();
         this.setup();
+        this.appSetup();
     }
 
     private async setup() {
@@ -25,19 +30,16 @@ export class App {
     }
 
     private appSetup() {
-        this._app.set("port", config.port);
-        this._app.use(cors());
+        this.App.set("port", config.port);
+        this.App.use(cors());
     }
 
-    public start(): void {
-        this.getApp().listen(this.getPort(), () => Logger.info(`App has started on: ${process.env.URL}:${this.getPort()}/`));
+    public start() {
+        this.App.listen(this.port, () => Logger.info(`App has started on: ${config.url}:${this.port}/`));
     }
 
-    public getApp(): Express {
-        return this._app;
-    }
 
-    private getPort() {
+    private get port() {
         return this._app.get("port");
     }
 }

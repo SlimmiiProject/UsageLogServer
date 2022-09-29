@@ -12,5 +12,4 @@ export class MathUtil {
         return Math.min(Math.max(input, minimum), maximum);
     }
 
-    
 }
