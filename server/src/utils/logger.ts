@@ -1,23 +1,23 @@
 export class Logger {
 
-    public static info(information: string) {
+    public static info(information: any) {
         this.log(information, LogType.INFO, console.info);
     }
 
-    public static warn(warning: string) {
+    public static warn(warning: any) {
         this.log(warning, LogType.WARNING, console.warn);
     }
 
-    public static error(error: string) {
+    public static error(error: any) {
         this.log(error, LogType.ERROR, console.error);
     }
 
-    private static log(message: string, type: LogType, callback: { (message: string): void }) {
+    private static log(message: any, type: LogType, callback: { (message: string): void }) {
         const color: string = Object.values(Color)[type];
         const typeName: string = LogType[type];
         callback(`${color}[${typeName}] ${message}${Color.Reset}`);
     }
-}
+} 
 
 enum LogType {
     INFO = 1,
