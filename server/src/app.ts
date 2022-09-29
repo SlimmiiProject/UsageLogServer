@@ -21,7 +21,7 @@ export class App {
     }
 
     private async setup() {
-        DatabaseConnector.INSTANCE.initialize();
+        await DatabaseConnector.INSTANCE.initialize();
     }
 
     private appSetup() {
