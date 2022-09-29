@@ -1,27 +1,21 @@
 export class Logger {
 
     public static info(information: string) {
-        this.log(information, LogType.INFO);
+        this.log(information, LogType.INFO, console.info);
     }
 
     public static warn(warning: string) {
-        this.log(warning, LogType.WARNING);
+        this.log(warning, LogType.WARNING, console.warn);
     }
 
     public static error(error: string) {
-        this.log(error, LogType.ERROR);
+        this.log(error, LogType.ERROR, console.error);
     }
 
-    private static log(message: string, type: LogType) {
-        const color: Color = Object.values(Color).at(type)!;
-        const typeName: string = Object.values(LogType)[type].toString();
-        const content = `${color}[${typeName}] ${message}${Color.Reset}`;
-
-        switch(type) {
-            case LogType.ERROR: console.error(content); break;
-            case LogType.WARNING: console.warn(content); break;
-            case LogType.INFO: console.info(content); break;
-        }
+    private static log(message: string, type: LogType, callback: { (message: string): void }) {
+        const color: string = Object.values(Color)[type];
+        const typeName: string = LogType[type];
+        callback(`${color}[${typeName}] ${message}${Color.Reset}`);
     }
 }
 
