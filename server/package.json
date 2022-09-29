@@ -5,6 +5,7 @@
   "main": "build/app.js",
   "scripts": {
     "start": "npm run build && concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "start:dev": "concurrently --kill-others-on-fail \"tsnd src/app.ts\" \"npm run client\"",
     "server": "node build/app.js",
     "client": "npm run start --prefix ../client",
     "build": "tsc && npm run build --prefix ../client"
