@@ -15,7 +15,13 @@ export class Logger {
     private static log(message: string, type: LogType) {
         const color: Color = Object.values(Color).at(type)!;
         const typeName: string = Object.values(LogType)[type].toString();
-        console.log(`${color}[${typeName}] ${message}${Color.Reset}`)
+        const content = `${color}[${typeName}] ${message}${Color.Reset}`;
+
+        switch(type) {
+            case LogType.ERROR: console.error(content); break;
+            case LogType.WARNING: console.warn(content); break;
+            case LogType.INFO: console.info(content); break;
+        }
     }
 }
 
