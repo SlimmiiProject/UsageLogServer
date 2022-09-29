@@ -6,23 +6,33 @@ const databaseConfig = Environment.CONFIG.database;
 
 export class DatabaseConnector {
 
-    public static readonly INSTANCE = new DatabaseConnector();
+    private _dataSource: DataSource = new DataSource({
+        type: "mysql",
+        ...databaseConfig,
+        synchronize: true,
+        logging: Environment.isDev(),
+        entities: []
+    });;
 
-    private _dataSource: DataSource;
+    private constructor() {
+      
+    }
 
-    constructor() {
-        this._dataSource = new DataSource({
-            type:"mysql",
-            ...databaseConfig,
-            synchronize: true,
-            logging: Environment.isDev(),
-            entities: []
-        });
+    private static _INSTANCE:DatabaseConnector;
+
+    public static get INSTANCE(): DatabaseConnector {
+        if (!this._INSTANCE) this._INSTANCE = new DatabaseConnector();
+        return this._INSTANCE;
     }
 
     public async initialize() {
+        if(this._dataSource.isInitialized) {
+            Logger.warn("Database can't be initialized more than one time!")
+            return;
+        }
+
         try {
-            await this._dataSource.initialize();
+            this._dataSource = await this._dataSource.initialize();
             Logger.info("Connected to database.");
         } catch (error) {
             Logger.error(error);
