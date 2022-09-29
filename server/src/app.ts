@@ -1,24 +1,33 @@
 import express from "express";
 import { Express } from "express-serve-static-core";
-import { Logger } from "./utils/logger";
-import dotenv from "dotenv";
+import { Logger } from "./utils/Logger";
+import "reflect-metadata";
+import { DatabaseConnector } from "./data/DatabaseConnector";
+import { Environment } from "./utils/Environment";
+
 
 const cors = require("cors");
+const config = Environment.CONFIG;
+
 
 export class App {
 
     public static readonly INSTANCE = new App();
-    private app: Express;
+    private _app: Express;
 
     constructor() {
-        this.app = express();
-        dotenv.config();
+        this._app = express();
+        this.appSetup();
         this.setup();
     }
 
-    private setup() {
-        this.app.set("port", process.env.PORT);
-        this.app.use(cors());
+    private async setup() {
+        DatabaseConnector.INSTANCE.initialize();
+    }
+
+    private appSetup() {
+        this._app.set("port", config.port);
+        this._app.use(cors());
     }
 
     public start(): void {
@@ -26,11 +35,11 @@ export class App {
     }
 
     public getApp(): Express {
-        return this.app;
+        return this._app;
     }
 
     private getPort() {
-        return this.app.get("port");
+        return this._app.get("port");
     }
 }
 
