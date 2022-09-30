@@ -4,6 +4,7 @@ import { Logger } from "../utils/Logger";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
 import { Device } from "./entities/Device";
+import { Translations } from "./entities/Translations";
 import { UserAcount } from "./entities/User";
 
 const { database } = Environment.CONFIG;
@@ -17,7 +18,7 @@ export class DatabaseConnector {
       ...database,
       synchronize: true,
       logging: Environment.isDev(),
-      entities: [UserAcount, Device, Data, Administrator],
+      entities: [UserAcount, Device, Data, Administrator, Translations],
     });
   }
 
