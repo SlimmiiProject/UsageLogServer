@@ -9,9 +9,9 @@ export class Data {
   @ManyToOne(() => Device, (device) => device.data)
   device!: Device;
 
-  @Column()
+  @Column("int", { nullable: true })
   Day!: number;
 
-  @Column()
+  @Column("int", { nullable: true })
   Night!: number;
 }
