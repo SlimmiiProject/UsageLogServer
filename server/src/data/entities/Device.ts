@@ -14,7 +14,7 @@ export class Device {
   deviceId!: string;
 
   @OneToMany(() => Data, (data) => data.dataId)
-  data!: Data[];
+  data: Data[] | undefined;
 
   @OneToOne(() => UserAcount, (user) => user.userId)
   @JoinColumn()
