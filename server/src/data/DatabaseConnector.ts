@@ -2,7 +2,7 @@ import { DataSource } from "typeorm";
 import { Environment } from "../utils/Environment";
 import { Logger } from "../utils/Logger";
 
-const databaseConfig = Environment.CONFIG.database;
+const { database } = Environment.CONFIG;
 
 export class DatabaseConnector {
 
@@ -11,7 +11,7 @@ export class DatabaseConnector {
     private constructor() {
         this._dataSource = new DataSource({
             type: "mysql",
-            ...databaseConfig,
+            ...database,
             synchronize: true,
             logging: Environment.isDev(),
             entities: []

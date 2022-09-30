@@ -4,10 +4,11 @@ import { Logger } from "./utils/Logger";
 import "reflect-metadata";
 import { DatabaseConnector } from "./data/DatabaseConnector";
 import { Environment } from "./utils/Environment";
+import helmet from "helmet";
 
 
 const cors = require("cors");
-const config = Environment.CONFIG;
+const {port, url} = Environment.CONFIG;
 
 export class App {
 
@@ -30,12 +31,13 @@ export class App {
     }
 
     private appSetup() {
-        this.App.set("port", config.port);
+        this.App.set("port", port);
+        this.App.use(helmet());
         this.App.use(cors());
     }
 
     public start() {
-        this.App.listen(this.port, () => Logger.info(`App has started on: ${config.url}:${this.port}/`));
+        this.App.listen(this.port, () => Logger.info(`App has started on: ${url}:${this.port}/`));
     }
 
 
