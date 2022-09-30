@@ -6,7 +6,7 @@ export class Administrator {
   @PrimaryGeneratedColumn()
   adminId!: number;
 
-  @OneToOne(() => UserAcount, (user) => user.userId)
+  @OneToOne(() => UserAcount, (user) => user.userId, { nullable: false })
   @JoinColumn()
   user!: UserAcount;
 }
