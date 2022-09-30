@@ -1,4 +1,4 @@
-import i18n from "i18next";
+import i18n, { TFunction, TOptions } from "i18next";
 import { initReactI18next, Translation, useTranslation } from "react-i18next";
 
 import Backend from "i18next-http-backend";
@@ -12,7 +12,7 @@ export const languages = {
     de: { nativeName: "Deutsch" }
 };
 
-const getJsonForName = (name: string) => {
+const getJsonForLanguage = (name: string) => {
     return require(`./languages/${name}.json`);
 }
 
@@ -21,20 +21,22 @@ i18n.use(Backend)
     .use(initReactI18next)
     .init({
         fallbackLng: "en",
-        updateMissing: true,
-        debug: true,
+        debug: false,
+        interpolation: {
+            skipOnVariables: false
+        },
         resources: {
             en: {
-                translation: getJsonForName("en")
+                translation: getJsonForLanguage("en")
             },
             nl: {
-                translation: getJsonForName("nl")
+                translation: getJsonForLanguage("nl")
             },
             de: {
-                translation: getJsonForName("de")
+                translation: getJsonForLanguage("de")
             },
             fr: {
-                translation: getJsonForName("fr")
+                translation: getJsonForLanguage("fr")
             }
         }
     }
@@ -44,10 +46,16 @@ export class I18n {
 
     /**
      * It takes a key, and returns the translation.
+     * 
+     * For use with custom data (multiple allowed):
+     * I18n.t("custom.test", {val: 9})}
+     * Within language file:
+     * We got {{val}} problems
+     * 
      * @param {string} key - The key of the translation to get.
      * @returns Translation for key
      */
-    public static t(key: string): string {
-        return i18n.t(key);
+    public static t(key: string, tFunction?: TFunction | TOptions): string {
+        return i18n.t(key, tFunction);
     }
 }
