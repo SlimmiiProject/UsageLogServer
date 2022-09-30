@@ -1,23 +1,33 @@
 import i18n, { TFunction, TOptions } from "i18next";
-import { initReactI18next, Translation, useTranslation } from "react-i18next";
+import { initReactI18next } from "react-i18next";
 
-import Backend from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
+
+const getJsonForLanguage = (languageKey: string) => require(`./languages/${languageKey}.json`);
+
+const default_en = getJsonForLanguage("en");
 
 export type LanguagesType = typeof languages;
 export const languages = {
-    en: { nativeName: "English" },
-    nl: { nativeName: "Nederlands" },
-    fr: { nativeName: "Français" },
-    de: { nativeName: "Deutsch" }
+    en: {
+        translation: default_en,
+        nativeName: "English"
+    },
+    nl: {
+        translation: getJsonForLanguage("nl"),
+        nativeName: "Nederlands"
+    },
+    de: {
+        translation: getJsonForLanguage("de"),
+        nativeName: "Deutsch"
+    },
+    fr: {
+        translation: getJsonForLanguage("fr"),
+        nativeName: "Français"
+    }
 };
 
-const getJsonForLanguage = (name: string) => {
-    return require(`./languages/${name}.json`);
-}
-
-i18n.use(Backend)
-    .use(LanguageDetector)
+i18n.use(LanguageDetector)
     .use(initReactI18next)
     .init({
         fallbackLng: "en",
@@ -25,20 +35,7 @@ i18n.use(Backend)
         interpolation: {
             skipOnVariables: false
         },
-        resources: {
-            en: {
-                translation: getJsonForLanguage("en")
-            },
-            nl: {
-                translation: getJsonForLanguage("nl")
-            },
-            de: {
-                translation: getJsonForLanguage("de")
-            },
-            fr: {
-                translation: getJsonForLanguage("fr")
-            }
-        }
+        resources: languages
     }
     );
 
@@ -56,6 +53,11 @@ export class I18n {
      * @returns Translation for key
      */
     public static t(key: string, tFunction?: TFunction | TOptions): string {
+        if (!this.containsTranslationKey(key)) console.warn("Couldn't find translation for:", key);
         return i18n.t(key, tFunction);
+    }
+
+    private static containsTranslationKey(key: string) {
+        return default_en[key];
     }
 }
