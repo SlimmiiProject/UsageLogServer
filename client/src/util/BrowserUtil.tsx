@@ -1,0 +1,1 @@
+export const reloadBrowser = () => window.location.reload();
