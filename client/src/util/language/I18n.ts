@@ -47,7 +47,7 @@ export class I18n {
      * For use with custom data (multiple allowed):
      * I18n.t("custom.test", {val: 9})}
      * Within language file:
-     * We got {{val}} problems
+     * "custom.test": "We got {{val}} problems"
      * 
      * @param {string} key - The key of the translation to get.
      * @returns Translation for key
