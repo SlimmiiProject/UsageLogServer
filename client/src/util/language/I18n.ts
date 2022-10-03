@@ -5,12 +5,12 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 const getJsonForLanguage = (languageKey: string) => require(`./languages/${languageKey}.json`);
 
-const default_en = getJsonForLanguage("en");
+const default_english = getJsonForLanguage("en");
 
 export type LanguagesType = typeof languages;
 export const languages = {
     en: {
-        translation: default_en,
+        translation: default_english,
         nativeName: "English"
     },
     nl: {
@@ -58,6 +58,6 @@ export class I18n {
     }
 
     private static containsTranslationKey(key: string) {
-        return default_en[key];
+        return default_english[key];
     }
 }
