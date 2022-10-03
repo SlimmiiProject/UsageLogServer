@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class Translations {
+export class Translations extends BaseEntity {
   @PrimaryColumn("varchar", { nullable: false, length: 2, unique: true })
   lang_key!: string;
 

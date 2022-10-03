@@ -1,12 +1,13 @@
-import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Entity, JoinColumn, JoinTable, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserAcount } from "./User";
 
 @Entity()
-export class Administrator {
+export class Administrator extends BaseEntity {
+  
   @PrimaryGeneratedColumn()
   adminId!: number;
 
-  @OneToOne(() => UserAcount, (user) => user.userId, { nullable: false })
+  @OneToOne(() => UserAcount, { nullable: false })
   @JoinColumn()
   user!: UserAcount;
 }

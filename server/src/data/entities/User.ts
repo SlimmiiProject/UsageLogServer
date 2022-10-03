@@ -1,7 +1,9 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class UserAcount {
+export class UserAcount extends BaseEntity  {
+
+
   @PrimaryColumn("varchar", { unique: true, nullable: false, length: 25 })
   userId!: string;
 
@@ -13,4 +15,5 @@ export class UserAcount {
 
   @Column("varchar", { nullable: false, length: 11, unique: true })
   phone!: string;
+
 }
