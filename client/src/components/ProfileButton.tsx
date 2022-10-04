@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Profile = (): JSX.Element => {
+const ProfileButton = (): JSX.Element => {
   return (
   <>
     <ul>
@@ -15,4 +15,4 @@ const Profile = (): JSX.Element => {
   </>);
 };
 
-export default Profile;
+export default ProfileButton;

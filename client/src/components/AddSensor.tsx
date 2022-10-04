@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { I18n } from "./util/language/I18n";
+import { I18n } from "../util/language/I18n";
 
 const AddSensor = (): JSX.Element => {
   return (
