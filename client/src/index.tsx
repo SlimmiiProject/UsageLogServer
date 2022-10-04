@@ -1,18 +1,25 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { I18n } from "./util/language/I18n";
 
-// Import translation configuration
-import "./util/language/I18n";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+(async () => {
 
-root.render(
-  <React.StrictMode>
-    <React.Suspense fallback="Loading">
-      <App />
-    </React.Suspense>
-  </React.StrictMode>
-);
+  await I18n.setup();
+  
+  const root = ReactDOM.createRoot(
+    document.getElementById("root") as HTMLElement
+  );
+  
+  root.render(
+    <React.StrictMode>
+      <React.Suspense fallback="Loading">
+        <App />
+      </React.Suspense>
+    </React.StrictMode>
+  );
+  
+})();
+
+

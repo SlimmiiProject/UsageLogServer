@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import LoginForm from "./LoginForm";
 import Profile from "./Profile";
 import AddSensor from "./AddSensor";
-import { I18n, languages } from "./util/language/I18n";
+import { I18n } from "./util/language/I18n";
 import { LanguageSelector } from "./components/LanguageSelector";
 
 const App = (): JSX.Element => {
@@ -14,14 +14,13 @@ const App = (): JSX.Element => {
       </p>
       <Profile />
       <AddSensor />
-      <LanguageSelector languages={languages} />
+      <LanguageSelector />
       <section>
         <img
           src="./images/slimmii_500x500.png"
           alt="Placeholder logo"
           width={250}
         />
-        <p>{I18n.t("custom.test")}</p>
         <LoginForm />
       </section>
     </>
