@@ -126,10 +126,12 @@ export default function PersistentDrawerLeft() {
         <Divider />
         <List>
           {[
-            {id: 0, text:'Dashboard', icon: <DashboardRoundedIcon/>, link: "/dashboard"}, 
-            {id: 1, text:'Profiel', icon: <AccountCircleRoundedIcon/>, link: "/profile"},
-            {id: 2, text:'Meters', icon: <SpeedRoundedIcon/>, link: "/devices"},
-            {id: 3, text:'Contact', icon: <MailIcon/>, link: "/dashboard"}].map((element) => (
+            {id: 0, text:'Startpagina', icon:<DashboardRoundedIcon/>, link:"/"},
+            {id: 1, text:'Dashboard', icon: <DashboardRoundedIcon/>, link: "/dashboard"}, 
+            {id: 2, text:'Profiel', icon: <AccountCircleRoundedIcon/>, link: "/profile"},
+            {id: 3, text:'Meters', icon: <SpeedRoundedIcon/>, link: "/devices"},
+            {id: 4, text:'Contact', icon: <MailIcon/>, link: "/dashboard"},
+            {id: 5, text:'Logout', icon: <MailIcon/>, link: "/logout"}].map((element) => (
             <NavLink to={element.link}>
             <ListItem key={element.id} disablePadding>
               <ListItemButton>

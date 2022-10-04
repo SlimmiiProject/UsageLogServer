@@ -13,6 +13,7 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import  DashboardComp from "./components/Dashboard";
 
 
 const App = (): JSX.Element => {
@@ -21,6 +22,7 @@ const App = (): JSX.Element => {
     <Drawer />
       <Routes>
         <Route path="/" element={<HomePage/>}/>
+        <Route path="/dashboard" element={<DashboardComp/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/devices" element={<Devices/>}/>
