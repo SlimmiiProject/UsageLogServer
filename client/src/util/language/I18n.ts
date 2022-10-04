@@ -4,10 +4,7 @@ import { initReactI18next } from "react-i18next";
 
 import LanguageDetector from "i18next-browser-languagedetector";
 
-//const default_english = getJsonForLanguage("en");
-
 export class I18n {
-
 
     private static _translationConfig: { [key: string]: { nativeName: string, translation: { [key: string]: string } } };
     public static get translationConfig() {
@@ -45,7 +42,6 @@ export class I18n {
      */
     public static t(key: string, tFunction?: TFunction | TOptions): string {
         if (!this.containsTranslationKey(key)) console.warn("Couldn't find translation for:", key);
-        
         return i18n.t(key, tFunction);
     }
 
