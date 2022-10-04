@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-<<<<<<< HEAD
 
 const ProfileButton = (): JSX.Element => {
   return (
@@ -17,16 +16,3 @@ const ProfileButton = (): JSX.Element => {
 };
 
 export default ProfileButton;
-=======
-import { I18n } from "../util/language/I18n";
-
-const Profile = (): JSX.Element => {
-  return (
-    <>
-        <h1>Profiel</h1>  
-    </>
-    );
-};
-
-export default Profile;
->>>>>>> 054818ed6e9232027c22579200c799efa3520f28
