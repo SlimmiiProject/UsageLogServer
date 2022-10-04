@@ -9,6 +9,7 @@ import {Route, Routes, NavLink} from "react-router-dom"
 import HomePage from "./components/HomePage";
 import Register from "./components/Register";
 import Devices from "./components/Devices";
+import PageNotFound from "./components/404";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -32,6 +33,7 @@ const App = (): JSX.Element => {
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/devices" element={<Devices/>}/>
+        <Route path="/PageNotFound" element={<PageNotFound/>}/>
       </Routes>
     </>
   );
