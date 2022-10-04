@@ -31,7 +31,7 @@ const Register = (): JSX.Element => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'rgba(25,118,210,255)' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -112,7 +112,7 @@ const Register = (): JSX.Element => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/LoginForm" variant="body2">
+                <Link href="/SignIn" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
