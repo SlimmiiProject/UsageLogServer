@@ -6,7 +6,6 @@ import { DatabaseConnector } from "./data/DatabaseConnector";
 import { Environment } from "./utils/Environment";
 import helmet from "helmet";
 
-
 const cors = require("cors");
 const {port, url} = Environment.CONFIG;
 
@@ -24,6 +23,7 @@ export class App {
         this._app = express();
         this.setup();
         this.appSetup();
+        this.setupRoutes();
     }
 
     private async setup() {
@@ -34,6 +34,14 @@ export class App {
         this.App.set("port", port);
         this.App.use(helmet());
         this.App.use(cors());
+    }
+
+    private setupRoutes() {
+        let apiRouter = require("./routes/ApiRouter");
+        let translationRouter = require("./routes/TranslationRoutes");
+
+        this.App.use("/api", apiRouter);
+        apiRouter.use("/translation", translationRouter)
     }
 
     public start() {
