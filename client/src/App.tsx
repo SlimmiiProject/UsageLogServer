@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import LoginForm from "./components/LoginForm";
 import Profile from "./components/Profile";
 import AddSensor from "./components/AddSensor";
 import { I18n, languages } from "./util/language/I18n";
