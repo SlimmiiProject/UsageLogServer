@@ -13,23 +13,27 @@ export class Environment {
     }
 
     /**
-     * It reads the .env file and returns an object with the values from the .env file.
+     * It reads the .env file and command line arguments and returns an object with the combination of values from the .env file and command line arguments with a prioritization for CLI.
+     * 
      * @returns An object with our .env properties:
      */
     private static setupConfig() {
-        dotenv.config();
+        const argv_set = process.argv.slice(2, process.argv.length).map((value, index) => index % 2 ? value : value.toUpperCase())
+                                                                   .join(" ").split(/(?!^)(?=\-\-)/);
+        const argv_conf = process.argv.length == 2 ? {} : Object.fromEntries(argv_set.map(set_string => set_string.split(" ").map((value, index) => index % 2 ? value : value.replace("--", ""))))
+        const config = {... dotenv.config()["parsed"], ... argv_conf}
 
         return {
-            url: process.env.URL,
-            port: parseInt(process.env.PORT!),
-            developmentEnv: Converter.parseBoolean(process.env.DEV_ENV),
+            url: config.URL,
+            port: parseInt(config.PORT!),
+            developmentEnv: Converter.parseBoolean(config.DEV_ENV),
 
             database: {
-                host: process.env.DATABASE_HOST,
-                port: parseInt(process.env.DATABASE_PORT!),
-                username: process.env.DATABASE_USERNAME,
-                password: process.env.DATABASE_PASSWORD,
-                database: process.env.DATABASE_NAME
+                host: config.DATABASE_HOST,
+                port: parseInt(config.DATABASE_PORT!),
+                username: config.DATABASE_USERNAME,
+                password: config.DATABASE_PASSWORD,
+                database: config.DATABASE_NAME
             }
         }
     }
