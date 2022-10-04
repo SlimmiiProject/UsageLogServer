@@ -1,3 +1,4 @@
+import  Drawer  from "./DrawerComponent";
 import React, { useEffect, useState } from "react";
 import { I18n, languages } from "../util/language/I18n";
 import AddSensor from "./AddSensor";
@@ -9,7 +10,7 @@ import Profile from "./ProfileButton";
 const HomePage = (): JSX.Element => {
   return (
     <>
-    <section className="titleFlex">
+    {/* <section className="titleFlex">
         <h1>Slimmii CommV</h1>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, vel!
@@ -26,7 +27,8 @@ const HomePage = (): JSX.Element => {
       />
       <p>{I18n.t("custom.test")}</p>
       <LoginForm />
-    </section>
+    </section> */}
+    <Drawer />
   </>
   );
 };
