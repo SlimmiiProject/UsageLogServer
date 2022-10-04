@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import LoginForm from "./components/LoginForm";
 import Profile from "./components/Profile";
 import AddSensor from "./components/AddSensor";
 import { I18n, languages } from "./util/language/I18n";
@@ -9,6 +8,7 @@ import HomePage from "./components/HomePage";
 import Register from "./components/Register";
 import Devices from "./components/Devices";
 import Drawer from "./components/DrawerComponent"
+import PageNotFound from "./components/404";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -24,6 +24,7 @@ const App = (): JSX.Element => {
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/devices" element={<Devices/>}/>
+        <Route path="*" element={<PageNotFound/>}/>
       </Routes>
     </>
   );
