@@ -130,7 +130,7 @@ export default function PersistentDrawerLeft() {
             {id: 1, text:'Profiel', icon: <AccountCircleRoundedIcon/>, link: "/profile"},
             {id: 2, text:'Meters', icon: <SpeedRoundedIcon/>, link: "/devices"},
             {id: 3, text:'Contact', icon: <MailIcon/>, link: "/dashboard"}].map((element) => (
-            <NavLink to={element.link}>
+            <NavLink to={element.link} style={{textDecoration:'none',color:'inherit'}}>
             <ListItem key={element.id} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
@@ -150,4 +150,5 @@ export default function PersistentDrawerLeft() {
     </Box>
   );
 }
+
 
