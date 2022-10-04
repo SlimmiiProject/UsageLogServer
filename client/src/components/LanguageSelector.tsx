@@ -2,6 +2,8 @@ import { useTransition } from "react";
 import { useTranslation } from "react-i18next";
 import { reloadBrowser } from "../util/BrowserUtil";
 import { I18n, LanguagesType } from "../util/language/I18n";
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 type LanguageSelectorProps = {
   languages: LanguagesType;
@@ -13,7 +15,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   const { i18n } = useTranslation();
 
   return (
-    <select
+    <Select
       name="languageSelector"
       id="languageSelector"
       onChange={(e) =>
@@ -30,12 +32,13 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         let currentLanguage = entry[1].nativeName;
 
         return (
-          <option key={langSelector} value={langSelector}>
+          <MenuItem key={langSelector} value={langSelector}>
             {currentLanguage}
-          </option>
+          </MenuItem>
         );
       })}
       
-    </select>
+    </Select>
+    
   );
 };
