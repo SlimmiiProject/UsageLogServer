@@ -9,6 +9,7 @@ import Register from "./components/Register";
 import Devices from "./components/Devices";
 import SignIn from "./components/SignIn";
 import Drawer from "./components/DrawerComponent"
+import Contact from "./components/Contact"
 import PageNotFound from "./components/404";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -26,6 +27,7 @@ const App = (): JSX.Element => {
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/devices" element={<Devices/>}/>
         <Route path="/SignIn" element={<SignIn/>}/>
+        <Route path="/Contact" element={<Contact/>}/>
         <Route path="*" element={<PageNotFound/>}/>
       </Routes>
     </>
