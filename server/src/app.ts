@@ -6,7 +6,6 @@ import { DatabaseConnector } from "./data/DatabaseConnector";
 import { Environment } from "./utils/Environment";
 import helmet from "helmet";
 
-
 const cors = require("cors");
 const {port, url} = Environment.CONFIG;
 
