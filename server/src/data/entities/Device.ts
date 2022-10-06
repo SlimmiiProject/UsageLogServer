@@ -38,7 +38,7 @@ export class Device extends BaseEntity {
     onUpdate:'CASCADE'
   })
   @JoinColumn({
-    name:"userI"
+    name:"userId"
   })
   user!: UserAcount;
 }
