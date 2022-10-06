@@ -148,7 +148,7 @@ export default function PersistentDrawerLeft() {
               icon: <SpeedRoundedIcon />,
               link: "/devices",
             },
-            { id: 3, text: "Contact", icon: <MailIcon />, link: "/dashboard" },
+            { id: 3, text: "Contact", icon: <MailIcon />, link: "/contact" },
           ].map((element) => (
             <NavLink
               to={element.link}
