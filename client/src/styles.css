@@ -17,3 +17,21 @@ antiLink {
   border-radius: 2rem;
   padding: 1rem 0;
 }
+
+.box {
+  width: 75%;
+  margin: 0 auto;
+  padding: 0 2rem;
+  border: 3px solid #ccc;
+  border-radius: 2rem;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+Button {
+  height: 2.5rem;
+}
