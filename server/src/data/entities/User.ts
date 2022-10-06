@@ -50,8 +50,7 @@ export class UserAcount extends BaseEntity {
   phone!: string;
 
   @OneToMany(() => Device, (device) => device.deviceId, {
-    nullable: true,
-    cascade: true,
+    nullable: true
   })
   @JoinColumn({ name: "device" })
   device!: Device;
