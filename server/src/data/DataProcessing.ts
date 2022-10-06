@@ -20,6 +20,7 @@ create administrator: X
     if (alias) newDevice.friendlyName = alias;
     await newDevice.save();
   }
+
   public async CreateUser(
     userId: string,
     firstname: string,
@@ -38,6 +39,7 @@ create administrator: X
       device: undefined,
     });
   }
+
   public async CreateData(
     deviceId: string,
     dataDay?: number,
@@ -70,7 +72,7 @@ get data: X
 */
 
   public async GetAdministrator(userId: string): Promise<Administrator> {
-    let AdminQuery = DatabaseConnector.INSTANCE._dataSource
+    let AdminQuery = DatabaseConnector.INSTANCE.dataSource
       .getRepository(Administrator)
       .createQueryBuilder("administrator")
       .innerJoinAndSelect("administrator.user", "user")
@@ -78,9 +80,10 @@ get data: X
       .getOne();
     return await AdminQuery;
   }
+
   //NEEDS TESTING
   public async GetDevices(userid: string): Promise<Device[]> {
-    const devices = await DatabaseConnector.INSTANCE._dataSource
+    const devices = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Device)
       .createQueryBuilder("device")
       .leftJoinAndSelect("device.user", "user")
@@ -89,7 +92,7 @@ get data: X
     return devices;
   }
   public async GetData(userid: string): Promise<Data[]> {
-    let allData = await DatabaseConnector.INSTANCE._dataSource
+    let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Data)
       .createQueryBuilder("data")
       .leftJoinAndSelect("data.deviceDeviceId", "dev")
@@ -118,19 +121,19 @@ change device alias:
   }
 
   //does not work yet!!
-  /*
+
   public async AddDevicetoUser(
     userId: string,
     deviceid: string
   ): Promise<void> {
-    await DatabaseConnector.INSTANCE._dataSource
+    await DatabaseConnector.INSTANCE.dataSource
       .createQueryBuilder()
-      .update(UserAcount)
-      .set({ device: [...deviceid] })
-      .where("userid = :id", { id: userId })
+      .update(Device)
+      .set({ user: userId })
+      .where("deviceID = :id", { id: deviceid })
       .execute();
   }
-*/
+
   //#endregion
 
   //#region  Delete Data
