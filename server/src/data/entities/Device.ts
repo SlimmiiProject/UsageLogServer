@@ -33,6 +33,12 @@ export class Device extends BaseEntity {
 
   @ManyToOne(() => UserAcount, (useracount) => useracount.device, {
     nullable: true,
+    cascade: true,
+    onDelete: 'SET NULL',
+    onUpdate:'CASCADE'
+  })
+  @JoinColumn({
+    name:"userId"
   })
   user!: UserAcount;
 }

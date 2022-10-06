@@ -11,6 +11,9 @@ const { database } = Environment.CONFIG;
 
 export class DatabaseConnector {
   private _dataSource: DataSource;
+  public get dataSource() {
+    return this._dataSource;
+  }
 
   private constructor() {
     this._dataSource = new DataSource({
@@ -30,13 +33,13 @@ export class DatabaseConnector {
   }
 
   public async initialize() {
-    if (this._dataSource.isInitialized) {
+    if (this.dataSource.isInitialized) {
       Logger.warn("Database can't be initialized more than one time!");
       return;
     }
 
     try {
-      this._dataSource = await this._dataSource.initialize();
+      this._dataSource = await this.dataSource.initialize();
       Logger.info("Connected to database.");
     } catch (error) {
       Logger.error(error);
