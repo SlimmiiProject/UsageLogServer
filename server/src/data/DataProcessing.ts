@@ -26,17 +26,30 @@ create administrator: X
     lastname: string,
     email: string,
     password: string,
-    phonenumber: string
+    phonenumber: string,
+    device?: Device
   ): Promise<void> {
-    await UserAcount.insert({
-      userId: userId,
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      password: password,
-      phone: phonenumber,
-      device: undefined,
-    });
+    if (device) {
+      await UserAcount.insert({
+        userId: userId,
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        password: password,
+        phone: phonenumber,
+        device: device,
+      });
+    } else {
+      await UserAcount.insert({
+        userId: userId,
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        password: password,
+        phone: phonenumber,
+        device: undefined,
+      });
+    }
   }
   public async CreateData(
     deviceId: string,
