@@ -27,8 +27,8 @@ const App = (): JSX.Element => {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/devices" element={<Devices />} />
-        <Route path="/SignIn" element={<SignIn />} />
-        <Route path="/Contact" element={<Contact />} />
+        <Route path="/login" element={<SignIn />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
