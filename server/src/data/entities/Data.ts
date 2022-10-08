@@ -1,7 +1,6 @@
 import {
   BaseEntity,
   Column,
-  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -10,7 +9,7 @@ import { Device } from "./Device";
 
 @Entity()
 export class Data extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: "dataid" })
   dataId!: number;
 
   @ManyToOne(() => Device, (device) => device.data, { nullable: false })

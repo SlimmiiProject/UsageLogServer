@@ -5,15 +5,23 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { Data } from "./Data";
 import { UserAcount } from "./User";
 
 @Entity()
 export class Device extends BaseEntity {
-  @PrimaryColumn("varchar", { unique: true, nullable: false, name: "deviceId" })
+  @PrimaryGeneratedColumn()
+  device_index!: number;
+
+  @PrimaryColumn("varchar", {
+    nullable: false,
+    name: "deviceId",
+    unique: true,
+    length: 64,
+  })
   deviceId!: string;
 
   @OneToMany(() => Data, (data) => data.dataId, {
@@ -21,7 +29,7 @@ export class Device extends BaseEntity {
     cascade: true,
   })
   @JoinColumn({ name: "data" })
-  data: Data[] | undefined;
+  data!: Data[];
 
   @Column("varchar", {
     nullable: true,
@@ -34,11 +42,11 @@ export class Device extends BaseEntity {
   @ManyToOne(() => UserAcount, (useracount) => useracount.device, {
     nullable: true,
     cascade: true,
-    onDelete: 'SET NULL',
-    onUpdate:'CASCADE'
+    onDelete: "SET NULL",
+    onUpdate: "CASCADE",
   })
   @JoinColumn({
-    name:"userId"
+    name: "userId",
   })
   user!: UserAcount;
 }

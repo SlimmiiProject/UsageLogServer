@@ -4,20 +4,16 @@ import {
   Entity,
   JoinColumn,
   OneToMany,
-  OneToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { Device } from "./Device";
 
 @Entity()
 export class UserAcount extends BaseEntity {
-  @PrimaryColumn("varchar", {
-    unique: true,
-    nullable: false,
-    length: 25,
-    name: "userid",
+  @PrimaryGeneratedColumn({
+    name: "userId",
   })
-  userId!: string;
+  userId!: number;
 
   @Column("varchar", {
     nullable: false,
@@ -46,12 +42,12 @@ export class UserAcount extends BaseEntity {
   })
   email!: string;
 
-  @Column("varchar", { nullable: false, length: 11, unique: true })
-  phone!: string;
+  @Column("numeric", { nullable: false, unique: true })
+  phone!: number;
 
   @OneToMany(() => Device, (device) => device.deviceId, {
-    nullable: true
+    nullable: true,
   })
   @JoinColumn({ name: "device" })
-  device!: Device;
+  device!: Device[];
 }

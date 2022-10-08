@@ -5,15 +5,6 @@ import { UserAcount } from "./entities/User";
 import { Device } from "./entities/Device";
 export class DataProcessor {
   //#region Create Data
-  /*
-whats needed?:
-
-create device: X
-create user : X
-create data: X
-create administrator: X
-*/
-
   public async CreateDevice(DeviceId: string, alias?: string) {
     const newDevice = new Device();
     newDevice.deviceId = DeviceId;
@@ -22,35 +13,21 @@ create administrator: X
   }
 
   public async CreateUser(
-    userId: string,
     firstname: string,
     lastname: string,
     email: string,
     password: string,
-    phonenumber: string,
-    device?: Device
+    phonenumber: number,
+    devices: Device[] = []
   ): Promise<void> {
-    if (device) {
-      await UserAcount.insert({
-        userId: userId,
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-        password: password,
-        phone: phonenumber,
-        device: device,
-      });
-    } else {
-      await UserAcount.insert({
-        userId: userId,
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-        password: password,
-        phone: phonenumber,
-        device: undefined,
-      });
-    }
+    await UserAcount.insert({
+      email: email,
+      password: password,
+      firstname: firstname,
+      lastname: lastname,
+      phone: phonenumber,
+      device: devices,
+    });
   }
 
   public async CreateData(
@@ -66,25 +43,14 @@ create administrator: X
     newData.save();
   }
 
-  public async CreateAdministrator(userid: string): Promise<void> {
+  public async CreateAdministrator(userid: number): Promise<void> {
     let user = await UserAcount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
   //#endregion
 
   //#region get Data
-  /*
-whats needed?:
-
-get admin: X
-get device: X
-get user: X
-get data: X
-
-
-*/
-
-  public async GetAdministrator(userId: string): Promise<Administrator> {
+  public async GetAdministrator(userId: number): Promise<Administrator> {
     let AdminQuery = DatabaseConnector.INSTANCE.dataSource
       .getRepository(Administrator)
       .createQueryBuilder("administrator")
@@ -93,9 +59,7 @@ get data: X
       .getOne();
     return await AdminQuery;
   }
-
-  //NEEDS TESTING
-  public async GetDevices(userid: string): Promise<Device[]> {
+  public async GetDevices(userid: number): Promise<Device[]> {
     const devices = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Device)
       .createQueryBuilder("device")
@@ -104,76 +68,63 @@ get data: X
       .getMany();
     return devices;
   }
-  public async GetData(userid: string): Promise<Data[]> {
+  public async GetData(userid: number): Promise<Data[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Data)
       .createQueryBuilder("data")
-      .leftJoinAndSelect("data.deviceDeviceId", "dev")
-      .where("dev.user.userId = :id", { id: userid })
+      .leftJoinAndSelect("data.device", "dev")
+      .where("dev.user = :id", { id: userid })
       .getMany();
     return allData;
   }
 
-  public async GetUser(userid: string): Promise<UserAcount> {
-    return await UserAcount.findOneBy({ userId: userid });
+  public async GetUser(
+    userid?: number,
+    email?: string,
+    number?: number
+  ): Promise<UserAcount> {
+    if (userid) {
+      return await UserAcount.findOneBy({ userId: userid });
+    } else if (email) {
+      return await UserAcount.findOneBy({ email: email });
+    } else if (number) {
+      return await UserAcount.findOneBy({ phone: number });
+    }
   }
   //#endregion
 
   //#region Alter Data
-  /*
-whats needed?:
-
-change password: X
-add device to user:
-change device alias:
-
-*/
-
-  public async ChangePassword(userId: string, password: string): Promise<void> {
+  public async ChangePassword(userId: number, password: string): Promise<void> {
     await UserAcount.update(userId, { password: password });
   }
 
-  //does not work yet!!
-
   public async AddDevicetoUser(
-    userId: string,
+    userId: number,
     deviceid: string
   ): Promise<void> {
-    await DatabaseConnector.INSTANCE.dataSource
-      .createQueryBuilder()
-      .update(Device)
-      .set({ user: userId })
-      .where("deviceID = :id", { id: deviceid })
-      .execute();
+    let user = await UserAcount.findOneBy({ userId: userId });
+    await Device.update({ deviceId: deviceid }, { user: user });
   }
 
+  public async ChangeDeviceAlias(device_index: number, alias: string) {
+    Device.update({ device_index: device_index }, { friendlyName: alias });
+  }
   //#endregion
 
   //#region  Delete Data
-  /*
-whats needed?:
-
-delete admin: X
-delete User: 
-delete device:
-delete data: X
-*/
-
   public async DeleteAdministrator(adminId: number): Promise<void> {
     Administrator.delete({ adminId: adminId });
   }
 
-  /*
-these fail due to relation issues with administrator and data
-  public async DeleteUser(userId: string): Promise<void> {
+  //fails if administrator is not removed first
+  public async DeleteUser(userId: number): Promise<void> {
     UserAcount.delete({ userId: userId });
   }
-  //fails due to relation with data
+  //fails if data is not removed first
   public async DeleteDevice(deviceid: string): Promise<void> {
     Device.delete({ deviceId: deviceid });
   }
-*/
-  //works no relationship issues
+
   public async DeleteData(dataid: number): Promise<void> {
     Data.delete({ dataId: dataid });
   }
