@@ -1,6 +1,7 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -30,4 +31,7 @@ export class Data extends BaseEntity {
     name: "night",
   })
   Night!: number;
+
+  @CreateDateColumn({ name: "created_at" })
+  created_at: Date;
 }
