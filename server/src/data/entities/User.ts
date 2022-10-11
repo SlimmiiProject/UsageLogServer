@@ -1,19 +1,53 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Device } from "./Device";
 
 @Entity()
-export class UserAcount extends BaseEntity  {
+export class UserAcount extends BaseEntity {
+  @PrimaryGeneratedColumn({
+    name: "userId",
+  })
+  userId!: number;
 
+  @Column("varchar", {
+    nullable: false,
+    unique: false,
+    name: "firstname",
+    length: 30,
+  })
+  firstname: string;
 
-  @PrimaryColumn("varchar", { unique: true, nullable: false, length: 25 })
-  userId!: string;
+  @Column("varchar", {
+    nullable: false,
+    unique: false,
+    name: "lastname",
+    length: 30,
+  })
+  lastname: string;
 
-  @Column("varchar", { nullable: false, unique: false })
+  @Column("varchar", { nullable: false, unique: false, name: "password" })
   password!: string;
 
-  @Column("varchar", { nullable: false, unique: true, length: 60 })
+  @Column("varchar", {
+    nullable: false,
+    unique: true,
+    length: 50,
+    name: "email",
+  })
   email!: string;
 
-  @Column("varchar", { nullable: false, length: 11, unique: true })
-  phone!: string;
+  @Column("numeric", { nullable: false, unique: true })
+  phone!: number;
 
+  @OneToMany(() => Device, (device) => device.deviceId, {
+    nullable: true,
+  })
+  @JoinColumn({ name: "device" })
+  device!: Device[];
 }

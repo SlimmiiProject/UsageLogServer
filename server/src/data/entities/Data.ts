@@ -1,18 +1,33 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Device } from "./Device";
 
 @Entity()
-export class Data extends BaseEntity  {
-  
-  @PrimaryGeneratedColumn()
+export class Data extends BaseEntity {
+  @PrimaryGeneratedColumn({ name: "dataid" })
   dataId!: number;
 
   @ManyToOne(() => Device, (device) => device.data, { nullable: false })
   device!: Device;
 
-  @Column("int", { nullable: true, unique: false, unsigned: true })
-  Day!: number;
+  @Column("numeric", {
+    nullable: true,
+    unique: false,
+    unsigned: true,
+    name: "day",
+  })
+  Day: number;
 
-  @Column("int", { nullable: true, unique: false, unsigned: true })
+  @Column("numeric", {
+    nullable: true,
+    unique: false,
+    unsigned: true,
+    name: "night",
+  })
   Night!: number;
 }
