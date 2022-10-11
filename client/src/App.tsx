@@ -26,9 +26,11 @@ const App = (): JSX.Element => {
         <Route path="/dashboard" element={<DashboardComp />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile-change-data" element={<Contact />} />
         <Route path="/devices" element={<Devices />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/admin" element={<Contact />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
