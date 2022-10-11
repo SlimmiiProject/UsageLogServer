@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { I18n, languages } from "../util/language/I18n";
 import AddSensor from "./AddSensor";
 import { LanguageSelector } from "./LanguageSelector";
-import ProfileButton from "./ProfileButton";
-import Profile from "./ProfileButton";
 import SignIn from "./SignIn";
 
 
@@ -16,7 +14,6 @@ const HomePage = (): JSX.Element => {
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, vel!
         </p>
-        <ProfileButton />
     </section>
     <AddSensor />
     <LanguageSelector languages={languages} />

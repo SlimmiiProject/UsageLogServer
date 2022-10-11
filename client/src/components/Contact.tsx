@@ -58,6 +58,17 @@ const Contact = (): JSX.Element => {
                     <Grid item xs={12}>
                         <TextField
                             required
+                            id="email"
+                            name="email"
+                            label="e-mail"
+                            fullWidth
+                            autoComplete="email"
+                            variant="standard"
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            required
                             id="ProblemWith"
                             name="ProblemWith"
                             label="Waarmee hebt u een probleem?"
@@ -68,6 +79,7 @@ const Contact = (): JSX.Element => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextareaAutosize
+                            id="Problem"
                             aria-label="empty textarea"
                             placeholder="Wat is het probleem?"
                             minRows={8}
@@ -77,8 +89,8 @@ const Contact = (): JSX.Element => {
                     </Grid>
                     <Button
                         type="submit"
-                        fullWidth
-                        sx={{ mt: 2, mb: 2 }}
+                        sx={{ mt: 2, mb: 2, bgcolor: 'rgba(25,118,210,255)', color: "white" }}
+                        style={{ width: 600, alignItems: 'center', }}
                     >
                         Send
                     </Button>
