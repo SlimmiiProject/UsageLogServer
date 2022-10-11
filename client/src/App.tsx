@@ -11,6 +11,7 @@ import SignIn from "./components/SignIn";
 import Drawer from "./components/DrawerComponent";
 import Contact from "./components/Contact";
 import PageNotFound from "./components/404";
+import EditProfile from "./components/EditProfile";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -26,7 +27,7 @@ const App = (): JSX.Element => {
         <Route path="/dashboard" element={<DashboardComp />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/profile-change-data" element={<Contact />} />
+        <Route path="/profile/edit-profile" element={<EditProfile/>} />
         <Route path="/devices" element={<Devices />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/contact" element={<Contact />} />
