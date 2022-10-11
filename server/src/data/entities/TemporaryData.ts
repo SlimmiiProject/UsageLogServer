@@ -1,16 +1,14 @@
 import {
   Entity,
   BaseEntity,
-  PrimaryColumn,
   Column,
   CreateDateColumn,
+  PrimaryColumn,
 } from "typeorm";
-
 @Entity()
 export class TemporaryData extends BaseEntity {
   @PrimaryColumn({ name: "deviceId" })
-  deviceId: string;
-
+  deviceId!: string;
   @Column("numeric", { name: "day", nullable: true, unique: false })
   Day: number;
 
