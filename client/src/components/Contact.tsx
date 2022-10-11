@@ -90,7 +90,7 @@ const Contact = (): JSX.Element => {
                     <Button
                         type="submit"
                         sx={{ mt: 2, mb: 2, bgcolor: 'rgba(25,118,210,255)', color: "white" }}
-                        style={{ width: 600, alignItems: 'center', }}
+                        style={{ width: 600, marginLeft: 23, }}
                     >
                         Send
                     </Button>
