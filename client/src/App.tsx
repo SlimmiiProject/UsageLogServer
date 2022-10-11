@@ -16,6 +16,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import DashboardComp from "./components/Dashboard";
+import { AdminPage } from "./components/AdminPage";
 
 const App = (): JSX.Element => {
   return (
@@ -30,7 +31,10 @@ const App = (): JSX.Element => {
         <Route path="/devices" element={<Devices />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/admin" element={<Contact />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/allusers" element={<AdminPage />} />
+        <Route path="/admin/alldevices" element={<AdminPage />} />
+        <Route path="/admin/logfile" element={<AdminPage />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>

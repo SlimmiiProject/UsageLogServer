@@ -22,6 +22,7 @@ import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import { NavLink } from "react-router-dom";
+import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
 
 const drawerWidth = 240;
 
@@ -149,6 +150,12 @@ export default function PersistentDrawerLeft() {
               link: "/devices",
             },
             { id: 3, text: "Contact", icon: <MailIcon />, link: "/contact" },
+            {
+              id: 4,
+              text: "Admin",
+              icon: <AdminPanelSettingsRoundedIcon />,
+              link: "/Admin",
+            },
           ].map((element) => (
             <NavLink
               to={element.link}
