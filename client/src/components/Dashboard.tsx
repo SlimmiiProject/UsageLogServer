@@ -77,6 +77,7 @@ export default function App() {
       nacht: 247,
     },
   ];
+  const data3 = [...data1, ...data2];
   return (
     <>
       <div className="grafiek">
@@ -84,6 +85,9 @@ export default function App() {
       </div>
       <div className="grafiek">
         <Graph data={data2} titel="Meter 2" />
+      </div>
+      <div className="grafiek">
+        <Graph data={data3} titel="Testmeter" />
       </div>
     </>
   );

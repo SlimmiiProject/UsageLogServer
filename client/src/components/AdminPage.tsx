@@ -24,6 +24,11 @@ export const AdminPage = (): JSX.Element => {
             link="/admin/alldevices"
             icon="device"
           />
+          <AdminPageOneComponent
+            title="Vertalingen"
+            link="/admin/translate"
+            icon="translate"
+          />
         </div>
       </div>
     </>

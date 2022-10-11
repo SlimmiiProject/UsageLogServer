@@ -3,6 +3,7 @@ import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import TextSnippetRoundedIcon from "@mui/icons-material/TextSnippetRounded";
 import SettingsRemoteRoundedIcon from "@mui/icons-material/SettingsRemoteRounded";
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
+import TranslateRoundedIcon from "@mui/icons-material/TranslateRounded";
 import { NavLink } from "react-router-dom";
 
 export const AdminPageOneComponent = ({
@@ -37,6 +38,14 @@ export const AdminPageOneComponent = ({
               />
             ) : icon === "device" ? (
               <SettingsRemoteRoundedIcon
+                style={{
+                  fontSize: "6rem",
+                  textAlign: "center",
+                  color: "white",
+                }}
+              />
+            ) : icon === "translate" ? (
+              <TranslateRoundedIcon
                 style={{
                   fontSize: "6rem",
                   textAlign: "center",

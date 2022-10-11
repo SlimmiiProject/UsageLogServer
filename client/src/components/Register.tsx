@@ -84,10 +84,10 @@ const Register = (): JSX.Element => {
               <TextField
                 required
                 fullWidth
-                id="User Id"
-                label="User Id"
-                name="UserId"
-                autoComplete="User-Id"
+                id="Username"
+                label="UserName"
+                name="UserName"
+                autoComplete="User-Name"
               />
             </Grid>
             <Grid item xs={12}>

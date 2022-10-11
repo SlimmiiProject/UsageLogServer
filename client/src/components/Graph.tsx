@@ -43,8 +43,8 @@ export default function App(props: MeerdereData) {
         <Tooltip />
         <Legend />
         <ReferenceLine y={0} stroke="#000" />
-        <Bar dataKey="nacht" fill="#8884d8" />
         <Bar dataKey="dag" fill="#82ca9d" />
+        <Bar dataKey="nacht" fill="#8884d8" />
       </BarChart>
     </>
   );
