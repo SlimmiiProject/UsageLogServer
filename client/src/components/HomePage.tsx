@@ -1,10 +1,12 @@
+import  Drawer  from "./DrawerComponent";
 import React, { useEffect, useState } from "react";
 import { I18n, languages } from "../util/language/I18n";
 import AddSensor from "./AddSensor";
 import { LanguageSelector } from "./LanguageSelector";
-import LoginForm from "./LoginForm";
 import ProfileButton from "./ProfileButton";
 import Profile from "./ProfileButton";
+import SignIn from "./SignIn";
+
 
 const HomePage = (): JSX.Element => {
   return (
@@ -25,10 +27,11 @@ const HomePage = (): JSX.Element => {
         width={250}
       />
       <p>{I18n.t("custom.test")}</p>
-      <LoginForm />
+      <SignIn/>
     </section>
   </>
   );
 };
+
 
 export default HomePage;

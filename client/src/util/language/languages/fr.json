@@ -1,3 +1,5 @@
 {
-    "sensor.add": "Ajouter capteur"
+    "sensor.add": "Ajouter capteur",
+    "username.text":  "Entrez votre nom d'utilisateur ici:"
+
 }

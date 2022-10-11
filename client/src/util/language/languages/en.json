@@ -1,3 +1,4 @@
 {
-    "sensor.add": "Add sensor"
+  "sensor.add": "Add sensor",
+  "username.text": "Enter your username here:"
 }
