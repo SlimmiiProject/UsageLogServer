@@ -32,6 +32,9 @@ const App = (): JSX.Element => {
         <Route path="/login" element={<SignIn />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/allusers" element={<AdminPage />} />
+        <Route path="/admin/alldevices" element={<AdminPage />} />
+        <Route path="/admin/logfile" element={<AdminPage />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
