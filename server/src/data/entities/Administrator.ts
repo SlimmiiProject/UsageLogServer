@@ -12,7 +12,7 @@ export class Administrator extends BaseEntity {
   @PrimaryGeneratedColumn()
   adminId!: number;
 
-  @OneToOne(() => UserAcount, { nullable: false, cascade: false })
+  @OneToOne(() => UserAcount, { nullable: false, cascade: true })
   @JoinColumn({ name: "user" })
   user!: UserAcount;
 }
