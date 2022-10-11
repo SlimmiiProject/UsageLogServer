@@ -22,7 +22,7 @@ const Contact = (): JSX.Element => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                marginLeft: 55,
+                margin: "auto",
             }}
         >
             <React.Fragment>
@@ -70,6 +70,8 @@ const Contact = (): JSX.Element => {
                         <TextareaAutosize
                             aria-label="empty textarea"
                             placeholder="Wat is het probleem?"
+                            minRows={8}
+                            required
                             style={{ width: 600 }}
                         />
                     </Grid>
