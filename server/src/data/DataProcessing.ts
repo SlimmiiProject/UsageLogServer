@@ -3,6 +3,7 @@ import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
 import { UserAcount } from "./entities/User";
 import { Device } from "./entities/Device";
+import { TemporaryData } from "./entities/TemporaryData";
 export class DataProcessor {
   //#region Create Data
   public async CreateDevice(DeviceId: string, alias?: string) {
@@ -30,14 +31,28 @@ export class DataProcessor {
     });
   }
 
-  public async CreateData(
+  private async CreateData(
     deviceId: string,
+    date: Date,
     dataDay?: number,
     DataNight?: number
   ): Promise<void> {
     let dataDevice = await Device.findOneBy({ deviceId: deviceId });
     const newData = new Data();
     newData.device = dataDevice;
+    newData.created_at = date;
+    if (dataDay) newData.Day = dataDay;
+    if (DataNight) newData.Night = DataNight;
+    newData.save();
+  }
+
+  public async CreatetempData(
+    deviceId: string,
+    dataDay?: number,
+    DataNight?: number
+  ): Promise<void> {
+    const newData = new TemporaryData();
+    newData.deviceId = deviceId;
     if (dataDay) newData.Day = dataDay;
     if (DataNight) newData.Night = DataNight;
     newData.save();
@@ -94,8 +109,26 @@ export class DataProcessor {
   //#endregion
 
   //#region Alter Data
+  //probably redundant.
   public async ChangePassword(userId: number, password: string): Promise<void> {
     await UserAcount.update(userId, { password: password });
+  }
+
+  public async EditAcount(
+    userid: number,
+    firstname: string,
+    lastname: string,
+    password: string,
+    email: string,
+    phone: number
+  ) {
+    await UserAcount.update(userid, {
+      firstname: firstname,
+      lastname: lastname,
+      password: password,
+      email: email,
+      phone: phone,
+    });
   }
 
   public async AddDevicetoUser(
@@ -128,5 +161,38 @@ export class DataProcessor {
   public async DeleteData(dataid: number): Promise<void> {
     Data.delete({ dataId: dataid });
   }
+  private async BulkDeleteTempData(deviceId: string) {
+    DatabaseConnector.INSTANCE.dataSource
+      .createQueryBuilder()
+      .delete()
+      .from(TemporaryData)
+      .where("deviceId: = :id", { id: deviceId })
+      .execute();
+  }
   //#endregion
+
+  //CREATE DATE FROM TEMP DATA
+  public async CleanTemproraryData() {
+    let allDevices: Device[] = await Device.find();
+    let allTempData: TemporaryData[] = await TemporaryData.find();
+    let totalDay: number, totalNight: number;
+    allDevices.map(async (device) => {
+      totalDay = 0;
+      totalNight = 0;
+      let filteredData: TemporaryData[] = allTempData.filter(
+        (data) => data.deviceId == device.deviceId
+      );
+      filteredData.map((data) => {
+        totalDay += data.Day;
+        totalNight += data.Night;
+      });
+      await this.CreateData(
+        device.deviceId,
+        new Date(Date.now()),
+        totalDay,
+        totalNight
+      );
+      await this.BulkDeleteTempData(device.deviceId);
+    });
+  }
 }
