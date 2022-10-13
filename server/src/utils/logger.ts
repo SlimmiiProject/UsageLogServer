@@ -19,6 +19,7 @@ export class Logger {
     }
 } 
 
+// References to the corresponding color
 enum LogType {
     INFO = 1,
     WARNING = 2,
