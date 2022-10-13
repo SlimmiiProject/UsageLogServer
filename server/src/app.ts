@@ -7,7 +7,7 @@ import helmet from "helmet";
 import { Logger } from "./utils/Logger";
 
 const cors = require("cors");
-const {port, url} = Environment.CONFIG;
+const {server_port, url} = Environment.CONFIG;
 
 export class App {
 
@@ -31,7 +31,6 @@ export class App {
     }
 
     private appSetup() {
-        this.App.set("port", port);
         this.App.use(helmet());
         this.App.use(cors());
     }
@@ -55,7 +54,7 @@ export class App {
     }
 
     private get port() {
-        return this._app.get("port");
+        return server_port;
     }
 }
 

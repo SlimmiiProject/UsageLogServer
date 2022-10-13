@@ -21,12 +21,12 @@ export class Environment {
 
         return {
             url: process.env.URL,
-            port: parseInt(process.env.PORT!),
+            port: parseInt(process.env.SERVER_PORT),
             developmentEnv: Converter.parseBoolean(process.env.DEV_ENV),
 
             database: {
                 host: process.env.DATABASE_HOST,
-                port: parseInt(process.env.DATABASE_PORT!),
+                port: parseInt(process.env.DATABASE_PORT),
                 username: process.env.DATABASE_USERNAME,
                 password: process.env.DATABASE_PASSWORD,
                 database: process.env.DATABASE_NAME
