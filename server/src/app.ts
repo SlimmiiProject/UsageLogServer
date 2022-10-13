@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import { Express } from "express-serve-static-core";
 import "reflect-metadata";
 import { DatabaseConnector } from "./data/DatabaseConnector";
@@ -37,13 +37,17 @@ export class App {
     }
 
     private setupRoutes() {
-        let apiRouter = require("./routes/ApiRouter");
-        let translationRouter = require("./routes/TranslationRoutes");
-        let userRouter = require("./routes/UserRoutes");
+        const apiRouter:Router = require("./routes/ApiRouter");
+        const translationRouter:Router = require("./routes/TranslationRoutes");
+        const userRouter:Router = require("./routes/UserRouter");
+        const dataRouter:Router = require("./routes/DataRouter");
+        const profileRouter:Router = require("./routes/ProfileRouter");
 
         this.App.use("/api", apiRouter);
         apiRouter.use("/translation", translationRouter);
         apiRouter.use("/users/:userId", userRouter);
+        apiRouter.use("/data", dataRouter);
+        apiRouter.use("/profiles", profileRouter);
     }
 
     public start() {
