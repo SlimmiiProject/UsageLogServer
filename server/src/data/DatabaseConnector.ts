@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { Environment } from "../utils/Environment";
-import { Logger } from "../utils/Logger";
+import { Logger } from "../utils/logger";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
 import { Device } from "./entities/Device";

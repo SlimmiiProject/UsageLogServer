@@ -1,10 +1,10 @@
 import express from "express";
 import { Express } from "express-serve-static-core";
-import { Logger } from "./utils/Logger";
 import "reflect-metadata";
 import { DatabaseConnector } from "./data/DatabaseConnector";
 import { Environment } from "./utils/Environment";
 import helmet from "helmet";
+import { Logger } from "./utils/logger";
 
 const cors = require("cors");
 const {port, url} = Environment.CONFIG;
@@ -39,15 +39,16 @@ export class App {
     private setupRoutes() {
         let apiRouter = require("./routes/ApiRouter");
         let translationRouter = require("./routes/TranslationRoutes");
+        let userRouter = require("./routes/UserRoutes");
 
         this.App.use("/api", apiRouter);
-        apiRouter.use("/translation", translationRouter)
+        apiRouter.use("/translation", translationRouter);
+        apiRouter.use("/users/:userId", userRouter);
     }
 
     public start() {
         this.App.listen(this.port, () => Logger.info(`App has started on: ${url}:${this.port}/`));
     }
-
 
     private get port() {
         return this._app.get("port");
