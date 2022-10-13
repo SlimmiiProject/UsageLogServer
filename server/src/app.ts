@@ -4,7 +4,7 @@ import "reflect-metadata";
 import { DatabaseConnector } from "./data/DatabaseConnector";
 import { Environment } from "./utils/Environment";
 import helmet from "helmet";
-import { Logger } from "./utils/logger";
+import { Logger } from "./utils/Logger";
 
 const cors = require("cors");
 const {port, url} = Environment.CONFIG;
