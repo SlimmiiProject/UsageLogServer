@@ -4,11 +4,11 @@ import { BaseEntity, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } fro
 export class Translations extends BaseEntity {
 
   @PrimaryColumn("varchar", { nullable: false, length: 2, unique: true })
-  lang_key!: string;
+  lang_key: string;
 
   @Column("varchar", {length: 15})
-  nativeName!:string;
+  nativeName:string;
 
   @Column("longtext")
-  translations!: string;
+  translations: string;
 }

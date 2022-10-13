@@ -10,10 +10,10 @@ import { Device } from "./Device";
 @Entity()
 export class Data extends BaseEntity {
   @PrimaryGeneratedColumn({ name: "dataid" })
-  dataId!: number;
+  dataId: number;
 
   @ManyToOne(() => Device, (device) => device.data, { nullable: false })
-  device!: Device;
+  device: Device;
 
   @Column("numeric", {
     nullable: true,
@@ -29,5 +29,5 @@ export class Data extends BaseEntity {
     unsigned: true,
     name: "night",
   })
-  Night!: number;
+  Night: number;
 }

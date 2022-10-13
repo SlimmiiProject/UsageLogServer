@@ -10,9 +10,9 @@ import { UserAcount } from "./User";
 @Entity()
 export class Administrator extends BaseEntity {
   @PrimaryGeneratedColumn()
-  adminId!: number;
+  adminId: number;
 
   @OneToOne(() => UserAcount, { nullable: false, cascade: true })
   @JoinColumn({ name: "user" })
-  user!: UserAcount;
+  user: UserAcount;
 }

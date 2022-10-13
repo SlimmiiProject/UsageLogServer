@@ -13,7 +13,7 @@ export class UserAcount extends BaseEntity {
   @PrimaryGeneratedColumn({
     name: "userId",
   })
-  userId!: number;
+  userId: number;
 
   @Column("varchar", {
     nullable: false,
@@ -31,8 +31,8 @@ export class UserAcount extends BaseEntity {
   })
   lastname: string;
 
-  @Column("varchar", { nullable: false, unique: false, name: "password" })
-  password!: string;
+  @Column("varchar", { nullable: true, unique: false, name: "password" })
+  password: string;
 
   @Column("varchar", {
     nullable: false,
@@ -40,14 +40,14 @@ export class UserAcount extends BaseEntity {
     length: 50,
     name: "email",
   })
-  email!: string;
+  email: string;
 
   @Column("numeric", { nullable: false, unique: true })
-  phone!: number;
+  phone: number;
 
   @OneToMany(() => Device, (device) => device.deviceId, {
     nullable: true,
   })
   @JoinColumn({ name: "device" })
-  device!: Device[];
+  device: Device[];
 }

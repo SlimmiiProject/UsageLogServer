@@ -22,14 +22,14 @@ export class Device extends BaseEntity {
     unique: true,
     length: 64,
   })
-  deviceId!: string;
+  deviceId: string;
 
   @OneToMany(() => Data, (data) => data.dataId, {
     nullable: true,
     cascade: true,
   })
   @JoinColumn({ name: "data" })
-  data!: Data[];
+  data: Data[];
 
   @Column("varchar", {
     nullable: true,
@@ -37,7 +37,7 @@ export class Device extends BaseEntity {
     unique: false,
     name: "deviceAlias",
   })
-  friendlyName!: string;
+  friendlyName: string;
 
   @ManyToOne(() => UserAcount, (useracount) => useracount.device, {
     nullable: true,
@@ -48,5 +48,5 @@ export class Device extends BaseEntity {
   @JoinColumn({
     name: "userId",
   })
-  user!: UserAcount;
+  user: UserAcount;
 }
