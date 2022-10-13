@@ -1,11 +1,11 @@
 import { DataSource } from "typeorm";
 import { Environment } from "../utils/Environment";
-import { Logger } from "../utils/logger";
+import { Logger } from "../utils/Logger";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
 import { Device } from "./entities/Device";
 import { Translations } from "./entities/Translations";
-import { UserAcount } from "./entities/User";
+import { UserAccount } from "./entities/UserAccount";
 
 const { database } = Environment.CONFIG;
 
@@ -21,7 +21,7 @@ export class DatabaseConnector {
       ...database,
       synchronize: true,
       logging: Environment.isDev(),
-      entities: [UserAcount, Device, Data, Administrator, Translations],
+      entities: [UserAccount, Device, Data, Administrator, Translations],
     });
   }
 

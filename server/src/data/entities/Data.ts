@@ -9,6 +9,7 @@ import { Device } from "./Device";
 
 @Entity()
 export class Data extends BaseEntity {
+  
   @PrimaryGeneratedColumn({ name: "dataid" })
   dataId: number;
 

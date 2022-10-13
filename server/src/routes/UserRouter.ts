@@ -9,7 +9,8 @@ router.route("/user-data")
     //TODO Get user data
 });
 
-router.route("/meters").post((req: Request, res: Response) => {
+router.route("/meters")
+.post((req: Request, res: Response) => {
     //TODO Add meter
 })
 .get((req: Request, res: Response) => {

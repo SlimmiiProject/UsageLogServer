@@ -9,10 +9,11 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Data } from "./Data";
-import { UserAcount } from "./User";
+import { UserAccount } from "./UserAccount";
 
 @Entity()
 export class Device extends BaseEntity {
+  
   @PrimaryGeneratedColumn()
   device_index!: number;
 
@@ -39,7 +40,7 @@ export class Device extends BaseEntity {
   })
   friendlyName: string;
 
-  @ManyToOne(() => UserAcount, (useracount) => useracount.device, {
+  @ManyToOne(() => UserAccount, (useracount) => useracount.device, {
     nullable: true,
     cascade: true,
     onDelete: "SET NULL",
@@ -48,5 +49,5 @@ export class Device extends BaseEntity {
   @JoinColumn({
     name: "userId",
   })
-  user: UserAcount;
+  user: UserAccount;
 }

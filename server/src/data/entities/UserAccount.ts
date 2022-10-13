@@ -9,7 +9,8 @@ import {
 import { Device } from "./Device";
 
 @Entity()
-export class UserAcount extends BaseEntity {
+export class UserAccount extends BaseEntity {
+  
   @PrimaryGeneratedColumn({
     name: "userId",
   })
@@ -31,8 +32,8 @@ export class UserAcount extends BaseEntity {
   })
   lastname: string;
 
-  @Column("varchar", { nullable: true, unique: false, name: "password" })
-  password: string;
+  @Column("text", { nullable: true, unique: false, name: "hashedPassword" })
+  hashed_password: string | undefined;
 
   @Column("varchar", {
     nullable: false,

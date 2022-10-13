@@ -1,7 +1,7 @@
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
-import { UserAcount } from "./entities/User";
+import { UserAccount } from "./entities/UserAccount";
 import { Device } from "./entities/Device";
 export class DataProcessor {
   //#region Create Data
@@ -16,13 +16,13 @@ export class DataProcessor {
     firstname: string,
     lastname: string,
     email: string,
-    password: string,
+    password: string | undefined,
     phonenumber: number,
     devices: Device[] = []
   ): Promise<void> {
-    await UserAcount.insert({
+    await UserAccount.insert({
       email: email,
-      password: password,
+      hashed_password: password,
       firstname: firstname,
       lastname: lastname,
       phone: phonenumber,
@@ -44,7 +44,7 @@ export class DataProcessor {
   }
 
   public async CreateAdministrator(userid: number): Promise<void> {
-    let user = await UserAcount.findOneBy({ userId: userid });
+    let user = await UserAccount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
   //#endregion
@@ -82,27 +82,27 @@ export class DataProcessor {
     userid?: number,
     email?: string,
     number?: number
-  ): Promise<UserAcount> {
+  ): Promise<UserAccount> {
     if (userid) {
-      return await UserAcount.findOneBy({ userId: userid });
+      return await UserAccount.findOneBy({ userId: userid });
     } else if (email) {
-      return await UserAcount.findOneBy({ email: email });
+      return await UserAccount.findOneBy({ email: email });
     } else if (number) {
-      return await UserAcount.findOneBy({ phone: number });
+      return await UserAccount.findOneBy({ phone: number });
     }
   }
   //#endregion
 
   //#region Alter Data
-  public async ChangePassword(userId: number, password: string): Promise<void> {
-    await UserAcount.update(userId, { password: password });
+  public async ChangePassword(userId: number, hashedPassword: string): Promise<void> {
+    await UserAccount.update(userId, { hashed_password: hashedPassword });
   }
 
   public async AddDevicetoUser(
     userId: number,
     deviceid: string
   ): Promise<void> {
-    let user = await UserAcount.findOneBy({ userId: userId });
+    let user = await UserAccount.findOneBy({ userId: userId });
     await Device.update({ deviceId: deviceid }, { user: user });
   }
 
@@ -118,7 +118,7 @@ export class DataProcessor {
 
   //fails if administrator is not removed first
   public async DeleteUser(userId: number): Promise<void> {
-    UserAcount.delete({ userId: userId });
+    UserAccount.delete({ userId: userId });
   }
   //fails if data is not removed first
   public async DeleteDevice(deviceid: string): Promise<void> {

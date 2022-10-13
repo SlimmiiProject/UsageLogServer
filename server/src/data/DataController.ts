@@ -2,7 +2,7 @@ import { Translations } from "./entities/Translations";
 
 export class DataController {
 
-    public static async getTranslationJson() {
+    public static async getTranslationJson(): Promise<Object> {
         let translationSetup: any = {};
 
         const languages: Translations[] = await Translations.find();        
