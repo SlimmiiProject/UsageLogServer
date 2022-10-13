@@ -43,8 +43,8 @@ export class UserAccount extends BaseEntity {
   })
   email: string;
 
-  @Column("numeric", { nullable: false, unique: true })
-  phone: number;
+  @Column("varchar", { nullable: false, unique: true, length: 12})
+  phone: string;
 
   @OneToMany(() => Device, (device) => device.deviceId, {
     nullable: true,

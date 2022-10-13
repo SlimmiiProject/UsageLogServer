@@ -5,20 +5,19 @@ import { UserAccount } from "./entities/UserAccount";
 import { Device } from "./entities/Device";
 export class DataProcessor {
   //#region Create Data
-  public async CreateDevice(DeviceId: string, alias?: string) {
+  public static async CreateDevice(DeviceId: string, alias?: string) {
     const newDevice = new Device();
     newDevice.deviceId = DeviceId;
     if (alias) newDevice.friendlyName = alias;
     await newDevice.save();
   }
 
-  public async CreateUser(
+  public static async CreateUser(
     firstname: string,
     lastname: string,
     email: string,
     password: string | undefined,
-    phonenumber: number,
-    devices: Device[] = []
+    phonenumber: string,
   ): Promise<void> {
     await UserAccount.insert({
       email: email,
@@ -26,11 +25,11 @@ export class DataProcessor {
       firstname: firstname,
       lastname: lastname,
       phone: phonenumber,
-      device: devices,
+      device: [],
     });
   }
 
-  public async CreateData(
+  public static async CreateData(
     deviceId: string,
     dataDay?: number,
     DataNight?: number
@@ -43,14 +42,14 @@ export class DataProcessor {
     newData.save();
   }
 
-  public async CreateAdministrator(userid: number): Promise<void> {
+  public static async CreateAdministrator(userid: number): Promise<void> {
     let user = await UserAccount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
   //#endregion
 
   //#region get Data
-  public async GetAdministrator(userId: number): Promise<Administrator> {
+  public static async GetAdministrator(userId: number): Promise<Administrator> {
     let AdminQuery = DatabaseConnector.INSTANCE.dataSource
       .getRepository(Administrator)
       .createQueryBuilder("administrator")
@@ -59,7 +58,7 @@ export class DataProcessor {
       .getOne();
     return await AdminQuery;
   }
-  public async GetDevices(userid: number): Promise<Device[]> {
+  public static async GetDevices(userid: number): Promise<Device[]> {
     const devices = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Device)
       .createQueryBuilder("device")
@@ -68,7 +67,7 @@ export class DataProcessor {
       .getMany();
     return devices;
   }
-  public async GetData(userid: number): Promise<Data[]> {
+  public static async GetData(userid: number): Promise<Data[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Data)
       .createQueryBuilder("data")
@@ -78,10 +77,10 @@ export class DataProcessor {
     return allData;
   }
 
-  public async GetUser(
+  public static async GetUser(
     userid?: number,
     email?: string,
-    number?: number
+    number?: string
   ): Promise<UserAccount> {
     if (userid) {
       return await UserAccount.findOneBy({ userId: userid });
@@ -94,11 +93,11 @@ export class DataProcessor {
   //#endregion
 
   //#region Alter Data
-  public async ChangePassword(userId: number, hashedPassword: string): Promise<void> {
+  public static async ChangePassword(userId: number, hashedPassword: string): Promise<void> {
     await UserAccount.update(userId, { hashed_password: hashedPassword });
   }
 
-  public async AddDevicetoUser(
+  public static async AddDevicetoUser(
     userId: number,
     deviceid: string
   ): Promise<void> {
@@ -106,26 +105,26 @@ export class DataProcessor {
     await Device.update({ deviceId: deviceid }, { user: user });
   }
 
-  public async ChangeDeviceAlias(device_index: number, alias: string) {
+  public static async ChangeDeviceAlias(device_index: number, alias: string) {
     Device.update({ device_index: device_index }, { friendlyName: alias });
   }
   //#endregion
 
   //#region  Delete Data
-  public async DeleteAdministrator(adminId: number): Promise<void> {
+  public static async DeleteAdministrator(adminId: number): Promise<void> {
     Administrator.delete({ adminId: adminId });
   }
 
   //fails if administrator is not removed first
-  public async DeleteUser(userId: number): Promise<void> {
+  public static async DeleteUser(userId: number): Promise<void> {
     UserAccount.delete({ userId: userId });
   }
   //fails if data is not removed first
-  public async DeleteDevice(deviceid: string): Promise<void> {
+  public static async DeleteDevice(deviceid: string): Promise<void> {
     Device.delete({ deviceId: deviceid });
   }
 
-  public async DeleteData(dataid: number): Promise<void> {
+  public static async DeleteData(dataid: number): Promise<void> {
     Data.delete({ dataId: dataid });
   }
   //#endregion
