@@ -1,11 +1,12 @@
 
 
-export class RegexValidator {
+export class RegExpVal {
 
     // TODO Fill in RegEx
-    public static readonly phoneValidator = new RegExp("");
-    public static readonly emailValidator = new RegExp("");
-    public static readonly alphabetValidator = new RegExp("");
+    public static readonly phoneValidator = new RegExp('');
+    public static readonly emailValidator = new RegExp('');
+    public static readonly alphabetValidator = new RegExp('');
+    public static readonly base64Encoded = new RegExp('^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$');
 
     /**
      * It takes a string and a regular expression as input and returns true if the string matches the
