@@ -88,7 +88,6 @@ export class DataProcessor {
       await UserAccount.findOneBy({ email: email }),
       await UserAccount.findOneBy({ phone: number })
     ]);
-
   }
   //#endregion
 
