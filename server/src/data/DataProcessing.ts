@@ -1,3 +1,4 @@
+import { ObjectUtil } from './../utils/ObjectUtil';
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
@@ -18,15 +19,15 @@ export class DataProcessor {
     email: string,
     password: string | undefined,
     phonenumber: string,
-  ): Promise<void> {
-    await UserAccount.insert({
+  ): Promise<number> {
+    return (await UserAccount.insert({
       email: email,
       hashed_password: password,
       firstname: firstname,
       lastname: lastname,
       phone: phonenumber,
       device: [],
-    });
+    })).raw.insertId;
   }
 
   public static async CreateData(
@@ -82,13 +83,12 @@ export class DataProcessor {
     email?: string,
     number?: string
   ): Promise<UserAccount> {
-    if (userid) {
-      return await UserAccount.findOneBy({ userId: userid });
-    } else if (email) {
-      return await UserAccount.findOneBy({ email: email });
-    } else if (number) {
-      return await UserAccount.findOneBy({ phone: number });
-    }
+    return ObjectUtil.firstNonUndefined([
+      await UserAccount.findOneBy({ userId: userid }),
+      await UserAccount.findOneBy({ email: email }),
+      await UserAccount.findOneBy({ phone: number })
+    ]);
+
   }
   //#endregion
 
