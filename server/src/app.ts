@@ -7,12 +7,12 @@ import helmet from "helmet";
 import { Logger } from "./utils/Logger";
 
 const cors = require("cors");
-const {server_port, url} = Environment.CONFIG;
+const { server_port, url } = Environment.CONFIG;
 
 export class App {
 
     public static readonly INSTANCE = new App();
-    
+
     private _app: Express;
 
     public get App(): Express {
@@ -31,16 +31,18 @@ export class App {
     }
 
     private appSetup() {
+        this.App.use(express.json());
+        this.App.use(express.urlencoded({ extended: true }));
         this.App.use(helmet());
         this.App.use(cors());
     }
 
     private setupRoutes() {
-        const apiRouter:Router = require("./routes/ApiRouter");
-        const translationRouter:Router = require("./routes/TranslationRoutes");
-        const userRouter:Router = require("./routes/UserRouter");
-        const dataRouter:Router = require("./routes/DataRouter");
-        const profileRouter:Router = require("./routes/ProfileRouter");
+        const apiRouter: Router = require("./routes/ApiRouter");
+        const translationRouter: Router = require("./routes/TranslationRoutes");
+        const userRouter: Router = require("./routes/UserRouter");
+        const dataRouter: Router = require("./routes/DataRouter");
+        const profileRouter: Router = require("./routes/ProfileRouter");
 
         this.App.use("/api", apiRouter);
         apiRouter.use("/translation", translationRouter);
