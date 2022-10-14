@@ -15,7 +15,7 @@ export class Crypt {
     }
 
     public static encrypt(content: string): string {
-        let hashedInput = bcrypt.hashSync(content, this.saltRounds);
+        const hashedInput = bcrypt.hashSync(content, this.saltRounds);
         const bytesInput = this.toBytes(hashedInput);
         const xorInput = this.xor(bytesInput);
         return this.toBase64(xorInput);
