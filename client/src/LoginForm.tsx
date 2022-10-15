@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { GoogleLoginComponent } from "./components/GoogleLoginComponent";
 
 const LoginForm = (): JSX.Element => {
   return (
@@ -10,6 +11,8 @@ const LoginForm = (): JSX.Element => {
         <input type="password" name="password" id="password" /><br />
         <input type="submit" value="Login" />
       </form>
+    
+    <GoogleLoginComponent/>
   </>);
 };
 
