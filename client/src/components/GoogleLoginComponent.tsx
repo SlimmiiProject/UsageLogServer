@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline, GoogleLogout } from "react-google-login";
+import {gapi} from "gapi-script";
 
 const CLIENT_ID = "221342809801-g72s252qo6fqssr1taughcq32er2o6dh.apps.googleusercontent.com";
 
@@ -9,6 +10,17 @@ export interface UserInfo {
 }
 
 export const GoogleLoginComponent = () => {
+
+    useEffect(() => {
+        const initClient = () => {
+            gapi.client.init({
+            clientId: CLIENT_ID,
+            scope: ''
+          });
+       };
+       gapi.load('client:auth2', initClient);
+    });
+
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [userInfo, setUserInfo] = useState<UserInfo>({
         name: "",
