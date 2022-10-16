@@ -1,9 +1,17 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { AdminPageOneComponent } from "./AdminPageOneComponent";
 import { AllUsers } from "./AllUsers";
 import { LogFile } from "./LogFile";
 
 export const AdminPage = (): JSX.Element => {
+  let location = useLocation();
+  if (location.pathname[location.pathname.length - 1] === "/") {
+    location.pathname = location.pathname.substring(
+      0,
+      location.pathname.length - 1
+    );
+  }
   return (
     <>
       <div className="boxnoborder">
@@ -11,22 +19,22 @@ export const AdminPage = (): JSX.Element => {
         <div className="flex">
           <AdminPageOneComponent
             title="Alle gebruikers"
-            link="/admin/allusers"
+            link={`${location.pathname}/allusers`}
             icon="profile"
           />
           <AdminPageOneComponent
             title="Logfile"
-            link="/admin/logfile"
+            link={`${location.pathname}/logfile`}
             icon="log"
           />
           <AdminPageOneComponent
             title="Alle apparaten"
-            link="/admin/alldevices"
+            link={`${location.pathname}/alldevice`}
             icon="device"
           />
           <AdminPageOneComponent
             title="Vertalingen"
-            link="/admin/translate"
+            link={`${location.pathname}/translate`}
             icon="translate"
           />
         </div>

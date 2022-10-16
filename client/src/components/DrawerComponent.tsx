@@ -23,6 +23,8 @@ import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import { NavLink } from "react-router-dom";
 import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
+import { LanguageSelector } from "./LanguageSelector";
+import { languages } from "../util/language/I18n";
 
 const drawerWidth = 240;
 
@@ -75,7 +77,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function PersistentDrawerLeft() {
+export default function PersistentDrawerLeft({ lang }: { lang: string }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -169,6 +171,11 @@ export default function PersistentDrawerLeft() {
               </ListItem>
             </NavLink>
           ))}
+        </List>
+        <List></List>
+        <List>
+          <ListItemIcon></ListItemIcon>
+          <LanguageSelector languages={languages} />
         </List>
         <Divider />
       </Drawer>
