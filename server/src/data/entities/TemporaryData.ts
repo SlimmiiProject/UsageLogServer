@@ -5,13 +5,17 @@ import {
   CreateDateColumn,
   PrimaryColumn,
   PrimaryGeneratedColumn,
+  ManyToOne,
 } from "typeorm";
+import { Device } from "./Device";
 @Entity()
 export class TemporaryData extends BaseEntity {
   @PrimaryGeneratedColumn({ name: "index" })
   index!: number;
-  @Column({ name: "deviceId", unique: false })
-  deviceId!: string;
+
+  @ManyToOne(() => Device, (device) => device.device_index, { nullable: false })
+  device: Device;
+
   @Column("numeric", { name: "day", nullable: true, unique: false })
   Day: number;
 

@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Data } from "./Data";
+import { TemporaryData } from "./TemporaryData";
 import { UserAcount } from "./User";
 
 @Entity()
@@ -49,4 +50,11 @@ export class Device extends BaseEntity {
     name: "userId",
   })
   user!: UserAcount;
+
+  @OneToMany(() => TemporaryData, (tempData) => tempData.device, {
+    nullable: true,
+    cascade: true,
+  })
+  @JoinColumn({ name: "temporary_data" })
+  temporary_data: TemporaryData[];
 }
