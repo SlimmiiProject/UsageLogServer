@@ -137,26 +137,31 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
               id: 0,
               text: "Dashboard",
               icon: <DashboardRoundedIcon />,
-              link: "/dashboard",
+              link: `${lang}/dashboard`,
             },
             {
               id: 1,
               text: "Profiel",
               icon: <AccountCircleRoundedIcon />,
-              link: "/profile",
+              link: `${lang}/profile`,
             },
             {
               id: 2,
               text: "Meters",
               icon: <SpeedRoundedIcon />,
-              link: "/devices",
+              link: `${lang}/devices`,
             },
-            { id: 3, text: "Contact", icon: <MailIcon />, link: "/contact" },
+            {
+              id: 3,
+              text: "Contact",
+              icon: <MailIcon />,
+              link: `${lang}/contact`,
+            },
             {
               id: 4,
               text: "Admin",
               icon: <AdminPanelSettingsRoundedIcon />,
-              link: "/Admin",
+              link: `${lang}/admin`,
             },
           ].map((element) => (
             <NavLink
