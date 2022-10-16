@@ -49,12 +49,13 @@ export class DataProcessor {
   public async CreatetempData(
     deviceId: string,
     dataDay?: number,
-    DataNight?: number
+    dataNight?: number
   ): Promise<void> {
+    let device: Device = await Device.findOneBy({ deviceId: deviceId });
     const newData = new TemporaryData();
-    newData.deviceId = deviceId;
+    newData.device = device;
     if (dataDay) newData.Day = dataDay;
-    if (DataNight) newData.Night = DataNight;
+    if (dataNight) newData.Night = dataNight;
     newData.save();
   }
 
@@ -106,6 +107,15 @@ export class DataProcessor {
       return await UserAcount.findOneBy({ phone: number });
     }
   }
+  public async GetLastData(userid: number): Promise<TemporaryData> {
+    let allData = await DatabaseConnector.INSTANCE.dataSource
+      .getRepository(TemporaryData)
+      .createQueryBuilder("data")
+      .leftJoinAndSelect("data.device", "dev")
+      .where("dev.user = :id", { id: userid })
+      .getMany();
+    return allData.reverse()[0];
+  }
   //#endregion
 
   //#region Alter Data
@@ -138,7 +148,7 @@ export class DataProcessor {
     let user = await UserAcount.findOneBy({ userId: userId });
     await Device.update({ deviceId: deviceid }, { user: user });
   }
-
+  //change name from device
   public async ChangeDeviceAlias(device_index: number, alias: string) {
     Device.update({ device_index: device_index }, { friendlyName: alias });
   }
@@ -161,38 +171,16 @@ export class DataProcessor {
   public async DeleteData(dataid: number): Promise<void> {
     Data.delete({ dataId: dataid });
   }
-  private async BulkDeleteTempData(deviceId: string) {
+  /*
+  delete all temporary data from specific data
+  */
+  private async BulkDeleteTempData(deviceIndex: number) {
     DatabaseConnector.INSTANCE.dataSource
       .createQueryBuilder()
       .delete()
       .from(TemporaryData)
-      .where("deviceId: = :id", { id: deviceId })
+      .where("deviceDeviceIndex: = :id", { id: deviceIndex })
       .execute();
   }
   //#endregion
-
-  //CREATE DATE FROM TEMP DATA
-  public async CleanTemproraryData() {
-    let allDevices: Device[] = await Device.find();
-    let allTempData: TemporaryData[] = await TemporaryData.find();
-    let totalDay: number, totalNight: number;
-    allDevices.map(async (device) => {
-      totalDay = 0;
-      totalNight = 0;
-      let filteredData: TemporaryData[] = allTempData.filter(
-        (data) => data.deviceId == device.deviceId
-      );
-      filteredData.map((data) => {
-        totalDay += data.Day;
-        totalNight += data.Night;
-      });
-      await this.CreateData(
-        device.deviceId,
-        new Date(Date.now()),
-        totalDay,
-        totalNight
-      );
-      await this.BulkDeleteTempData(device.deviceId);
-    });
-  }
 }
