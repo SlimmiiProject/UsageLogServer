@@ -47,7 +47,7 @@ export class App {
             connectionLimit: 10,
             password: database.password,
             user: database.username,
-            database: database.database,
+            database: database.database_name,
             host: database.host,
             port: database.port,
             createDatabaseTable: true
