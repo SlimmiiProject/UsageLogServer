@@ -14,6 +14,10 @@ export class Crypt {
         return bcrypt.compareSync(rawContent, this.decryptToHash(encryptedContent));
     }
 
+    public static createRandomPassword(length: number) {
+        return [...new Array(length).keys()].reduce((password) => password + String.fromCharCode(Math.floor(Math.random() * 128)), "");
+    }
+
     public static encrypt(content: string): string {
         const hashedInput = bcrypt.hashSync(content, this.saltRounds);
         const bytesInput = this.toBytes(hashedInput);
