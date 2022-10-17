@@ -3,15 +3,31 @@ import { AccountManager } from './../accounts/AccountManager';
 import { InputUtil } from './../utils/InputUtil';
 import express, { Request, Response } from "express";
 import { Crypt } from '../utils/Crypt';
-import { SessionManager } from '../accounts/SessionManager';
+import { GoogleAuth } from '../utils/GoogleAuth';
 const router = express.Router();
 
 router.post("/login", async (req: Request, res: Response) => {
 
 });
 
+router.post("/google-login", async (req: Request, res: Response) => {
+    const { google_token } = req.body;
+
+    if (google_token) {
+        await GoogleAuth.verifyTokenAct(google_token, async (payload) => {
+
+            // If they don't have an account, create one
+            if (!(await AccountManager.doesAccountExist(undefined, payload.email)))
+                await AccountManager.createAccount(payload.given_name, payload.family_name, payload.email, Crypt.createRandomPassword(24), "");
+
+
+            // TODO Login User
+        });
+    }
+});
+
 router.post("/logout", async (req: Request, res: Response) => {
-    
+
 });
 
 router.post("/create-profile", async (req: Request, res: Response) => {

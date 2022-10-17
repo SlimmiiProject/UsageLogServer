@@ -17,4 +17,13 @@ export class IOUtil {
         return conn.data;
     }
 
+    public static async logoutUser() {
+        await this.INSTANCE.post("/profiles/logout/");
+    }
+
+    public static async LoginGoogle(token: string) {
+        await this.INSTANCE.post("/profiles/google-login/", {
+            google_token: token
+        });
+    }
 }
