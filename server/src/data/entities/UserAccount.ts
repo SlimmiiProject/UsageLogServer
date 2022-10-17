@@ -10,7 +10,7 @@ import { Device } from "./Device";
 
 @Entity()
 export class UserAccount extends BaseEntity {
-  
+
   @PrimaryGeneratedColumn({
     name: "userId",
   })
@@ -43,7 +43,7 @@ export class UserAccount extends BaseEntity {
   })
   email: string;
 
-  @Column("varchar", { nullable: false, unique: true, length: 12})
+  @Column("varchar", { nullable: false, unique: true, length: 12 })
   phone: string;
 
   @OneToMany(() => Device, (device) => device.deviceId, {
