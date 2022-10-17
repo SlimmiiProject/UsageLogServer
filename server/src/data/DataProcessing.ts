@@ -18,7 +18,7 @@ export class DataProcessor {
     lastname: string,
     email: string,
     password: string | undefined,
-    phonenumber: string,
+    phonenumber?: string,
   ): Promise<number> {
     return (await UserAccount.insert({
       email: email,
