@@ -2,7 +2,16 @@ import { AccountManager } from './../accounts/AccountManager';
 import { InputUtil } from './../utils/InputUtil';
 import express, { Request, Response } from "express";
 import { Crypt } from '../utils/Crypt';
+import { SessionManager } from '../accounts/SessionManager';
 const router = express.Router();
+
+router.post("/login", async (req: Request, res: Response) => {
+
+});
+
+router.post("/logout", async (req: Request, res: Response) => {
+    
+});
 
 router.post("/create-profile", async (req: Request, res: Response) => {
     let body = req.body;

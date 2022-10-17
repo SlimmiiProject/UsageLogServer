@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express, { request, Router } from "express";
 import { Express } from "express-serve-static-core";
 import "reflect-metadata";
 import { DatabaseConnector } from "./data/DatabaseConnector";
@@ -7,7 +7,9 @@ import helmet from "helmet";
 import { Logger } from "./utils/Logger";
 
 const cors = require("cors");
-const { server_port, url } = Environment.CONFIG;
+const session = require('express-session');
+const { server_port, url, developmentEnv } = Environment.CONFIG;
+const mysqlStore = require('express-mysql-session')(session);
 
 export class App {
 
@@ -23,6 +25,7 @@ export class App {
         this._app = express();
         this.setup();
         this.appSetup();
+        this.setupSession();
         this.setupRoutes();
     }
 
@@ -30,11 +33,39 @@ export class App {
         await DatabaseConnector.INSTANCE.initialize();
     }
 
+
     private appSetup() {
         this.App.use(express.json());
         this.App.use(express.urlencoded({ extended: true }));
         this.App.use(helmet());
         this.App.use(cors());
+    }
+
+    private setupSession() {
+        const { session_secret, database } = Environment.CONFIG;
+        const options = {
+            connectionLimit: 10,
+            password: database.password,
+            user: database.username,
+            database: database.database,
+            host: database.host,
+            port: database.port,
+            createDatabaseTable: true
+        }
+
+        const sessionStore = new mysqlStore(options);
+
+        this.App.use(session({
+            name: process.env.SESS_NAME,
+            resave: false,
+            saveUninitialized: false,
+            store: sessionStore,
+            secret: session_secret,
+            cookie: {
+                sameSite: true,
+                secure: developmentEnv
+            }
+        }))
     }
 
     private setupRoutes() {
