@@ -37,7 +37,7 @@ export class Mailer {
         if (!receivers.every(receiver => RegExpVal.validate(receiver, RegExpVal.emailValidator))) return;
 
         this._transporter.sendMail({
-            from: '"SlimmiiMeter" <slimmiiproject@gmail.com>',
+            from: `"SlimmiiMeter" <${username}>`,
             to: receivers.join(","),
             subject: subject,
             html: htmlContent,
