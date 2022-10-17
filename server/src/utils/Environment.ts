@@ -29,7 +29,14 @@ export class Environment {
                 port: parseInt(process.env.DATABASE_PORT),
                 username: process.env.DATABASE_USERNAME,
                 password: process.env.DATABASE_PASSWORD,
-                database: process.env.DATABASE_NAME
+                database_name: process.env.DATABASE_NAME
+            },
+
+            mailer: {
+                smtp_host: process.env.MAIL_HOST,
+                smtp_port: parseInt(process.env.MAIL_PORT),
+                username: process.env.MAIL_USERNAME,
+                password: process.env.MAIL_PASSWORD
             }
         }
     }
