@@ -1,3 +1,4 @@
+import { RegExpVal } from './../utils/RegexValidator';
 import { AccountManager } from './../accounts/AccountManager';
 import { InputUtil } from './../utils/InputUtil';
 import express, { Request, Response } from "express";
@@ -29,6 +30,17 @@ router.post("/create-profile", async (req: Request, res: Response) => {
     if (Object.values(data).every(InputUtil.isSet)) {
         const hashedPassword = Crypt.encrypt(data.password);
 
+        // Validate entries
+        if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) {
+            res.status(500).json(errorJson("Wrong Syntax for email or phone", body));
+            return;
+        }
+
+        if (await AccountManager.doesAccountExist(0, data.email, data.phone_number)) {
+            res.json(errorJson("Account already exists", body));
+            return;
+        }
+
         if (data.password.length < 8) {
             res.json(errorJson("Password too short", body));
             return;
@@ -44,7 +56,7 @@ router.post("/create-profile", async (req: Request, res: Response) => {
             return;
         }
 
-        res.json(errorJson("Account already exists", body));
+        res.status(500).json(errorJson("Something went wrong.", body));
         return;
     }
 
