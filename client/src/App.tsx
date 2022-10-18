@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
+
 import Profile from "./components/Profile";
-import AddSensor from "./components/AddSensor";
-import { languages } from "./util/language/I18n";
-import { LanguageSelector } from "./components/LanguageSelector";
 import { Route, Routes, NavLink, useParams, Navigate } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import Register from "./components/Register";

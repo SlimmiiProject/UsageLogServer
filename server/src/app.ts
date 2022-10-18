@@ -1,19 +1,20 @@
-import express from "express";
+import express, { request, Router } from "express";
 import { Express } from "express-serve-static-core";
-import { Logger } from "./utils/Logger";
 import "reflect-metadata";
 import { DatabaseConnector } from "./data/DatabaseConnector";
 import { Environment } from "./utils/Environment";
 import helmet from "helmet";
-
+import { Logger } from "./utils/Logger";
 
 const cors = require("cors");
-const {port, url} = Environment.CONFIG;
+const session = require('express-session');
+const { server_port, url, developmentEnv } = Environment.CONFIG;
+const mysqlStore = require('express-mysql-session')(session);
 
 export class App {
 
     public static readonly INSTANCE = new App();
-    
+
     private _app: Express;
 
     public get App(): Express {
@@ -24,6 +25,8 @@ export class App {
         this._app = express();
         this.setup();
         this.appSetup();
+        this.setupSession();
+        this.setupRoutes();
     }
 
     private async setup() {
@@ -31,18 +34,59 @@ export class App {
     }
 
     private appSetup() {
-        this.App.set("port", port);
+        this.App.use(express.json());
+        this.App.use(express.urlencoded({ extended: true }));
         this.App.use(helmet());
         this.App.use(cors());
+    }
+
+    private setupSession() {
+        const { session_secret, database } = Environment.CONFIG;
+        const options = {
+            connectionLimit: 10,
+            password: database.password,
+            user: database.username,
+            database: database.database_name,
+            host: database.host,
+            port: database.port,
+            createDatabaseTable: true
+        }
+
+        const sessionStore = new mysqlStore(options);
+
+        this.App.use(session({
+            name: process.env.SESS_NAME,
+            resave: false,
+            saveUninitialized: false,
+            store: sessionStore,
+            secret: session_secret,
+            cookie: {
+                sameSite: true,
+                secure: developmentEnv
+            }
+        }))
+    }
+
+    private setupRoutes() {
+        const apiRouter: Router = require("./routes/ApiRouter");
+        const translationRouter: Router = require("./routes/TranslationRoutes");
+        const userRouter: Router = require("./routes/UserRouter");
+        const dataRouter: Router = require("./routes/DataRouter");
+        const profileRouter: Router = require("./routes/ProfileRouter");
+
+        this.App.use("/api", apiRouter);
+        apiRouter.use("/translation", translationRouter);
+        apiRouter.use("/users/:userId", userRouter);
+        apiRouter.use("/data", dataRouter);
+        apiRouter.use("/profiles", profileRouter);
     }
 
     public start() {
         this.App.listen(this.port, () => Logger.info(`App has started on: ${url}:${this.port}/`));
     }
 
-
     private get port() {
-        return this._app.get("port");
+        return server_port;
     }
 }
 
