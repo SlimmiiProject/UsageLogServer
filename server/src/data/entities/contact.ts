@@ -1,19 +1,25 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity()
-export class Contact extends BaseEntity {
+export class ContactForm extends BaseEntity {
   @PrimaryGeneratedColumn({
     name: "contactId",
   })
-  userId: number;
+  contactId: number;
 
   @Column("varchar", {
-    nullable: true,
+    nullable: false,
     unique: false,
     length: 20,
-    name: "name",
+    name: "topic",
   })
-  name: string;
+  message_topic: string;
 
   @Column("varchar", {
     nullable: false,
@@ -29,4 +35,7 @@ export class Contact extends BaseEntity {
     name: "message",
   })
   message: string;
+
+  @CreateDateColumn({ name: "created_at" })
+  created_at: Date;
 }
