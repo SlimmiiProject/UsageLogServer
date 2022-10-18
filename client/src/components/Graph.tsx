@@ -20,9 +20,19 @@ export interface Data {
 export interface MeerdereData {
   data: Data[];
   titel: string;
+  colorDay?: string;
+  colorNight?: string;
 }
 
 export default function App(props: MeerdereData) {
+  let colorDay = props.colorDay;
+  let colorNight = props.colorNight;
+  if (colorDay === undefined) {
+    colorDay = "#ffbc40";
+  }
+  if (colorNight === undefined) {
+    colorNight = "#00008b";
+  }
   return (
     <>
       <h3>{props.titel}</h3>
@@ -44,8 +54,8 @@ export default function App(props: MeerdereData) {
           <Tooltip />
           <Legend />
           <ReferenceLine y={0} stroke="#000" />
-          <Bar dataKey="dag" fill="#ffbc40" />
-          <Bar dataKey="nacht" fill="#00008b" />
+          <Bar dataKey="dag" fill={colorDay} />
+          <Bar dataKey="nacht" fill={colorNight} />
         </BarChart>
       </div>
     </>
