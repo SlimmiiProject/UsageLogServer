@@ -51,10 +51,10 @@ export class Device extends BaseEntity {
   })
   user!: UserAccount;
 
-  // @OneToMany(() => TemporaryData, (tempData) => tempData.device, {
-  //   nullable: true,
-  //   cascade: true,
-  // })
-  // @JoinColumn({ name: "temporary_data" })
-  // temporary_data: TemporaryData[];
+  @OneToMany(() => TemporaryData, (tempData) => tempData.device, {
+    nullable: true,
+    cascade: true,
+  })
+  @JoinColumn({ name: "temporary_data" })
+  temporary_data: TemporaryData[];
 }
