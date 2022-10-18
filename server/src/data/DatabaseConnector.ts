@@ -2,6 +2,7 @@ import { DataSource } from "typeorm";
 import { Environment } from "../utils/Environment";
 import { Logger } from "../utils/Logger";
 import { Administrator } from "./entities/Administrator";
+import { ContactForm } from "./entities/contact";
 import { Data } from "./entities/Data";
 import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
@@ -35,6 +36,7 @@ export class DatabaseConnector {
         Administrator,
         Translations,
         TemporaryData,
+        ContactForm,
       ],
     });
   }
