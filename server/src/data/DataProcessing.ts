@@ -7,7 +7,7 @@ import { TemporaryData } from "./entities/TemporaryData";
 import { ContactForm } from "./entities/contact";
 export class DataProcessor {
   //#region Create Data
-  public async CreateDevice(DeviceId: string, alias?: string) {
+  public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
     const newDevice = new Device();
     newDevice.deviceId = DeviceId;
     if (alias) newDevice.friendlyName = alias;
@@ -69,7 +69,7 @@ export class DataProcessor {
     email: string,
     message: string,
     message_topic: string
-  ) {
+  ): Promise<void> {
     let contactForm = new ContactForm();
     contactForm.email = email;
     contactForm.message = message;
@@ -148,7 +148,7 @@ export class DataProcessor {
     password: string,
     email: string,
     phone: number
-  ) {
+  ): Promise<void> {
     await UserAcount.update(userid, {
       firstname: firstname,
       lastname: lastname,
@@ -166,7 +166,10 @@ export class DataProcessor {
     await Device.update({ deviceId: deviceid }, { user: user });
   }
   //change name from device
-  public async ChangeDeviceAlias(device_index: number, alias: string) {
+  public async ChangeDeviceAlias(
+    device_index: number,
+    alias: string
+  ): Promise<void> {
     Device.update({ device_index: device_index }, { friendlyName: alias });
   }
   //#endregion
@@ -195,7 +198,7 @@ export class DataProcessor {
   /*
   delete all temporary data from specific data
   */
-  private async CleantempData(deviceIndex: number) {
+  private async CleantempData(deviceIndex: number): Promise<void> {
     DatabaseConnector.INSTANCE.dataSource
       .createQueryBuilder()
       .delete()
