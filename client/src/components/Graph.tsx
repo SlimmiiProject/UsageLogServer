@@ -27,8 +27,8 @@ export default function App(props: MeerdereData) {
     <>
       <h3>{props.titel}</h3>
       <BarChart
-        width={600}
-        height={300}
+        width={1000}
+        height={500}
         data={props.data}
         margin={{
           top: 5,
@@ -43,8 +43,8 @@ export default function App(props: MeerdereData) {
         <Tooltip />
         <Legend />
         <ReferenceLine y={0} stroke="#000" />
-        <Bar dataKey="nacht" fill="#8884d8" />
         <Bar dataKey="dag" fill="#82ca9d" />
+        <Bar dataKey="nacht" fill="#8884d8" />
       </BarChart>
     </>
   );

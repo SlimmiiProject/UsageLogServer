@@ -22,6 +22,8 @@ import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import { NavLink } from "react-router-dom";
+import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
+import { LanguageSelector } from "./LanguageSelector";
 
 const drawerWidth = 240;
 
@@ -74,7 +76,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function PersistentDrawerLeft() {
+export default function PersistentDrawerLeft({ lang }: { lang: string }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -134,21 +136,32 @@ export default function PersistentDrawerLeft() {
               id: 0,
               text: "Dashboard",
               icon: <DashboardRoundedIcon />,
-              link: "/dashboard",
+              link: `${lang}/dashboard`,
             },
             {
               id: 1,
               text: "Profiel",
               icon: <AccountCircleRoundedIcon />,
-              link: "/profile",
+              link: `${lang}/profile`,
             },
             {
               id: 2,
               text: "Meters",
               icon: <SpeedRoundedIcon />,
-              link: "/devices",
+              link: `${lang}/devices`,
             },
-            { id: 3, text: "Contact", icon: <MailIcon />, link: "/contact" },
+            {
+              id: 3,
+              text: "Contact",
+              icon: <MailIcon />,
+              link: `${lang}/contact`,
+            },
+            {
+              id: 4,
+              text: "Admin",
+              icon: <AdminPanelSettingsRoundedIcon />,
+              link: `${lang}/admin`,
+            },
           ].map((element) => (
             <NavLink
               to={element.link}
@@ -162,6 +175,11 @@ export default function PersistentDrawerLeft() {
               </ListItem>
             </NavLink>
           ))}
+        </List>
+        <List></List>
+        <List>
+          <ListItemIcon></ListItemIcon>
+          <LanguageSelector />
         </List>
         <Divider />
       </Drawer>
