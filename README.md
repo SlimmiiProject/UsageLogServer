@@ -3,6 +3,8 @@
  ![](https://img.shields.io/badge/React-blue.svg)
  ![](https://img.shields.io/badge/Express-blue.svg)
  ![](https://img.shields.io/badge/Owner-Andie_Similon-blue.svg) ![](https://img.shields.io/badge/Project%20Status-Incomplete-red.svg)
+ [![Dependency Review](https://github.com/SlimmiiProject/UsageLogServer/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/SlimmiiProject/UsageLogServer/actions/workflows/dependency-review.yml)
+ [![Build](https://github.com/SlimmiiProject/UsageLogServer/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/SlimmiiProject/UsageLogServer/actions/workflows/codeql-analysis.yml)
 
 
 # About this project
