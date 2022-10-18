@@ -10,9 +10,19 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { IOUtil } from "../util/IOUtil";
 
+export interface ContactInfo {
+    firstname: string,
+    lastname: string,
+    email: string,
+    ProblemWith: string,
+    Problem: string;
+}
 
 const Contact = (): JSX.Element => {
+
+const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", lastname: "", email: "", ProblemWith: "", Problem: ""});
 
     return (
         <Box
@@ -42,6 +52,7 @@ const Contact = (): JSX.Element => {
                             fullWidth
                             autoComplete="given-name"
                             variant="standard"
+                            onChange={event => SetContactData({...contactData, firstname: event.target.textContent!})}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -53,6 +64,7 @@ const Contact = (): JSX.Element => {
                             fullWidth
                             autoComplete="family-name"
                             variant="standard"
+                            onChange={event => SetContactData({...contactData, lastname: event.target.textContent!})}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -64,6 +76,7 @@ const Contact = (): JSX.Element => {
                             fullWidth
                             autoComplete="email"
                             variant="standard"
+                            onChange={event => SetContactData({...contactData, email: event.target.textContent!})}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -75,6 +88,7 @@ const Contact = (): JSX.Element => {
                             fullWidth
                             autoComplete="ProblemWith"
                             variant="standard"
+                            onChange={event => SetContactData({...contactData, ProblemWith: event.target.textContent!})}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -85,12 +99,14 @@ const Contact = (): JSX.Element => {
                             minRows={8}
                             required
                             style={{ width: 600 }}
+                            onChange={event => SetContactData({...contactData, Problem: event.target.textContent!})}
                         />
                     </Grid>
                     <Button
                         type="submit"
                         sx={{ mt: 2, mb: 2, bgcolor: 'rgba(25,118,210,255)', color: "white" }}
                         style={{ width: 600, marginLeft: 23, }}
+                        onClick={async event => await IOUtil.SendContactData(contactData)}
                     >
                         Send
                     </Button>
