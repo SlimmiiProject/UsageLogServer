@@ -16,13 +16,13 @@ export interface ContactInfo {
     firstname: string,
     lastname: string,
     email: string,
-    ProblemWith: string,
-    Problem: string;
+    subject: string,
+    description: string;
 }
 
 const Contact = (): JSX.Element => {
 
-const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", lastname: "", email: "", ProblemWith: "", Problem: ""});
+const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", lastname: "", email: "", subject: "", description: ""});
 
     return (
         <Box
@@ -52,7 +52,7 @@ const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", last
                             fullWidth
                             autoComplete="given-name"
                             variant="standard"
-                            onChange={event => SetContactData({...contactData, firstname: event.target.textContent!})}
+                            onChange={event => SetContactData({...contactData, firstname: event.target.value})}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -64,7 +64,7 @@ const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", last
                             fullWidth
                             autoComplete="family-name"
                             variant="standard"
-                            onChange={event => SetContactData({...contactData, lastname: event.target.textContent!})}
+                            onChange={event => SetContactData({...contactData, lastname: event.target.value})}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -76,7 +76,7 @@ const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", last
                             fullWidth
                             autoComplete="email"
                             variant="standard"
-                            onChange={event => SetContactData({...contactData, email: event.target.textContent!})}
+                            onChange={event => SetContactData({...contactData, email: event.target.value})}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -88,7 +88,7 @@ const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", last
                             fullWidth
                             autoComplete="ProblemWith"
                             variant="standard"
-                            onChange={event => SetContactData({...contactData, ProblemWith: event.target.textContent!})}
+                            onChange={event => SetContactData({...contactData, subject: event.target.value})}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -99,7 +99,7 @@ const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", last
                             minRows={8}
                             required
                             style={{ width: 600 }}
-                            onChange={event => SetContactData({...contactData, Problem: event.target.textContent!})}
+                            onChange={event => SetContactData({...contactData, description: event.target.value})}
                         />
                     </Grid>
                     <Button
