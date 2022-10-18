@@ -5,15 +5,14 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserAccount } from "./UserAccount";
+import { UserAcount } from "./User";
 
 @Entity()
 export class Administrator extends BaseEntity {
-  
   @PrimaryGeneratedColumn()
-  adminId: number;
+  adminId!: number;
 
-  @OneToOne(() => UserAccount, { nullable: false, cascade: true })
+  @OneToOne(() => UserAcount, { nullable: false, cascade: false })
   @JoinColumn({ name: "user" })
-  user: UserAccount;
+  user!: UserAcount;
 }

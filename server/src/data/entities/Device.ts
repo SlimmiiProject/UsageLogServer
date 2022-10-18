@@ -9,11 +9,11 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Data } from "./Data";
-import { UserAccount } from "./UserAccount";
+import { TemporaryData } from "./TemporaryData";
+import { UserAcount } from "./User";
 
 @Entity()
 export class Device extends BaseEntity {
-  
   @PrimaryGeneratedColumn()
   device_index!: number;
 
@@ -23,14 +23,14 @@ export class Device extends BaseEntity {
     unique: true,
     length: 64,
   })
-  deviceId: string;
+  deviceId!: string;
 
   @OneToMany(() => Data, (data) => data.dataId, {
     nullable: true,
     cascade: true,
   })
   @JoinColumn({ name: "data" })
-  data: Data[];
+  data!: Data[];
 
   @Column("varchar", {
     nullable: true,
@@ -38,9 +38,9 @@ export class Device extends BaseEntity {
     unique: false,
     name: "deviceAlias",
   })
-  friendlyName: string;
+  friendlyName!: string;
 
-  @ManyToOne(() => UserAccount, (useracount) => useracount.device, {
+  @ManyToOne(() => UserAcount, (useracount) => useracount.device, {
     nullable: true,
     cascade: true,
     onDelete: "SET NULL",
@@ -49,5 +49,12 @@ export class Device extends BaseEntity {
   @JoinColumn({
     name: "userId",
   })
-  user: UserAccount;
+  user!: UserAcount;
+
+  @OneToMany(() => TemporaryData, (tempData) => tempData.device, {
+    nullable: true,
+    cascade: true,
+  })
+  @JoinColumn({ name: "temporary_data" })
+  temporary_data: TemporaryData[];
 }

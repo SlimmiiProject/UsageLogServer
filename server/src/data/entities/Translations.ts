@@ -1,14 +1,10 @@
-import { BaseEntity, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class Translations extends BaseEntity {
-
   @PrimaryColumn("varchar", { nullable: false, length: 2, unique: true })
-  lang_key: string;
-
-  @Column("varchar", {length: 15})
-  nativeName:string;
+  lang_key!: string;
 
   @Column("longtext")
-  translations: string;
+  text!: string;
 }
