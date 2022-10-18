@@ -5,16 +5,17 @@ antiLink {
   text-decoration: none;
 }
 
-.grafiek {
+.graph {
   border: 2px solid #ccc;
   border-radius: 2rem;
-  width: fit-content;
+  min-width: 300px;
+  width: 80%;
   padding: 0 2rem;
   margin: 2rem;
   background-color: rgb(250, 250, 250);
 }
 
-.grafiek h3 {
+.graph h3 {
   text-align: center;
   background-color: #ccc;
   border-radius: 2rem;
