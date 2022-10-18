@@ -4,6 +4,7 @@ import { DatabaseConnector } from "./DatabaseConnector";
 import { UserAcount } from "./entities/User";
 import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
+import { ContactForm } from "./entities/contact";
 export class DataProcessor {
   //#region Create Data
   public async CreateDevice(DeviceId: string, alias?: string) {
@@ -63,6 +64,18 @@ export class DataProcessor {
     let user = await UserAcount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
+
+  public async CreateContactForm(
+    email: string,
+    message: string,
+    message_topic: string
+  ) {
+    let contactForm = new ContactForm();
+    contactForm.email = email;
+    contactForm.message = message;
+    contactForm.message_topic = message_topic;
+    contactForm.save();
+  }
   //#endregion
 
   //#region get Data
@@ -115,6 +128,10 @@ export class DataProcessor {
       .where("dev.user = :id", { id: userid })
       .getMany();
     return allData.reverse()[0];
+  }
+
+  public async GetContactForms(): Promise<ContactForm[]> {
+    return await ContactForm.find();
   }
   //#endregion
 
@@ -171,10 +188,14 @@ export class DataProcessor {
   public async DeleteData(dataid: number): Promise<void> {
     Data.delete({ dataId: dataid });
   }
+
+  public async DeleteContactForm(id: number): Promise<void> {
+    ContactForm.delete({ contactId: id });
+  }
   /*
   delete all temporary data from specific data
   */
-  private async BulkDeleteTempData(deviceIndex: number) {
+  private async CleantempData(deviceIndex: number) {
     DatabaseConnector.INSTANCE.dataSource
       .createQueryBuilder()
       .delete()
