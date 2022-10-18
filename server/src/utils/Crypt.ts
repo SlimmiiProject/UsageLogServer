@@ -14,7 +14,7 @@ export class Crypt {
         return bcrypt.compareSync(rawContent, this.decryptToHash(encryptedContent));
     }
 
-    public static createRandomPassword(length: number) {
+    public static createRandomPassword(length: number): string {
         return [...new Array(length).keys()].reduce((password) => password + String.fromCharCode(Math.floor(Math.random() * 128)), "");
     }
 

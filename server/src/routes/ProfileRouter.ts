@@ -52,7 +52,7 @@ router.post("/create-profile", async (req: Request, res: Response) => {
             return;
         }
 
-        if (await AccountManager.doesAccountExist(0, data.email, data.phone_number)) {
+        if (await AccountManager.doesAccountExist(0, data.email)) {
             res.json(errorJson("Account already exists", body));
             return;
         }
