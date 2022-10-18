@@ -4,9 +4,10 @@ import { DatabaseConnector } from "./DatabaseConnector";
 import { UserAcount } from "./entities/User";
 import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
+import { ContactForm } from "./entities/contact";
 export class DataProcessor {
   //#region Create Data
-  public async CreateDevice(DeviceId: string, alias?: string) {
+  public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
     const newDevice = new Device();
     newDevice.deviceId = DeviceId;
     if (alias) newDevice.friendlyName = alias;
@@ -63,6 +64,18 @@ export class DataProcessor {
     let user = await UserAcount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
+
+  public async CreateContactForm(
+    email: string,
+    message: string,
+    message_topic: string
+  ): Promise<void> {
+    let contactForm = new ContactForm();
+    contactForm.email = email;
+    contactForm.message = message;
+    contactForm.message_topic = message_topic;
+    contactForm.save();
+  }
   //#endregion
 
   //#region get Data
@@ -116,6 +129,10 @@ export class DataProcessor {
       .getMany();
     return allData.reverse()[0];
   }
+
+  public async GetContactForms(): Promise<ContactForm[]> {
+    return await ContactForm.find();
+  }
   //#endregion
 
   //#region Alter Data
@@ -131,7 +148,7 @@ export class DataProcessor {
     password: string,
     email: string,
     phone: number
-  ) {
+  ): Promise<void> {
     await UserAcount.update(userid, {
       firstname: firstname,
       lastname: lastname,
@@ -149,7 +166,10 @@ export class DataProcessor {
     await Device.update({ deviceId: deviceid }, { user: user });
   }
   //change name from device
-  public async ChangeDeviceAlias(device_index: number, alias: string) {
+  public async ChangeDeviceAlias(
+    device_index: number,
+    alias: string
+  ): Promise<void> {
     Device.update({ device_index: device_index }, { friendlyName: alias });
   }
   //#endregion
@@ -171,10 +191,14 @@ export class DataProcessor {
   public async DeleteData(dataid: number): Promise<void> {
     Data.delete({ dataId: dataid });
   }
+
+  public async DeleteContactForm(id: number): Promise<void> {
+    ContactForm.delete({ contactId: id });
+  }
   /*
   delete all temporary data from specific data
   */
-  private async BulkDeleteTempData(deviceIndex: number) {
+  private async CleantempData(deviceIndex: number): Promise<void> {
     DatabaseConnector.INSTANCE.dataSource
       .createQueryBuilder()
       .delete()
