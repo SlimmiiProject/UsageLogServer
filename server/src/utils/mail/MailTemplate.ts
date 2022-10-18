@@ -1,9 +1,11 @@
 
 import fs from "fs";
 import path from "path";
+import { parse } from 'node-html-parser';
 
 export class MailTemplate {
 
+    private static mainStyle = this.getStyleSheetContent();
     private static templates: Map<string, MailTemplate> = new Map();
 
     private content: string;
@@ -24,12 +26,19 @@ export class MailTemplate {
             compiledHTML = compiledHTML.replaceAll(`%${entry[0]}%`, entry[1])
         });
 
-        return compiledHTML;
+        const root = parse(compiledHTML);
+        root.querySelector("head").appendChild(parse(`<style>${MailTemplate.mainStyle}</style>`));
+        return root.toString();
     }
 
     private getTemplateContent(identifier: string): string {
-
         const dir = path.join(__dirname, "./templates/", `${identifier}.html`);
+        const content = fs.readFileSync(dir, { encoding: "utf8" });
+        return content;
+    }
+
+    private static getStyleSheetContent() {
+        const dir = path.join(__dirname, "./templates/", `mainStyle.css`);
         const content = fs.readFileSync(dir, { encoding: "utf8" });
         return content;
     }
