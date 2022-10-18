@@ -10,7 +10,7 @@ import {
 } from "typeorm";
 import { Data } from "./Data";
 import { TemporaryData } from "./TemporaryData";
-import { UserAcount } from "./User";
+import { UserAccount } from "./UserAccount";
 
 @Entity()
 export class Device extends BaseEntity {
@@ -40,7 +40,7 @@ export class Device extends BaseEntity {
   })
   friendlyName!: string;
 
-  @ManyToOne(() => UserAcount, (useracount) => useracount.device, {
+  @ManyToOne(() => UserAccount, (useracount) => useracount.device, {
     nullable: true,
     cascade: true,
     onDelete: "SET NULL",
@@ -49,12 +49,12 @@ export class Device extends BaseEntity {
   @JoinColumn({
     name: "userId",
   })
-  user!: UserAcount;
+  user!: UserAccount;
 
-  @OneToMany(() => TemporaryData, (tempData) => tempData.device, {
-    nullable: true,
-    cascade: true,
-  })
-  @JoinColumn({ name: "temporary_data" })
-  temporary_data: TemporaryData[];
+  // @OneToMany(() => TemporaryData, (tempData) => tempData.device, {
+  //   nullable: true,
+  //   cascade: true,
+  // })
+  // @JoinColumn({ name: "temporary_data" })
+  // temporary_data: TemporaryData[];
 }

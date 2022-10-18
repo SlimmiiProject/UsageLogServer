@@ -1,3 +1,4 @@
+
 import { DataProcessor } from "../data/DataProcessing";
 import { Crypt } from "../utils/Crypt";
 
@@ -8,12 +9,12 @@ export class AccountManager {
     }
 
     public static async removeAccount(email: string) {
-        const user = (await DataProcessor.GetUser(undefined, email));
+        const user = (await DataProcessor.GetUser(email));
         if (user) await DataProcessor.DeleteUser(user.userId);
     }
 
     public static async doesAccountExist(userId?: number, email?: string): Promise<boolean> {
-        return await DataProcessor.GetUser(userId, email) !== undefined;
+        return await DataProcessor.GetUser(email) !== undefined;
     }
 
 }
