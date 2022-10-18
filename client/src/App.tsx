@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Profile from "./components/Profile";
 import AddSensor from "./components/AddSensor";
-import { I18n, languages } from "./util/language/I18n";
+import { languages } from "./util/language/I18n";
 import { LanguageSelector } from "./components/LanguageSelector";
-import { Route, Routes, NavLink, useParams } from "react-router-dom";
+import { Route, Routes, NavLink, useParams, Navigate } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import Register from "./components/Register";
 import Devices from "./components/Devices";
@@ -17,19 +17,113 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import DashboardComp from "./components/Dashboard";
 import { AdminPage } from "./components/AdminPage";
+import { useTranslation } from "react-i18next";
+import { reloadBrowser } from "./util/BrowserUtil";
+
+export interface Idata {
+  name: string;
+  dag: number;
+  nacht: number;
+}
 
 const App = (): JSX.Element => {
-  let { lang } = useParams();
+  let { i18n } = useTranslation();
+  console.log(i18n);
+
+  let lang = i18n.resolvedLanguage;
+
   if (lang === undefined) {
     lang = "en";
   }
+
+  let indexNavigate = `/${lang}/`;
+
+  const data1 = [
+    {
+      name: "Page A",
+      dag: 4000,
+      nacht: 2400,
+    },
+    {
+      name: "Page B",
+      dag: -3000,
+      nacht: 1398,
+    },
+    {
+      name: "Page C",
+      dag: -2000,
+      nacht: -3000,
+    },
+    {
+      name: "Page D",
+      dag: 2780,
+      nacht: 3908,
+    },
+    {
+      name: "Page E",
+      dag: -1890,
+      nacht: 4800,
+    },
+    {
+      name: "Page F",
+      dag: 2390,
+      nacht: -3800,
+    },
+    {
+      name: "Page G",
+      dag: 3490,
+      nacht: 4300,
+    },
+  ];
+  const data2 = [
+    {
+      name: "Dinsdag",
+      dag: 500,
+      nacht: 20,
+    },
+    {
+      name: "Woensdag",
+      dag: 200,
+      nacht: -10,
+    },
+    {
+      name: "Donderdag",
+      dag: 5000,
+      nacht: 360,
+    },
+    {
+      name: "Vrijdag",
+      dag: 2500,
+      nacht: 2500,
+    },
+    {
+      name: "Zaterdag",
+      dag: -150,
+      nacht: 28,
+    },
+    {
+      name: "Zondag",
+      dag: 248,
+      nacht: -36,
+    },
+    {
+      name: "Maandag",
+      dag: 898,
+      nacht: 247,
+    },
+  ];
+  const combineddata = require("./util/data/testData.json");
   return (
     <>
       <Drawer lang={lang} />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Navigate to={indexNavigate} />} />
         <Route path="/:lang">
-          <Route path="dashboard" element={<DashboardComp />} />
+          <Route index element={<HomePage />} />
+          <Route
+            path="dashboard"
+            element={<DashboardComp data={combineddata} />}
+          />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
           <Route path="profile-change-data" element={<Contact />} />
