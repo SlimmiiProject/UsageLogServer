@@ -27,7 +27,7 @@ export default function App(props: MeerdereData) {
     <>
       <h3>{props.titel}</h3>
       <BarChart
-        width={1000}
+        width={800}
         height={500}
         data={props.data}
         margin={{

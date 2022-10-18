@@ -2,24 +2,34 @@ import React from "react";
 import { MeerdereData } from "./Graph";
 import Graph from "./Graph";
 import { Idata } from "../App";
+import { MemoryRouter } from "react-router-dom";
+
+interface Device {
+  nameDevice: string;
+  data: Datum[];
+}
+
+interface Datum {
+  name: string;
+  dag: number;
+  nacht: number;
+}
 
 export default function App({
-  data: { data1, data2, data3 },
+  data: { devices },
 }: {
-  data: { data1: Idata[]; data2: Idata[]; data3: Idata[] };
+  data: { devices: Device[] };
 }) {
   return (
     <>
       <div className="flex">
-        <div className="grafiek">
-          <Graph data={data1} titel="Meter 1" />
-        </div>
-        <div className="grafiek">
-          <Graph data={data2} titel="Meter 2" />
-        </div>
-        <div className="grafiek">
-          <Graph data={data3} titel="Testmeter" />
-        </div>
+        {devices.map((meter) => {
+          return (
+            <div className="graph">
+              <Graph data={meter.data} titel={meter.nameDevice} />
+            </div>
+          );
+        })}
       </div>
     </>
   );
