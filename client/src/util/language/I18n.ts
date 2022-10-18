@@ -1,45 +1,33 @@
+import { IOUtil } from './../IOUtil';
 import i18n, { TFunction, TOptions } from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import LanguageDetector from "i18next-browser-languagedetector";
 
-const getJsonForLanguage = (languageKey: string) => require(`./languages/${languageKey}.json`);
-
-const default_en = getJsonForLanguage("en");
-
-export type LanguagesType = typeof languages;
-export const languages = {
-    en: {
-        translation: default_en,
-        nativeName: "English"
-    },
-    nl: {
-        translation: getJsonForLanguage("nl"),
-        nativeName: "Nederlands"
-    },
-    de: {
-        translation: getJsonForLanguage("de"),
-        nativeName: "Deutsch"
-    },
-    fr: {
-        translation: getJsonForLanguage("fr"),
-        nativeName: "Français"
-    }
-};
-
-i18n.use(LanguageDetector)
-    .use(initReactI18next)
-    .init({
-        fallbackLng: "en",
-        debug: false,
-        interpolation: {
-            skipOnVariables: false
-        },
-        resources: languages
-    }
-    );
-
 export class I18n {
+
+    private static _translationConfig: { [key: string]: { nativeName: string, translation: { [key: string]: string } } };
+    public static get translationConfig() {
+        return this._translationConfig;
+    }
+
+    public static async setup() {
+        if (this.translationConfig) return;
+
+        this._translationConfig = await IOUtil.getTranslationConfig();
+
+        i18n.use(LanguageDetector)
+            .use(initReactI18next)
+            .init({
+                fallbackLng: "en",
+                debug: false,
+                interpolation: {
+                    skipOnVariables: false
+                },
+                resources: this.translationConfig
+            }
+            );
+    }
 
     /**
      * It takes a key, and returns the translation.
@@ -57,7 +45,7 @@ export class I18n {
         return i18n.t(key, tFunction);
     }
 
-    private static containsTranslationKey(key: string) {
-        return default_en[key];
-    }
+     private static containsTranslationKey(key: string) {
+         return this.translationConfig["en"].translation[key];
+     }
 }
