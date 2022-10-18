@@ -17,6 +17,15 @@ import DashboardComp from "./components/Dashboard";
 import { AdminPage } from "./components/AdminPage";
 import { useTranslation } from "react-i18next";
 
+export interface ItestData {
+  devices: Idevice[];
+}
+export interface Idevice {
+  nameDevice: string;
+  data: Idata[];
+  colorDay: string;
+  colorNight: string;
+}
 export interface Idata {
   name: string;
   dag: number;
@@ -36,7 +45,7 @@ const App = (): JSX.Element => {
   let indexNavigate = `/${lang}/`;
 
   // Add testdata from file to emulate externaldata
-  const combineddata = require("./util/data/testData.json");
+  const combineddata: ItestData = require("./util/data/testData.json");
   return (
     <>
       <Drawer lang={lang} />

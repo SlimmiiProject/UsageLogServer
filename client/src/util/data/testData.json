@@ -154,6 +154,47 @@
           "nacht": 247
         }
       ]
+    },
+    {
+      "colorDay": "#abc",
+      "nameDevice": "No negative values",
+      "data": [
+        {
+          "name": "Page A",
+          "dag": 4000,
+          "nacht": 2400
+        },
+        {
+          "name": "Page B",
+          "dag": 3000,
+          "nacht": 1398
+        },
+        {
+          "name": "Page C",
+          "dag": 2000,
+          "nacht": 3000
+        },
+        {
+          "name": "Page D",
+          "dag": 2780,
+          "nacht": 3908
+        },
+        {
+          "name": "Page E",
+          "dag": 1890,
+          "nacht": 4800
+        },
+        {
+          "name": "Page F",
+          "dag": 2390,
+          "nacht": 3800
+        },
+        {
+          "name": "Page G",
+          "dag": 3490,
+          "nacht": 1000
+        }
+      ]
     }
   ]
 }
