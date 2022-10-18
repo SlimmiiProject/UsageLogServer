@@ -1,9 +1,12 @@
+:root {
+  --usedBlue: rgba(25, 118, 210, 255);
+}
 antiLink {
   text-decoration: none;
 }
 
 .grafiek {
-  border: 2px solid black;
+  border: 2px solid #ccc;
   border-radius: 2rem;
   width: fit-content;
   padding: 0 2rem;
@@ -26,12 +29,39 @@ antiLink {
   border-radius: 2rem;
 }
 
+.boxnoborder {
+  width: 90%;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 .flex {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
 
+.flexbox {
+  width: 200px;
+  height: 200px;
+  padding: 0 2rem;
+  border: 3px solid var(--usedBlue);
+  background-color: var(--usedBlue);
+}
+
+.center {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.small {
+  font-size: 1rem;
+  color: white;
+}
+
+.padvert1-5 {
+  padding: 1.5rem 0;
+}
 Button {
   height: 2.5rem;
 }

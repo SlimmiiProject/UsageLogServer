@@ -2,13 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
+import { I18n } from "./util/language/I18n";
 
-// Import translation configuration
-import "./util/language/I18n";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+(async () => {
+
+  await I18n.setup();
+  
+  const root = ReactDOM.createRoot(
+    document.getElementById("root") as HTMLElement
+  );
+
 
 root.render(
   <React.StrictMode>
@@ -19,3 +23,4 @@ root.render(
     </React.Suspense>
   </React.StrictMode>
 );
+})();

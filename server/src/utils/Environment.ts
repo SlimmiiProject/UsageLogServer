@@ -24,16 +24,24 @@ export class Environment {
         const config = {... dotenv.config()["parsed"], ... argv_conf}
 
         return {
-            url: config.URL,
-            port: parseInt(config.PORT!),
-            developmentEnv: Converter.parseBoolean(config.DEV_ENV),
+            url: process.env.URL,
+            server_port: parseInt(process.env.SERVER_PORT),
+            developmentEnv: Converter.parseBoolean(process.env.DEV_ENV),
+            session_secret: process.env.SESSION_SECRET,
 
             database: {
-                host: config.DATABASE_HOST,
-                port: parseInt(config.DATABASE_PORT!),
-                username: config.DATABASE_USERNAME,
-                password: config.DATABASE_PASSWORD,
-                database: config.DATABASE_NAME
+                host: process.env.DATABASE_HOST,
+                port: parseInt(process.env.DATABASE_PORT),
+                username: process.env.DATABASE_USERNAME,
+                password: process.env.DATABASE_PASSWORD,
+                database_name: process.env.DATABASE_NAME
+            },
+
+            mailer: {
+                smtp_host: process.env.MAIL_HOST,
+                smtp_port: parseInt(process.env.MAIL_PORT),
+                username: process.env.MAIL_USERNAME,
+                password: process.env.MAIL_PASSWORD
             }
         }
     }
