@@ -26,21 +26,22 @@ export class Mailer {
         });
     }
 
-    public async sendMailTo(receiver:string, subject:string, htmlCOntent:string) {
+    public async sendMailTo(receiver: string, subject: string, htmlCOntent: string) {
         this.sendMailToAll([receiver], subject, htmlCOntent);
     }
 
     public async sendMailToAll(receivers: string[], subject: string, htmlContent: string) {
         if (receivers.length === 0 || subject === "") return;
 
-        // Do all receivers match mail format
-        if (!receivers.every(receiver => RegExpVal.validate(receiver, RegExpVal.emailValidator))) return;
+        for (let receiver of receivers) {
+            if (!RegExpVal.validate(receiver, RegExpVal.emailValidator)) continue;
 
-        this._transporter.sendMail({
-            from: `"SlimmiiMeter" <${username}>`,
-            to: receivers.join(","),
-            subject: subject,
-            html: htmlContent,
-        }).catch(error => Logger.error(error));
+            this._transporter.sendMail({
+                from: `"SlimmiiMeter" <${username}>`,
+                to: receiver,
+                subject: subject,
+                html: htmlContent,
+            }).catch(error => Logger.error(error));
+        }
     }
 }

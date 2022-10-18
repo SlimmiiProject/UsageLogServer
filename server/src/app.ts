@@ -33,7 +33,6 @@ export class App {
         await DatabaseConnector.INSTANCE.initialize();
     }
 
-
     private appSetup() {
         this.App.use(express.json());
         this.App.use(express.urlencoded({ extended: true }));
