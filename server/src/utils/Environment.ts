@@ -23,6 +23,7 @@ export class Environment {
             url: process.env.URL,
             server_port: parseInt(process.env.SERVER_PORT),
             developmentEnv: Converter.parseBoolean(process.env.DEV_ENV),
+            session_secret: process.env.SESSION_SECRET,
 
             database: {
                 host: process.env.DATABASE_HOST,

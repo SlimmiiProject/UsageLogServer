@@ -18,7 +18,7 @@ export class DataProcessor {
     lastname: string,
     email: string,
     password: string | undefined,
-    phonenumber: string,
+    phonenumber?: string,
   ): Promise<number> {
     return (await UserAccount.insert({
       email: email,
@@ -80,13 +80,11 @@ export class DataProcessor {
 
   public static async GetUser(
     userid?: number,
-    email?: string,
-    number?: string
+    email?: string
   ): Promise<UserAccount> {
     return ObjectUtil.firstNonUndefined([
       await UserAccount.findOneBy({ userId: userid }),
-      await UserAccount.findOneBy({ email: email }),
-      await UserAccount.findOneBy({ phone: number })
+      await UserAccount.findOneBy({ email: email })
     ]);
   }
   //#endregion

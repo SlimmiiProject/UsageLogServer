@@ -7,7 +7,7 @@ import { Device } from "./entities/Device";
 import { Translations } from "./entities/Translations";
 import { UserAccount } from "./entities/UserAccount";
 
-const { database } = Environment.CONFIG;
+const { database: { database_name, host, port, username, password } } = Environment.CONFIG;
 
 export class DatabaseConnector {
   private _dataSource: DataSource;
@@ -18,7 +18,11 @@ export class DatabaseConnector {
   private constructor() {
     this._dataSource = new DataSource({
       type: "mysql",
-      ...database,
+      host: host,
+      port: port,
+      username: username,
+      password: password,
+      database: database_name,
       synchronize: true,
       logging: Environment.isDev(),
       entities: [UserAccount, Device, Data, Administrator, Translations],

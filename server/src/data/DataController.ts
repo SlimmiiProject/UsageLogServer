@@ -5,7 +5,7 @@ export class DataController {
     public static async getTranslationJson(): Promise<Object> {
         let translationSetup: any = {};
 
-        const languages: Translations[] = await Translations.find();        
+        const languages: Translations[] = await Translations.find();
 
         languages.forEach(language => {
             translationSetup[language.lang_key] = {
