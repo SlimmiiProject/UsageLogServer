@@ -28,7 +28,7 @@ App that receives data from a microcontroller that is set up at your electricity
 
 </ul>
 
-<a href="https://github.com/GremlinsAP/TheOne/graphs/contributors">
+<a href="https://github.com/SlimmiiProject/UsageLogServer/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=SlimmiiProject/UsageLogServer" style="margin-top:1rem"/>
 </a>
 

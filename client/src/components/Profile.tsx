@@ -1,6 +1,7 @@
 import { Avatar, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { I18n } from "../util/language/I18n";
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 const Profile = (): JSX.Element => {
   let fullName = "Raven Van Hove";
@@ -40,14 +41,11 @@ const Profile = (): JSX.Element => {
         <div className="flex">
           <Avatar {...stringAvatar(fullName)} />
           <h2>{fullName}</h2>
-          <Button
+          <Link to="./edit-profile">
+            <Button
             variant="contained"
-            onClick={() => {
-              alert("Hier komt wijzigen van gegevens");
-            }}
-          >
-            Wijzig je gegevens
-          </Button>
+          >Wijzig je gegevens
+          </Button></Link>
         </div>
       </div>
     </>
