@@ -12,16 +12,6 @@ import { I18n } from "./util/language/I18n";
   const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
   );
-  
-  root.render(
-    <React.StrictMode>
-      <React.Suspense fallback="Loading">
-        <App />
-      </React.Suspense>
-    </React.StrictMode>
-  );
-  
-})();
 
 
 root.render(
@@ -33,3 +23,4 @@ root.render(
     </React.Suspense>
   </React.StrictMode>
 );
+})();

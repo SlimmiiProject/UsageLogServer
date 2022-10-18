@@ -24,7 +24,6 @@ import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import { NavLink } from "react-router-dom";
 import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
 import { LanguageSelector } from "./LanguageSelector";
-import { languages } from "../util/language/I18n";
 
 const drawerWidth = 240;
 
@@ -180,7 +179,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
         <List></List>
         <List>
           <ListItemIcon></ListItemIcon>
-          <LanguageSelector languages={languages} />
+          <LanguageSelector />
         </List>
         <Divider />
       </Drawer>
