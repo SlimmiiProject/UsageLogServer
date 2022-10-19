@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import { ContactInfo } from "../components/Contact";
 
 export class IOUtil {
 
@@ -21,9 +22,13 @@ export class IOUtil {
         await this.INSTANCE.post("/profiles/logout/");
     }
 
-    public static async LoginGoogle(token: string) {
+    public static async loginGoogle(token: string) {
         await this.INSTANCE.post("/profiles/google-login/", {
             google_token: token
         });
+    }
+
+    public static async sendContactData(data: ContactInfo) {
+        await this.INSTANCE.post("/contact/", data)
     }
 }
