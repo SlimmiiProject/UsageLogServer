@@ -1,18 +1,23 @@
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
-import { reloadBrowser } from "../util/BrowserUtil";
+import { reloadBrowser, replaceLanguageUrl } from "../util/BrowserUtil";
 import { I18n } from "../util/language/I18n";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 export const LanguageSelector: React.FC = () => {
   const { i18n } = useTranslation();
+  const [language, setLanguage] = useState(i18n.resolvedLanguage);
 
   return (
     <Select
       name="languageSelector"
       id="languageSelector"
-      onChange={(e) => i18n.changeLanguage(e.target.value, reloadBrowser)}
+      onChange={(e) => {
+        let value = e.target.value;
+        let previous = [i18n.resolvedLanguage][0];
+        i18n.changeLanguage(e.target.value, () => replaceLanguageUrl(previous, value));
+      }}
       value={i18n.resolvedLanguage}
     >
       {Object.entries(I18n.translationConfig).reverse().map((entry) => {

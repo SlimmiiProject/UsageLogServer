@@ -34,24 +34,17 @@ export interface Idata {
 
 const App = (): JSX.Element => {
   let { i18n } = useTranslation();
-  console.log(i18n);
-
   let lang = i18n.resolvedLanguage;
-
-  if (lang === undefined) {
-    lang = "en";
-  }
-
-  let indexNavigate = `/${lang}/`;
 
   // Add testdata from file to emulate externaldata
   const combineddata: ItestData = require("./util/data/testData.json");
+
   return (
     <>
       <Drawer lang={lang} />
       <Routes>
-        <Route path="/" element={<Navigate to={indexNavigate} />} />
-        <Route path="/:lang">
+        <Route path="/" element={<Navigate to={`/${lang}/`} />} />
+        <Route path="/:lang" >
           <Route index element={<HomePage />} />
           <Route
             path="dashboard"
