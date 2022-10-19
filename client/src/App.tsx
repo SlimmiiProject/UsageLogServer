@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import Profile from "./components/Profile";
-import { Route, Routes, NavLink, useParams, Navigate } from "react-router-dom";
-import HomePage from "./components/HomePage";
+import {
+  Route,
+  Routes,
+  NavLink,
+  useParams,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import Register from "./components/Register";
 import Devices from "./components/Devices";
 import SignIn from "./components/SignIn";
@@ -16,6 +22,7 @@ import "@fontsource/roboto/700.css";
 import DashboardComp from "./components/Dashboard";
 import { AdminPage } from "./components/AdminPage";
 import { useTranslation } from "react-i18next";
+import LoginPage from "./components/LoginPage";
 
 export interface ItestData {
   devices: Idevice[];
@@ -32,18 +39,35 @@ export interface Idata {
   nacht: number;
 }
 
-const App = (): JSX.Element => {
-  let { i18n } = useTranslation();
-  console.log(i18n);
+export const getCurrentPath = (location: any) => {
+  if (location.pathname[location.pathname.length - 1] === "/") {
+    location.pathname = location.pathname.substring(
+      0,
+      location.pathname.length - 1
+    );
+  }
+  return location.pathname;
+};
 
-  let lang = i18n.resolvedLanguage;
-
+export const getCurrentLanguage = (translation: any) => {
+  let { i18n } = translation;
+  // get language from language selector
+  return i18n.resolvedLanguage;
+};
+export const getCurrentLanguagePath = (lang: string) => {
+  // Set default language to en (English)
   if (lang === undefined) {
     lang = "en";
   }
+  return `/${lang}/`;
+};
 
-  let indexNavigate = `/${lang}/`;
-
+const App = (): JSX.Element => {
+  const [loggedIn, setLoggedIn] = useState<boolean>();
+  const indexNavigate = getCurrentLanguagePath(
+    getCurrentLanguage(useTranslation())
+  );
+  const lang = getCurrentLanguage(useTranslation());
   // Add testdata from file to emulate externaldata
   const combineddata: ItestData = require("./util/data/testData.json");
   return (
@@ -52,7 +76,16 @@ const App = (): JSX.Element => {
       <Routes>
         <Route path="/" element={<Navigate to={indexNavigate} />} />
         <Route path="/:lang">
-          <Route index element={<HomePage />} />
+          <Route
+            index
+            element={
+              loggedIn ? (
+                <Navigate to={indexNavigate + "dashboard"} />
+              ) : (
+                <LoginPage />
+              )
+            }
+          />
           <Route
             path="dashboard"
             element={<DashboardComp data={combineddata} />}
