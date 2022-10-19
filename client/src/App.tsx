@@ -68,8 +68,10 @@ const App = (): JSX.Element => {
     getCurrentLanguage(useTranslation())
   );
   const lang = getCurrentLanguage(useTranslation());
+
   // Add testdata from file to emulate externaldata
   const combineddata: ItestData = require("./util/data/testData.json");
+
   return (
     <>
       <Drawer lang={lang} />

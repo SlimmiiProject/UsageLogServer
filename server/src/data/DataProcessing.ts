@@ -1,11 +1,11 @@
-import { ObjectUtil } from './../utils/ObjectUtil';
+import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
 import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
 import { ContactForm } from "./entities/contact";
-import { UserAccount } from './entities/UserAccount';
+import { UserAccount } from "./entities/UserAccount";
 export class DataProcessor {
   //#region Create Data
   public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
@@ -23,14 +23,15 @@ export class DataProcessor {
     phonenumber?: string,
     devices: Device[] = []
   ): Promise<number> {
-    return (await UserAccount.insert({
-      email: email,
-      hashed_password: password,
-      firstname: firstname,
-      lastname: lastname,
-      phone: phonenumber,
-      device: devices,
-    })).raw.insertId;
+    const newUser = new UserAccount();
+    newUser.email = email;
+    newUser.firstname = firstname;
+    newUser.lastname = lastname;
+    newUser.password = password;
+    newUser.phone = phonenumber;
+    newUser.device = devices;
+    return (await UserAccount.save(newUser)).userId;
+    //tested => await users.save(newUser);
   }
 
   private async CreateData(
@@ -113,11 +114,10 @@ export class DataProcessor {
     userid?: number,
     number?: number
   ): Promise<UserAccount> {
-
     return ObjectUtil.firstNonUndefined([
       await UserAccount.findOneBy({ email: email }),
-      await UserAccount.findOneBy({ userId: userid })
-    ])
+      await UserAccount.findOneBy({ userId: userid }),
+    ]);
   }
   public async GetLastData(userid: number): Promise<TemporaryData> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
@@ -137,7 +137,9 @@ export class DataProcessor {
   //#region Alter Data
   //probably redundant.
   public async ChangePassword(userId: number, password: string): Promise<void> {
-    await UserAccount.update(userId, { hashed_password: password });
+    let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
+    User.password = password;
+    User.save();
   }
 
   public async EditAcount(
@@ -151,7 +153,7 @@ export class DataProcessor {
     await UserAccount.update(userid, {
       firstname: firstname,
       lastname: lastname,
-      hashed_password: password,
+      password: password,
       email: email,
       phone: phone,
     });

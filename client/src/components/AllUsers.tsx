@@ -1,4 +1,3 @@
-import React from "react";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 
 export const AllUsers = (): JSX.Element => {
