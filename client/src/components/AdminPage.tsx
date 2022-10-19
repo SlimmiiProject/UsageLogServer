@@ -1,8 +1,5 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 import { AdminPageOneComponent } from "./AdminPageOneComponent";
-import { AllUsers } from "./AllUsers";
-import { LogFile } from "./LogFile";
 
 export const AdminPage = (): JSX.Element => {
   let location = useLocation();

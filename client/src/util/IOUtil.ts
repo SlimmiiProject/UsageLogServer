@@ -22,15 +22,13 @@ export class IOUtil {
         await this.INSTANCE.post("/profiles/logout/");
     }
 
-    public static async LoginGoogle(token: string) {
+    public static async loginGoogle(token: string) {
         await this.INSTANCE.post("/profiles/google-login/", {
             google_token: token
         });
     }
 
-    public static async SendContactData(data: ContactInfo) {
-        await this.INSTANCE.post("/contact/", 
-            data
-        )
+    public static async sendContactData(data: ContactInfo) {
+        await this.INSTANCE.post("/contact/", data)
     }
 }

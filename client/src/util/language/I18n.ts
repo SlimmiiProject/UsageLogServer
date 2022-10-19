@@ -25,8 +25,7 @@ export class I18n {
                     skipOnVariables: false
                 },
                 resources: this.translationConfig
-            }
-            );
+            });
     }
 
     /**
@@ -45,7 +44,7 @@ export class I18n {
         return i18n.t(key, tFunction);
     }
 
-     private static containsTranslationKey(key: string) {
-         return this.translationConfig["en"].translation[key];
-     }
+    private static containsTranslationKey(key: string) {
+        return this.translationConfig["en"].translation[key];
+    }
 }

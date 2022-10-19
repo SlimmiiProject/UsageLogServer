@@ -1,14 +1,7 @@
-import React from "react";
-import { MeerdereData } from "./Graph";
 import Graph from "./Graph";
-import { Idata, Idevice } from "../App";
-import { MemoryRouter } from "react-router-dom";
+import { Idevice } from "../App";
 
-export default function App({
-  data: { devices },
-}: {
-  data: { devices: Idevice[] };
-}) {
+export default function App({ data: { devices } }: { data: { devices: Idevice[] } }) {
   return (
     <>
       <div className="flex">

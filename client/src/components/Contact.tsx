@@ -4,8 +4,6 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -22,7 +20,7 @@ export interface ContactInfo {
 
 const Contact = (): JSX.Element => {
 
-const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", lastname: "", email: "", subject: "", description: ""});
+    const [contactData, setContactData] = useState<ContactInfo>({ firstname: "", lastname: "", email: "", subject: "", description: "" });
 
     return (
         <Box
@@ -52,7 +50,7 @@ const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", last
                             fullWidth
                             autoComplete="given-name"
                             variant="standard"
-                            onChange={event => SetContactData({...contactData, firstname: event.target.value})}
+                            onChange={event => setContactData({ ...contactData, firstname: event.target.value })}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -64,7 +62,7 @@ const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", last
                             fullWidth
                             autoComplete="family-name"
                             variant="standard"
-                            onChange={event => SetContactData({...contactData, lastname: event.target.value})}
+                            onChange={event => setContactData({ ...contactData, lastname: event.target.value })}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -76,37 +74,37 @@ const [contactData, SetContactData] = useState<ContactInfo>({firstname: "", last
                             fullWidth
                             autoComplete="email"
                             variant="standard"
-                            onChange={event => SetContactData({...contactData, email: event.target.value})}
+                            onChange={event => setContactData({ ...contactData, email: event.target.value })}
                         />
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
                             required
-                            id="ProblemWith"
-                            name="ProblemWith"
-                            label="Waarmee hebt u een probleem?"
+                            id="subject"
+                            name="subject"
+                            label="Onderwerp"
                             fullWidth
                             autoComplete="ProblemWith"
                             variant="standard"
-                            onChange={event => SetContactData({...contactData, subject: event.target.value})}
+                            onChange={event => setContactData({ ...contactData, subject: event.target.value })}
                         />
                     </Grid>
                     <Grid item xs={12}>
                         <TextareaAutosize
-                            id="Problem"
+                            id="description"
                             aria-label="empty textarea"
-                            placeholder="Wat is het probleem?"
+                            placeholder="Beschrijving"
                             minRows={8}
                             required
                             style={{ width: 600 }}
-                            onChange={event => SetContactData({...contactData, description: event.target.value})}
+                            onChange={event => setContactData({ ...contactData, description: event.target.value })}
                         />
                     </Grid>
                     <Button
                         type="submit"
                         sx={{ mt: 2, mb: 2, bgcolor: 'rgba(25,118,210,255)', color: "white" }}
                         style={{ width: 600, marginLeft: 23, }}
-                        onClick={async event => await IOUtil.SendContactData(contactData)}
+                        onClick={async (event) => await IOUtil.sendContactData(contactData)}
                     >
                         Send
                     </Button>
