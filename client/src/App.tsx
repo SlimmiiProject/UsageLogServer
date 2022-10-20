@@ -23,6 +23,9 @@ import DashboardComp from "./components/Dashboard";
 import { AdminPage } from "./components/AdminPage";
 import { useTranslation } from "react-i18next";
 import LoginPage from "./components/LoginPage";
+import { getLanguageFromUrl } from "./util/BrowserUtil";
+import { I18n } from "./util/language/I18n";
+import { url } from "inspector";
 
 export interface ItestData {
   devices: Idevice[];
@@ -49,7 +52,7 @@ export const getCurrentPath = (location: any) => {
   return location.pathname;
 };
 
-export const getCurrentLanguage = (translation: any) => {
+export const getCurrentLanguage = (translation: any):string => {
   let { i18n } = translation;
   // get language from language selector
   return i18n.resolvedLanguage;
@@ -67,8 +70,12 @@ const App = (): JSX.Element => {
   const indexNavigate = getCurrentLanguagePath(
     getCurrentLanguage(useTranslation())
   );
-  const lang = getCurrentLanguage(useTranslation());
-
+  let lang = getCurrentLanguage(useTranslation());
+  const urlLang = getLanguageFromUrl();
+ 
+  const {i18n} = useTranslation();
+  if (lang !== urlLang && I18n.doesLanguageExist(urlLang)) i18n.changeLanguage(urlLang);
+  
   // Add testdata from file to emulate externaldata
   const combineddata: ItestData = require("./util/data/testData.json");
 
