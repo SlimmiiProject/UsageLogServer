@@ -14,7 +14,7 @@ export class AccountManager {
     }
 
     public static async doesAccountExist(userId?: number, email?: string): Promise<boolean> {
-        return await DataProcessor.GetUser(email) !== undefined;
+        return await DataProcessor.GetUser(email, userId) !== undefined;
     }
 
 }
