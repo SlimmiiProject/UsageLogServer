@@ -1,10 +1,11 @@
-import express, { request, Router } from "express";
+import express, { Request, request, Response, Router } from "express";
 import { Express } from "express-serve-static-core";
 import "reflect-metadata";
 import { DatabaseConnector } from "./data/DatabaseConnector";
 import { Environment } from "./utils/Environment";
 import helmet from "helmet";
 import { Logger } from "./utils/Logger";
+import path from "path";
 
 const cors = require("cors");
 const session = require('express-session');
@@ -34,6 +35,7 @@ export class App {
     }
 
     private appSetup() {
+        this.App.use(express.static(__dirname + "/public"));
         this.App.use(express.json());
         this.App.use(express.urlencoded({ extended: true }));
         this.App.use(helmet());
@@ -75,12 +77,16 @@ export class App {
         const profileRouter: Router = require("./routes/ProfileRouter");
         const contactRouter:Router = require("./routes/ContactRouter");
 
+
         this.App.use("/api", apiRouter);
         apiRouter.use("/translation", translationRouter);
         apiRouter.use("/users/:userId", userRouter);
         apiRouter.use("/data", dataRouter);
         apiRouter.use("/profiles", profileRouter);
-        apiRouter.use("/contact", contactRouter)
+        apiRouter.use("/contact", contactRouter);
+
+        // This has to stay at the end of this method to assure it's only executed if the url doesn't match any of the above cases
+        this.App.get("*", (req:Request, res:Response) => res.sendFile(path.join(__dirname, "public", "index.html")));
     }
 
     public start() {
