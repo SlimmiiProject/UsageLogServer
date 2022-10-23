@@ -2,12 +2,16 @@ import { DataSource } from "typeorm";
 import { Environment } from "../utils/Environment";
 import { Logger } from "../utils/Logger";
 import { Administrator } from "./entities/Administrator";
+import { ContactForm } from "./entities/contact";
 import { Data } from "./entities/Data";
 import { Device } from "./entities/Device";
+import { TemporaryData } from "./entities/TemporaryData";
 import { Translations } from "./entities/Translations";
 import { UserAccount } from "./entities/UserAccount";
 
-const { database: { database_name, host, port, username, password } } = Environment.CONFIG;
+const {
+  database: { database_name, host, port, username, password },
+} = Environment.CONFIG;
 
 export class DatabaseConnector {
   private _dataSource: DataSource;
@@ -25,7 +29,15 @@ export class DatabaseConnector {
       database: database_name,
       synchronize: true,
       logging: Environment.isDev(),
-      entities: [UserAccount, Device, Data, Administrator, Translations],
+      entities: [
+        UserAccount,
+        Device,
+        Data,
+        Administrator,
+        Translations,
+        TemporaryData,
+        ContactForm,
+      ],
     });
   }
 

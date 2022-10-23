@@ -17,6 +17,15 @@ import DashboardComp from "./components/Dashboard";
 import { AdminPage } from "./components/AdminPage";
 import { useTranslation } from "react-i18next";
 
+export interface ItestData {
+  devices: Idevice[];
+}
+export interface Idevice {
+  nameDevice: string;
+  data: Idata[];
+  colorDay: string;
+  colorNight: string;
+}
 export interface Idata {
   name: string;
   dag: number;
@@ -25,97 +34,17 @@ export interface Idata {
 
 const App = (): JSX.Element => {
   let { i18n } = useTranslation();
-  console.log(i18n);
-
   let lang = i18n.resolvedLanguage;
 
-  if (lang === undefined) {
-    lang = "en";
-  }
+  // Add testdata from file to emulate externaldata
+  const combineddata: ItestData = require("./util/data/testData.json");
 
-  let indexNavigate = `/${lang}/`;
-
-  const data1 = [
-    {
-      name: "Page A",
-      dag: 4000,
-      nacht: 2400,
-    },
-    {
-      name: "Page B",
-      dag: -3000,
-      nacht: 1398,
-    },
-    {
-      name: "Page C",
-      dag: -2000,
-      nacht: -3000,
-    },
-    {
-      name: "Page D",
-      dag: 2780,
-      nacht: 3908,
-    },
-    {
-      name: "Page E",
-      dag: -1890,
-      nacht: 4800,
-    },
-    {
-      name: "Page F",
-      dag: 2390,
-      nacht: -3800,
-    },
-    {
-      name: "Page G",
-      dag: 3490,
-      nacht: 4300,
-    },
-  ];
-  const data2 = [
-    {
-      name: "Dinsdag",
-      dag: 500,
-      nacht: 20,
-    },
-    {
-      name: "Woensdag",
-      dag: 200,
-      nacht: -10,
-    },
-    {
-      name: "Donderdag",
-      dag: 5000,
-      nacht: 360,
-    },
-    {
-      name: "Vrijdag",
-      dag: 2500,
-      nacht: 2500,
-    },
-    {
-      name: "Zaterdag",
-      dag: -150,
-      nacht: 28,
-    },
-    {
-      name: "Zondag",
-      dag: 248,
-      nacht: -36,
-    },
-    {
-      name: "Maandag",
-      dag: 898,
-      nacht: 247,
-    },
-  ];
-  const combineddata = require("./util/data/testData.json");
   return (
     <>
       <Drawer lang={lang} />
       <Routes>
-        <Route path="/" element={<Navigate to={indexNavigate} />} />
-        <Route path="/:lang">
+        <Route path="/" element={<Navigate to={`/${lang}/`} />} />
+        <Route path="/:lang" >
           <Route index element={<HomePage />} />
           <Route
             path="dashboard"

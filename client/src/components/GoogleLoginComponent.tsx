@@ -30,7 +30,7 @@ export const GoogleLoginComponent = () => {
 
         if (onlineResponse !== undefined) {
             setLoggedIn(true);
-            await IOUtil.LoginGoogle(onlineResponse.tokenId);
+            await IOUtil.loginGoogle(onlineResponse.tokenId);
         }
     };
 

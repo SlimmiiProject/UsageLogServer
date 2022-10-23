@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
 } from "typeorm";
 
@@ -19,6 +20,7 @@ export class ContactForm extends BaseEntity {
     length: 20,
     name: "topic",
   })
+  @Index()
   message_topic: string;
 
   @Column("varchar", {

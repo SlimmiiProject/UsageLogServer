@@ -73,12 +73,14 @@ export class App {
         const userRouter: Router = require("./routes/UserRouter");
         const dataRouter: Router = require("./routes/DataRouter");
         const profileRouter: Router = require("./routes/ProfileRouter");
+        const contactRouter:Router = require("./routes/ContactRouter");
 
         this.App.use("/api", apiRouter);
         apiRouter.use("/translation", translationRouter);
         apiRouter.use("/users/:userId", userRouter);
         apiRouter.use("/data", dataRouter);
         apiRouter.use("/profiles", profileRouter);
+        apiRouter.use("/contact", contactRouter)
     }
 
     public start() {

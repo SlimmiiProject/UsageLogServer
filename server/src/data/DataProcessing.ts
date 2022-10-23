@@ -1,10 +1,11 @@
+import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
-import { UserAcount } from "./entities/User";
 import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
 import { ContactForm } from "./entities/contact";
+import { UserAccount } from "./entities/UserAccount";
 export class DataProcessor {
   //#region Create Data
   public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
@@ -14,22 +15,23 @@ export class DataProcessor {
     await newDevice.save();
   }
 
-  public async CreateUser(
+  public static async CreateUser(
     firstname: string,
     lastname: string,
     email: string,
     password: string,
-    phonenumber: number,
+    phonenumber?: string,
     devices: Device[] = []
-  ): Promise<void> {
-    await UserAcount.insert({
-      email: email,
-      password: password,
-      firstname: firstname,
-      lastname: lastname,
-      phone: phonenumber,
-      device: devices,
-    });
+  ): Promise<number> {
+    const newUser = new UserAccount();
+    newUser.email = email;
+    newUser.firstname = firstname;
+    newUser.lastname = lastname;
+    newUser.password = password;
+    newUser.phone = phonenumber;
+    newUser.device = devices;
+    return (await UserAccount.save(newUser)).userId;
+    //tested => await users.save(newUser);
   }
 
   private async CreateData(
@@ -61,7 +63,7 @@ export class DataProcessor {
   }
 
   public async CreateAdministrator(userid: number): Promise<void> {
-    let user = await UserAcount.findOneBy({ userId: userid });
+    let user = await UserAccount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
 
@@ -107,18 +109,15 @@ export class DataProcessor {
     return allData;
   }
 
-  public async GetUser(
-    userid?: number,
+  public static async GetUser(
     email?: string,
+    userid?: number,
     number?: number
-  ): Promise<UserAcount> {
-    if (userid) {
-      return await UserAcount.findOneBy({ userId: userid });
-    } else if (email) {
-      return await UserAcount.findOneBy({ email: email });
-    } else if (number) {
-      return await UserAcount.findOneBy({ phone: number });
-    }
+  ): Promise<UserAccount> {
+    return ObjectUtil.firstNonUndefined([
+      await UserAccount.findOneBy({ email: email }),
+      await UserAccount.findOneBy({ userId: userid }),
+    ]);
   }
   public async GetLastData(userid: number): Promise<TemporaryData> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
@@ -138,7 +137,9 @@ export class DataProcessor {
   //#region Alter Data
   //probably redundant.
   public async ChangePassword(userId: number, password: string): Promise<void> {
-    await UserAcount.update(userId, { password: password });
+    let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
+    User.password = password;
+    User.save();
   }
 
   public async EditAcount(
@@ -147,9 +148,9 @@ export class DataProcessor {
     lastname: string,
     password: string,
     email: string,
-    phone: number
+    phone?: string
   ): Promise<void> {
-    await UserAcount.update(userid, {
+    await UserAccount.update(userid, {
       firstname: firstname,
       lastname: lastname,
       password: password,
@@ -162,7 +163,7 @@ export class DataProcessor {
     userId: number,
     deviceid: string
   ): Promise<void> {
-    let user = await UserAcount.findOneBy({ userId: userId });
+    let user = await UserAccount.findOneBy({ userId: userId });
     await Device.update({ deviceId: deviceid }, { user: user });
   }
   //change name from device
@@ -180,8 +181,8 @@ export class DataProcessor {
   }
 
   //fails if administrator is not removed first
-  public async DeleteUser(userId: number): Promise<void> {
-    UserAcount.delete({ userId: userId });
+  public static async DeleteUser(userId: number): Promise<void> {
+    UserAccount.delete({ userId: userId });
   }
   //fails if data is not removed first
   public async DeleteDevice(deviceid: string): Promise<void> {

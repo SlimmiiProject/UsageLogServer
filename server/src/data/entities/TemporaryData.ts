@@ -10,6 +10,7 @@ import {
 import { Device } from "./Device";
 @Entity()
 export class TemporaryData extends BaseEntity {
+
   @PrimaryGeneratedColumn({ name: "index" })
   index!: number;
 
