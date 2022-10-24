@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { Device } from "./Device";
 import { Crypt } from "../../utils/Crypt";
+import { AccountManager } from "../../accounts/AccountManager";
 
 @Entity()
 export class UserAccount extends BaseEntity {
@@ -68,5 +69,9 @@ export class UserAccount extends BaseEntity {
             );
       }))
     );
+  }
+
+  async isAdmin() {
+    return await AccountManager.isAdministrator(this.userId); 
   }
 }

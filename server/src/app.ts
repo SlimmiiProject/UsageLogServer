@@ -7,6 +7,7 @@ import helmet from "helmet";
 import { Logger } from "./utils/Logger";
 import path from "path";
 import bodyParser from "body-parser";
+import { SessionManager } from "./accounts/SessionManager";
 
 const cors = require("cors");
 const session = require('express-session');
@@ -77,6 +78,9 @@ export class App {
         const dataRouter: Router = require("./routes/DataRouter");
         const profileRouter: Router = require("./routes/ProfileRouter");
         const contactRouter:Router = require("./routes/ContactRouter");
+
+        // Middleware for setting up Sessions
+        this.App.use((req:Request, res:Response, next) => SessionManager.setup(request, res, next));
 
         this.App.use("/api", apiRouter);
         apiRouter.use("/translation", translationRouter);

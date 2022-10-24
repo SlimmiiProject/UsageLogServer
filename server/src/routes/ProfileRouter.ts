@@ -4,10 +4,34 @@ import { InputUtil } from './../utils/InputUtil';
 import express, { Request, Response } from "express";
 import { Crypt } from '../utils/Crypt';
 import { GoogleAuth } from '../utils/GoogleAuth';
+import { SessionManager } from '../accounts/SessionManager';
 const router = express.Router();
 
-router.post("/login", async (req: Request, res: Response) => {
+type CreationData = {
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number:string;
+    password: string;
+    password_verify: string;
+};
 
+type LoginData = Pick<CreationData, "email" | "password">;
+
+router.post("/login", async (req: Request, res: Response) => {
+    let body = req.body;
+    const data: LoginData = {
+        email: body.email,
+        password: body.password
+    }
+
+    if(Object.values(data).every(InputUtil.isSet)) {
+
+        if(await AccountManager.doesAccountExist(undefined, data.email)) {
+            console.log("a")
+           SessionManager.createLoggedInSession(req, await AccountManager.getAccount(undefined, data.email));
+        }
+    }
 });
 
 router.post("/google-login", async (req: Request, res: Response) => {
@@ -21,19 +45,19 @@ router.post("/google-login", async (req: Request, res: Response) => {
                 await AccountManager.createAccount(payload.given_name, payload.family_name, payload.email, Crypt.createRandomPassword(24), "");
 
 
-            // TODO Login User
         });
     }
 });
 
-router.post("/logout", async (req: Request, res: Response) => {
 
+router.post("/logout", async (req: Request, res: Response) => {
+    SessionManager.destroy(req, res);
 });
 
 router.post("/create-profile", async (req: Request, res: Response) => {
     let body = req.body;
 
-    const data: { [key: string]: string } = {
+    const data: CreationData = {
         first_name: body.first_name,
         last_name: body.last_name,
         email: body.email,
