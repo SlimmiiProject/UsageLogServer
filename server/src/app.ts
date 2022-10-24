@@ -6,6 +6,7 @@ import { Environment } from "./utils/Environment";
 import helmet from "helmet";
 import { Logger } from "./utils/Logger";
 import path from "path";
+import bodyParser from "body-parser";
 
 const cors = require("cors");
 const session = require('express-session');
@@ -37,7 +38,7 @@ export class App {
     private appSetup() {
         this.App.use(express.static("public"));
         this.App.use(express.json());
-        this.App.use(express.urlencoded({ extended: true }));
+        this.App.use(bodyParser.urlencoded({ extended: true }));
         this.App.use(helmet());
         this.App.use(cors());
     }
@@ -58,13 +59,13 @@ export class App {
 
         this.App.use(session({
             name: process.env.SESS_NAME,
-            resave: false,
-            saveUninitialized: false,
+            resave: true,
+            saveUninitialized: true,
             store: sessionStore,
             secret: session_secret,
             cookie: {
                 sameSite: true,
-                secure: developmentEnv
+                secure: !developmentEnv
             }
         }))
     }
@@ -96,5 +97,6 @@ export class App {
         return server_port;
     }
 }
+
 
 App.INSTANCE.start();
