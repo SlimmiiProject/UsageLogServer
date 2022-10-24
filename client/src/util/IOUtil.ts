@@ -18,6 +18,24 @@ export class IOUtil {
         return conn.data;
     }
 
+    public static async loginUser(email: string, password: string) {
+        await this.INSTANCE.post("/profiles/login", {
+            email: email,
+            password: password
+        });
+    }
+
+    public static async registerUser(first_name: string, last_name: string, email: string, phone_number: string, password: string, password_verify: string) {
+        await this.INSTANCE.post("/profiles/create-profile/", {
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            phone_number: phone_number,
+            password: password,
+            password_verify: password_verify
+        });
+    }
+
     public static async logoutUser() {
         await this.INSTANCE.post("/profiles/logout/");
     }

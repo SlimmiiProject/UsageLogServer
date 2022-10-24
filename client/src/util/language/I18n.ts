@@ -44,6 +44,10 @@ export class I18n {
         return i18n.t(key, tFunction);
     }
 
+    public static get currentLanguage() {
+        return i18n.resolvedLanguage;
+    }
+
     private static containsTranslationKey(key: string) {
         return this.translationConfig["en"].translation[key];
     }

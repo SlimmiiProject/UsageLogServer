@@ -12,15 +12,20 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { GoogleLoginComponent } from './GoogleLoginComponent';
+import { IOUtil } from '../util/IOUtil';
+import { getLanguageUrl } from '../util/BrowserUtil';
+import { I18n } from '../util/language/I18n';
 
 const SignIn = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+   // TODO Improve data capture
+    const email = data.get("email")!.toString();
+    const password = data.get("password")!.toString();
+  
+    IOUtil.loginUser(email, password);
   };
 
   return (
@@ -73,6 +78,7 @@ const SignIn = (): JSX.Element => {
             >
               Sign In
             </Button>
+            <GoogleLoginComponent/>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
@@ -80,7 +86,7 @@ const SignIn = (): JSX.Element => {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/Register" variant="body2">
+                <Link href={"register"} variant="body2">
                   {"Registreren"}
                 </Link>
               </Grid>
