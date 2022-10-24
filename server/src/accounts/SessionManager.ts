@@ -9,16 +9,17 @@ export class SessionManager {
         next();
     }
 
-    public static createLoggedInSession(request: Request, account: UserAccount) {
+    public static async createLoggedInSession(request: Request, account: UserAccount) {
         if (account == undefined) return;
 
         this.updateSessionData(request, async (data) => {
             data.isLoggedIn = true
             data.user = {
-                first_name: account.firstname,
-                last_name: account.lastname,
+                firstName: account.firstname,
+                lastName: account.lastname,
                 email: account.email,
-                phonenumber: account.phone
+                phoneNumber: account.phone,
+                isAdmin: await account.isAdmin()
             };
         });
     }

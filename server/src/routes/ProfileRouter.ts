@@ -28,8 +28,7 @@ router.post("/login", async (req: Request, res: Response) => {
     if(Object.values(data).every(InputUtil.isSet)) {
 
         if(await AccountManager.doesAccountExist(undefined, data.email)) {
-            console.log("a")
-           SessionManager.createLoggedInSession(req, await AccountManager.getAccount(undefined, data.email));
+           await SessionManager.createLoggedInSession(req, await AccountManager.getAccount(undefined, data.email));
         }
     }
 });
