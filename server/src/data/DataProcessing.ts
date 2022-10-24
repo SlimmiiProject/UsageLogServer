@@ -129,13 +129,19 @@ export class DataProcessor {
     return allData.reverse()[0];
   }
 
-  public async GetContactForms(): Promise<ContactForm[]> {
+  public async GetContactForms(
+    message_topic?: string,
+    email?: string
+  ): Promise<ContactForm[]> {
+    if (message_topic)
+      return await ContactForm.findBy({ message_topic: message_topic });
+    if (email) return await ContactForm.findBy({ email: email });
     return await ContactForm.find();
   }
   //#endregion
 
   //#region Alter Data
-  //probably redundant.
+  //possibly redundant.
   public async ChangePassword(userId: number, password: string): Promise<void> {
     let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
     User.password = password;
@@ -166,7 +172,7 @@ export class DataProcessor {
     let user = await UserAccount.findOneBy({ userId: userId });
     await Device.update({ deviceId: deviceid }, { user: user });
   }
-  //change name from device
+  //change alternate name for device
   public async ChangeDeviceAlias(
     device_index: number,
     alias: string
@@ -196,9 +202,8 @@ export class DataProcessor {
   public async DeleteContactForm(id: number): Promise<void> {
     ContactForm.delete({ contactId: id });
   }
-  /*
-  delete all temporary data from specific data
-  */
+
+  //delete all temporary data from specific device
   private async CleantempData(deviceIndex: number): Promise<void> {
     DatabaseConnector.INSTANCE.dataSource
       .createQueryBuilder()
