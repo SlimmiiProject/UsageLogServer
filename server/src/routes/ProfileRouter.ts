@@ -11,7 +11,7 @@ type CreationData = {
     first_name: string;
     last_name: string;
     email: string;
-    phone_number:string;
+    phone_number: string;
     password: string;
     password_verify: string;
 };
@@ -25,11 +25,8 @@ router.post("/login", async (req: Request, res: Response) => {
         password: body.password
     }
 
-    if(Object.values(data).every(InputUtil.isSet)) {
-
-        if(await AccountManager.doesAccountExist(undefined, data.email)) {
-           await SessionManager.createLoggedInSession(req, await AccountManager.getAccount(undefined, data.email));
-        }
+    if (Object.values(data).every(InputUtil.isSet)) {
+        if (await AccountManager.doesAccountExist(undefined, data.email)) await login(req, data.email);
     }
 });
 
@@ -43,10 +40,14 @@ router.post("/google-login", async (req: Request, res: Response) => {
             if (!(await AccountManager.doesAccountExist(undefined, payload.email)))
                 await AccountManager.createAccount(payload.given_name, payload.family_name, payload.email, Crypt.createRandomPassword(24), "");
 
-
+            await login(req, payload.email);
         });
     }
 });
+
+const login = async (req: Request, email: string) => {
+    await SessionManager.createLoggedInSession(req, await AccountManager.getAccount(undefined, email));
+}
 
 
 router.post("/logout", async (req: Request, res: Response) => {
