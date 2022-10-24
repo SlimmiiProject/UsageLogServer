@@ -10,7 +10,7 @@ node_modules
 
 # production
 build
-server/src/public/*
+server/public/*
 
 # security
 .env

@@ -1,6 +1,6 @@
 export class InputUtil {
 
     public static isSet(input:string):boolean {
-        return input !== undefined && input != ""
+        return ![undefined, "", false].includes(input);
     }
 }
