@@ -24,7 +24,7 @@ export class RegExpVal {
      * return true for the input."
      * 
      * @param {string} input - The input string to validate
-     * @param {IValidator[]} validators - An array of validators.
+     * @param {RegExp[]} validators - An array of regular expressions.
      * @returns Outcome of validator iteration.
      */
     public static validateAllOn(input: string, validators: RegExp[]): boolean {

@@ -9,3 +9,7 @@ export const replaceLanguageUrl = (prevLang:string, newLang:string) => {
 export const getLanguageUrl = (path:string) => {
     return I18n.currentLanguage + path;
 }
+
+export const getLanguageFromUrl = () => {
+   return window.location.pathname.split("/")[1];
+}
