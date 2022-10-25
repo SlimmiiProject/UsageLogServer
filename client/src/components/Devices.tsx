@@ -5,8 +5,8 @@ import MeterCard from "./MeterCard";
 const Devices = (): JSX.Element => {
   return (
   <>
-    <h1>apparaatbeheer</h1>
-    <h2>sample metercard</h2>
+    <h1>{I18n.t("devices.devicemanager")}</h1>
+    <h2>{I18n.t("devices.sample")}</h2>
     <MeterCard/>
   </>);
 };

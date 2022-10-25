@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Button,CssBaseline,TextField,Grid,Box,Container,Alert} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { I18n } from "../util/language/I18n";
 
 const EditProfile = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -35,7 +36,7 @@ const EditProfile = (): JSX.Element => {
                 required
                 fullWidth
                 id="firstName"
-                label="First Name"
+                label={I18n.t("editprofile.firstname")}
                 autoFocus
               />
             </Grid>
@@ -44,7 +45,7 @@ const EditProfile = (): JSX.Element => {
                 required
                 fullWidth
                 id="lastName"
-                label="Last Name"
+                label={I18n.t("editprofile.lastname")}
                 name="lastName"
                 autoComplete="family-name"
               />
@@ -54,7 +55,7 @@ const EditProfile = (): JSX.Element => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={I18n.t("editprofile.email")}
                 name="email"
                 autoComplete="email"
               />
@@ -64,7 +65,7 @@ const EditProfile = (): JSX.Element => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label={I18n.t("editprofile.password")}
                 type="password"
                 id="password"
                 autoComplete="new-password"
@@ -75,7 +76,7 @@ const EditProfile = (): JSX.Element => {
                 required
                 fullWidth
                 name="password2"
-                label="Password control"
+                label={I18n.t("editprofile.password2")}
                 type="password"
                 id="password2"
                 autoComplete="new-password"
@@ -88,7 +89,7 @@ const EditProfile = (): JSX.Element => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Edit profile
+            {I18n.t("editprofile.editprofile")}
           </Button>
         </Box>
       </Box>

@@ -44,7 +44,7 @@ const Profile = (): JSX.Element => {
           <Link to="./edit-profile">
             <Button
             variant="contained"
-          >Wijzig je gegevens
+          >{I18n.t("profile.edit")}
           </Button></Link>
         </div>
       </div>

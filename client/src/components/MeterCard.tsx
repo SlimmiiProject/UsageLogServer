@@ -5,6 +5,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { I18n } from "../util/language/I18n";
 
 const bull = (
   <Box
@@ -20,14 +21,14 @@ export default function BasicCard() {
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography variant="h5" component="div">
-          Meternaam
+        {I18n.t("metercard.name")}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          Meter ID
+        {I18n.t("metercard.id")}
         </Typography>
-        Insert chart here
+        {I18n.t("metercard.chart")}
         <Typography variant="subtitle1" component="div" sx={{opacity:"50%"}}>
-            Battery %
+        {I18n.t("metercard.battery")}
         </Typography> 
       </CardContent>
     </Card>

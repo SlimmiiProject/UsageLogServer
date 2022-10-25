@@ -24,6 +24,7 @@ import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import { NavLink } from "react-router-dom";
 import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
 import { LanguageSelector } from "./LanguageSelector";
+import { I18n } from "../util/language/I18n";
 
 const drawerWidth = 240;
 
@@ -103,7 +104,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Slimmii Metingen
+          {I18n.t("drawercomponent.head")}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -134,31 +135,31 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
           {[
             {
               id: 0,
-              text: "Dashboard",
+              text: I18n.t("drawercomponent.dashboard"),
               icon: <DashboardRoundedIcon />,
               link: `${lang}/dashboard`,
             },
             {
               id: 1,
-              text: "Profiel",
+              text: I18n.t("drawercomponent.profile"),
               icon: <AccountCircleRoundedIcon />,
               link: `${lang}/profile`,
             },
             {
               id: 2,
-              text: "Meters",
+              text: I18n.t("drawercomponent.meters"),
               icon: <SpeedRoundedIcon />,
               link: `${lang}/devices`,
             },
             {
               id: 3,
-              text: "Contact",
+              text: I18n.t("drawercomponent.contact"),
               icon: <MailIcon />,
               link: `${lang}/contact`,
             },
             {
               id: 4,
-              text: "Admin",
+              text: I18n.t("drawercomponent.admin"),
               icon: <AdminPanelSettingsRoundedIcon />,
               link: `${lang}/admin`,
             },
