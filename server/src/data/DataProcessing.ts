@@ -6,6 +6,8 @@ import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
 import { ContactForm } from "./entities/contact";
 import { UserAccount } from "./entities/UserAccount";
+import { Password_Reset } from "./entities/Password_reset";
+import { LessThan } from "typeorm";
 export class DataProcessor {
   //#region Create Data
   public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
@@ -31,7 +33,6 @@ export class DataProcessor {
     newUser.phone = phonenumber;
     newUser.device = devices;
     return (await UserAccount.save(newUser)).userId;
-    //tested => await users.save(newUser);
   }
 
   private async CreateData(
@@ -77,6 +78,23 @@ export class DataProcessor {
     contactForm.message = message;
     contactForm.message_topic = message_topic;
     contactForm.save();
+  }
+
+  public async CreatePasswordReset(
+    token: string,
+    userId?: number,
+    email?: string,
+    phonenumber?: number
+  ) {
+    let user: UserAccount = await DataProcessor.GetUser(
+      email,
+      userId,
+      phonenumber
+    );
+    const newPasswordReset = new Password_Reset();
+    newPasswordReset.Token = token;
+    newPasswordReset.user = user;
+    Password_Reset.save(newPasswordReset);
   }
   //#endregion
 
@@ -137,6 +155,24 @@ export class DataProcessor {
       return await ContactForm.findBy({ message_topic: message_topic });
     if (email) return await ContactForm.findBy({ email: email });
     return await ContactForm.find();
+  }
+
+  //not sure what input this will get (assuming it will get a token)
+  //returns true, or false if the token is expired(older than 30 mins)
+  public async GetPasswordReset(token: string): Promise<boolean> {
+    let resetToken: Password_Reset = await Password_Reset.findOneBy({
+      Token: token,
+    });
+    if (
+      new Date().getTime() - resetToken.created_at.getTime() <
+      30 * 60 * 1000
+    ) {
+      this.DeleteSpecificPasswordReset(token);
+      return true;
+    } else {
+      this.DeleteSpecificPasswordReset(token);
+      return false;
+    }
   }
   //#endregion
 
@@ -211,6 +247,20 @@ export class DataProcessor {
       .from(TemporaryData)
       .where("deviceDeviceIndex: = :id", { id: deviceIndex })
       .execute();
+  }
+
+  /*
+  untested garbage code :-|
+  
+  public async DeleteExpiredPasswordReset() {
+    const expiringDate: Date = new Date(new Date().getTime() - 30 * 60 * 1000);
+    DatabaseConnector.INSTANCE.dataSource
+      .getRepository(Password_Reset)
+      .delete({ created_at: LessThan(expiringDate) });
+  }
+  */
+  private async DeleteSpecificPasswordReset(token: string) {
+    Password_Reset.delete({ Token: token });
   }
   //#endregion
 }
