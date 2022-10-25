@@ -86,7 +86,7 @@ const EditProfile = (): JSX.Element => {
               />
             </Grid>
           </Grid>
-          <Link to="./profile" replace>
+          <Link to="/profile" replace>
           
           <Button
             type="submit"
