@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import Profile from "./components/Profile";
-import { Route, Routes, NavLink, useParams, Navigate } from "react-router-dom";
-import HomePage from "./components/HomePage";
+import {
+  Route,
+  Routes,
+  NavLink,
+  useParams,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import Register from "./components/Register";
 import Devices from "./components/Devices";
 import SignIn from "./components/SignIn";
@@ -16,108 +22,72 @@ import "@fontsource/roboto/700.css";
 import DashboardComp from "./components/Dashboard";
 import { AdminPage } from "./components/AdminPage";
 import { useTranslation } from "react-i18next";
+import LoginPage from "./components/LoginPage";
+import { getLanguageFromUrl } from "./util/BrowserUtil";
+import { I18n } from "./util/language/I18n";
+import { url } from "inspector";
 import EditProfile from "./components/EditProfile";
 
+export interface ItestData {
+  devices: Idevice[];
+}
+export interface Idevice {
+  nameDevice: string;
+  data: Idata[];
+  colorDay: string;
+  colorNight: string;
+}
 export interface Idata {
   name: string;
   dag: number;
   nacht: number;
 }
 
-const App = (): JSX.Element => {
-  let { i18n } = useTranslation();
-  console.log(i18n);
+export const getCurrentPath = (location: any) => {
+  if (location.pathname[location.pathname.length - 1] === "/") {
+    location.pathname = location.pathname.substring(
+      0,
+      location.pathname.length - 1
+    );
+  }
+  return location.pathname;
+};
 
-  let lang = i18n.resolvedLanguage;
-
+export const getCurrentLanguage = (translation: any): string => {
+  let { i18n } = translation;
+  // get language from language selector
+  return i18n.resolvedLanguage;
+};
+export const getCurrentLanguagePath = (lang: string) => {
+  // Set default language to en (English)
   if (lang === undefined) {
     lang = "en";
   }
+  return `/${lang}/`;
+};
 
-  let indexNavigate = `/${lang}/`;
+const App = (): JSX.Element => {
+  const [loggedIn, setLoggedIn] = useState<boolean>();
+  const indexNavigate = getCurrentLanguagePath(
+    getCurrentLanguage(useTranslation())
+  );
+  let lang = getCurrentLanguage(useTranslation());
+  const urlLang = getLanguageFromUrl();
 
-  const data1 = [
-    {
-      name: "Page A",
-      dag: 4000,
-      nacht: 2400,
-    },
-    {
-      name: "Page B",
-      dag: -3000,
-      nacht: 1398,
-    },
-    {
-      name: "Page C",
-      dag: -2000,
-      nacht: -3000,
-    },
-    {
-      name: "Page D",
-      dag: 2780,
-      nacht: 3908,
-    },
-    {
-      name: "Page E",
-      dag: -1890,
-      nacht: 4800,
-    },
-    {
-      name: "Page F",
-      dag: 2390,
-      nacht: -3800,
-    },
-    {
-      name: "Page G",
-      dag: 3490,
-      nacht: 4300,
-    },
-  ];
-  const data2 = [
-    {
-      name: "Dinsdag",
-      dag: 500,
-      nacht: 20,
-    },
-    {
-      name: "Woensdag",
-      dag: 200,
-      nacht: -10,
-    },
-    {
-      name: "Donderdag",
-      dag: 5000,
-      nacht: 360,
-    },
-    {
-      name: "Vrijdag",
-      dag: 2500,
-      nacht: 2500,
-    },
-    {
-      name: "Zaterdag",
-      dag: -150,
-      nacht: 28,
-    },
-    {
-      name: "Zondag",
-      dag: 248,
-      nacht: -36,
-    },
-    {
-      name: "Maandag",
-      dag: 898,
-      nacht: 247,
-    },
-  ];
-  const combineddata = require("./util/data/testData.json");
+  const { i18n } = useTranslation();
+  if (lang !== urlLang && I18n.doesLanguageExist(urlLang))
+    i18n.changeLanguage(urlLang);
+
+  // Add testdata from file to emulate externaldata
+  const combineddata: ItestData = require("./util/data/testData.json");
+
   return (
     <>
       <Drawer lang={lang} />
       <Routes>
-        <Route path="/" element={<Navigate to={indexNavigate} />} />
+        <Route path="/" element={<Navigate to={`/${lang}/`} />} />
         <Route path="/:lang">
-          <Route index element={<HomePage />} />
+          <Route index element={<LoginPage />} />
           <Route
             path="dashboard"
             element={<DashboardComp data={combineddata} />}

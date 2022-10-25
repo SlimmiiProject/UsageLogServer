@@ -1,10 +1,13 @@
-import express, { request, Router } from "express";
+import express, { Request, request, Response, Router } from "express";
 import { Express } from "express-serve-static-core";
 import "reflect-metadata";
 import { DatabaseConnector } from "./data/DatabaseConnector";
 import { Environment } from "./utils/Environment";
 import helmet from "helmet";
 import { Logger } from "./utils/Logger";
+import path from "path";
+import bodyParser from "body-parser";
+import { SessionManager } from "./accounts/SessionManager";
 
 const cors = require("cors");
 const session = require('express-session');
@@ -34,8 +37,9 @@ export class App {
     }
 
     private appSetup() {
+        this.App.use(express.static("public"));
         this.App.use(express.json());
-        this.App.use(express.urlencoded({ extended: true }));
+        this.App.use(bodyParser.urlencoded({ extended: true }));
         this.App.use(helmet());
         this.App.use(cors());
     }
@@ -56,13 +60,13 @@ export class App {
 
         this.App.use(session({
             name: process.env.SESS_NAME,
-            resave: false,
-            saveUninitialized: false,
+            resave: true,
+            saveUninitialized: true,
             store: sessionStore,
             secret: session_secret,
             cookie: {
                 sameSite: true,
-                secure: developmentEnv
+                secure: !developmentEnv
             }
         }))
     }
@@ -73,12 +77,20 @@ export class App {
         const userRouter: Router = require("./routes/UserRouter");
         const dataRouter: Router = require("./routes/DataRouter");
         const profileRouter: Router = require("./routes/ProfileRouter");
+        const contactRouter:Router = require("./routes/ContactRouter");
+
+        // Middleware for setting up Sessions
+        this.App.use((req:Request, res:Response, next) => SessionManager.setup(request, res, next));
 
         this.App.use("/api", apiRouter);
         apiRouter.use("/translation", translationRouter);
         apiRouter.use("/users/:userId", userRouter);
         apiRouter.use("/data", dataRouter);
         apiRouter.use("/profiles", profileRouter);
+        apiRouter.use("/contact", contactRouter);
+
+        // !! This has to stay at the end of this method to assure it's only executed if the url doesn't match any of the above cases
+        this.App.get("*", (req:Request, res:Response) => res.sendFile(path.join(__dirname, "../public", "index.html")));
     }
 
     public start() {
@@ -89,5 +101,6 @@ export class App {
         return server_port;
     }
 }
+
 
 App.INSTANCE.start();

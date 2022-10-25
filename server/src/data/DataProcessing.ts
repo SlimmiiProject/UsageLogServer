@@ -1,11 +1,11 @@
-import { ObjectUtil } from './../utils/ObjectUtil';
+import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
 import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
 import { ContactForm } from "./entities/contact";
-import { UserAccount } from './entities/UserAccount';
+import { UserAccount } from "./entities/UserAccount";
 export class DataProcessor {
   //#region Create Data
   public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
@@ -20,17 +20,18 @@ export class DataProcessor {
     lastname: string,
     email: string,
     password: string,
-    phonenumber?: string,
+    phonenumber: string,
     devices: Device[] = []
   ): Promise<number> {
-    return (await UserAccount.insert({
-      email: email,
-      hashed_password: password,
-      firstname: firstname,
-      lastname: lastname,
-      phone: phonenumber,
-      device: devices,
-    })).raw.insertId;
+    const newUser = new UserAccount();
+    newUser.email = email;
+    newUser.firstname = firstname;
+    newUser.lastname = lastname;
+    newUser.password = password;
+    newUser.phone = phonenumber;
+    newUser.device = devices;
+    return (await UserAccount.save(newUser)).userId;
+    //tested => await users.save(newUser);
   }
 
   private async CreateData(
@@ -80,7 +81,7 @@ export class DataProcessor {
   //#endregion
 
   //#region get Data
-  public async GetAdministrator(userId: number): Promise<Administrator> {
+  public static async GetAdministrator(userId: number): Promise<Administrator> {
     let AdminQuery = DatabaseConnector.INSTANCE.dataSource
       .getRepository(Administrator)
       .createQueryBuilder("administrator")
@@ -113,11 +114,10 @@ export class DataProcessor {
     userid?: number,
     number?: number
   ): Promise<UserAccount> {
-
     return ObjectUtil.firstNonUndefined([
       await UserAccount.findOneBy({ email: email }),
-      await UserAccount.findOneBy({ userId: userid })
-    ])
+      await UserAccount.findOneBy({ userId: userid }),
+    ]);
   }
   public async GetLastData(userid: number): Promise<TemporaryData> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
@@ -129,15 +129,23 @@ export class DataProcessor {
     return allData.reverse()[0];
   }
 
-  public async GetContactForms(): Promise<ContactForm[]> {
+  public async GetContactForms(
+    message_topic?: string,
+    email?: string
+  ): Promise<ContactForm[]> {
+    if (message_topic)
+      return await ContactForm.findBy({ message_topic: message_topic });
+    if (email) return await ContactForm.findBy({ email: email });
     return await ContactForm.find();
   }
   //#endregion
 
   //#region Alter Data
-  //probably redundant.
+  //possibly redundant.
   public async ChangePassword(userId: number, password: string): Promise<void> {
-    await UserAccount.update(userId, { hashed_password: password });
+    let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
+    User.password = password;
+    User.save();
   }
 
   public async EditAcount(
@@ -151,7 +159,7 @@ export class DataProcessor {
     await UserAccount.update(userid, {
       firstname: firstname,
       lastname: lastname,
-      hashed_password: password,
+      password: password,
       email: email,
       phone: phone,
     });
@@ -164,7 +172,7 @@ export class DataProcessor {
     let user = await UserAccount.findOneBy({ userId: userId });
     await Device.update({ deviceId: deviceid }, { user: user });
   }
-  //change name from device
+  //change alternate name for device
   public async ChangeDeviceAlias(
     device_index: number,
     alias: string
@@ -194,9 +202,8 @@ export class DataProcessor {
   public async DeleteContactForm(id: number): Promise<void> {
     ContactForm.delete({ contactId: id });
   }
-  /*
-  delete all temporary data from specific data
-  */
+
+  //delete all temporary data from specific device
   private async CleantempData(deviceIndex: number): Promise<void> {
     DatabaseConnector.INSTANCE.dataSource
       .createQueryBuilder()

@@ -1,5 +1,7 @@
 import {
   BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -7,10 +9,11 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Device } from "./Device";
+import { Crypt } from "../../utils/Crypt";
+import { AccountManager } from "../../accounts/AccountManager";
 
 @Entity()
 export class UserAccount extends BaseEntity {
-
   @PrimaryGeneratedColumn({
     name: "userId",
   })
@@ -33,7 +36,7 @@ export class UserAccount extends BaseEntity {
   lastname: string;
 
   @Column("text", { nullable: true, unique: false, name: "hashedPassword" })
-  hashed_password: string | undefined;
+  password: string | undefined;
 
   @Column("varchar", {
     nullable: false,
@@ -51,4 +54,24 @@ export class UserAccount extends BaseEntity {
   })
   @JoinColumn({ name: "device" })
   device: Device[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    return (
+      this.password &&
+      (await new Promise((resolve, reject) => {
+        const hashedPassword = Crypt.encrypt(this.password);
+        hashedPassword
+          ? resolve((this.password = hashedPassword))
+          : reject(
+              console.log("hashing password failed password: " + hashedPassword)
+            );
+      }))
+    );
+  }
+
+  async isAdmin() {
+    return await AccountManager.isAdministrator(this.userId); 
+  }
 }

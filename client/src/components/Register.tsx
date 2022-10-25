@@ -9,17 +9,31 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import {
+  getCurrentLanguage,
+  getCurrentLanguagePath,
+  getCurrentPath,
+} from "../App";
+import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { IOUtil } from "../util/IOUtil";
 
 const Register = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+    
+    // TODO Improve data capture
+    const first_name = data.get("firstName")!.toString();
+    const last_name = data.get("lastName")!.toString();
+    const email = data.get("email")!.toString();
+    const phone_number = data.get("phoneNumber")!.toString();
+    const password = data.get("password")!.toString();
+    const password_verify = data.get("passwordVerify")!.toString();
 
+    IOUtil.registerUser(first_name, last_name, email, phone_number, password, password_verify);
+  };
+  let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -74,20 +88,10 @@ const Register = (): JSX.Element => {
               <TextField
                 required
                 fullWidth
-                id="Phone Nummer"
+                id="phoneNumber"
                 label="Phone Nummer"
-                name="PhoneNummer"
+                name="phoneNumber"
                 autoComplete="Phone-Nummer"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="Username"
-                label="UserName"
-                name="UserName"
-                autoComplete="User-Name"
               />
             </Grid>
             <Grid item xs={12}>
@@ -98,6 +102,17 @@ const Register = (): JSX.Element => {
                 label="Password"
                 type="password"
                 id="password"
+                autoComplete="new-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="passwordVerify"
+                label="Verify Password"
+                type="password"
+                id="passwordVerify"
                 autoComplete="new-password"
               />
             </Grid>
@@ -112,7 +127,7 @@ const Register = (): JSX.Element => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/login" variant="body2">
+              <Link href={path + "login"} variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
