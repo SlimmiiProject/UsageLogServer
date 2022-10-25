@@ -8,6 +8,7 @@ import { Logger } from "./utils/Logger";
 import path from "path";
 import bodyParser from "body-parser";
 import { SessionManager } from "./accounts/SessionManager";
+import { body } from "express-validator";
 
 const cors = require("cors");
 const session = require('express-session');
