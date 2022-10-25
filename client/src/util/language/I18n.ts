@@ -27,6 +27,10 @@ export class I18n {
                 resources: this.translationConfig
             });
     }
+    
+    public static doesLanguageExist(language_key:string):boolean {
+       return Object.keys(I18n.translationConfig).find((key) => key === language_key) != undefined;
+    }
 
     /**
      * It takes a key, and returns the translation.

@@ -9,6 +9,13 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import {
+  getCurrentLanguage,
+  getCurrentLanguagePath,
+  getCurrentPath,
+} from "../App";
+import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Register = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -19,7 +26,7 @@ const Register = (): JSX.Element => {
       password: data.get("password"),
     });
   };
-
+  let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -112,7 +119,7 @@ const Register = (): JSX.Element => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/login" variant="body2">
+              <Link href={path + "login"} variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

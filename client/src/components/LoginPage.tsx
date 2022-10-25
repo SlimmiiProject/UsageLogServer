@@ -5,7 +5,7 @@ import AddSensor from "./AddSensor";
 import { LanguageSelector } from "./LanguageSelector";
 import SignIn from "./SignIn";
 
-const HomePage = (): JSX.Element => {
+const LoginPage = (): JSX.Element => {
   return (
     <>
       <section>
@@ -15,4 +15,4 @@ const HomePage = (): JSX.Element => {
   );
 };
 
-export default HomePage;
+export default LoginPage;

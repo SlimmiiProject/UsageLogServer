@@ -1,14 +1,9 @@
 import { useLocation } from "react-router-dom";
+import { getCurrentPath } from "../App";
 import { AdminPageOneComponent } from "./AdminPageOneComponent";
 
 export const AdminPage = (): JSX.Element => {
-  let location = useLocation();
-  if (location.pathname[location.pathname.length - 1] === "/") {
-    location.pathname = location.pathname.substring(
-      0,
-      location.pathname.length - 1
-    );
-  }
+  const location = getCurrentPath(useLocation());
   return (
     <>
       <div className="boxnoborder">
@@ -16,22 +11,22 @@ export const AdminPage = (): JSX.Element => {
         <div className="flex">
           <AdminPageOneComponent
             title="Alle gebruikers"
-            link={`${location.pathname}/allusers`}
+            link={`${location}/allusers`}
             icon="profile"
           />
           <AdminPageOneComponent
             title="Logfile"
-            link={`${location.pathname}/logfile`}
+            link={`${location}/logfile`}
             icon="log"
           />
           <AdminPageOneComponent
             title="Alle apparaten"
-            link={`${location.pathname}/alldevice`}
+            link={`${location}/alldevice`}
             icon="device"
           />
           <AdminPageOneComponent
             title="Vertalingen"
-            link={`${location.pathname}/translate`}
+            link={`${location}/translate`}
             icon="translate"
           />
         </div>
