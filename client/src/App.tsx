@@ -16,6 +16,7 @@ import "@fontsource/roboto/700.css";
 import DashboardComp from "./components/Dashboard";
 import { AdminPage } from "./components/AdminPage";
 import { useTranslation } from "react-i18next";
+import EditProfile from "./components/EditProfile";
 
 export interface Idata {
   name: string;
@@ -123,7 +124,7 @@ const App = (): JSX.Element => {
           />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="profile-change-data" element={<Contact />} />
+          <Route path="profile/edit-profile" element={<EditProfile />} />
           <Route path="devices" element={<Devices />} />
           <Route path="login" element={<SignIn />} />
           <Route path="contact" element={<Contact />} />
