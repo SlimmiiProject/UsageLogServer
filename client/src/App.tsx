@@ -52,7 +52,7 @@ export const getCurrentPath = (location: any) => {
   return location.pathname;
 };
 
-export const getCurrentLanguage = (translation: any):string => {
+export const getCurrentLanguage = (translation: any): string => {
   let { i18n } = translation;
   // get language from language selector
   return i18n.resolvedLanguage;
@@ -72,10 +72,11 @@ const App = (): JSX.Element => {
   );
   let lang = getCurrentLanguage(useTranslation());
   const urlLang = getLanguageFromUrl();
- 
-  const {i18n} = useTranslation();
-  if (lang !== urlLang && I18n.doesLanguageExist(urlLang)) i18n.changeLanguage(urlLang);
-  
+
+  const { i18n } = useTranslation();
+  if (lang !== urlLang && I18n.doesLanguageExist(urlLang))
+    i18n.changeLanguage(urlLang);
+
   // Add testdata from file to emulate externaldata
   const combineddata: ItestData = require("./util/data/testData.json");
 
@@ -84,8 +85,8 @@ const App = (): JSX.Element => {
       <Drawer lang={lang} />
       <Routes>
         <Route path="/" element={<Navigate to={`/${lang}/`} />} />
-        <Route path="/:lang" >
-          <Route index element={<HomePage />} />
+        <Route path="/:lang">
+          <Route index element={<LoginPage />} />
           <Route
             path="dashboard"
             element={<DashboardComp data={combineddata} />}
