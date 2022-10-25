@@ -25,8 +25,11 @@ export class I18n {
                     skipOnVariables: false
                 },
                 resources: this.translationConfig
-            }
-            );
+            });
+    }
+    
+    public static doesLanguageExist(language_key:string):boolean {
+       return Object.keys(I18n.translationConfig).find((key) => key === language_key) != undefined;
     }
 
     /**
@@ -45,7 +48,11 @@ export class I18n {
         return i18n.t(key, tFunction);
     }
 
-     private static containsTranslationKey(key: string) {
-         return this.translationConfig["en"].translation[key];
-     }
+    public static get currentLanguage() {
+        return i18n.resolvedLanguage;
+    }
+
+    private static containsTranslationKey(key: string) {
+        return this.translationConfig["en"].translation[key];
+    }
 }

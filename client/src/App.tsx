@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import Profile from "./components/Profile";
-import { Route, Routes, NavLink, useParams, Navigate } from "react-router-dom";
-import HomePage from "./components/HomePage";
+import {
+  Route,
+  Routes,
+  NavLink,
+  useParams,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import Register from "./components/Register";
 import Devices from "./components/Devices";
 import SignIn from "./components/SignIn";
@@ -16,41 +22,79 @@ import "@fontsource/roboto/700.css";
 import DashboardComp from "./components/Dashboard";
 import { AdminPage } from "./components/AdminPage";
 import { useTranslation } from "react-i18next";
+import LoginPage from "./components/LoginPage";
+import { getLanguageFromUrl } from "./util/BrowserUtil";
+import { I18n } from "./util/language/I18n";
+import { url } from "inspector";
+import EditProfile from "./components/EditProfile";
 
+export interface ItestData {
+  devices: Idevice[];
+}
+export interface Idevice {
+  nameDevice: string;
+  data: Idata[];
+  colorDay: string;
+  colorNight: string;
+}
 export interface Idata {
   name: string;
   dag: number;
   nacht: number;
 }
 
-const App = (): JSX.Element => {
-  let { i18n } = useTranslation();
-  console.log(i18n);
+export const getCurrentPath = (location: any) => {
+  if (location.pathname[location.pathname.length - 1] === "/") {
+    location.pathname = location.pathname.substring(
+      0,
+      location.pathname.length - 1
+    );
+  }
+  return location.pathname;
+};
 
-  let lang = i18n.resolvedLanguage;
-
+export const getCurrentLanguage = (translation: any): string => {
+  let { i18n } = translation;
+  // get language from language selector
+  return i18n.resolvedLanguage;
+};
+export const getCurrentLanguagePath = (lang: string) => {
+  // Set default language to en (English)
   if (lang === undefined) {
     lang = "en";
   }
+  return `/${lang}/`;
+};
 
-  let indexNavigate = `/${lang}/`;
+const App = (): JSX.Element => {
+  const [loggedIn, setLoggedIn] = useState<boolean>();
+  const indexNavigate = getCurrentLanguagePath(
+    getCurrentLanguage(useTranslation())
+  );
+  let lang = getCurrentLanguage(useTranslation());
+  const urlLang = getLanguageFromUrl();
+
+  const { i18n } = useTranslation();
+  if (lang !== urlLang && I18n.doesLanguageExist(urlLang))
+    i18n.changeLanguage(urlLang);
 
   // Add testdata from file to emulate externaldata
-  const combineddata = require("./util/data/testData.json");
+  const combineddata: ItestData = require("./util/data/testData.json");
+
   return (
     <>
       <Drawer lang={lang} />
       <Routes>
-        <Route path="/" element={<Navigate to={indexNavigate} />} />
+        <Route path="/" element={<Navigate to={`/${lang}/`} />} />
         <Route path="/:lang">
-          <Route index element={<HomePage />} />
+          <Route index element={<LoginPage />} />
           <Route
             path="dashboard"
             element={<DashboardComp data={combineddata} />}
           />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="profile-change-data" element={<Contact />} />
+          <Route path="profile/edit-profile" element={<EditProfile />} />
           <Route path="devices" element={<Devices />} />
           <Route path="login" element={<SignIn />} />
           <Route path="contact" element={<Contact />} />

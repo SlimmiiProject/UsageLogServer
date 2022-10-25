@@ -20,7 +20,7 @@ export class DataProcessor {
     lastname: string,
     email: string,
     password: string,
-    phonenumber?: string,
+    phonenumber: string,
     devices: Device[] = []
   ): Promise<number> {
     const newUser = new UserAccount();
@@ -81,7 +81,7 @@ export class DataProcessor {
   //#endregion
 
   //#region get Data
-  public async GetAdministrator(userId: number): Promise<Administrator> {
+  public static async GetAdministrator(userId: number): Promise<Administrator> {
     let AdminQuery = DatabaseConnector.INSTANCE.dataSource
       .getRepository(Administrator)
       .createQueryBuilder("administrator")

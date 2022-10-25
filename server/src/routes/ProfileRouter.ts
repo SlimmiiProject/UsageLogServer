@@ -4,10 +4,38 @@ import { InputUtil } from './../utils/InputUtil';
 import express, { Request, Response } from "express";
 import { Crypt } from '../utils/Crypt';
 import { GoogleAuth } from '../utils/GoogleAuth';
+import { SessionManager } from '../accounts/SessionManager';
 const router = express.Router();
 
-router.post("/login", async (req: Request, res: Response) => {
+type CreationData = {
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number: string;
+    password: string;
+    password_verify: string;
+};
 
+type LoginData = Pick<CreationData, "email" | "password">;
+
+router.post("/login", async (req: Request, res: Response) => {
+    console.log(req.body)
+
+    let body = req.body;
+    const data: LoginData = {
+        email: body.email,
+        password: body.password
+    }
+
+    if (Object.values(data).every(InputUtil.isSet)) {
+        if (await AccountManager.doesAccountExist(undefined, data.email)) {
+            await login(req, data.email)
+            res.sendStatus(200);
+            return;
+        };
+    }
+
+    res.sendStatus(300);
 });
 
 router.post("/google-login", async (req: Request, res: Response) => {
@@ -20,20 +48,28 @@ router.post("/google-login", async (req: Request, res: Response) => {
             if (!(await AccountManager.doesAccountExist(undefined, payload.email)))
                 await AccountManager.createAccount(payload.given_name, payload.family_name, payload.email, Crypt.createRandomPassword(24), "");
 
-
-            // TODO Login User
+            await login(req, payload.email)
+            res.sendStatus(200);
+            return;
         });
     }
+
+    res.sendStatus(300);
 });
 
-router.post("/logout", async (req: Request, res: Response) => {
+const login = async (req: Request, email: string) => {
+    await SessionManager.createLoggedInSession(req, await AccountManager.getAccount(undefined, email));
+}
 
+
+router.post("/logout", async (req: Request, res: Response) => {
+    SessionManager.destroy(req, res);
 });
 
 router.post("/create-profile", async (req: Request, res: Response) => {
     let body = req.body;
-
-    const data: { [key: string]: string } = {
+    console.log(req.body)
+    const data: CreationData = {
         first_name: body.first_name,
         last_name: body.last_name,
         email: body.email,
