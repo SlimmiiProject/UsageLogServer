@@ -162,7 +162,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
               icon: <AdminPanelSettingsRoundedIcon />,
               link: `${lang}/admin`,
             },
-          ].map((element) => (
+          ].map((element) => ( 
             <NavLink
               to={element.link}
               style={{ textDecoration: "none", color: "inherit" }}
