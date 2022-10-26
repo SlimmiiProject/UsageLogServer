@@ -14,8 +14,6 @@
   "author": "Elwyn Van der Borght, Jannick Oste, Raven Van Hove, Kasper Bosteels, Bjarne Van Looke, Alex Van Dijck",
   "license": "ISC",
   "dependencies": {
-    "@types/body-parser": "^1.19.2",
-    "@types/cookie-session": "^2.0.44",
     "bcrypt": "^5.1.0",
     "concurrently": "^7.4.0",
     "cors": "^2.8.5",
@@ -31,15 +29,17 @@
     "nodemailer": "^6.8.0",
     "reflect-metadata": "^0.1.13",
     "styled-components": "^5.3.6",
-    "ts-node": "^10.9.1",
     "typeorm": "^0.3.10",
     "typescript": "^4.8.4"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/body-parser": "^1.19.2",
+    "@types/cookie-session": "^2.0.44",
     "@types/express": "^4.17.14",
     "@types/express-session": "^1.17.5",
     "@types/node": "^18.7.23",
-    "@types/nodemailer": "^6.4.6"
+    "@types/nodemailer": "^6.4.6",
+    "ts-node": "^10.9.1"
   }
 }
