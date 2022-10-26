@@ -17,7 +17,7 @@ export class ContactForm extends BaseEntity {
   @Column("varchar", {
     nullable: false,
     unique: false,
-    length: 20,
+    length: 100,
     name: "topic",
   })
   @Index()
