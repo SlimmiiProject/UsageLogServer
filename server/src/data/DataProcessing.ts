@@ -6,6 +6,7 @@ import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
 import { ContactForm } from "./entities/contact";
 import { UserAccount } from "./entities/UserAccount";
+import { Equal } from "typeorm";
 export class DataProcessor {
   //#region Create Data
   public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
@@ -115,8 +116,8 @@ export class DataProcessor {
     number?: number
   ): Promise<UserAccount> {
     return ObjectUtil.firstNonUndefined([
-      await UserAccount.findOneBy({ email: email }),
-      await UserAccount.findOneBy({ userId: userid }),
+      await UserAccount.findOne({where: {email: Equal((email))}}),
+      await UserAccount.findOne({where: {userId: Equal((userid))}}),
     ]);
   }
   public async GetLastData(userid: number): Promise<TemporaryData> {
