@@ -7,7 +7,7 @@ import { TemporaryData } from "./entities/TemporaryData";
 import { ContactForm } from "./entities/contact";
 import { UserAccount } from "./entities/UserAccount";
 import { Password_Reset } from "./entities/Password_reset";
-import { LessThan } from "typeorm";
+import { Equal, LessThan } from "typeorm";
 export class DataProcessor {
   //#region Create Data
   public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
@@ -50,7 +50,7 @@ export class DataProcessor {
     newData.save();
   }
 
-  public async CreatetempData(
+  public async CreateTempData(
     deviceId: string,
     dataDay?: number,
     dataNight?: number
@@ -73,26 +73,26 @@ export class DataProcessor {
     message: string,
     message_topic: string
   ): Promise<void> {
-    let contactForm = new ContactForm();
-    contactForm.email = email;
-    contactForm.message = message;
-    contactForm.message_topic = message_topic;
-    contactForm.save();
+    const newContactForm = new ContactForm();
+    newContactForm.email = email;
+    newContactForm.message = message;
+    newContactForm.message_topic = message_topic;
+    ContactForm.save(newContactForm);
   }
 
   public async CreatePasswordReset(
     token: string,
     userId?: number,
     email?: string,
-    phonenumber?: number
-  ) {
+    phoneNumber?: number
+  ): Promise<void> {
     let user: UserAccount = await DataProcessor.GetUser(
       email,
       userId,
-      phonenumber
+      phoneNumber
     );
     const newPasswordReset = new Password_Reset();
-    newPasswordReset.Token = token;
+    newPasswordReset.token = token;
     newPasswordReset.user = user;
     Password_Reset.save(newPasswordReset);
   }
@@ -147,13 +147,19 @@ export class DataProcessor {
     return allData.reverse()[0];
   }
 
+  //withouth any variable it will return all contactForms
   public async GetContactForms(
     message_topic?: string,
     email?: string
   ): Promise<ContactForm[]> {
-    if (message_topic)
-      return await ContactForm.findBy({ message_topic: message_topic });
-    if (email) return await ContactForm.findBy({ email: email });
+    if (message_topic || email) {
+      return ObjectUtil.firstNonUndefined([
+        await ContactForm.find({
+          where: { message_topic: Equal(message_topic) },
+        }),
+        await ContactForm.find({ where: { email: Equal(email) } }),
+      ]);
+    }
     return await ContactForm.find();
   }
 
@@ -161,18 +167,12 @@ export class DataProcessor {
   //returns true, or false if the token is expired(older than 30 mins)
   public async GetPasswordReset(token: string): Promise<boolean> {
     let resetToken: Password_Reset = await Password_Reset.findOneBy({
-      Token: token,
+      token: token,
     });
-    if (
-      new Date().getTime() - resetToken.created_at.getTime() <
-      30 * 60 * 1000
-    ) {
-      this.DeleteSpecificPasswordReset(token);
-      return true;
-    } else {
-      this.DeleteSpecificPasswordReset(token);
-      return false;
-    }
+    let passwordResetAllowed: boolean =
+      new Date().getTime() - resetToken.created_at.getTime() < 30 * 60 * 1000;
+    this.DeleteSpecificPasswordReset(token);
+    return passwordResetAllowed;
   }
   //#endregion
 
@@ -249,18 +249,16 @@ export class DataProcessor {
       .execute();
   }
 
-  /*
-  untested garbage code :-|
-  
+  //tested garbage code :-|
   public async DeleteExpiredPasswordReset() {
     const expiringDate: Date = new Date(new Date().getTime() - 30 * 60 * 1000);
     DatabaseConnector.INSTANCE.dataSource
       .getRepository(Password_Reset)
       .delete({ created_at: LessThan(expiringDate) });
   }
-  */
+
   private async DeleteSpecificPasswordReset(token: string) {
-    Password_Reset.delete({ Token: token });
+    Password_Reset.delete({ token: token });
   }
   //#endregion
 }
