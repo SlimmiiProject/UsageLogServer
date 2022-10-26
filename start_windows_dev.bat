@@ -1,1 +1,1 @@
-npm run start:dev --prefix ./server
+npm run start:dev
