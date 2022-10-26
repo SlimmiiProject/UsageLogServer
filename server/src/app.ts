@@ -8,6 +8,7 @@ import { Logger } from "./utils/Logger";
 import path from "path";
 import bodyParser from "body-parser";
 import { SessionManager } from "./accounts/SessionManager";
+import { body } from "express-validator";
 
 const cors = require("cors");
 const session = require('express-session');
@@ -77,10 +78,10 @@ export class App {
         const userRouter: Router = require("./routes/UserRouter");
         const dataRouter: Router = require("./routes/DataRouter");
         const profileRouter: Router = require("./routes/ProfileRouter");
-        const contactRouter:Router = require("./routes/ContactRouter");
+        const contactRouter: Router = require("./routes/ContactRouter");
 
         // Middleware for setting up Sessions
-        this.App.use((req:Request, res:Response, next) => SessionManager.setup(request, res, next));
+        this.App.use((req: Request, res: Response, next) => SessionManager.setup(request, res, next));
 
         this.App.use("/api", apiRouter);
         apiRouter.use("/translation", translationRouter);
@@ -90,7 +91,7 @@ export class App {
         apiRouter.use("/contact", contactRouter);
 
         // !! This has to stay at the end of this method to assure it's only executed if the url doesn't match any of the above cases
-        this.App.get("*", (req:Request, res:Response) => res.sendFile(path.join(__dirname, "../public", "index.html")));
+        this.App.get("*", (req: Request, res: Response) => res.sendFile(path.join(__dirname, "../public", "index.html")));
     }
 
     public start() {

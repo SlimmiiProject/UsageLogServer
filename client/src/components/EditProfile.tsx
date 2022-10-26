@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Button,CssBaseline,TextField,Grid,Box,Container,Alert} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import {Link} from 'react-router-dom';
 
 const EditProfile = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -14,6 +15,9 @@ const EditProfile = (): JSX.Element => {
       password2:data.get("password2"),
     });
   };
+  
+
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -82,6 +86,8 @@ const EditProfile = (): JSX.Element => {
               />
             </Grid>
           </Grid>
+          <Link to="/profile" replace>
+          
           <Button
             type="submit"
             fullWidth
@@ -90,6 +96,7 @@ const EditProfile = (): JSX.Element => {
           >
             Edit profile
           </Button>
+          </Link>
         </Box>
       </Box>
     </Container>

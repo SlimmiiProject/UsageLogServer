@@ -26,6 +26,7 @@ import LoginPage from "./components/LoginPage";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
 import { I18n } from "./util/language/I18n";
 import { url } from "inspector";
+import EditProfile from "./components/EditProfile";
 
 export interface ItestData {
   devices: Idevice[];
@@ -93,7 +94,7 @@ const App = (): JSX.Element => {
           />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="profile-change-data" element={<Contact />} />
+          <Route path="profile/edit-profile" element={<EditProfile />} />
           <Route path="devices" element={<Devices />} />
           <Route path="login" element={<SignIn />} />
           <Route path="contact" element={<Contact />} />
