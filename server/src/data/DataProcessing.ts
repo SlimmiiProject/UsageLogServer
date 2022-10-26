@@ -116,8 +116,8 @@ export class DataProcessor {
     number?: number
   ): Promise<UserAccount> {
     return ObjectUtil.firstNonUndefined([
-      await UserAccount.findOne({where: {email: Equal((email))}}),
-      await UserAccount.findOne({where: {userId: Equal((userid))}}),
+      await UserAccount.findOne({where: {email: Equal(email)}}),
+      await UserAccount.findOne({where: {userId: Equal(userid)}}),
     ]);
   }
   public async GetLastData(userid: number): Promise<TemporaryData> {
