@@ -10,10 +10,23 @@ export class Crypt {
         return 15;
     }
 
+  /**
+   * It takes a raw string and an encrypted string, decrypts the encrypted string, and then compares
+   * the two strings
+   * @param {string} rawContent - The raw content that you want to compare to the encrypted content.
+   * @param {string} encryptedContent - The encrypted content that you want to compare against.
+   * @returns The encrypted content is being returned.
+   */
     public static matchesEncrypted(rawContent: string, encryptedContent: string): boolean {
         return bcrypt.compareSync(rawContent, this.decryptToHash(encryptedContent));
     }
 
+    /**
+     * "Create an array of length `length` and reduce it to a string by adding a random character to it
+     * for each iteration."
+     * @param {number} length - number - The length of the password to generate.
+     * @returns A string of random characters.
+     */
     public static createRandomPassword(length: number): string {
         return [...new Array(length).keys()].reduce((password) => password + String.fromCharCode(Math.floor(Math.random() * 128)), "");
     }

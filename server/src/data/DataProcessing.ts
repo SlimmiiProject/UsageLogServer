@@ -110,16 +110,26 @@ export class DataProcessor {
     return allData;
   }
 
+ /**
+  * Get a user by email or userid, and return the first one that's not undefined.
+  * @param {string} [email] - string,
+  * @param {number} [userid] - number
+  * @param {number} [number] - number
+  * @returns The first non-undefined value from the array.
+  */
   public static async GetUser(
     email?: string,
     userid?: number,
-    number?: number
+    number?: string
   ): Promise<UserAccount> {
     return ObjectUtil.firstNonUndefined([
       await UserAccount.findOne({where: {email: Equal(email)}}),
       await UserAccount.findOne({where: {userId: Equal(userid)}}),
+      await UserAccount.findOne({where: {phone:  Equal(number)}}),
     ]);
   }
+
+
   public async GetLastData(userid: number): Promise<TemporaryData> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)

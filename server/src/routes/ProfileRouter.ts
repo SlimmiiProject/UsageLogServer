@@ -35,7 +35,7 @@ router.post("/login", async (req: Request, res: Response) => {
         };
     }
 
-    res.sendStatus(300);
+    res.sendStatus(401);
 });
 
 router.post("/google-login", async (req: Request, res: Response) => {
@@ -54,7 +54,7 @@ router.post("/google-login", async (req: Request, res: Response) => {
         });
     }
 
-    res.sendStatus(300);
+    res.sendStatus(401);
 });
 
 const login = async (req: Request, email: string) => {
