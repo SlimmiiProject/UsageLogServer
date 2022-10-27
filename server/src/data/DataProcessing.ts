@@ -8,13 +8,20 @@ import { ContactForm } from "./entities/contact";
 import { UserAccount } from "./entities/UserAccount";
 import { Password_Reset } from "./entities/Password_reset";
 import { Equal, LessThan } from "typeorm";
+import { validate } from "class-validator";
 export class DataProcessor {
   //#region Create Data
   public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
     const newDevice = new Device();
     newDevice.deviceId = DeviceId;
     if (alias) newDevice.friendlyName = alias;
-    await newDevice.save();
+    validate(newDevice).then(async (result) => {
+      if (result.length > 0) {
+        throw new Error("device validation failed:\n" + result.toString());
+      } else {
+        await newDevice.save();
+      }
+    });
   }
 
   public static async CreateUser(
@@ -32,7 +39,13 @@ export class DataProcessor {
     newUser.password = password;
     newUser.phone = phonenumber;
     newUser.device = devices;
-    return (await UserAccount.save(newUser)).userId;
+    return validate(newUser).then(async (result) => {
+      if (result.length > 0) {
+        throw new Error("validation for user failed:" + result);
+      } else {
+        return (await UserAccount.save(newUser)).userId;
+      }
+    });
   }
 
   private async CreateData(
@@ -47,7 +60,13 @@ export class DataProcessor {
     newData.created_at = date;
     if (dataDay) newData.Day = dataDay;
     if (DataNight) newData.Night = DataNight;
-    newData.save();
+    validate(newData).then(async (result) => {
+      if (result.length > 0) {
+        throw new Error("validation for Data failed: " + result);
+      } else {
+        newData.save();
+      }
+    });
   }
 
   public async CreateTempData(
@@ -60,7 +79,13 @@ export class DataProcessor {
     newData.device = device;
     if (dataDay) newData.Day = dataDay;
     if (dataNight) newData.Night = dataNight;
-    newData.save();
+    validate(newData).then(async (result) => {
+      if (result.length > 0) {
+        throw new Error("validation for temporary Data failed: " + result);
+      } else {
+        newData.save();
+      }
+    });
   }
 
   public async CreateAdministrator(userid: number): Promise<void> {
@@ -77,7 +102,13 @@ export class DataProcessor {
     newContactForm.email = email;
     newContactForm.message = message;
     newContactForm.message_topic = message_topic;
-    ContactForm.save(newContactForm);
+    validate(newContactForm).then(async (result) => {
+      if (result.length > 0) {
+        throw new Error("validation for contactForm failed: " + result);
+      } else {
+        ContactForm.save(newContactForm);
+      }
+    });
   }
 
   public async CreatePasswordReset(
@@ -94,7 +125,13 @@ export class DataProcessor {
     const newPasswordReset = new Password_Reset();
     newPasswordReset.token = token;
     newPasswordReset.user = user;
-    Password_Reset.save(newPasswordReset);
+    validate(newPasswordReset).then(async (result) => {
+      if (result.length > 0) {
+        throw new Error("validation for password reset failed: " + result);
+      } else {
+        Password_Reset.save(newPasswordReset);
+      }
+    });
   }
   //#endregion
 
