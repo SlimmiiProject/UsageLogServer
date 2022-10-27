@@ -1,3 +1,4 @@
+import { IsEmail, Length, MaxLength, IsDefined } from "class-validator";
 import {
   BaseEntity,
   Column,
@@ -17,10 +18,11 @@ export class ContactForm extends BaseEntity {
   @Column("varchar", {
     nullable: false,
     unique: false,
-    length: 100,
     name: "topic",
+    length: 100,
   })
-  @Index()
+  @Length(4, 100)
+  @IsDefined()
   message_topic: string;
 
   @Column("varchar", {
@@ -29,6 +31,9 @@ export class ContactForm extends BaseEntity {
     length: 50,
     name: "email",
   })
+  @MaxLength(50)
+  @IsDefined()
+  @IsEmail()
   email: string;
 
   @Column("text", {
@@ -36,6 +41,8 @@ export class ContactForm extends BaseEntity {
     unique: false,
     name: "message",
   })
+  @IsDefined()
+  @MaxLength(1000)
   message: string;
 
   @CreateDateColumn({ name: "created_at" })
