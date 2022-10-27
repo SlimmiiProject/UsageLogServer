@@ -11,6 +11,13 @@ import { Equal, LessThan } from "typeorm";
 import { validate } from "class-validator";
 export class DataProcessor {
   //#region Create Data
+
+  /**
+   * creates a new device in the database
+   * throws an Error if input is not valied
+   * @param DeviceId string of 64 characters
+   * @param alias undefined | string of 1 to 50 characters
+   */
   public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
     const newDevice = new Device();
     newDevice.deviceId = DeviceId;
@@ -24,6 +31,17 @@ export class DataProcessor {
     });
   }
 
+  /**
+   * creates a new user in the database, returns the new user id
+   * throws an Error if input is not valied
+   * @param firstname  string of 3 to 30 characters
+   * @param lastname string of 3 to 30 characters
+   * @param email string of max 50 characters needs to be a valid email
+   * @param password string of minimum 5 characters
+   * @param phonenumber string of 12 characters needs to start with +32
+   * @param devices undefined | Device[ ]
+   * @returns Promise<number>
+   */
   public static async CreateUser(
     firstname: string,
     lastname: string,
@@ -48,6 +66,14 @@ export class DataProcessor {
     });
   }
 
+  /**
+   * creates new Data coupled to a specific device
+   * throws an Error if input is not valied
+   * @param deviceId string id from device
+   * @param date Date when data was created
+   * @param dataDay undefined | number amount of power used during day time
+   * @param DataNight undefined | number amount of power used during night time
+   */
   private async CreateData(
     deviceId: string,
     date: Date,
@@ -68,7 +94,13 @@ export class DataProcessor {
       }
     });
   }
-
+  /**
+   * creates TempData coupled to a device
+   * throws an Error if input is not valied
+   * @param deviceId string id of device
+   * @param dataDay undefined | number power usage during day
+   * @param dataNight undefined | number power useage during night
+   */
   public async CreateTempData(
     deviceId: string,
     dataDay?: number,
@@ -88,11 +120,21 @@ export class DataProcessor {
     });
   }
 
+  /**
+   *creates a new administator coupled to a user
+   * @param userid number user id
+   */
   public async CreateAdministrator(userid: number): Promise<void> {
     let user = await UserAccount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
-
+  /**
+   * creates a new contactform.
+   * throws an Error if input is not valied
+   * @param email string valied email adress of max 50 characters
+   * @param message string of max 1000 characters
+   * @param message_topic string of 4 to 100 characters
+   */
   public async CreateContactForm(
     email: string,
     message: string,
@@ -110,7 +152,14 @@ export class DataProcessor {
       }
     });
   }
-
+  /**
+   *  you need at least one of the optional values to use this function.
+   * throws an Error if input is not valied.
+   * @param token string serves as unique id for reset
+   * @param userId undefined | number user id
+   * @param email undefined | string email adress of a user
+   * @param phoneNumber undefined | number phonenumber of user
+   */
   public async CreatePasswordReset(
     token: string,
     userId?: number,
@@ -136,6 +185,11 @@ export class DataProcessor {
   //#endregion
 
   //#region get Data
+  /**
+   * returns administrator object if user is an administrator
+   * @param userId number search by user id
+   * @returns Promise<Administrator>
+   */
   public static async GetAdministrator(userId: number): Promise<Administrator> {
     let AdminQuery = DatabaseConnector.INSTANCE.dataSource
       .getRepository(Administrator)
@@ -145,6 +199,11 @@ export class DataProcessor {
       .getOne();
     return await AdminQuery;
   }
+  /**
+   * returns all devices from a specific user
+   * @param userid number search by user id
+   * @returns Promise<Device[]>
+   */
   public async GetDevices(userid: number): Promise<Device[]> {
     const devices = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Device)
@@ -154,6 +213,11 @@ export class DataProcessor {
       .getMany();
     return devices;
   }
+  /**
+   * return all data from a specific users devices
+   * @param userid number search by user id
+   * @returns Promise<Data[]>
+   */
   public async GetData(userid: number): Promise<Data[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Data)
@@ -163,7 +227,13 @@ export class DataProcessor {
       .getMany();
     return allData;
   }
-
+  /**
+   *returns a specific user
+   * @param email string search user by email address
+   * @param userid number search user by index
+   * @param number number search user by phonenumber
+   * @returns Promise<UserAccounts>
+   */
   public static async GetUser(
     email?: string,
     userid?: number,
@@ -174,6 +244,11 @@ export class DataProcessor {
       await UserAccount.findOneBy({ userId: userid }),
     ]);
   }
+  /**
+   * returns the latest temporary data for the final column in the graphs
+   * @param userid number user id
+   * @returns Promise<TemporaryData>
+   */
   public async GetLastData(userid: number): Promise<TemporaryData> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
@@ -184,7 +259,12 @@ export class DataProcessor {
     return allData.reverse()[0];
   }
 
-  //withouth any variable it will return all contactForms
+  /**
+   * withouth any parameters this will return all forms
+   * @param message_topic undefined | string searches forms by topic
+   * @param email undefined | string searches forms by email address
+   * @returns Promise<ContactForm[]>
+   */
   public async GetContactForms(
     message_topic?: string,
     email?: string
@@ -201,12 +281,17 @@ export class DataProcessor {
   }
 
   //not sure what input this will get (assuming it will get a token)
-  //returns true, or false if the token is expired(older than 30 mins)
+  /**
+   * returns true or false if the token is valied or expired
+   * @param token string the unique id of the reset
+   * @returns Promise<boolean>
+   */
   public async GetPasswordReset(token: string): Promise<boolean> {
     let resetToken: Password_Reset = await Password_Reset.findOneBy({
       token: token,
     });
-    let passwordResetAllowed: boolean =
+    let passwordResetAllowed: boolean = false;
+    passwordResetAllowed =
       new Date().getTime() - resetToken.created_at.getTime() < 30 * 60 * 1000;
     this.DeleteSpecificPasswordReset(token);
     return passwordResetAllowed;
@@ -215,12 +300,28 @@ export class DataProcessor {
 
   //#region Alter Data
   //possibly redundant.
+  //TODO: add validation
+  /**
+   *
+   * @param userId number user id
+   * @param password  string password of minimum 5 characters
+   */
   public async ChangePassword(userId: number, password: string): Promise<void> {
     let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
     User.password = password;
     User.save();
   }
 
+  //TODO: add validation
+  /**
+   * @param userid number user id
+   * @param firstname  string of 3 to 30 characters
+   * @param lastname string of 3 to 30 characters
+   * @param email string of max 50 characters needs to be a valid email
+   * @param password string of minimum 5 characters
+   * @param phonenumber undefined | string of 12 characters that needs to start with +32
+   * @returns Promise<void>
+   */
   public async EditAcount(
     userid: number,
     firstname: string,
@@ -238,6 +339,11 @@ export class DataProcessor {
     });
   }
 
+  /**
+   *
+   * @param userId number user id
+   * @param deviceid string unique id of device
+   */
   public async AddDevicetoUser(
     userId: number,
     deviceid: string
@@ -245,7 +351,13 @@ export class DataProcessor {
     let user = await UserAccount.findOneBy({ userId: userId });
     await Device.update({ deviceId: deviceid }, { user: user });
   }
-  //change alternate name for device
+
+  //TODO: add validation
+  /**
+   * change alternate name for device
+   * @param device_index number device index
+   * @param alias string of 1 to 50 characters
+   */
   public async ChangeDeviceAlias(
     device_index: number,
     alias: string
@@ -287,6 +399,9 @@ export class DataProcessor {
   }
 
   //tested garbage code :-|
+  /**
+   * removes all password reset rows that are older than 30 minutes
+   */
   public async DeleteExpiredPasswordReset() {
     const expiringDate: Date = new Date(new Date().getTime() - 30 * 60 * 1000);
     DatabaseConnector.INSTANCE.dataSource
