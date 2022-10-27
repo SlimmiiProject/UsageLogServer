@@ -1,3 +1,4 @@
+import { IsDefined } from "class-validator";
 import {
   BaseEntity,
   Entity,
@@ -7,7 +8,6 @@ import {
 } from "typeorm";
 import { UserAccount } from "./UserAccount";
 
-
 @Entity()
 export class Administrator extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -15,5 +15,6 @@ export class Administrator extends BaseEntity {
 
   @OneToOne(() => UserAccount, { nullable: false, cascade: false })
   @JoinColumn({ name: "user" })
+  @IsDefined()
   user: UserAccount;
 }
