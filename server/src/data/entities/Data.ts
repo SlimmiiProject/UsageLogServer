@@ -21,21 +21,21 @@ export class Data extends BaseEntity {
   @Column("numeric", {
     nullable: true,
     unique: false,
-    unsigned: true,
+    unsigned: false,
     name: "day",
   })
   @IsOptional()
-  @IsNumberString()
+  @IsInt()
   Day: number;
 
   @Column("numeric", {
     nullable: true,
     unique: false,
-    unsigned: true,
+    unsigned: false,
     name: "night",
   })
   @IsOptional()
-  @IsNumberString()
+  @IsInt()
   Night: number;
 
   @CreateDateColumn({ name: "created_at" })
