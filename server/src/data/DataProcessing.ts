@@ -90,7 +90,7 @@ export class DataProcessor {
       if (result.length > 0) {
         throw new Error("validation for Data failed: " + result);
       } else {
-        newData.save();
+        await Data.save(newData);
       }
     });
   }
@@ -115,7 +115,7 @@ export class DataProcessor {
       if (result.length > 0) {
         throw new Error("validation for temporary Data failed: " + result);
       } else {
-        newData.save();
+        await TemporaryData.save(newData);
       }
     });
   }
@@ -296,13 +296,26 @@ export class DataProcessor {
     this.DeleteSpecificPasswordReset(token);
     return passwordResetAllowed;
   }
+  /**
+   * gets all temporary data connected a specific device
+   * @param deviceIndex number index of a device
+   * @returns Promise<Temporarydata[]>
+   */
+  private async GetTempData(deviceIndex: number): Promise<TemporaryData[]> {
+    let allData = await DatabaseConnector.INSTANCE.dataSource
+      .getRepository(TemporaryData)
+      .createQueryBuilder("temporary_data")
+      .select()
+      .where("deviceDeviceIndex = :devindex", { devindex: deviceIndex })
+      .getMany();
+    return allData;
+  }
   //#endregion
 
   //#region Alter Data
   //possibly redundant.
   //TODO: add validation
   /**
-   *
    * @param userId number user id
    * @param password  string password of minimum 5 characters
    */
@@ -379,30 +392,88 @@ export class DataProcessor {
   public async DeleteDevice(deviceid: string): Promise<void> {
     Device.delete({ deviceId: deviceid });
   }
-
+  /**
+   * deletes a single data row
+   * @param dataid number
+   */
   public async DeleteData(dataid: number): Promise<void> {
     Data.delete({ dataId: dataid });
   }
-
+  /**
+   * deletes a single contact form.
+   * @param id number
+   */
   public async DeleteContactForm(id: number): Promise<void> {
     ContactForm.delete({ contactId: id });
   }
 
-  //delete all temporary data from specific device
-  private async CleantempData(deviceIndex: number): Promise<void> {
-    DatabaseConnector.INSTANCE.dataSource
-      .createQueryBuilder()
-      .delete()
-      .from(TemporaryData)
-      .where("deviceDeviceIndex: = :id", { id: deviceIndex })
-      .execute();
+  //god this is awfull
+  /**
+   * deletes all data from 24 hours prior,
+   * collects all temporary data, add a single data row per device,
+   *  and deletes all data except for latest entry
+   */
+  public async cleanTemporaryData(): Promise<void> {
+    await this.DeleteExpiredTemporaryData();
+    let allDevices: Device[] = await Device.find();
+    allDevices.map(async (specificDevice) => {
+      let dataFromSpecificDevice: TemporaryData[] = await this.GetTempData(
+        specificDevice.device_index
+      );
+      //sort all temporary data by date
+      dataFromSpecificDevice = dataFromSpecificDevice.sort((a, b) =>
+        a.created_at > b.created_at ? 1 : -1
+      );
+      //if temporary data array is more than 1(has been updated at least once since cleanup) use it to calculate usage
+      if (dataFromSpecificDevice.length > 1) {
+        let allDayData: number[] = [];
+        let allNightData: number[] = [];
+        dataFromSpecificDevice.map((specificData) => {
+          allDayData.push(specificData.Day);
+          allNightData.push(specificData.Night);
+        });
+        //get diferential between first and last entry
+        const totalDayUsage: number = allDayData.at(-1) - allDayData.at(0);
+        const totalNightUsasge: number = allNightData.at(-1) - allDayData.at(0);
+
+        await this.CreateData(
+          specificDevice.deviceId,
+          new Date(),
+          totalDayUsage,
+          totalNightUsasge
+        );
+      }
+      //delete all temp data except for newest row.
+      dataFromSpecificDevice.shift();
+      dataFromSpecificDevice.map(
+        async (data) => await this.DeleteSpecificTemporaryData(data.index)
+      );
+    });
+  }
+  /**
+   * deletes a single entry in temporary data
+   * @param index number index of the temporary data
+   */
+  private async DeleteSpecificTemporaryData(index: number): Promise<void> {
+    TemporaryData.delete({ index: index });
+  }
+  /**
+   * deletes all data older than 24 hours
+   */
+  private async DeleteExpiredTemporaryData(): Promise<void> {
+    const expiringDate: Date = new Date(
+      new Date().getTime() - 24 * 60 * 60 * 1000
+    );
+    await DatabaseConnector.INSTANCE.dataSource
+      .getRepository(TemporaryData)
+      .delete({ created_at: LessThan(expiringDate) });
   }
 
   //tested garbage code :-|
   /**
    * removes all password reset rows that are older than 30 minutes
    */
-  public async DeleteExpiredPasswordReset() {
+  public async DeleteExpiredPasswordResets() {
     const expiringDate: Date = new Date(new Date().getTime() - 30 * 60 * 1000);
     DatabaseConnector.INSTANCE.dataSource
       .getRepository(Password_Reset)
