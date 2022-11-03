@@ -34,7 +34,7 @@ export class DataProcessor {
     //tested => await users.save(newUser);
   }
 
-  private async CreateData(
+  private static async CreateData(
     deviceId: string,
     date: Date,
     dataDay?: number,
@@ -49,7 +49,7 @@ export class DataProcessor {
     newData.save();
   }
 
-  public async CreatetempData(
+  public static async CreatetempData(
     deviceId: string,
     dataDay?: number,
     dataNight?: number
@@ -62,12 +62,12 @@ export class DataProcessor {
     newData.save();
   }
 
-  public async CreateAdministrator(userid: number): Promise<void> {
+  public static async CreateAdministrator(userid: number): Promise<void> {
     let user = await UserAccount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
 
-  public async CreateContactForm(
+  public static async CreateContactForm(
     email: string,
     message: string,
     message_topic: string
@@ -81,7 +81,7 @@ export class DataProcessor {
   //#endregion
 
   //#region get Data
-  public async GetAdministrator(userId: number): Promise<Administrator> {
+  public static async GetAdministrator(userId: number): Promise<Administrator> {
     let AdminQuery = DatabaseConnector.INSTANCE.dataSource
       .getRepository(Administrator)
       .createQueryBuilder("administrator")
@@ -90,7 +90,7 @@ export class DataProcessor {
       .getOne();
     return await AdminQuery;
   }
-  public async GetDevices(userid: number): Promise<Device[]> {
+  public static async GetDevices(userid: number): Promise<Device[]> {
     const devices = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Device)
       .createQueryBuilder("device")
@@ -99,7 +99,7 @@ export class DataProcessor {
       .getMany();
     return devices;
   }
-  public async GetData(userid: number): Promise<Data[]> {
+  public static async GetData(userid: number): Promise<Data[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Data)
       .createQueryBuilder("data")
@@ -119,7 +119,7 @@ export class DataProcessor {
       await UserAccount.findOneBy({ userId: userid }),
     ]);
   }
-  public async GetLastData(userid: number): Promise<TemporaryData> {
+  public static async GetLastData(userid: number): Promise<TemporaryData> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
       .createQueryBuilder("data")
@@ -129,20 +129,20 @@ export class DataProcessor {
     return allData.reverse()[0];
   }
 
-  public async GetContactForms(): Promise<ContactForm[]> {
+  public static async GetContactForms(): Promise<ContactForm[]> {
     return await ContactForm.find();
   }
   //#endregion
 
   //#region Alter Data
   //probably redundant.
-  public async ChangePassword(userId: number, password: string): Promise<void> {
+  public static async ChangePassword(userId: number, password: string): Promise<void> {
     let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
     User.password = password;
     User.save();
   }
 
-  public async EditAcount(
+  public static async EditAcount(
     userid: number,
     firstname: string,
     lastname: string,
@@ -159,7 +159,7 @@ export class DataProcessor {
     });
   }
 
-  public async AddDevicetoUser(
+  public static async AddDevicetoUser(
     userId: number,
     deviceid: string
   ): Promise<void> {
@@ -167,7 +167,7 @@ export class DataProcessor {
     await Device.update({ deviceId: deviceid }, { user: user });
   }
   //change name from device
-  public async ChangeDeviceAlias(
+  public static async ChangeDeviceAlias(
     device_index: number,
     alias: string
   ): Promise<void> {
@@ -176,7 +176,7 @@ export class DataProcessor {
   //#endregion
 
   //#region  Delete Data
-  public async DeleteAdministrator(adminId: number): Promise<void> {
+  public static async DeleteAdministrator(adminId: number): Promise<void> {
     Administrator.delete({ adminId: adminId });
   }
 
@@ -185,21 +185,21 @@ export class DataProcessor {
     UserAccount.delete({ userId: userId });
   }
   //fails if data is not removed first
-  public async DeleteDevice(deviceid: string): Promise<void> {
+  public static async DeleteDevice(deviceid: string): Promise<void> {
     Device.delete({ deviceId: deviceid });
   }
 
-  public async DeleteData(dataid: number): Promise<void> {
+  public static async DeleteData(dataid: number): Promise<void> {
     Data.delete({ dataId: dataid });
   }
 
-  public async DeleteContactForm(id: number): Promise<void> {
+  public static async DeleteContactForm(id: number): Promise<void> {
     ContactForm.delete({ contactId: id });
   }
   /*
   delete all temporary data from specific data
   */
-  private async CleantempData(deviceIndex: number): Promise<void> {
+  private static async CleantempData(deviceIndex: number): Promise<void> {
     DatabaseConnector.INSTANCE.dataSource
       .createQueryBuilder()
       .delete()
