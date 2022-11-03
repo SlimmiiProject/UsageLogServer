@@ -26,6 +26,7 @@ import LoginPage from "./components/LoginPage";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
 import { I18n } from "./util/language/I18n";
 import { url } from "inspector";
+import EditProfile from "./components/EditProfile";
 
 export interface ItestData {
   devices: Idevice[];
@@ -52,11 +53,12 @@ export const getCurrentPath = (location: any) => {
   return location.pathname;
 };
 
-export const getCurrentLanguage = (translation: any):string => {
+export const getCurrentLanguage = (translation: any): string => {
   let { i18n } = translation;
   // get language from language selector
   return i18n.resolvedLanguage;
 };
+
 export const getCurrentLanguagePath = (lang: string) => {
   // Set default language to en (English)
   if (lang === undefined) {
@@ -83,25 +85,16 @@ const App = (): JSX.Element => {
     <>
       <Drawer lang={lang} />
       <Routes>
-        <Route path="/" element={<Navigate to={indexNavigate} />} />
+        <Route path="/" element={<Navigate to={`/${lang}/`} />} />
         <Route path="/:lang">
-          <Route
-            index
-            element={
-              loggedIn ? (
-                <Navigate to={indexNavigate + "dashboard"} />
-              ) : (
-                <LoginPage />
-              )
-            }
-          />
+          <Route index element={<LoginPage />} />
           <Route
             path="dashboard"
             element={<DashboardComp data={combineddata} />}
           />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="profile-change-data" element={<Contact />} />
+          <Route path="profile/edit-profile" element={<EditProfile />} />
           <Route path="devices" element={<Devices />} />
           <Route path="login" element={<SignIn />} />
           <Route path="contact" element={<Contact />} />

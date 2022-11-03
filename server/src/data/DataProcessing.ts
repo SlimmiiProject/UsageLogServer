@@ -6,6 +6,7 @@ import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
 import { ContactForm } from "./entities/contact";
 import { UserAccount } from "./entities/UserAccount";
+import { Equal } from "typeorm";
 export class DataProcessor {
   //#region Create Data
   public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
@@ -20,7 +21,7 @@ export class DataProcessor {
     lastname: string,
     email: string,
     password: string,
-    phonenumber?: string,
+    phonenumber: string,
     devices: Device[] = []
   ): Promise<number> {
     const newUser = new UserAccount();
@@ -109,17 +110,26 @@ export class DataProcessor {
     return allData;
   }
 
+ /**
+  * Get a user by email or userid, and return the first one that's not undefined.
+  * @param {string} [email] - string,
+  * @param {number} [userid] - number
+  * @param {number} [number] - number
+  * @returns The first non-undefined value from the array.
+  */
   public static async GetUser(
     email?: string,
     userid?: number,
-    number?: number
+    number?: string
   ): Promise<UserAccount> {
     return ObjectUtil.firstNonUndefined([
-      await UserAccount.findOneBy({ email: email }),
-      await UserAccount.findOneBy({ userId: userid }),
+      await UserAccount.findOne({where: {email: Equal(email)}}),
+      await UserAccount.findOne({where: {userId: Equal(userid)}}),
+      await UserAccount.findOne({where: {phone:  Equal(number)}}),
     ]);
   }
-  public static async GetLastData(userid: number): Promise<TemporaryData> {
+
+  public async GetLastData(userid: number): Promise<TemporaryData> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
       .createQueryBuilder("data")
@@ -129,13 +139,19 @@ export class DataProcessor {
     return allData.reverse()[0];
   }
 
-  public static async GetContactForms(): Promise<ContactForm[]> {
+  public static async GetContactForms(
+    message_topic?: string,
+    email?: string
+  ): Promise<ContactForm[]> {
+    if (message_topic)
+      return await ContactForm.findBy({ message_topic: message_topic });
+    if (email) return await ContactForm.findBy({ email: email });
     return await ContactForm.find();
   }
   //#endregion
 
   //#region Alter Data
-  //probably redundant.
+  //possibly redundant.
   public static async ChangePassword(userId: number, password: string): Promise<void> {
     let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
     User.password = password;
@@ -166,7 +182,8 @@ export class DataProcessor {
     let user = await UserAccount.findOneBy({ userId: userId });
     await Device.update({ deviceId: deviceid }, { user: user });
   }
-  //change name from device
+
+  //change alternate name for device
   public static async ChangeDeviceAlias(
     device_index: number,
     alias: string
@@ -196,9 +213,8 @@ export class DataProcessor {
   public static async DeleteContactForm(id: number): Promise<void> {
     ContactForm.delete({ contactId: id });
   }
-  /*
-  delete all temporary data from specific data
-  */
+
+  //delete all temporary data from specific device
   private static async CleantempData(deviceIndex: number): Promise<void> {
     DatabaseConnector.INSTANCE.dataSource
       .createQueryBuilder()

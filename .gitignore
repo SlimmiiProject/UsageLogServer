@@ -12,6 +12,7 @@ server/public
 
 # production
 build
+server/public/*
 
 # security
 .env

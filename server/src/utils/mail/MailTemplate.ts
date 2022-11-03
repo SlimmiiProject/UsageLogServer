@@ -6,6 +6,7 @@ import { parse } from 'node-html-parser';
 export class MailTemplate {
 
     private static mainStyle = this.getStyleSheetContent();
+    private static mainHtml = this.getMainContent();
     private static templates: Map<string, MailTemplate> = new Map();
 
     private content: string;
@@ -19,18 +20,25 @@ export class MailTemplate {
         this.content = this.getTemplateContent(identifier);
     }
 
+   /**
+    * It takes a string of HTML and replaces all the placeholders with the data provided.
+    * @param data - { [key: string]: string }
+    * @returns The compiled HTML string.
+    */
     private compile(data: { [key: string]: string }): string {
-        let compiledHTML = this.content;
+        let compiledMailHtml = this.content;
 
-        Object.entries(data).forEach((entry) => {
-            compiledHTML = compiledHTML.replaceAll(`%${entry[0]}%`, entry[1])
-        });
+        Object.entries(data).forEach((entry) =>
+            compiledMailHtml = compiledMailHtml.replaceAll(`%${entry[0]}%`, entry[1])
+        );
 
-        const root = parse(compiledHTML);
+        const root = parse(MailTemplate.mainHtml.replace("%content%", compiledMailHtml));
+      
         root.querySelector("head").appendChild(parse(`<style>${MailTemplate.mainStyle}</style>`));
         return root.toString();
     }
 
+   /* Reading the content of the html file and returning it. */
     private getTemplateContent(identifier: string): string {
         const dir = path.join(__dirname, "./templates/", `${identifier}.html`);
         const content = fs.readFileSync(dir, { encoding: "utf8" });
@@ -38,7 +46,13 @@ export class MailTemplate {
     }
 
     private static getStyleSheetContent() {
-        const dir = path.join(__dirname, "./templates/", `mainStyle.css`);
+        const dir = path.join(__dirname, "./templates/main/", `mainStyle.css`);
+        const content = fs.readFileSync(dir, { encoding: "utf8" });
+        return content;
+    }
+
+    private static getMainContent() {
+        const dir = path.join(__dirname, "./templates/main/", `main.html`);
         const content = fs.readFileSync(dir, { encoding: "utf8" });
         return content;
     }

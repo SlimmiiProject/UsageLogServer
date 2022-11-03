@@ -1,5 +1,29 @@
 {
-  "devDependencies": {
-    "@types/node": "^18.11.0"
-  }
+  "name": "usage-log-server",
+  "version": "1.0.0",
+  "description": "![](https://img.shields.io/badge/Project_Type-IT_Case-orange.svg) \r  ![](https://img.shields.io/badge/React-blue.svg)\r  ![](https://img.shields.io/badge/Express-blue.svg)\r  ![](https://img.shields.io/badge/Owner-Andie_Similon-blue.svg) ![](https://img.shields.io/badge/Project%20Status-Incomplete-red.svg)\r  [![Dependency Review](https://github.com/SlimmiiProject/UsageLogServer/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/SlimmiiProject/UsageLogServer/actions/workflows/dependency-review.yml)\r  [![Build](https://github.com/SlimmiiProject/UsageLogServer/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/SlimmiiProject/UsageLogServer/actions/workflows/codeql-analysis.yml)",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build && npm run server",
+    "start:dev": "concurrently --kill-others-on-fail \"npm run server:dev\" \"npm run client\"",
+   
+    "client": "npm run start --prefix ./client",
+    "server": "npm run start --prefix ./server",
+    "server:dev": "npm run start:dev --prefix ./server",
+
+    "build": "npm run build:server && npm run build:client && npm run client:merge",
+    "build:server": "npm run build --prefix ./server",
+    "build:client": "npm run build --prefix ./client",
+    "client:merge": "xcopy /e /v /y .\\client\\build\\ .\\server\\public\\"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SlimmiiProject/UsageLogServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SlimmiiProject/UsageLogServer/issues"
+  },
+  "homepage": "https://github.com/SlimmiiProject/UsageLogServer#readme"
 }

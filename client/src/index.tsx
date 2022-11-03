@@ -23,4 +23,4 @@ root.render(
     </React.Suspense>
   </React.StrictMode>
 );
-})();
+})(); 
