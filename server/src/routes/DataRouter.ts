@@ -14,4 +14,12 @@ router.post("/meter-entry", (req: Request, res: Response) => {
     // TODO Receives data from local python program with JSON data about the meter entry
 });
 
+
+
+// router.get("/week-data", /*onlyAcceptJSON,*/ async (req: Request, res: Response) => { 
+//      const devices: Device[] = await DataProcessor.GetDevices(SessionManager.getSessionData(req).user.id);
+
+// });
+
+
 module.exports = router;
