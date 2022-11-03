@@ -20,6 +20,11 @@ export class MailTemplate {
         this.content = this.getTemplateContent(identifier);
     }
 
+   /**
+    * It takes a string of HTML and replaces all the placeholders with the data provided.
+    * @param data - { [key: string]: string }
+    * @returns The compiled HTML string.
+    */
     private compile(data: { [key: string]: string }): string {
         let compiledMailHtml = this.content;
 
@@ -30,10 +35,10 @@ export class MailTemplate {
         const root = parse(MailTemplate.mainHtml.replace("%content%", compiledMailHtml));
       
         root.querySelector("head").appendChild(parse(`<style>${MailTemplate.mainStyle}</style>`));
-        console.log(root.toString());
         return root.toString();
     }
 
+   /* Reading the content of the html file and returning it. */
     private getTemplateContent(identifier: string): string {
         const dir = path.join(__dirname, "./templates/", `${identifier}.html`);
         const content = fs.readFileSync(dir, { encoding: "utf8" });
