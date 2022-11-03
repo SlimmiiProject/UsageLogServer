@@ -9,7 +9,7 @@ import { UserAccount } from "./entities/UserAccount";
 import { Equal } from "typeorm";
 export class DataProcessor {
   //#region Create Data
-  public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
+  public static async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
     const newDevice = new Device();
     newDevice.deviceId = DeviceId;
     if (alias) newDevice.friendlyName = alias;
@@ -100,6 +100,8 @@ export class DataProcessor {
       .getMany();
     return devices;
   }
+
+  
   public static async GetData(userid: number): Promise<Data[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Data)
@@ -107,6 +109,7 @@ export class DataProcessor {
       .leftJoinAndSelect("data.device", "dev")
       .where("dev.user = :id", { id: userid })
       .getMany();
+
     return allData;
   }
 
