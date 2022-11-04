@@ -9,6 +9,28 @@ import { UserAccount } from "./entities/UserAccount";
 import { Password_Reset } from "./entities/Password_reset";
 import { Equal, LessThan } from "typeorm";
 import { validate } from "class-validator";
+export interface DeviceSpecificData {
+  device_index: number;
+  device_alias: string;
+  data: Data[];
+  lastData: TemporaryData;
+}
+/*
+ *implementation:
+ * every 24 hours execute cleanTemporaryData()
+ * this wil thin out the temporary data and combine all data for the current day to data
+ *
+ * if validation fails for any Create... functions this will throw an Error with a discriptive text
+ *
+ *
+ * All Get functions will return an empty array if nothing is found.
+ * exceptions:
+ * GetData returns an object consisting of a combination of Device, Data[], TemporaryData for each device that this user has.
+ * GetPasswordReset returns a boolean if the reset for this userAcount exists and is valid.
+ *
+ * more to come...
+ */
+
 export class DataProcessor {
   //#region Create Data
 
@@ -214,18 +236,48 @@ export class DataProcessor {
     return devices;
   }
   /**
-   * return all data from a specific users devices
-   * @param userid number search by user id
-   * @returns Promise<Data[]>
+   * returns an array of objects for each device coupled to the user => look at interface DeviceSpecificData
+   * if lastData does not contain a full TemporaryData object this means the day and night values are the difference calculated from start of day to current time
+   *  @param userid number search by user id
+   * @returns Promise<DeviceSpecificData[]>
    */
-  public async GetData(userid: number): Promise<Data[]> {
-    let allData = await DatabaseConnector.INSTANCE.dataSource
+  public async GetData(userid: number): Promise<DeviceSpecificData[]> {
+    let tempdata: TemporaryData[] = await this.GetTempData(userid);
+    let data: Data[] = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Data)
       .createQueryBuilder("data")
       .leftJoinAndSelect("data.device", "dev")
       .where("dev.user = :id", { id: userid })
       .getMany();
-    return allData;
+    let devices: Device[] = await this.GetDevices(userid);
+
+    let completeData: DeviceSpecificData[] = [];
+    devices.forEach((device) => {
+      let currentDayData: TemporaryData = new TemporaryData();
+      let filteredTempData: TemporaryData[] = tempdata.filter(
+        (a) => a.device.device_index === device.device_index
+      );
+      if (filteredTempData.length >= 2) {
+        //incredibly annoying thing the Day and Night would return as string,
+        //but not be recognised as string, so i had to convert it to string and then back to integer.
+        currentDayData.Day =
+          parseInt(filteredTempData[0].Day.toString()) -
+          parseInt(filteredTempData.reverse()[0].Day.toString());
+        currentDayData.Night =
+          parseInt(filteredTempData[0].Night.toString()) -
+          parseInt(filteredTempData.reverse()[0].Night.toString());
+      } else {
+        currentDayData = filteredTempData[0];
+      }
+      const deviceData: DeviceSpecificData = {
+        device_index: device.device_index,
+        device_alias: device.friendlyName,
+        data: data.filter((a) => a.device.device_index === device.device_index),
+        lastData: currentDayData,
+      };
+      completeData.push(deviceData);
+    });
+    return completeData;
   }
   /**
    *returns a specific user
@@ -244,11 +296,13 @@ export class DataProcessor {
       await UserAccount.findOneBy({ userId: userid }),
     ]);
   }
+
   /**
    * returns the latest temporary data for the final column in the graphs
    * @param userid number user id
    * @returns Promise<TemporaryData>
    */
+  //i think this is now unused
   public async GetLastData(userid: number): Promise<TemporaryData> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
@@ -256,7 +310,9 @@ export class DataProcessor {
       .leftJoinAndSelect("data.device", "dev")
       .where("dev.user = :id", { id: userid })
       .getMany();
-    return allData.reverse()[0];
+    allData = allData.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+
+    return;
   }
 
   /**
@@ -280,7 +336,7 @@ export class DataProcessor {
     return await ContactForm.find();
   }
 
-  //not sure what input this will get (assuming it will get a token)
+  //not sure what input this will get (assuming it will get the token)
   /**
    * returns true or false if the token is valied or expired
    * @param token string the unique id of the reset
@@ -297,16 +353,30 @@ export class DataProcessor {
     return passwordResetAllowed;
   }
   /**
-   * gets all temporary data connected a specific device
-   * @param deviceIndex number index of a device
+   * gets user specific TemporaryData
+   * @param userid number id of a user
    * @returns Promise<Temporarydata[]>
    */
-  private async GetTempData(deviceIndex: number): Promise<TemporaryData[]> {
+  private async GetTempData(userid: number): Promise<TemporaryData[]> {
+    let allData = await DatabaseConnector.INSTANCE.dataSource
+      .getRepository(TemporaryData)
+      .createQueryBuilder("Temporary_data")
+      .leftJoinAndSelect("temporary_data.device", "dev")
+      .where("dev.user = :id", { id: userid })
+      .getMany();
+    return allData;
+  }
+  /**
+   * gets device specific TemporaryData
+   * @param index number index of device
+   * @returns Promise<TemporaryData[]>
+   */
+  private async GetAllTempData(index: number): Promise<TemporaryData[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
       .createQueryBuilder("temporary_data")
       .select()
-      .where("deviceDeviceIndex = :devindex", { devindex: deviceIndex })
+      .where("deviceDeviceIndex = :index", { index: index })
       .getMany();
     return allData;
   }
@@ -321,6 +391,7 @@ export class DataProcessor {
    */
   public async ChangePassword(userId: number, password: string): Promise<void> {
     let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
+    if (User == undefined) throw new Error("User Does not exist");
     User.password = password;
     User.save();
   }
@@ -332,7 +403,7 @@ export class DataProcessor {
    * @param lastname string of 3 to 30 characters
    * @param email string of max 50 characters needs to be a valid email
    * @param password string of minimum 5 characters
-   * @param phonenumber undefined | string of 12 characters that needs to start with +32
+   * @param phone undefined | string of 12 characters that needs to start with +32
    * @returns Promise<void>
    */
   public async EditAcount(
@@ -362,6 +433,7 @@ export class DataProcessor {
     deviceid: string
   ): Promise<void> {
     let user = await UserAccount.findOneBy({ userId: userId });
+    if (user == undefined) throw new Error("User does not exist");
     await Device.update({ deviceId: deviceid }, { user: user });
   }
 
@@ -407,7 +479,6 @@ export class DataProcessor {
     ContactForm.delete({ contactId: id });
   }
 
-  //god this is awfull
   /**
    * deletes all data from 24 hours prior,
    * collects all temporary data, add a single data row per device,
@@ -417,7 +488,7 @@ export class DataProcessor {
     await this.DeleteExpiredTemporaryData();
     let allDevices: Device[] = await Device.find();
     allDevices.map(async (specificDevice) => {
-      let dataFromSpecificDevice: TemporaryData[] = await this.GetTempData(
+      let dataFromSpecificDevice: TemporaryData[] = await this.GetAllTempData(
         specificDevice.device_index
       );
       //sort all temporary data by date
