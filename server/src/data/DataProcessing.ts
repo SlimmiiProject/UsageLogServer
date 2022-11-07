@@ -188,7 +188,7 @@ export class DataProcessor {
     token: string,
     userId?: number,
     email?: string,
-    phoneNumber?: number
+    phoneNumber?: string
   ): Promise<void> {
     let user: UserAccount = await DataProcessor.GetUser(
       email,
@@ -247,7 +247,7 @@ export class DataProcessor {
    * @returns Promise<DeviceSpecificData[]>
    */
   public static async GetData(userid: number): Promise<DeviceSpecificData[]> {
-    let tempdata: TemporaryData[] = await this.GetTempData(userid);
+    let tempdata: TemporaryData[] = await this.GetAllTempData(userid);
     let data: Data[] = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Data)
       .createQueryBuilder("data")
@@ -351,7 +351,7 @@ export class DataProcessor {
    * @param token string the unique id of the reset
    * @returns Promise<boolean>
    */
-  public async GetPasswordReset(token: string): Promise<boolean> {
+  public static async GetPasswordReset(token: string): Promise<boolean> {
     let resetToken: Password_Reset = await Password_Reset.findOneBy({
       token: token,
     });
@@ -380,7 +380,7 @@ export class DataProcessor {
    * @param index number index of device
    * @returns Promise<TemporaryData[]>
    */
-  private async GetAllTempData(index: number): Promise<TemporaryData[]> {
+  private static async GetAllTempData(index: number): Promise<TemporaryData[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
       .createQueryBuilder("temporary_data")
