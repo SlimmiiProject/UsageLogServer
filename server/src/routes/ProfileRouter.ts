@@ -61,7 +61,7 @@ const login = async (req: Request, email: string) => {
 }
 
 
-router.post("/logout", async (req: Request, res: Response) => {
+router.post("/logout",  SessionManager.loginRequired, async (req: Request, res: Response) => {
     SessionManager.destroy(req, res);
 });
 
@@ -118,7 +118,7 @@ router.post("/create-profile", async (req: Request, res: Response) => {
     );
 });
 
-router.delete("/delete-profile", async (req: Request, res: Response) => {
+router.delete("/delete-profile",  SessionManager.loginRequired, async (req: Request, res: Response) => {
     // Delete account
 });
 

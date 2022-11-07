@@ -1,4 +1,4 @@
-import express, { Request, request, Response, Router } from "express";
+import express, { NextFunction, request, Request, response, Response, Router } from "express";
 import { Express } from "express-serve-static-core";
 import "reflect-metadata";
 import { DatabaseConnector } from "./data/DatabaseConnector";
@@ -81,14 +81,17 @@ export class App {
         const contactRouter: Router = require("./routes/ContactRouter");
 
         // Middleware for setting up Sessions
-        this.App.use((req: Request, res: Response, next) => SessionManager.setup(request, res, next));
+        this.App.use((req: Request, res: Response, next:NextFunction) => SessionManager.setup(request, response, next));
 
         this.App.use("/api", apiRouter);
         apiRouter.use("/translation", translationRouter);
+        apiRouter.use("/contact", contactRouter);
+
+        this.App.use((req:Request, res: Response, next:NextFunction) => SessionManager.loginRequired(request, response, next));
+        
         apiRouter.use("/users/:userId", userRouter);
         apiRouter.use("/data", dataRouter);
         apiRouter.use("/profiles", profileRouter);
-        apiRouter.use("/contact", contactRouter);
 
         // !! This has to stay at the end of this method to assure it's only executed if the url doesn't match any of the above cases
         this.App.get("*", (req: Request, res: Response) => res.sendFile(path.join(__dirname, "../public", "index.html")));
