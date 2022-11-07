@@ -5,6 +5,7 @@ import { Administrator } from "./entities/Administrator";
 import { ContactForm } from "./entities/contact";
 import { Data } from "./entities/Data";
 import { Device } from "./entities/Device";
+import { Password_Reset } from "./entities/Password_reset";
 import { TemporaryData } from "./entities/TemporaryData";
 import { Translations } from "./entities/Translations";
 import { UserAccount } from "./entities/UserAccount";
@@ -37,6 +38,7 @@ export class DatabaseConnector {
         Translations,
         TemporaryData,
         ContactForm,
+        Password_Reset,
       ],
     });
   }
