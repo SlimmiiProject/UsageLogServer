@@ -4,11 +4,10 @@
   "description": "Express Server where you can get information about your electricity usage, which gets data from a microcontroller that is attached to your meter box",
   "main": "build/app.js",
   "scripts": {
-    "start": "npm run build && concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "start:dev": "concurrently --kill-others-on-fail \"tsnd src/app.ts\" \"npm run client\"",
+    "start": "npm run build && npm run server",
+    "start:dev": "tsnd src/app.ts",
     "server": "node build/app.js",
-    "client": "npm run start --prefix ../client",
-    "build": "tsc && npm run build --prefix ../client"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "Elwyn Van der Borght, Jannick Oste, Raven Van Hove, Kasper Bosteels, Bjarne Van Looke, Alex Van Dijck",
@@ -32,15 +31,17 @@
     "nodemailer": "^6.8.0",
     "reflect-metadata": "^0.1.13",
     "styled-components": "^5.3.6",
-    "ts-node": "^10.9.1",
     "typeorm": "^0.3.10",
     "typescript": "^4.8.4"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/body-parser": "^1.19.2",
+    "@types/cookie-session": "^2.0.44",
     "@types/express": "^4.17.14",
     "@types/express-session": "^1.17.5",
     "@types/node": "^18.7.23",
-    "@types/nodemailer": "^6.4.6"
+    "@types/nodemailer": "^6.4.6",
+    "ts-node": "^10.9.1"
   }
 }

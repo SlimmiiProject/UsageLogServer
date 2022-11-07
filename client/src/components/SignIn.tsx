@@ -25,7 +25,9 @@ const SignIn = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-   // TODO Improve data capture
+
+    // TODO Improve data capture
+   
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
   

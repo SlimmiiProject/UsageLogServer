@@ -58,6 +58,7 @@ export const getCurrentLanguage = (translation: any): string => {
   // get language from language selector
   return i18n.resolvedLanguage;
 };
+
 export const getCurrentLanguagePath = (lang: string) => {
   // Set default language to en (English)
   if (lang === undefined) {
@@ -73,11 +74,10 @@ const App = (): JSX.Element => {
   );
   let lang = getCurrentLanguage(useTranslation());
   const urlLang = getLanguageFromUrl();
-
-  const { i18n } = useTranslation();
-  if (lang !== urlLang && I18n.doesLanguageExist(urlLang))
-    i18n.changeLanguage(urlLang);
-
+ 
+  const {i18n} = useTranslation();
+  if (lang !== urlLang && I18n.doesLanguageExist(urlLang)) i18n.changeLanguage(urlLang);
+  
   // Add testdata from file to emulate externaldata
   const combineddata: ItestData = require("./util/data/testData.json");
 

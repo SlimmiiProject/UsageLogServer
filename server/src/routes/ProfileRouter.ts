@@ -19,23 +19,22 @@ type CreationData = {
 type LoginData = Pick<CreationData, "email" | "password">;
 
 router.post("/login", async (req: Request, res: Response) => {
-    console.log(req.body)
-
-    let body = req.body;
+    const body = req.body;
     const data: LoginData = {
         email: body.email,
         password: body.password
     }
 
     if (Object.values(data).every(InputUtil.isSet)) {
+  
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             await login(req, data.email)
             res.sendStatus(200);
             return;
         };
     }
-
-    res.sendStatus(300);
+    
+    res.sendStatus(401);
 });
 
 router.post("/google-login", async (req: Request, res: Response) => {
@@ -54,7 +53,7 @@ router.post("/google-login", async (req: Request, res: Response) => {
         });
     }
 
-    res.sendStatus(300);
+    res.sendStatus(401);
 });
 
 const login = async (req: Request, email: string) => {
@@ -67,8 +66,8 @@ router.post("/logout", async (req: Request, res: Response) => {
 });
 
 router.post("/create-profile", async (req: Request, res: Response) => {
-    let body = req.body;
-    console.log(req.body)
+    const body = req.body;
+
     const data: CreationData = {
         first_name: body.first_name,
         last_name: body.last_name,

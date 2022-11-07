@@ -40,7 +40,7 @@ export class DataProcessor {
    * @param DeviceId string of 64 characters
    * @param alias undefined | string of 1 to 50 characters
    */
-  public async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
+  public static async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
     const newDevice = new Device();
     newDevice.deviceId = DeviceId;
     if (alias) newDevice.friendlyName = alias;
@@ -87,7 +87,7 @@ export class DataProcessor {
       }
     });
   }
-
+  
   /**
    * creates new Data coupled to a specific device
    * throws an Error if input is not valied
@@ -96,7 +96,7 @@ export class DataProcessor {
    * @param dataDay undefined | number amount of power used during day time
    * @param DataNight undefined | number amount of power used during night time
    */
-  private async CreateData(
+  private static async CreateData(
     deviceId: string,
     date: Date,
     dataDay?: number,
@@ -116,6 +116,7 @@ export class DataProcessor {
       }
     });
   }
+
   /**
    * creates TempData coupled to a device
    * throws an Error if input is not valied
@@ -123,7 +124,7 @@ export class DataProcessor {
    * @param dataDay undefined | number power usage during day
    * @param dataNight undefined | number power useage during night
    */
-  public async CreateTempData(
+  public static async CreateTempData(
     deviceId: string,
     dataDay?: number,
     dataNight?: number
@@ -146,10 +147,11 @@ export class DataProcessor {
    *creates a new administator coupled to a user
    * @param userid number user id
    */
-  public async CreateAdministrator(userid: number): Promise<void> {
+  public static async CreateAdministrator(userid: number): Promise<void> {
     let user = await UserAccount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
+  
   /**
    * creates a new contactform.
    * throws an Error if input is not valied
@@ -157,7 +159,7 @@ export class DataProcessor {
    * @param message string of max 1000 characters
    * @param message_topic string of 4 to 100 characters
    */
-  public async CreateContactForm(
+  public static async CreateContactForm(
     email: string,
     message: string,
     message_topic: string
@@ -221,12 +223,14 @@ export class DataProcessor {
       .getOne();
     return await AdminQuery;
   }
+
+
   /**
    * returns all devices from a specific user
    * @param userid number search by user id
    * @returns Promise<Device[]>
    */
-  public async GetDevices(userid: number): Promise<Device[]> {
+  public static async GetDevices(userid: number): Promise<Device[]> {
     const devices = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Device)
       .createQueryBuilder("device")
@@ -235,13 +239,14 @@ export class DataProcessor {
       .getMany();
     return devices;
   }
+
   /**
    * returns an array of objects for each device coupled to the user => look at interface DeviceSpecificData
    * if lastData does not contain a full TemporaryData object this means the day and night values are the difference calculated from start of day to current time
    *  @param userid number search by user id
    * @returns Promise<DeviceSpecificData[]>
    */
-  public async GetData(userid: number): Promise<DeviceSpecificData[]> {
+  public static async GetData(userid: number): Promise<DeviceSpecificData[]> {
     let tempdata: TemporaryData[] = await this.GetTempData(userid);
     let data: Data[] = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Data)
@@ -249,6 +254,7 @@ export class DataProcessor {
       .leftJoinAndSelect("data.device", "dev")
       .where("dev.user = :id", { id: userid })
       .getMany();
+
     let devices: Device[] = await this.GetDevices(userid);
 
     let completeData: DeviceSpecificData[] = [];
@@ -289,11 +295,12 @@ export class DataProcessor {
   public static async GetUser(
     email?: string,
     userid?: number,
-    number?: number
+    number?: string
   ): Promise<UserAccount> {
     return ObjectUtil.firstNonUndefined([
-      await UserAccount.findOneBy({ email: email }),
-      await UserAccount.findOneBy({ userId: userid }),
+      await UserAccount.findOne({where: {email: Equal(email)}}),
+      await UserAccount.findOne({where: {userId: Equal(userid)}}),
+      await UserAccount.findOne({where: {phone:  Equal(number)}}),
     ]);
   }
 
@@ -315,13 +322,14 @@ export class DataProcessor {
     return;
   }
 
+
   /**
    * withouth any parameters this will return all forms
    * @param message_topic undefined | string searches forms by topic
    * @param email undefined | string searches forms by email address
    * @returns Promise<ContactForm[]>
    */
-  public async GetContactForms(
+  public static async GetContactForms(
     message_topic?: string,
     email?: string
   ): Promise<ContactForm[]> {
@@ -333,6 +341,7 @@ export class DataProcessor {
         await ContactForm.find({ where: { email: Equal(email) } }),
       ]);
     }
+    
     return await ContactForm.find();
   }
 
@@ -389,7 +398,7 @@ export class DataProcessor {
    * @param userId number user id
    * @param password  string password of minimum 5 characters
    */
-  public async ChangePassword(userId: number, password: string): Promise<void> {
+  public static async ChangePassword(userId: number, password: string): Promise<void> {
     let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
     if (User == undefined) throw new Error("User Does not exist");
     User.password = password;
@@ -406,7 +415,7 @@ export class DataProcessor {
    * @param phone undefined | string of 12 characters that needs to start with +32
    * @returns Promise<void>
    */
-  public async EditAcount(
+  public static async EditAcount(
     userid: number,
     firstname: string,
     lastname: string,
@@ -428,7 +437,7 @@ export class DataProcessor {
    * @param userId number user id
    * @param deviceid string unique id of device
    */
-  public async AddDevicetoUser(
+  public static async AddDevicetoUser(
     userId: number,
     deviceid: string
   ): Promise<void> {
@@ -443,7 +452,7 @@ export class DataProcessor {
    * @param device_index number device index
    * @param alias string of 1 to 50 characters
    */
-  public async ChangeDeviceAlias(
+  public static async ChangeDeviceAlias(
     device_index: number,
     alias: string
   ): Promise<void> {
@@ -452,7 +461,7 @@ export class DataProcessor {
   //#endregion
 
   //#region  Delete Data
-  public async DeleteAdministrator(adminId: number): Promise<void> {
+  public static async DeleteAdministrator(adminId: number): Promise<void> {
     Administrator.delete({ adminId: adminId });
   }
 
@@ -461,21 +470,22 @@ export class DataProcessor {
     UserAccount.delete({ userId: userId });
   }
   //fails if data is not removed first
-  public async DeleteDevice(deviceid: string): Promise<void> {
+  public static async DeleteDevice(deviceid: string): Promise<void> {
     Device.delete({ deviceId: deviceid });
   }
+
   /**
    * deletes a single data row
    * @param dataid number
    */
-  public async DeleteData(dataid: number): Promise<void> {
+  public static async DeleteData(dataid: number): Promise<void> {
     Data.delete({ dataId: dataid });
   }
   /**
    * deletes a single contact form.
    * @param id number
    */
-  public async DeleteContactForm(id: number): Promise<void> {
+  public static async DeleteContactForm(id: number): Promise<void> {
     ContactForm.delete({ contactId: id });
   }
 
@@ -484,7 +494,7 @@ export class DataProcessor {
    * collects all temporary data, add a single data row per device,
    *  and deletes all data except for latest entry
    */
-  public async cleanTemporaryData(): Promise<void> {
+  public static async cleanTemporaryData(): Promise<void> {
     await this.DeleteExpiredTemporaryData();
     let allDevices: Device[] = await Device.find();
     allDevices.map(async (specificDevice) => {
@@ -525,13 +535,13 @@ export class DataProcessor {
    * deletes a single entry in temporary data
    * @param index number index of the temporary data
    */
-  private async DeleteSpecificTemporaryData(index: number): Promise<void> {
+  private static async DeleteSpecificTemporaryData(index: number): Promise<void> {
     TemporaryData.delete({ index: index });
   }
   /**
    * deletes all data older than 24 hours
    */
-  private async DeleteExpiredTemporaryData(): Promise<void> {
+  private static async DeleteExpiredTemporaryData(): Promise<void> {
     const expiringDate: Date = new Date(
       new Date().getTime() - 24 * 60 * 60 * 1000
     );
@@ -544,14 +554,15 @@ export class DataProcessor {
   /**
    * removes all password reset rows that are older than 30 minutes
    */
-  public async DeleteExpiredPasswordResets() {
+  public static async DeleteExpiredPasswordResets() {
     const expiringDate: Date = new Date(new Date().getTime() - 30 * 60 * 1000);
+
     DatabaseConnector.INSTANCE.dataSource
       .getRepository(Password_Reset)
       .delete({ created_at: LessThan(expiringDate) });
   }
 
-  private async DeleteSpecificPasswordReset(token: string) {
+  private static async DeleteSpecificPasswordReset(token: string) {
     Password_Reset.delete({ token: token });
   }
   //#endregion
