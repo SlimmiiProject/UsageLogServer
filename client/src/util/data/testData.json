@@ -1,6 +1,6 @@
 {
   "isLoggedIn": true,
-  "isAdmin": false,
+  "isAdmin": true,
   "devices": [
     {
       "nameDevice": "Testmeter 1",
