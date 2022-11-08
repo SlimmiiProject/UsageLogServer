@@ -1,6 +1,7 @@
 import * as React from "react";
 import {
   Avatar,
+  Alert,
   Button,
   CssBaseline,
   TextField,
@@ -24,12 +25,16 @@ import { useTranslation } from "react-i18next";
 import { IOUtil } from "../util/IOUtil";
 import { Navigate, useNavigate, useNavigation } from "react-router-dom";
 
+
+
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
-
   const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
+  const [isFailed,setFailed] = React.useState<Boolean>(false);
+
   React.useEffect(() => {
     if (authenticated) {
+      setFailed(false);
         navigate("/dashboard");
     }
   }, [authenticated]);
@@ -37,17 +42,19 @@ const SignIn = (): JSX.Element => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+    setFailed(true);
     // TODO Improve data capture
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
-
+    
     setAuthenticated(await IOUtil.loginUser(email, password));
+  
   };
   // get current location
   let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
   return (
     <Container component="main" maxWidth="xs">
+      {isFailed?<Alert severity="error">Login has failed, try again!</Alert>:<></>}
       <CssBaseline />
       <Box
         sx={{
