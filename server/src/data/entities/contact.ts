@@ -50,6 +50,7 @@ export class ContactForm extends BaseEntity {
     unique: false,
     name: "firstname",
   })
+  @IsDefined()
   @MaxLength(20)
   firstname: string;
 
@@ -58,6 +59,7 @@ export class ContactForm extends BaseEntity {
     name: "lastname",
     unique: false,
   })
+  @IsDefined()
   @MaxLength(20)
   lastname: string;
 
