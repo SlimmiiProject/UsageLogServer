@@ -87,6 +87,10 @@ const App = (): JSX.Element => {
       <Drawer lang={lang} />
       <Routes>
         <Route path="/" element={<Navigate to={`/${lang}/`} />} />
+        <Route
+          path="/dashboard"
+          element={<Navigate to={`/${lang}/dashboard`} />}
+        />
         <Route path="/:lang">
           <Route index element={<LoginPage />} />
           <Route

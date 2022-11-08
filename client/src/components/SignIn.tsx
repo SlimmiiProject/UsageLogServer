@@ -36,7 +36,7 @@ const SignIn = (): JSX.Element => {
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
 
-    await setAuthenticated(await IOUtil.loginUser(email, password));
+    setAuthenticated(await IOUtil.loginUser(email, password));
   };
   // get current location
   let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));

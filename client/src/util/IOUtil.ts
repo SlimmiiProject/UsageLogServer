@@ -25,7 +25,7 @@ export class IOUtil {
             password: password
         });
 
-        return res.status === 200 ? true : false
+        return res.status === 200;
     }
 
     public static async registerUser(first_name: string, last_name: string, email: string, phone_number: string, password: string, password_verify: string) {
