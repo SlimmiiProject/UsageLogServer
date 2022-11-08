@@ -45,6 +45,22 @@ export class ContactForm extends BaseEntity {
   @MaxLength(1000)
   message: string;
 
+  @Column("varchar", {
+    nullable: false,
+    unique: false,
+    name: "name",
+  })
+  @MaxLength(20)
+  name: string;
+
+  @Column("varchar", {
+    nullable: false,
+    name: "lastname",
+    unique: false,
+  })
+  @MaxLength(20)
+  lastname: string;
+
   @CreateDateColumn({ name: "created_at" })
   created_at: Date;
 }
