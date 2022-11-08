@@ -48,7 +48,7 @@ export class UserAccount extends BaseEntity {
   @IsDefined()
   lastname: string;
 
-  @Column("text", { nullable: true, unique: false, name: "hashedPassword" })
+  @Column("text", { nullable: false, unique: false, name: "hashedPassword" })
   @MinLength(5)
   @IsDefined()
   password: string | undefined;
