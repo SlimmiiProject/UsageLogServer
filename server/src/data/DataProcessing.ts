@@ -20,15 +20,25 @@ export interface DeviceSpecificData {
  * every 24 hours execute cleanTemporaryData()
  * this wil thin out the temporary data and combine all data for the current day to data
  *
- * if validation fails for any Create... functions this will throw an Error with a discriptive text
+ * CREATE::
+ * if validation fails for any Create... functions this will throw an Error
+ * CreateUser is only one that will return userId
+ * CreateData needs an existing device (deviceId)
+ * CreateTempData is what devices will will need to use to insert new data.
  *
- *
+ *GET::
  * All Get functions will return an empty array if nothing is found.
  * exceptions:
  * GetData returns an object consisting of a combination of Device, Data[], TemporaryData for each device that this user has.
  * GetPasswordReset returns a boolean if the reset for this userAcount exists and is valid.
  *
- * more to come...
+ * ALTER::
+ * EditAcount, addDevicetoUser, ChangeDeviceAlias: if device or user is not found this will throw an error.
+ *
+ * DELETE::
+ *
+ *
+ *
  */
 
 export class DataProcessor {
@@ -194,8 +204,7 @@ export class DataProcessor {
   public async CreatePasswordReset(
     token: string,
     userId?: number,
-    email?: string,
-    phoneNumber?: number
+    email?: string
   ): Promise<void> {
     let user: UserAccount = await DataProcessor.GetUser(email, userId);
     const newPasswordReset = new Password_Reset();
@@ -416,6 +425,7 @@ export class DataProcessor {
   //possibly redundant.
   //TODO: add validation
   /**
+   * changes a single password in the database
    * @param userId number user id
    * @param password  string password of minimum 5 characters
    */
@@ -430,6 +440,7 @@ export class DataProcessor {
   }
 
   //TODO: add validation
+  // test if password change alters users password by hashing it twice
   /**
    * @param userid number user id
    * @param firstname  string of 3 to 30 characters
@@ -447,6 +458,9 @@ export class DataProcessor {
     email: string,
     phone?: string
   ): Promise<void> {
+    let userExists = await UserAccount.findAndCountBy({ userId: userid });
+    if (userExists[1] < 1)
+      throw new Error(`Acount does not exist. looking for acount: ${userid}`);
     await UserAccount.update(userid, {
       firstname: firstname,
       lastname: lastname,
@@ -457,7 +471,7 @@ export class DataProcessor {
   }
 
   /**
-   *
+   * couple an existing Device to an existing User
    * @param userId number user id
    * @param deviceid string unique id of device
    */
@@ -466,7 +480,9 @@ export class DataProcessor {
     deviceid: string
   ): Promise<void> {
     let user = await UserAccount.findOneBy({ userId: userId });
-    if (user == undefined) throw new Error("User does not exist");
+    let device = await Device.findOneBy({ deviceId: deviceid });
+    if (user == undefined || device == undefined)
+      throw new Error("Either Device or User does not exist or was not found.");
     await Device.update({ deviceId: deviceid }, { user: user });
   }
 
@@ -480,6 +496,8 @@ export class DataProcessor {
     device_index: number,
     alias: string
   ): Promise<void> {
+    let device: Device = await Device.findOneBy({ device_index: device_index });
+    if (device == undefined) throw new Error("Device was not found.");
     Device.update({ device_index: device_index }, { friendlyName: alias });
   }
   //#endregion
