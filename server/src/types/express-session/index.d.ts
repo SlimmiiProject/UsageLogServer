@@ -19,4 +19,5 @@ export interface User {
   email: string;
   phoneNumber: string;
   isAdmin: boolean;
+
 }

@@ -27,6 +27,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
     if (Object.values(data).every(InputUtil.isSet)) {
   
+
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             await login(req, data.email)
             res.sendStatus(200);
@@ -62,11 +63,13 @@ const login = async (req: Request, email: string) => {
 
 
 router.post("/logout",  SessionManager.loginRequired, async (req: Request, res: Response) => {
+
     SessionManager.destroy(req, res);
 });
 
 router.post("/create-profile", async (req: Request, res: Response) => {
     const body = req.body;
+
 
     const data: CreationData = {
         first_name: body.first_name,

@@ -28,6 +28,7 @@ const SignIn = (): JSX.Element => {
 
     // TODO Improve data capture
    
+
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
   

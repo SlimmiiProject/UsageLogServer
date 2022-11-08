@@ -19,8 +19,8 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import DashboardComp from "./components/Dashboard";
-import { AdminPage } from "./components/AdminPage";
+import DashboardComp from "./components/dashboard/Dashboard";
+import { AdminPage } from "./components/admin/AdminPage";
 import { useTranslation } from "react-i18next";
 import LoginPage from "./components/LoginPage";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
@@ -74,10 +74,11 @@ const App = (): JSX.Element => {
   );
   let lang = getCurrentLanguage(useTranslation());
   const urlLang = getLanguageFromUrl();
- 
-  const {i18n} = useTranslation();
-  if (lang !== urlLang && I18n.doesLanguageExist(urlLang)) i18n.changeLanguage(urlLang);
-  
+
+  const { i18n } = useTranslation();
+  if (lang !== urlLang && I18n.doesLanguageExist(urlLang))
+    i18n.changeLanguage(urlLang);
+
   // Add testdata from file to emulate externaldata
   const combineddata: ItestData = require("./util/data/testData.json");
 
