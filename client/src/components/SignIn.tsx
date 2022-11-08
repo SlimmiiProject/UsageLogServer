@@ -20,7 +20,6 @@ const SignIn = (): JSX.Element => {
 
   const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
   React.useEffect(() => {
-    console.log(authenticated);
     if (authenticated) {
         navigate("/dashboard");
     }
