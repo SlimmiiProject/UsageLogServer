@@ -246,17 +246,35 @@ export class DataProcessor {
    * returns an array of objects for each device coupled to the user => look at interface DeviceSpecificData
    * if lastData does not contain a full TemporaryData object this means the day and night values are the difference calculated from start of day to current time
    *  @param userid number search by user id
+   *  @param startDate Date | undefined start date if necessary
+   * @param endDate Date | undefined end of date
    * @returns Promise<DeviceSpecificData[]>
    */
-  public static async GetData(userid: number): Promise<DeviceSpecificData[]> {
+  public static async GetData(
+    userid: number,
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<DeviceSpecificData[]> {
     let tempdata: TemporaryData[] = await DataProcessor.GetTempData(userid);
-    let data: Data[] = await DatabaseConnector.INSTANCE.dataSource
-      .getRepository(Data)
-      .createQueryBuilder("data")
-      .leftJoinAndSelect("data.device", "dev")
-      .where("dev.user = :id", { id: userid })
-      .getMany();
-
+    let data: Data[] = [];
+    if (startDate && endDate) {
+      //UNTESTED
+      data = await DatabaseConnector.INSTANCE.dataSource
+        .getRepository(Data)
+        .createQueryBuilder("data")
+        .leftJoinAndSelect("data.device", "dev")
+        .where("dev.user = :id", { id: userid })
+        .andWhere("data.created_at < :endDate", { endDate: endDate })
+        .andWhere("data.created_at > :startDate", { startDate: startDate })
+        .getMany();
+    } else {
+      data = await DatabaseConnector.INSTANCE.dataSource
+        .getRepository(Data)
+        .createQueryBuilder("data")
+        .leftJoinAndSelect("data.device", "dev")
+        .where("dev.user = :id", { id: userid })
+        .getMany();
+    }
     let devices: Device[] = await this.GetDevices(userid);
 
     let completeData: DeviceSpecificData[] = [];
