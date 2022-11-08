@@ -40,7 +40,10 @@ export class DataProcessor {
    * @param DeviceId string of 64 characters
    * @param alias undefined | string of 1 to 50 characters
    */
-  public static async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
+  public static async CreateDevice(
+    DeviceId: string,
+    alias?: string
+  ): Promise<void> {
     const newDevice = new Device();
     newDevice.deviceId = DeviceId;
     if (alias) newDevice.friendlyName = alias;
@@ -87,7 +90,7 @@ export class DataProcessor {
       }
     });
   }
-  
+
   /**
    * creates new Data coupled to a specific device
    * throws an Error if input is not valied
@@ -151,7 +154,7 @@ export class DataProcessor {
     let user = await UserAccount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
-  
+
   /**
    * creates a new contactform.
    * throws an Error if input is not valied
@@ -162,12 +165,16 @@ export class DataProcessor {
   public static async CreateContactForm(
     email: string,
     message: string,
-    message_topic: string
+    message_topic: string,
+    firstname: string,
+    lastname: string
   ): Promise<void> {
     const newContactForm = new ContactForm();
     newContactForm.email = email;
     newContactForm.message = message;
     newContactForm.message_topic = message_topic;
+    newContactForm.firstname = firstname;
+    newContactForm.lastname = lastname;
     validate(newContactForm).then(async (result) => {
       if (result.length > 0) {
         throw new Error("validation for contactForm failed: " + result);
@@ -190,11 +197,7 @@ export class DataProcessor {
     email?: string,
     phoneNumber?: number
   ): Promise<void> {
-    let user: UserAccount = await DataProcessor.GetUser(
-      email,
-      userId,
-      phoneNumber
-    );
+    let user: UserAccount = await DataProcessor.GetUser(email, userId);
     const newPasswordReset = new Password_Reset();
     newPasswordReset.token = token;
     newPasswordReset.user = user;
@@ -224,7 +227,6 @@ export class DataProcessor {
     return await AdminQuery;
   }
 
-
   /**
    * returns all devices from a specific user
    * @param userid number search by user id
@@ -247,7 +249,7 @@ export class DataProcessor {
    * @returns Promise<DeviceSpecificData[]>
    */
   public static async GetData(userid: number): Promise<DeviceSpecificData[]> {
-    let tempdata: TemporaryData[] = await this.GetTempData(userid);
+    let tempdata: TemporaryData[] = await DataProcessor.GetTempData(userid);
     let data: Data[] = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Data)
       .createQueryBuilder("data")
@@ -298,9 +300,9 @@ export class DataProcessor {
     number?: string
   ): Promise<UserAccount> {
     return ObjectUtil.firstNonUndefined([
-      await UserAccount.findOne({where: {email: Equal(email)}}),
-      await UserAccount.findOne({where: {userId: Equal(userid)}}),
-      await UserAccount.findOne({where: {phone:  Equal(number)}}),
+      await UserAccount.findOne({ where: { email: Equal(email) } }),
+      await UserAccount.findOne({ where: { userId: Equal(userid) } }),
+      await UserAccount.findOne({ where: { phone: Equal(number) } }),
     ]);
   }
 
@@ -322,7 +324,6 @@ export class DataProcessor {
     return;
   }
 
-
   /**
    * withouth any parameters this will return all forms
    * @param message_topic undefined | string searches forms by topic
@@ -341,7 +342,7 @@ export class DataProcessor {
         await ContactForm.find({ where: { email: Equal(email) } }),
       ]);
     }
-    
+
     return await ContactForm.find();
   }
 
@@ -358,7 +359,7 @@ export class DataProcessor {
     let passwordResetAllowed: boolean = false;
     passwordResetAllowed =
       new Date().getTime() - resetToken.created_at.getTime() < 30 * 60 * 1000;
-    this.DeleteSpecificPasswordReset(token);
+    DataProcessor.DeleteSpecificPasswordReset(token);
     return passwordResetAllowed;
   }
   /**
@@ -366,7 +367,7 @@ export class DataProcessor {
    * @param userid number id of a user
    * @returns Promise<Temporarydata[]>
    */
-  private async GetTempData(userid: number): Promise<TemporaryData[]> {
+  static async GetTempData(userid: number): Promise<TemporaryData[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
       .createQueryBuilder("Temporary_data")
@@ -380,7 +381,7 @@ export class DataProcessor {
    * @param index number index of device
    * @returns Promise<TemporaryData[]>
    */
-  private async GetAllTempData(index: number): Promise<TemporaryData[]> {
+  static async GetAllTempData(index: number): Promise<TemporaryData[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
       .createQueryBuilder("temporary_data")
@@ -398,7 +399,10 @@ export class DataProcessor {
    * @param userId number user id
    * @param password  string password of minimum 5 characters
    */
-  public static async ChangePassword(userId: number, password: string): Promise<void> {
+  public static async ChangePassword(
+    userId: number,
+    password: string
+  ): Promise<void> {
     let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
     if (User == undefined) throw new Error("User Does not exist");
     User.password = password;
@@ -498,9 +502,8 @@ export class DataProcessor {
     await this.DeleteExpiredTemporaryData();
     let allDevices: Device[] = await Device.find();
     allDevices.map(async (specificDevice) => {
-      let dataFromSpecificDevice: TemporaryData[] = await this.GetAllTempData(
-        specificDevice.device_index
-      );
+      let dataFromSpecificDevice: TemporaryData[] =
+        await DataProcessor.GetAllTempData(specificDevice.device_index);
       //sort all temporary data by date
       dataFromSpecificDevice = dataFromSpecificDevice.sort((a, b) =>
         a.created_at > b.created_at ? 1 : -1
@@ -535,7 +538,9 @@ export class DataProcessor {
    * deletes a single entry in temporary data
    * @param index number index of the temporary data
    */
-  private static async DeleteSpecificTemporaryData(index: number): Promise<void> {
+  private static async DeleteSpecificTemporaryData(
+    index: number
+  ): Promise<void> {
     TemporaryData.delete({ index: index });
   }
   /**
