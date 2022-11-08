@@ -552,8 +552,11 @@ export class DataProcessor {
       dataFromSpecificDevice.map(
         async (data) => await this.DeleteSpecificTemporaryData(data.index)
       );
+      //wait 10 seconds for all deletes to be completed
+      setTimeout(() => {}, 10 * 1000);
     });
   }
+
   /**
    * deletes a single entry in temporary data
    * @param index number index of the temporary data
