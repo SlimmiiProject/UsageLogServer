@@ -57,7 +57,7 @@ const SignIn = (): JSX.Element => {
             required
             fullWidth
             id="email"
-            label="E-mailadres"
+            label={I18n.t("signIn.email")}
             name="email"
             autoComplete="email"
             autoFocus
@@ -67,14 +67,14 @@ const SignIn = (): JSX.Element => {
             required
             fullWidth
             name="password"
-            label="Wachtwoord"
+            label={I18n.t("signIn.password")}
             type="password"
             id="password"
             autoComplete="current-password"
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
-            label="Onthoud mij"
+            label={I18n.t("signIn.rememberMe")}
           />
           <Button
             type="submit"
@@ -82,17 +82,17 @@ const SignIn = (): JSX.Element => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            {I18n.t("signIn.signIn")}
           </Button>
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
-                Wachtwoord vergeten?
+              {I18n.t("signIn.forgotPassword")}
               </Link>
             </Grid>
             <Grid item>
               <Link href={`${path}register`} variant="body2">
-                {"Registreren"}
+                {I18n.t("signIn.register")}
               </Link>
             </Grid>
           </Grid>
