@@ -13,7 +13,10 @@
   "author": "Elwyn Van der Borght, Jannick Oste, Raven Van Hove, Kasper Bosteels, Bjarne Van Looke, Alex Van Dijck",
   "license": "ISC",
   "dependencies": {
+    "@types/body-parser": "^1.19.2",
+    "@types/cookie-session": "^2.0.44",
     "bcrypt": "^5.1.0",
+    "class-validator": "^0.13.2",
     "concurrently": "^7.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

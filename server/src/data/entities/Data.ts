@@ -1,3 +1,4 @@
+import { IsDefined, IsInt, IsNumberString, IsOptional } from "class-validator";
 import {
   BaseEntity,
   Column,
@@ -14,22 +15,27 @@ export class Data extends BaseEntity {
   dataId: number;
 
   @ManyToOne(() => Device, (device) => device.data, { nullable: false })
+  @IsDefined()
   device: Device;
 
   @Column("numeric", {
     nullable: true,
     unique: false,
-    unsigned: true,
+    unsigned: false,
     name: "day",
   })
+  @IsOptional()
+  @IsInt()
   Day: number;
 
   @Column("numeric", {
     nullable: true,
     unique: false,
-    unsigned: true,
+    unsigned: false,
     name: "night",
   })
+  @IsOptional()
+  @IsInt()
   Night: number;
 
   @CreateDateColumn({ name: "created_at" })

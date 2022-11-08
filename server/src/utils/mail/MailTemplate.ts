@@ -35,6 +35,7 @@ export class MailTemplate {
         const root = parse(MailTemplate.mainHtml.replace("%content%", compiledMailHtml));
       
         root.querySelector("head").appendChild(parse(`<style>${MailTemplate.mainStyle}</style>`));
+        console.log(root.toString());
         return root.toString();
     }
 
