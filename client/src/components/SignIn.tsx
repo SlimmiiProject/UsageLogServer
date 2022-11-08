@@ -22,9 +22,7 @@ const SignIn = (): JSX.Element => {
   React.useEffect(() => {
     console.log(authenticated);
     if (authenticated) {
-      console.log("redirecting to dashboard 2");
-     
-      navigate("/dashboard");
+        navigate("/dashboard");
     }
   }, [authenticated]);
   // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
