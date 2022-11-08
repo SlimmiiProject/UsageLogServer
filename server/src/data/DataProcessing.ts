@@ -485,15 +485,27 @@ export class DataProcessor {
   //#endregion
 
   //#region  Delete Data
+  /**
+   * deletes a single administrator from database
+   * @param adminId number
+   */
   public static async DeleteAdministrator(adminId: number): Promise<void> {
     Administrator.delete({ adminId: adminId });
   }
 
   //fails if administrator is not removed first
+  /**
+   * deletes a single user form the database
+   * @param userId number
+   */
   public static async DeleteUser(userId: number): Promise<void> {
     UserAccount.delete({ userId: userId });
   }
   //fails if data is not removed first
+  /**
+   * deletes a single device from database. could fail still testing
+   * @param deviceid string
+   */
   public static async DeleteDevice(deviceid: string): Promise<void> {
     Device.delete({ deviceId: deviceid });
   }
@@ -567,7 +579,7 @@ export class DataProcessor {
     TemporaryData.delete({ index: index });
   }
   /**
-   * deletes all data older than 24 hours
+   * deletes all Temporary Data older than 24 hours
    */
   private static async DeleteExpiredTemporaryData(): Promise<void> {
     const expiringDate: Date = new Date(
@@ -589,7 +601,10 @@ export class DataProcessor {
       .getRepository(Password_Reset)
       .delete({ created_at: LessThan(expiringDate) });
   }
-
+  /**
+   * deletes a single password reset token in database
+   * @param token string
+   */
   private static async DeleteSpecificPasswordReset(token: string) {
     Password_Reset.delete({ token: token });
   }
