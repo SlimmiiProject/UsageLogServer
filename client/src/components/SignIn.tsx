@@ -18,16 +18,16 @@ import {
 } from "../App";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../util/IOUtil";
-import { Navigate } from "react-router-dom";
-import { reloadBrowser } from "../util/BrowserUtil";
+import { Navigate, useNavigate, useNavigation } from "react-router-dom";
 
 const SignIn = (): JSX.Element => {
   const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
+  const navigate = useNavigate();
   React.useEffect(() => {
     console.log(authenticated);
     if (authenticated) {
       console.log("redirecting to dashboard");
-      <Navigate to="/dashboard" />;
+      <Navigate to="/dashboard" replace={true} />;
     }
   }, [authenticated]);
   // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
