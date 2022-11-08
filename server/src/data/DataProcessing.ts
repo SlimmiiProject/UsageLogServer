@@ -31,6 +31,7 @@ export interface DeviceSpecificData {
  * more to come...
  */
 
+
 export class DataProcessor {
   //#region Create Data
 
@@ -292,6 +293,7 @@ export class DataProcessor {
    * @param number number search user by phonenumber
    * @returns Promise<UserAccounts>
    */
+
   public static async GetUser(
     email?: string,
     userid?: number,
@@ -310,6 +312,7 @@ export class DataProcessor {
    * @returns Promise<TemporaryData>
    */
   //i think this is now unused
+
   public async GetLastData(userid: number): Promise<TemporaryData> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
@@ -329,6 +332,7 @@ export class DataProcessor {
    * @param email undefined | string searches forms by email address
    * @returns Promise<ContactForm[]>
    */
+
   public static async GetContactForms(
     message_topic?: string,
     email?: string
@@ -342,6 +346,7 @@ export class DataProcessor {
       ]);
     }
     
+
     return await ContactForm.find();
   }
 
@@ -398,6 +403,7 @@ export class DataProcessor {
    * @param userId number user id
    * @param password  string password of minimum 5 characters
    */
+
   public static async ChangePassword(userId: number, password: string): Promise<void> {
     let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
     if (User == undefined) throw new Error("User Does not exist");
@@ -452,6 +458,7 @@ export class DataProcessor {
    * @param device_index number device index
    * @param alias string of 1 to 50 characters
    */
+
   public static async ChangeDeviceAlias(
     device_index: number,
     alias: string
@@ -556,6 +563,7 @@ export class DataProcessor {
    */
   public static async DeleteExpiredPasswordResets() {
     const expiringDate: Date = new Date(new Date().getTime() - 30 * 60 * 1000);
+
 
     DatabaseConnector.INSTANCE.dataSource
       .getRepository(Password_Reset)

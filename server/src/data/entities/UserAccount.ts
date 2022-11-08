@@ -21,6 +21,7 @@ import {
   MinLength,
 } from "class-validator";
 
+
 @Entity()
 export class UserAccount extends BaseEntity {
   @PrimaryGeneratedColumn({
@@ -94,6 +95,7 @@ export class UserAccount extends BaseEntity {
   }
 
   async isAdmin() {
-    return await AccountManager.isAdministrator(this.userId);
+
+    return await AccountManager.isAdministrator(this.userId); 
   }
 }

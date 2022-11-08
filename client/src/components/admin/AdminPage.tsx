@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { getCurrentPath } from "../App";
+import { getCurrentPath } from "../../App";
 import { AdminPageOneComponent } from "./AdminPageOneComponent";
 
 export const AdminPage = (): JSX.Element => {
