@@ -11,8 +11,6 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useLocation } from "react-router-dom";
 import {
   getCurrentLanguage,
   getCurrentLanguagePath,
@@ -20,17 +18,28 @@ import {
 } from "../App";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../util/IOUtil";
+import { Navigate } from "react-router-dom";
+import { reloadBrowser } from "../util/BrowserUtil";
 
 const SignIn = (): JSX.Element => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
+  React.useEffect(() => {
+    console.log(authenticated);
+    if (authenticated) {
+      console.log("redirecting to dashboard");
+      <Navigate to="/dashboard" />;
+    }
+  }, [authenticated]);
+  // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    
+
     // TODO Improve data capture
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
-  
-    IOUtil.loginUser(email, password);
+
+    await setAuthenticated(await IOUtil.loginUser(email, password));
   };
   // get current location
   let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));

@@ -19,10 +19,13 @@ export class IOUtil {
     }
 
     public static async loginUser(email: string, password: string) {
-        await this.INSTANCE.post("/profiles/login", {
+        let res;
+        res = await this.INSTANCE.post("/profiles/login", {
             email: email,
             password: password
         });
+
+        return res.status === 200 ? true : false
     }
 
     public static async registerUser(first_name: string, last_name: string, email: string, phone_number: string, password: string, password_verify: string) {
