@@ -48,10 +48,10 @@ export class ContactForm extends BaseEntity {
   @Column("varchar", {
     nullable: false,
     unique: false,
-    name: "name",
+    name: "firstname",
   })
   @MaxLength(20)
-  name: string;
+  firstname: string;
 
   @Column("varchar", {
     nullable: false,
