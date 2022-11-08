@@ -1,5 +1,17 @@
 import * as React from "react";
-import {Avatar,Button,CssBaseline,TextField,FormControlLabel,Checkbox,Link,Grid,Box,Typography,Container,} from "@mui/material";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
@@ -10,12 +22,9 @@ import {
 } from "../App";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../util/IOUtil";
-import { useNavigate } from "react-router-dom";
-import { reloadBrowser } from "../util/BrowserUtil";
-
+import { Navigate, useNavigate, useNavigation } from "react-router-dom";
 
 const SignIn = (): JSX.Element => {
-
   const navigate = useNavigate();
 
   const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
