@@ -31,7 +31,8 @@ const Register = (): JSX.Element => {
   const [passwordVerify, setPasswordVerify] = React.useState<string>("");
 
   const navigate = useNavigate();
-  const handleSubmit = () => {
+  const handleSubmit = (e:React.FormEvent) => {
+    e.preventDefault();
     password === passwordVerify ? setPasswordsMatch(true) : <></>;
     phoneNumber[0] === "0" ? (
       setPhoneNumber("+32" + phoneNumber.slice(1))
@@ -76,7 +77,7 @@ const Register = (): JSX.Element => {
         <Typography component="h1" variant="h5">
           Registreer u hier.
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component="form" noValidate onSubmit={(e) => handleSubmit(e)} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
