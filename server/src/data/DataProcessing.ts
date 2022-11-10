@@ -552,9 +552,6 @@ export class DataProcessor {
     await this.DeleteExpiredTemporaryData();
     let allDevices: Device[] = await Device.find();
 
-    //wait 10 seconds for all deletes to be completed
-
-
     allDevices.map(async (specificDevice, index) => {
       setTimeout(async () => {
         let dataFromSpecificDevice: TemporaryData[] =
@@ -563,6 +560,7 @@ export class DataProcessor {
         dataFromSpecificDevice = dataFromSpecificDevice.sort((a, b) =>
           a.created_at > b.created_at ? 1 : -1
         );
+        
         //if temporary data array is more than 1(has been updated at least once since cleanup) use it to calculate usage
         if (dataFromSpecificDevice.length > 1) {
           let allDayData: number[] = [];
