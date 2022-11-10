@@ -19,8 +19,8 @@ import {
   getCurrentPath,
 } from "../../App";
 import { useTranslation } from "react-i18next";
-import { IOUtil } from "../util/IOUtil";
-import { I18n } from "../util/language/I18n";
+import { IOUtil } from "../../util/IOUtil";
+import { I18n } from "../../util/language/I18n";
 
 const SignIn = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

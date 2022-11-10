@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { getCurrentPath } from "../../App";
 import { AdminPageOneComponent } from "./AdminPageOneComponent";
-import { I18n } from "../util/language/I18n";
+import { I18n } from "../../util/language/I18n";
 
 export const AdminPage = (): JSX.Element => {
   const location = getCurrentPath(useLocation());

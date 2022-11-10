@@ -16,8 +16,8 @@ import {
 } from "../../App";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { IOUtil } from "../util/IOUtil";
-import { I18n } from "../util/language/I18n";
+import { IOUtil } from "../../util/IOUtil";
+import { I18n } from "../../util/language/I18n";
 
 const Register = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

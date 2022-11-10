@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Button,CssBaseline,TextField,Grid,Box,Container,Alert} from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { I18n } from "../util/language/I18n";
+import { Link } from "react-router-dom";
 
 const EditProfile = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

@@ -2,8 +2,8 @@ import express, { Request, Response } from "express";
 import { DataController } from "../data/DataController";
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
-    const translationObject = await DataController.getTranslationJson();
+router.get("/",  (req: Request, res: Response) => {
+    const translationObject = DataController.getTranslationJson();
     res.status(200).json(translationObject);
 });
 
