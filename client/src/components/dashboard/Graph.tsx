@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles.css";
 import { I18n } from "../util/language/I18n";
+
 import {
   BarChart,
   Bar,

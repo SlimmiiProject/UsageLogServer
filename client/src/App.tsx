@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Profile from "./components/Profile";
+import Profile from "./components/users/Profile";
 import {
   Route,
   Routes,
@@ -9,9 +9,9 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import Register from "./components/Register";
-import Devices from "./components/Devices";
-import SignIn from "./components/SignIn";
+import Register from "./components/users/Register";
+import Devices from "./components/users/Devices";
+import SignIn from "./components/users/SignIn";
 import Drawer from "./components/DrawerComponent";
 import Contact from "./components/Contact";
 import PageNotFound from "./components/404";
@@ -19,13 +19,14 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import DashboardComp from "./components/Dashboard";
-import { AdminPage } from "./components/AdminPage";
+import DashboardComp from "./components/dashboard/Dashboard";
+import { AdminPage } from "./components/admin/AdminPage";
 import { useTranslation } from "react-i18next";
 import LoginPage from "./components/LoginPage";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
 import { I18n } from "./util/language/I18n";
 import { url } from "inspector";
+import EditProfile from "./components/EditProfile";
 
 export interface ItestData {
   devices: Idevice[];
@@ -57,6 +58,7 @@ export const getCurrentLanguage = (translation: any): string => {
   // get language from language selector
   return i18n.resolvedLanguage;
 };
+
 export const getCurrentLanguagePath = (lang: string) => {
   // Set default language to en (English)
   if (lang === undefined) {
@@ -93,7 +95,7 @@ const App = (): JSX.Element => {
           />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="profile-change-data" element={<Contact />} />
+          <Route path="profile/edit-profile" element={<EditProfile />} />
           <Route path="devices" element={<Devices />} />
           <Route path="login" element={<SignIn />} />
           <Route path="contact" element={<Contact />} />

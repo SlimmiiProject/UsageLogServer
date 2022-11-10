@@ -25,8 +25,12 @@ import { NavLink } from "react-router-dom";
 import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
 import { LanguageSelector } from "./LanguageSelector";
 import { I18n } from "../util/language/I18n";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
+
+const isLoggedIn = require("../util/data/testData.json").isLoggedIn;
+const isAdmin = require("../util/data/testData.json").isAdmin;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
@@ -157,25 +161,48 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
               icon: <MailIcon />,
               link: `${lang}/contact`,
             },
+            // {
+            //   id: 4,
+            //   text: I18n.t("drawercomponent.admin"),
+            //   icon: <AdminPanelSettingsRoundedIcon />,
+            //   link: `${lang}/admin`,
+            // },
             {
-              id: 4,
-              text: I18n.t("drawercomponent.admin"),
-              icon: <AdminPanelSettingsRoundedIcon />,
-              link: `${lang}/admin`,
+              id: 5,
+              text: "Logout",
+              icon: <LogoutIcon />,
+              link: `${lang}/logout`,
             },
-          ].map((element) => ( 
+          ].map((element) =>
+            isLoggedIn === true ? (
+              <NavLink
+                to={element.link}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <ListItem key={element.id} disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon>{element.icon}</ListItemIcon>
+                    <ListItemText primary={element.text} />
+                  </ListItemButton>
+                </ListItem>
+              </NavLink>
+            ) : null
+          )}
+          {isAdmin ? (
             <NavLink
-              to={element.link}
+              to={`${lang}/admin`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <ListItem key={element.id} disablePadding>
+              <ListItem key={5} disablePadding>
                 <ListItemButton>
-                  <ListItemIcon>{element.icon}</ListItemIcon>
-                  <ListItemText primary={element.text} />
+                  <ListItemIcon>
+                    {<AdminPanelSettingsRoundedIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={"Admin"} />
                 </ListItemButton>
               </ListItem>
             </NavLink>
-          ))}
+          ) : null}
         </List>
         <List></List>
         <List>

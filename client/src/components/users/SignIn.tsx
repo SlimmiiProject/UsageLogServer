@@ -17,7 +17,7 @@ import {
   getCurrentLanguage,
   getCurrentLanguagePath,
   getCurrentPath,
-} from "../App";
+} from "../../App";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../util/IOUtil";
 import { I18n } from "../util/language/I18n";
@@ -26,10 +26,11 @@ const SignIn = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-   // TODO Improve data capture
+
+    // TODO Improve data capture
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
-  
+
     IOUtil.loginUser(email, password);
   };
   // get current location

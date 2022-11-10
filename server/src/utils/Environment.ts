@@ -12,6 +12,10 @@ export class Environment {
         return this.CONFIG.developmentEnv;
     }
 
+    public static isDebug(): boolean {
+        return this.CONFIG.debug;
+    }
+
     /**
      * It reads the .env file and command line arguments and returns an object with the combination of values from the .env file and command line arguments with a prioritization for CLI.
      * 
@@ -19,15 +23,16 @@ export class Environment {
      */
     private static setupConfig() {
         const argv_set = process.argv.slice(2, process.argv.length).map((value, index) => index % 2 ? value : value.toUpperCase())
-                                                                   .join(" ").split(/(?!^)(?=\-\-)/);
+            .join(" ").split(/(?!^)(?=\-\-)/);
         const argv_conf = process.argv.length == 2 ? {} : Object.fromEntries(argv_set.map(set_string => set_string.split(" ").map((value, index) => index % 2 ? value : value.replace("--", ""))))
-        const config = {... dotenv.config()["parsed"], ... argv_conf}
+        const config = { ...dotenv.config()["parsed"], ...argv_conf }
 
         return {
             url: process.env.URL,
             server_port: parseInt(process.env.SERVER_PORT),
             developmentEnv: Converter.parseBoolean(process.env.DEV_ENV),
             session_secret: process.env.SESSION_SECRET,
+            debug: Converter.parseBoolean(process.env.DEBUG_MODE),
 
             database: {
                 host: process.env.DATABASE_HOST,

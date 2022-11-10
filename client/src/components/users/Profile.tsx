@@ -1,7 +1,7 @@
 import { Avatar, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { I18n } from "../util/language/I18n";
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { I18n } from "../../util/language/I18n";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 const Profile = (): JSX.Element => {
   let fullName = "Raven Van Hove";

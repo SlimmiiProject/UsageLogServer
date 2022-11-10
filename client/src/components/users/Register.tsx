@@ -13,7 +13,7 @@ import {
   getCurrentLanguage,
   getCurrentLanguagePath,
   getCurrentPath,
-} from "../App";
+} from "../../App";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../util/IOUtil";
@@ -23,7 +23,7 @@ const Register = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    
+
     // TODO Improve data capture
     const first_name = data.get("firstName")!.toString();
     const last_name = data.get("lastName")!.toString();
@@ -32,7 +32,14 @@ const Register = (): JSX.Element => {
     const password = data.get("password")!.toString();
     const password_verify = data.get("passwordVerify")!.toString();
 
-    IOUtil.registerUser(first_name, last_name, email, phone_number, password, password_verify);
+    IOUtil.registerUser(
+      first_name,
+      last_name,
+      email,
+      phone_number,
+      password,
+      password_verify
+    );
   };
   let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
   return (

@@ -16,6 +16,9 @@ const EditProfile = (): JSX.Element => {
     });
   };
 
+
+
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -83,6 +86,8 @@ const EditProfile = (): JSX.Element => {
               />
             </Grid>
           </Grid>
+          <Link to="/profile" replace>
+
           <Button
             type="submit"
             fullWidth
@@ -91,6 +96,7 @@ const EditProfile = (): JSX.Element => {
           >
             {I18n.t("editprofile.editprofile")}
           </Button>
+          </Link>
         </Box>
       </Box>
     </Container>

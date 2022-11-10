@@ -26,10 +26,25 @@ export class Mailer {
         });
     }
 
+    /**
+     * It sends an email to a single receiver.
+     * @param {string} receiver - The email address of the person you want to send the email to.
+     * @param {string} subject - The subject of the email
+     * @param {string} htmlCOntent - The HTML content of the email.
+     */
     public async sendMailTo(receiver: string, subject: string, htmlCOntent: string) {
         this.sendMailToAll([receiver], subject, htmlCOntent);
     }
 
+    /**
+     * "If the array of receivers is empty or the subject is empty, return. Otherwise, for each
+     * receiver, if the receiver is not a valid email address, continue. Otherwise, send the email."
+     * </code>
+     * @param {string[]} receivers - string[] - An array of email addresses to send the email to.
+     * @param {string} subject - The subject of the email
+     * @param {string} htmlContent - string - The html content of the email
+     * @returns Nothing.
+     */
     public async sendMailToAll(receivers: string[], subject: string, htmlContent: string) {
         if (receivers.length === 0 || subject === "") return;
 

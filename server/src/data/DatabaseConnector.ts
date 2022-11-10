@@ -5,12 +5,13 @@ import { Administrator } from "./entities/Administrator";
 import { ContactForm } from "./entities/contact";
 import { Data } from "./entities/Data";
 import { Device } from "./entities/Device";
+import { Password_Reset } from "./entities/Password_reset";
 import { TemporaryData } from "./entities/TemporaryData";
 import { Translations } from "./entities/Translations";
 import { UserAccount } from "./entities/UserAccount";
 
 const {
-  database: { database_name, host, port, username, password },
+  database: { database_name, host, port, username, password }
 } = Environment.CONFIG;
 
 export class DatabaseConnector {
@@ -28,7 +29,7 @@ export class DatabaseConnector {
       password: password,
       database: database_name,
       synchronize: true,
-      logging: Environment.isDev(),
+      logging: Environment.isDebug(),
       entities: [
         UserAccount,
         Device,
@@ -37,6 +38,7 @@ export class DatabaseConnector {
         Translations,
         TemporaryData,
         ContactForm,
+        Password_Reset,
       ],
     });
   }

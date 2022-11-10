@@ -1,4 +1,5 @@
-import express, { Request, request, Response, Router } from "express";
+import express, { Request, Response, Router } from "express";
+
 import { Express } from "express-serve-static-core";
 import "reflect-metadata";
 import { DatabaseConnector } from "./data/DatabaseConnector";
@@ -73,24 +74,25 @@ export class App {
 
     private setupRoutes() {
         const apiRouter: Router = require("./routes/ApiRouter");
-        const translationRouter: Router = require("./routes/TranslationRoutes");
-        const userRouter: Router = require("./routes/UserRouter");
-        const dataRouter: Router = require("./routes/DataRouter");
-        const profileRouter: Router = require("./routes/ProfileRouter");
-        const contactRouter:Router = require("./routes/ContactRouter");
 
-        // Middleware for setting up Sessions
-        this.App.use((req:Request, res:Response, next) => SessionManager.setup(request, res, next));
+        // Middleware for setting up Session
+        this.App.use(SessionManager.setup);
 
         this.App.use("/api", apiRouter);
-        apiRouter.use("/translation", translationRouter);
-        apiRouter.use("/users/:userId", userRouter);
-        apiRouter.use("/data", dataRouter);
-        apiRouter.use("/profiles", profileRouter);
-        apiRouter.use("/contact", contactRouter);
+        apiRouter.use("/translation", require("./routes/TranslationRoutes"));
+        apiRouter.use("/contact", require("./routes/ContactRouter"));
+
+        // All routes after this require you to be logged in, else you'll be redirected to the home page
+        this.App.use(SessionManager.loginRequired);
+
+        apiRouter.use("/users/:userId", require("./routes/UserRouter"));
+        apiRouter.use("/data", require("./routes/DataRouter"));
+        apiRouter.use("/profiles", require("./routes/ProfileRouter"));
+
+        apiRouter.use("/contact", require("./routes/ContactRouter"));
 
         // !! This has to stay at the end of this method to assure it's only executed if the url doesn't match any of the above cases
-        this.App.get("*", (req:Request, res:Response) => res.sendFile(path.join(__dirname, "../public", "index.html")));
+        this.App.get("*", (req: Request, res: Response) => res.sendFile(path.join(__dirname, "../public/", "index.html")));
     }
 
     public start() {
