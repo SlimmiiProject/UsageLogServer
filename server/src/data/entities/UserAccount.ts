@@ -84,11 +84,7 @@ export class UserAccount extends BaseEntity {
       this.password &&
       (await new Promise((resolve, reject) => {
         const hashedPassword = Crypt.encrypt(this.password);
-        hashedPassword
-          ? resolve((this.password = hashedPassword))
-          : reject(
-              console.log("hashing password failed password: " + hashedPassword)
-            );
+        hashedPassword ? resolve((this.password = hashedPassword)) : reject(console.log("Hashing password failed"));
       }))
     );
   }
