@@ -14,7 +14,7 @@ import {
   getCurrentLanguagePath,
   getCurrentPath,
 } from "../../App";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../../util/IOUtil";
 import { Alert } from "@mui/material";
@@ -30,10 +30,9 @@ const Register = (): JSX.Element => {
   const [password, setPassword] = React.useState<string>("");
   const [passwordVerify, setPasswordVerify] = React.useState<string>("");
 
+  const navigate = useNavigate();
   const handleSubmit = () => {
-    password === passwordVerify
-      ? setPasswordsMatch(true)
-      : setPasswordsMatch(false);
+    password === passwordVerify ? setPasswordsMatch(true) : <></>;
     phoneNumber[0] === "0" ? (
       setPhoneNumber("+32" + phoneNumber.slice(1))
     ) : (
@@ -41,16 +40,16 @@ const Register = (): JSX.Element => {
     );
 
     if (passwordsMatch) {
-      console.log(
-        IOUtil.registerUser(
-          firstName,
-          lastName,
-          email,
-          phoneNumber,
-          password,
-          passwordVerify
-        )
-      );
+      IOUtil.registerUser(
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        password,
+        passwordVerify
+      ).then((res) => {
+        console.log(res);
+      });
     }
   };
 
