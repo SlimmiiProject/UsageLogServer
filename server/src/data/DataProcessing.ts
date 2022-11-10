@@ -88,7 +88,7 @@ export class DataProcessor {
       }
     });
   }
-  
+
   /**
    * creates new Data coupled to a specific device
    * throws an Error if input is not valied
@@ -152,7 +152,7 @@ export class DataProcessor {
     let user = await UserAccount.findOneBy({ userId: userid });
     Administrator.insert({ user });
   }
-  
+
   /**
    * creates a new contactform.
    * throws an Error if input is not valied
@@ -299,10 +299,10 @@ export class DataProcessor {
     userid?: number,
     number?: string
   ): Promise<UserAccount> {
-    return ObjectUtil.firstNonUndefined([
-      await UserAccount.findOne({where: {email: Equal(email)}}),
-      await UserAccount.findOne({where: {userId: Equal(userid)}}),
-      await UserAccount.findOne({where: {phone:  Equal(number)}}),
+    return ObjectUtil.firstNonUndefined<UserAccount>([
+      await UserAccount.findOne({ where: { email: Equal(email) } }),
+      await UserAccount.findOne({ where: { userId: Equal(userid) } }),
+      await UserAccount.findOne({ where: { phone: Equal(number) } }),
     ]);
   }
 
@@ -345,7 +345,7 @@ export class DataProcessor {
         await ContactForm.find({ where: { email: Equal(email) } }),
       ]);
     }
-    
+
 
     return await ContactForm.find();
   }

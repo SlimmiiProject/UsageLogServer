@@ -5,6 +5,7 @@ import express, { Request, Response } from "express";
 import { SessionManager } from '../accounts/SessionManager';
 import { DataProcessor } from '../data/DataProcessing';
 import { User } from '../types/express-session';
+import { DateUtil, Period } from '../utils/DateUtil';
 const router = express.Router();
 
 router.post("raw-meter-entry", (req: Request, res: Response) => {
@@ -20,7 +21,7 @@ router.post("/meter-entry", (req: Request, res: Response) => {
 });
 
 
-type Period = "Day" | "Week" | "Month";
+
 
 type DataParams = { [key: string]: string } & {
     period: Period,
@@ -35,27 +36,10 @@ router.get("/data", onlyAcceptJSON, async (req: Request, res: Response) => {
     const params: DataParams = req.params as DataParams;
 
     let begin: Date = new Date(params.beginDate);
-    let endDate: Date;
-
-    // Calculate End Days
-    switch (params.period) {
-        case "Day":
-            endDate = new Date(begin.setDate(begin.getDate() + 1));
-            break;
-        case "Week":
-            endDate = new Date(begin.setDate(begin.getDate() + (7 - begin.getDay())));
-            break;
-        case "Month":
-            endDate = new Date(begin.getFullYear(), begin.getMonth() + 1, 0);
-            break;
-    }
+    let endDate: Date = DateUtil.getDateOverPeriod(begin, params.period);
 
     // TODO Wait for TypeORM changes to get data between begin and end
 });
-
-const getDayOfMonth = (year: number, month: number, day: number) => {
-    return new Date(year, month, day);
-}
 
 
 module.exports = router;
