@@ -1,6 +1,7 @@
 import { Translations } from "./entities/Translations";
 import fs from "fs";
 import path from "path";
+import { AssetUtil } from "../utils/AssetUtil";
 
 export type TranslationType = {
     [key: string]: {
@@ -20,12 +21,12 @@ export class DataController {
     private static setupTranslationJson(): TranslationType {
         const translationSetup: TranslationType = {};
 
-        const mainFile: { [key: string]: string } = JSON.parse(fs.readFileSync(__dirname + "/languages/_main.json", { encoding: "utf8" }));
+        const mainFile: { [key: string]: string } = JSON.parse(fs.readFileSync(AssetUtil.getPath("/languages/_main.json"), { encoding: "utf8" }));
 
         Object.entries(mainFile).forEach((pair) => {
             translationSetup[pair[0]] = {
                 nativeName: pair[1],
-                translation: JSON.parse(fs.readFileSync(path.join(__dirname, "/languages/", pair[0] + ".json"), { encoding: "utf-8" }))
+                translation: JSON.parse(fs.readFileSync(AssetUtil.getPath(path.join("languages", pair[0] + ".json")), { encoding: "utf-8" }))
             }
         });
 
