@@ -17,32 +17,51 @@ import {
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../../util/IOUtil";
+import { Alert } from "@mui/material";
 
 const Register = (): JSX.Element => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
+  const [register, setRegister] = React.useState<Boolean>(false);
+  const [passwordsMatch, setPasswordsMatch] = React.useState<Boolean>(true);
+  const [firstName, setFirstName] = React.useState<string>("");
+  const [lastName, setLastName] = React.useState<string>("");
+  const [email, setEmail] = React.useState<string>("");
+  const [phoneNumber, setPhoneNumber] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [passwordVerify, setPasswordVerify] = React.useState<string>("");
 
-    // TODO Improve data capture
-    const first_name = data.get("firstName")!.toString();
-    const last_name = data.get("lastName")!.toString();
-    const email = data.get("email")!.toString();
-    const phone_number = data.get("phoneNumber")!.toString();
-    const password = data.get("password")!.toString();
-    const password_verify = data.get("passwordVerify")!.toString();
-
-    IOUtil.registerUser(
-      first_name,
-      last_name,
-      email,
-      phone_number,
-      password,
-      password_verify
+  const handleSubmit = () => {
+    password === passwordVerify
+      ? setPasswordsMatch(true)
+      : setPasswordsMatch(false);
+    phoneNumber[0] === "0" ? (
+      setPhoneNumber("+32" + phoneNumber.slice(1))
+    ) : (
+      <></>
     );
+
+    if (passwordsMatch) {
+      console.log(
+        IOUtil.registerUser(
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          password,
+          passwordVerify
+        )
+      );
+    }
   };
+
   let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
   return (
     <Container component="main" maxWidth="xs">
+      {!passwordsMatch ? (
+        <Alert severity="error">Passwords don't match, try again!</Alert>
+      ) : (
+        <></>
+      )}
       <CssBaseline />
       <Box
         sx={{
@@ -68,6 +87,10 @@ const Register = (): JSX.Element => {
                 fullWidth
                 id="firstName"
                 label="First Name"
+                value={firstName}
+                onChange={(event) => {
+                  setFirstName(event.target.value);
+                }}
                 autoFocus
               />
             </Grid>
@@ -78,6 +101,10 @@ const Register = (): JSX.Element => {
                 id="lastName"
                 label="Last Name"
                 name="lastName"
+                value={lastName}
+                onChange={(event) => {
+                  setLastName(event.target.value);
+                }}
                 autoComplete="family-name"
               />
             </Grid>
@@ -88,6 +115,11 @@ const Register = (): JSX.Element => {
                 id="email"
                 label="Email Address"
                 name="email"
+                type="email"
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                }}
                 autoComplete="email"
               />
             </Grid>
@@ -98,6 +130,10 @@ const Register = (): JSX.Element => {
                 id="phoneNumber"
                 label="Phone Nummer"
                 name="phoneNumber"
+                value={phoneNumber}
+                onChange={(event) => {
+                  setPhoneNumber(event.target.value);
+                }}
                 autoComplete="Phone-Nummer"
               />
             </Grid>
@@ -109,6 +145,10 @@ const Register = (): JSX.Element => {
                 label="Password"
                 type="password"
                 id="password"
+                value={password}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                }}
                 autoComplete="new-password"
               />
             </Grid>
@@ -120,6 +160,10 @@ const Register = (): JSX.Element => {
                 label="Verify Password"
                 type="password"
                 id="passwordVerify"
+                value={passwordVerify}
+                onChange={(event) => {
+                  setPasswordVerify(event.target.value);
+                }}
                 autoComplete="new-password"
               />
             </Grid>

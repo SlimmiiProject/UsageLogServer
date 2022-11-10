@@ -22,53 +22,40 @@ import {
   getCurrentPath,
 } from "../../App";
 import { useTranslation } from "react-i18next";
-<<<<<<< HEAD:client/src/components/SignIn.tsx
-import { IOUtil } from "../util/IOUtil";
-import { Navigate, useNavigate, useNavigation } from "react-router-dom";
-
-
-=======
 import { IOUtil } from "../../util/IOUtil";
->>>>>>> 5109ace477fc2ca593c20c96fc0773622d1defe1:client/src/components/users/SignIn.tsx
+import { useNavigate } from "react-router-dom";
 
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
   const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
-  const [isFailed,setFailed] = React.useState<Boolean>(false);
+  const [isFailed, setFailed] = React.useState<Boolean>(false);
 
   React.useEffect(() => {
     if (authenticated) {
       setFailed(false);
-        navigate("/dashboard");
+      navigate("/dashboard");
     }
   }, [authenticated]);
   // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-<<<<<<< HEAD:client/src/components/SignIn.tsx
     setFailed(true);
-=======
 
->>>>>>> 5109ace477fc2ca593c20c96fc0773622d1defe1:client/src/components/users/SignIn.tsx
     // TODO Improve data capture
-
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
-<<<<<<< HEAD:client/src/components/SignIn.tsx
-    
     setAuthenticated(await IOUtil.loginUser(email, password));
-  
-=======
-
-    IOUtil.loginUser(email, password);
->>>>>>> 5109ace477fc2ca593c20c96fc0773622d1defe1:client/src/components/users/SignIn.tsx
   };
   // get current location
   let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
   return (
     <Container component="main" maxWidth="xs">
-      {isFailed?<Alert severity="error">Login has failed, try again!</Alert>:<></>}
+      {isFailed ? (
+        <Alert severity="error">Login has failed, try again!</Alert>
+      ) : (
+        <></>
+      )}
       <CssBaseline />
       <Box
         sx={{
