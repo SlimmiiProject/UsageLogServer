@@ -303,7 +303,7 @@ export class DataProcessor {
           parseInt(filteredTempData.reverse()[0].Night.toString());
       } else {
         currentDayData = null;
-        if (filteredTempData[0 && !startDate && !endDate])
+        if (filteredTempData[0] && !startDate && !endDate)
           currentDayData = filteredTempData[0];
       }
       const deviceData: DeviceSpecificData = {
