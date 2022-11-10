@@ -22,7 +22,7 @@ import "@fontsource/roboto/700.css";
 import DashboardComp from "./components/dashboard/Dashboard";
 import { AdminPage } from "./components/admin/AdminPage";
 import { useTranslation } from "react-i18next";
-import LoginPage from "./components/LoginPage";
+import LoginPage from "./components/users/LoginPage";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
 import { I18n } from "./util/language/I18n";
 import { url } from "inspector";
