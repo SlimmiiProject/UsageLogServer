@@ -12,7 +12,7 @@ export class SessionManager {
      * middleware.
      */
     public static setup(request: Request, response: Response, next: NextFunction) {
-        if (this.hasSession(request)) this.updateSessionData(request);
+        if (SessionManager.hasSession(request)) SessionManager.updateSessionData(request);
         next();
     }
 
@@ -26,7 +26,7 @@ export class SessionManager {
      * @returns the session data.
      */
     public static loginRequired(request:Request, response:Response, next:NextFunction) {
-        if(this.getSessionData(request).isLoggedIn)  {
+        if(SessionManager.getSessionData(request).isLoggedIn)  {
             next();
             return;
         }
@@ -46,11 +46,10 @@ export class SessionManager {
     public static async createLoggedInSession(request: Request, account: UserAccount) {
         if (account == undefined) return;
 
-        await this.updateSessionData(request, async (data) => {
+        await SessionManager.updateSessionData(request, async (data) => {
             data.isLoggedIn = true
             data.user = {
                 id: account.userId,
-
                 firstName: account.firstname,
                 lastName: account.lastname,
                 email: account.email,
@@ -94,7 +93,7 @@ export class SessionManager {
     }
 
     public static logout(request: Request) {
-        this.updateSessionData(request, async (data) => {
+        SessionManager.updateSessionData(request, async (data) => {
             data.isLoggedIn = true;
             data.user = undefined;
         });
@@ -103,16 +102,16 @@ export class SessionManager {
     /**
      * "If the request has a session, get the session data, call the callback function with the session
      * data, and save the session."
-     * 
+     *
      * The callback function is a function that takes a UserSession object and returns a promise
      * @param {Request} request - The request object from the express request handler.
-     * @param [callback] - A function that takes in the session data and returns a promise.
+     * @param [_callback] - A function that takes in the session data and returns a promise.
      */
-    public static async updateSessionData(request: Request, callback?: { (data: UserSession): Promise<void> }) {
-        if (this.hasSession(request)) {
-            const data = this.getSessionData(request);
-            await callback(data);
-            this.save(request);
+    public static async updateSessionData(request: Request, _callback?: { (data: UserSession): Promise<void> }) {
+        if (SessionManager.hasSession(request)) {
+            const data = SessionManager.getSessionData(request);
+            if(_callback) await _callback(data);
+            SessionManager.save(request);
         }
     }
 }

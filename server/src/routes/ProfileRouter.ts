@@ -26,7 +26,6 @@ router.post("/login", async (req: Request, res: Response) => {
     }
 
     if (Object.values(data).every(InputUtil.isSet)) {
-  
 
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             await login(req, data.email)
@@ -34,7 +33,7 @@ router.post("/login", async (req: Request, res: Response) => {
             return;
         };
     }
-    
+
     res.sendStatus(401);
 });
 
@@ -62,14 +61,13 @@ const login = async (req: Request, email: string) => {
 }
 
 
-router.post("/logout",  SessionManager.loginRequired, async (req: Request, res: Response) => {
+router.post("/logout", SessionManager.loginRequired, async (req: Request, res: Response) => {
 
     SessionManager.destroy(req, res);
 });
 
 router.post("/create-profile", async (req: Request, res: Response) => {
     const body = req.body;
-
 
     const data: CreationData = {
         first_name: body.first_name,
@@ -85,30 +83,11 @@ router.post("/create-profile", async (req: Request, res: Response) => {
         const hashedPassword = Crypt.encrypt(data.password);
 
         // Validate entries
-        if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) {
-            res.status(500).json(errorJson("Wrong Syntax for email or phone", body));
-            return;
-        }
-
-        if (await AccountManager.doesAccountExist(0, data.email)) {
-            res.json(errorJson("Account already exists", body));
-            return;
-        }
-
-        if (data.password.length < 8) {
-            res.json(errorJson("Password too short", body));
-            return;
-        }
-
-        if (data.password !== data.password_verify) {
-            res.json(errorJson("Passwords don't match", body));
-            return;
-        }
-
-        if (await AccountManager.createAccount(data.first_name, data.last_name, data.email, hashedPassword, data.phone_number) > 0) {
-            res.json({ succes: true });
-            return;
-        }
+        if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) return res.status(500).json(errorJson("Wrong Syntax for email or phone", body));
+        if (await AccountManager.doesAccountExist(0, data.email)) return res.json(errorJson("Account already exists", body));
+        if (data.password.length < 8) return res.json(errorJson("Password too short", body));
+        if (data.password !== data.password_verify) return res.json(errorJson("Passwords don't match", body));
+        if (await AccountManager.createAccount(data.first_name, data.last_name, data.email, hashedPassword, data.phone_number) > 0) return res.json({ succes: true });
 
         res.status(500).json(errorJson("Something went wrong.", body));
         return;
@@ -121,7 +100,7 @@ router.post("/create-profile", async (req: Request, res: Response) => {
     );
 });
 
-router.delete("/delete-profile",  SessionManager.loginRequired, async (req: Request, res: Response) => {
+router.delete("/delete-profile", SessionManager.loginRequired, async (req: Request, res: Response) => {
     // Delete account
 });
 

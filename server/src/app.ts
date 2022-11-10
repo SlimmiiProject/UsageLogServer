@@ -1,4 +1,4 @@
-import express, { NextFunction, request, Request, response, Response, Router } from "express";
+import express, { Request, Response, Router } from "express";
 
 import { Express } from "express-serve-static-core";
 import "reflect-metadata";
@@ -82,14 +82,14 @@ export class App {
         const contactRouter: Router = require("./routes/ContactRouter");
 
         // Middleware for setting up Sessions
-        this.App.use((req: Request, res: Response, next:NextFunction) => SessionManager.setup(request, response, next));
+        this.App.use(SessionManager.setup);
 
 
         this.App.use("/api", apiRouter);
         apiRouter.use("/translation", translationRouter);
         apiRouter.use("/contact", contactRouter);
 
-        this.App.use((req:Request, res: Response, next:NextFunction) => SessionManager.loginRequired(request, response, next));
+        this.App.use(SessionManager.loginRequired);
         
         apiRouter.use("/users/:userId", userRouter);
         apiRouter.use("/data", dataRouter);
