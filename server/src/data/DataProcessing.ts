@@ -399,7 +399,7 @@ export class DataProcessor {
   private static async GetTempData(userid: number): Promise<TemporaryData[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
-      .createQueryBuilder("Temporary_data")
+      .createQueryBuilder("temporary_data")
       .leftJoinAndSelect("temporary_data.device", "dev")
       .where("dev.user = :id", { id: userid })
       .getMany();
