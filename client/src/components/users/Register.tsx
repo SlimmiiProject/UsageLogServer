@@ -30,7 +30,7 @@ const Register = (): JSX.Element => {
   const [passwordVerify, setPasswordVerify] = React.useState<string>("");
 
   const navigate = useNavigate();
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     phoneNumber[0] === "0" ? (
       setPhoneNumber("+32" + phoneNumber.slice(1))
@@ -39,15 +39,20 @@ const Register = (): JSX.Element => {
     );
 
     if (password === passwordVerify) {
-      IOUtil.registerUser(
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        password,
-        passwordVerify
+      console.log(
+        await IOUtil.registerUser(
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          password,
+          passwordVerify
+        )
       );
     }
+
+    setPassword("");
+    setPasswordVerify("");
   };
 
   let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
