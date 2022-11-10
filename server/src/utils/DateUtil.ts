@@ -31,9 +31,9 @@ export class DateUtil {
 
     public static getDisplayForPeriod(date: Date, period: Period) {
         switch (period) {
-            case "Day": return "Dag";
-            case "Week": this.getDayName(date, "nl-NL");
-            case "Month": this.getDateFull(date, "nl-NL");
+            case "Day": return date.getHours().toString();
+            case "Week": return this.getDayName(date, "nl-NL");
+            case "Month": return this.getDateFull(date, "nl-NL");
         }
     }
 
