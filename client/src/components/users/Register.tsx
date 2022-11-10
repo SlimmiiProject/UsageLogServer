@@ -28,17 +28,23 @@ const Register = (): JSX.Element => {
   const [phoneNumber, setPhoneNumber] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [passwordVerify, setPasswordVerify] = React.useState<string>("");
+  const [passwordMatch, setPasswordMatch] = React.useState<boolean>(true);
+  const [phoneNumberCorrectLength, setPhoneNumberCorrectLength] =
+    React.useState<boolean>();
 
   const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    password === passwordVerify
+      ? setPasswordMatch(true)
+      : setPasswordMatch(false);
     phoneNumber[0] === "0" ? (
       setPhoneNumber("+32" + phoneNumber.slice(1))
     ) : (
       <></>
     );
 
-    if (password === passwordVerify) {
+    if (passwordMatch) {
       console.log(
         await IOUtil.registerUser(
           firstName,
@@ -58,7 +64,7 @@ const Register = (): JSX.Element => {
   let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
   return (
     <Container component="main" maxWidth="xs">
-      {password !== passwordVerify ? (
+      {!passwordMatch ? (
         <Alert severity="error">Passwords don't match, try again!</Alert>
       ) : (
         <></>
