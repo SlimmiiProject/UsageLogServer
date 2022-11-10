@@ -24,4 +24,24 @@ export class DateUtil {
     public static getDayOfMonth(year: number, month: number, day: number) {
         return new Date(year, month, day);
     }
+
+    public static get dayInMillis(): number {
+        return 86_400_000;
+    }
+
+    public static getDisplayForPeriod(date: Date, period: Period) {
+        switch (period) {
+            case "Day": return "Dag";
+            case "Week": this.getDayName(date, "nl-NL");
+            case "Month": this.getDateFull(date, "nl-NL");
+        }
+    }
+
+    public static getDayName(date:Date, locale:string) {
+        return date.toLocaleDateString(locale, { weekday: 'long' });
+    }
+
+    public static getDateFull(date:Date, locale:string) {
+        return date.toLocaleDateString(locale, { weekday:"long", day: '2-digit', month: "2-digit", year:"2-digit" });
+    }
 }
