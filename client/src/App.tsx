@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Profile from "./components/Profile";
+import Profile from "./components/users/Profile";
 import {
   Route,
   Routes,
@@ -9,9 +9,9 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import Register from "./components/Register";
-import Devices from "./components/Devices";
-import SignIn from "./components/SignIn";
+import Register from "./components/users/Register";
+import Devices from "./components/users/Devices";
+import SignIn from "./components/users/SignIn";
 import Drawer from "./components/DrawerComponent";
 import Contact from "./components/Contact";
 import PageNotFound from "./components/404";
