@@ -556,11 +556,12 @@ export class DataProcessor {
       setTimeout(async () => {
         let dataFromSpecificDevice: TemporaryData[] =
           await DataProcessor.GetAllTempData(specificDevice.device_index);
+        if(dataFromSpecificDevice.length > 0){
         //sort all temporary data by date
         dataFromSpecificDevice = dataFromSpecificDevice.sort((a, b) =>
           a.created_at > b.created_at ? 1 : -1
         );
-        
+
         //if temporary data array is more than 1(has been updated at least once since cleanup) use it to calculate usage
         if (dataFromSpecificDevice.length > 1) {
           let allDayData: number[] = [];
@@ -585,6 +586,7 @@ export class DataProcessor {
         dataFromSpecificDevice.map(
           async (data) => await this.DeleteSpecificTemporaryData(data.index)
         );
+        }
       }, 3_000 * (index + 1));
     });
   }
