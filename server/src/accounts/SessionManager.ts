@@ -17,6 +17,25 @@ export class SessionManager {
     }
 
     /**
+     * If the user is logged in, then continue to the next function, otherwise redirect to the home
+     * page
+     * @param {Request} request - The request object
+     * @param {Response} response - The response object that will be sent back to the client.
+     * @param {NextFunction} next - This is a function that you call when you're done with your
+     * middleware.
+     * @returns the session data.
+     */
+    public static loginRequired(request:Request, response:Response, next:NextFunction) {
+        if(this.getSessionData(request).isLoggedIn)  {
+            next();
+            return;
+        }
+
+        response.redirect("/");
+    }
+
+    /**
+
      * It takes a request object and a user account object, and if the user account object is not
      * undefined, it updates the session data to say that the user is logged in, and it sets the user data
      * to the user account object
@@ -83,7 +102,7 @@ export class SessionManager {
     /**
      * "If the request has a session, get the session data, call the callback function with the session
      * data, and save the session."
-     * 
+     *
      * The callback function is a function that takes a UserSession object and returns a promise
      * @param {Request} request - The request object from the express request handler.
      * @param [callback] - A function that takes in the session data and returns a promise.

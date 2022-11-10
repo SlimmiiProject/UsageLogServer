@@ -1,7 +1,11 @@
+import { Idevice } from "../../App";
 import Graph from "./Graph";
-import { Idevice } from "../App";
 
-export default function App({ data: { devices } }: { data: { devices: Idevice[] } }) {
+export default function App({
+  data: { devices },
+}: {
+  data: { devices: Idevice[] };
+}) {
   return (
     <>
       <div className="flex">

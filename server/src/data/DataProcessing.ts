@@ -328,7 +328,7 @@ export class DataProcessor {
     userid?: number,
     number?: string
   ): Promise<UserAccount> {
-    return ObjectUtil.firstNonUndefined([
+    return ObjectUtil.firstNonUndefined<UserAccount>([
       await UserAccount.findOne({ where: { email: Equal(email) } }),
       await UserAccount.findOne({ where: { userId: Equal(userid) } }),
       await UserAccount.findOne({ where: { phone: Equal(number) } }),
@@ -381,7 +381,7 @@ export class DataProcessor {
    * @param token string the unique id of the reset
    * @returns Promise<boolean>
    */
-  public async GetPasswordReset(token: string): Promise<boolean> {
+  public static async GetPasswordReset(token: string): Promise<boolean> {
     let resetToken: Password_Reset = await Password_Reset.findOneBy({
       token: token,
     });
@@ -396,7 +396,7 @@ export class DataProcessor {
    * @param userid number id of a user
    * @returns Promise<Temporarydata[]>
    */
-  static async GetTempData(userid: number): Promise<TemporaryData[]> {
+  private static async GetTempData(userid: number): Promise<TemporaryData[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
       .createQueryBuilder("Temporary_data")
@@ -410,7 +410,7 @@ export class DataProcessor {
    * @param index number index of device
    * @returns Promise<TemporaryData[]>
    */
-  static async GetAllTempData(index: number): Promise<TemporaryData[]> {
+  private static async GetAllTempData(index: number): Promise<TemporaryData[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
       .createQueryBuilder("temporary_data")
