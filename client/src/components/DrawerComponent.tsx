@@ -107,7 +107,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Slimmii Metingen
+            Slimmii comm v
           </Typography>
         </Toolbar>
       </AppBar>
