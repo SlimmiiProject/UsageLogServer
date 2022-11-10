@@ -5,6 +5,7 @@ import express, { Request, Response } from "express";
 import { SessionManager } from '../accounts/SessionManager';
 import { DataProcessor } from '../data/DataProcessing';
 import { User } from '../types/express-session';
+import { DateUtil, Period } from '../utils/DateUtil';
 const router = express.Router();
 
 router.post("raw-meter-entry", (req: Request, res: Response) => {
@@ -20,42 +21,55 @@ router.post("/meter-entry", (req: Request, res: Response) => {
 });
 
 
-type Period = "Day" | "Week" | "Month";
+
 
 type DataParams = { [key: string]: string } & {
     period: Period,
     beginDate: number;
 };
 
-const dayInMS = 86_400_000;
+type DataOutput = {
+    devices: DeviceData[];
+}
 
-router.get("/data", onlyAcceptJSON, async (req: Request, res: Response) => {
+type DeviceData = {
+    nameDevice: string;
+    data: DeviceValues[];
+}
+
+type DeviceValues = {
+    name: string;
+    day: number;
+    night: number;
+}
+
+router.get("/data", /*onlyAcceptJSON, */ async (req: Request, res: Response) => {
     const userData: User = SessionManager.getSessionData(req).user;
-    const data: DeviceSpecificData[] = await DataProcessor.GetData(userData.id);
     const params: DataParams = req.params as DataParams;
 
     let begin: Date = new Date(params.beginDate);
-    let endDate: Date;
+    let endDate: Date = DateUtil.getDateOverPeriod(begin, params.period);
 
-    // Calculate End Days
-    switch (params.period) {
-        case "Day":
-            endDate = new Date(begin.setDate(begin.getDate() + 1));
-            break;
-        case "Week":
-            endDate = new Date(begin.setDate(begin.getDate() + (7 - begin.getDay())));
-            break;
-        case "Month":
-            endDate = new Date(begin.getFullYear(), begin.getMonth() + 1, 0);
-            break;
-    }
+    const data: DeviceSpecificData[] = await DataProcessor.GetData(userData.id, begin, endDate);
+    let output: DataOutput = { devices: [] };
 
-    // TODO Wait for TypeORM changes to get data between begin and end
+    data.forEach((v) => {
+        const deviceData: DeviceValues[] = v.data.map((d) => {
+            return {
+                name: DateUtil.getDisplayForPeriod(d.created_at, params.period || "Week"),
+                day: d.Day,
+                night: d.Night
+            }
+        });
+
+        output.devices.push({
+            nameDevice: v.device_alias,
+            data: deviceData
+        });
+    });
+
+    res.json(output);
 });
-
-const getDayOfMonth = (year: number, month: number, day: number) => {
-    return new Date(year, month, day);
-}
 
 
 module.exports = router;
