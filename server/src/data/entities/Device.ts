@@ -1,3 +1,4 @@
+import { IsDefined, IsOptional, Length } from "class-validator";
 import {
   BaseEntity,
   Column,
@@ -23,6 +24,8 @@ export class Device extends BaseEntity {
     unique: true,
     length: 64,
   })
+  @IsDefined()
+  @Length(64, 64)
   deviceId!: string;
 
   @OneToMany(() => Data, (data) => data.dataId, {
@@ -38,6 +41,8 @@ export class Device extends BaseEntity {
     unique: false,
     name: "deviceAlias",
   })
+  @IsOptional()
+  @Length(1, 50)
   friendlyName!: string;
 
   @ManyToOne(() => UserAccount, (useracount) => useracount.device, {

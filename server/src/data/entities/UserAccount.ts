@@ -11,6 +11,16 @@ import {
 import { Device } from "./Device";
 import { Crypt } from "../../utils/Crypt";
 import { AccountManager } from "../../accounts/AccountManager";
+import {
+  IsDefined,
+  IsEmail,
+  IsOptional,
+  IsPhoneNumber,
+  Length,
+  MaxLength,
+  MinLength,
+} from "class-validator";
+
 
 @Entity()
 export class UserAccount extends BaseEntity {
@@ -25,6 +35,8 @@ export class UserAccount extends BaseEntity {
     name: "firstname",
     length: 30,
   })
+  @IsDefined()
+  @Length(3, 30)
   firstname: string;
 
   @Column("varchar", {
@@ -33,9 +45,13 @@ export class UserAccount extends BaseEntity {
     name: "lastname",
     length: 30,
   })
+  @Length(3, 30)
+  @IsDefined()
   lastname: string;
 
   @Column("text", { nullable: true, unique: false, name: "hashedPassword" })
+  @MinLength(5)
+  @IsDefined()
   password: string | undefined;
 
   @Column("varchar", {
@@ -44,15 +60,22 @@ export class UserAccount extends BaseEntity {
     length: 50,
     name: "email",
   })
+  @IsEmail()
+  @MaxLength(50)
+  @IsDefined()
   email: string;
 
   @Column("varchar", { nullable: true, unique: false, length: 12 })
+  @Length(12, 12)
+  @IsPhoneNumber("BE")
+  @IsOptional()
   phone: string;
 
   @OneToMany(() => Device, (device) => device.deviceId, {
     nullable: true,
   })
   @JoinColumn({ name: "device" })
+  @IsOptional()
   device: Device[];
 
   @BeforeInsert()
@@ -72,6 +95,7 @@ export class UserAccount extends BaseEntity {
   }
 
   async isAdmin() {
+
     return await AccountManager.isAdministrator(this.userId); 
   }
 }

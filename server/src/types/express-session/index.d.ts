@@ -13,9 +13,11 @@ export interface UserSession {
 }
 
 export interface User {
-   firstName:string;
-   lastName:string;
-   email:string;
-   phoneNumber:string;
-   isAdmin:boolean;
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  isAdmin: boolean;
+
 }
