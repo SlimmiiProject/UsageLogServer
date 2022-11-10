@@ -5,13 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && npm run server",
-
     "start:dev": "concurrently --kill-others-on-fail \"npm run server:dev\" \"npm run client\"",
-   
     "client": "npm run start --prefix ./client",
     "server": "npm run start --prefix ./server",
     "server:dev": "npm run start:dev --prefix ./server",
-
     "build": "npm run build:server && npm run build:client && npm run client:merge",
     "build:server": "npm run build --prefix ./server",
     "build:client": "npm run build --prefix ./client",
