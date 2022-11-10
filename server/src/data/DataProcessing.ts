@@ -551,39 +551,43 @@ export class DataProcessor {
   public static async cleanTemporaryData(): Promise<void> {
     await this.DeleteExpiredTemporaryData();
     let allDevices: Device[] = await Device.find();
-    allDevices.map(async (specificDevice) => {
-      let dataFromSpecificDevice: TemporaryData[] =
-        await DataProcessor.GetAllTempData(specificDevice.device_index);
-      //sort all temporary data by date
-      dataFromSpecificDevice = dataFromSpecificDevice.sort((a, b) =>
-        a.created_at > b.created_at ? 1 : -1
-      );
-      //if temporary data array is more than 1(has been updated at least once since cleanup) use it to calculate usage
-      if (dataFromSpecificDevice.length > 1) {
-        let allDayData: number[] = [];
-        let allNightData: number[] = [];
-        dataFromSpecificDevice.map((specificData) => {
-          allDayData.push(specificData.Day);
-          allNightData.push(specificData.Night);
-        });
-        //get diferential between first and last entry
-        const totalDayUsage: number = allDayData.at(-1) - allDayData.at(0);
-        const totalNightUsasge: number = allNightData.at(-1) - allDayData.at(0);
 
-        await this.CreateData(
-          specificDevice.deviceId,
-          new Date(),
-          totalDayUsage,
-          totalNightUsasge
+    //wait 10 seconds for all deletes to be completed
+
+
+    allDevices.map(async (specificDevice, index) => {
+      setTimeout(async () => {
+        let dataFromSpecificDevice: TemporaryData[] =
+          await DataProcessor.GetAllTempData(specificDevice.device_index);
+        //sort all temporary data by date
+        dataFromSpecificDevice = dataFromSpecificDevice.sort((a, b) =>
+          a.created_at > b.created_at ? 1 : -1
         );
-      }
-      //delete all temp data except for newest row.
-      dataFromSpecificDevice.shift();
-      dataFromSpecificDevice.map(
-        async (data) => await this.DeleteSpecificTemporaryData(data.index)
-      );
-      //wait 10 seconds for all deletes to be completed
-      setTimeout(() => {}, 10 * 1000);
+        //if temporary data array is more than 1(has been updated at least once since cleanup) use it to calculate usage
+        if (dataFromSpecificDevice.length > 1) {
+          let allDayData: number[] = [];
+          let allNightData: number[] = [];
+          dataFromSpecificDevice.map((specificData) => {
+            allDayData.push(specificData.Day);
+            allNightData.push(specificData.Night);
+          });
+          //get diferential between first and last entry
+          const totalDayUsage: number = allDayData.at(-1) - allDayData.at(0);
+          const totalNightUsasge: number = allNightData.at(-1) - allDayData.at(0);
+
+          await this.CreateData(
+            specificDevice.deviceId,
+            new Date(),
+            totalDayUsage,
+            totalNightUsasge
+          );
+        }
+        //delete all temp data except for newest row.
+        dataFromSpecificDevice.shift();
+        dataFromSpecificDevice.map(
+          async (data) => await this.DeleteSpecificTemporaryData(data.index)
+        );
+      }, 3_000 * (index + 1));
     });
   }
 
