@@ -22,7 +22,6 @@ import { Alert } from "@mui/material";
 const Register = (): JSX.Element => {
   const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
   const [register, setRegister] = React.useState<Boolean>(false);
-  const [passwordsMatch, setPasswordsMatch] = React.useState<Boolean>(true);
   const [firstName, setFirstName] = React.useState<string>("");
   const [lastName, setLastName] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
@@ -32,14 +31,13 @@ const Register = (): JSX.Element => {
 
   const navigate = useNavigate();
   const handleSubmit = () => {
-    password === passwordVerify ? setPasswordsMatch(true) : <></>;
     phoneNumber[0] === "0" ? (
       setPhoneNumber("+32" + phoneNumber.slice(1))
     ) : (
       <></>
     );
 
-    if (passwordsMatch) {
+    if (password === passwordVerify) {
       IOUtil.registerUser(
         firstName,
         lastName,
@@ -47,16 +45,14 @@ const Register = (): JSX.Element => {
         phoneNumber,
         password,
         passwordVerify
-      ).then((res) => {
-        console.log(res);
-      });
+      );
     }
   };
 
   let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
   return (
     <Container component="main" maxWidth="xs">
-      {!passwordsMatch ? (
+      {password !== passwordVerify ? (
         <Alert severity="error">Passwords don't match, try again!</Alert>
       ) : (
         <></>
