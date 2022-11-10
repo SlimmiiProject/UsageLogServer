@@ -41,9 +41,7 @@ export class IOUtil {
     }
 
     public static async loginGoogle(token: string) {
-        await this.INSTANCE.post("/profiles/google-login/", {
-            google_token: token
-        });
+        await this.INSTANCE.post("/profiles/google-login/", { google_token: token });
     }
 
     public static async sendContactData(data: ContactInfo) {
