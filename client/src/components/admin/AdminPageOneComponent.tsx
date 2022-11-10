@@ -1,4 +1,3 @@
-import React from "react";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import TextSnippetRoundedIcon from "@mui/icons-material/TextSnippetRounded";
 import SettingsRemoteRoundedIcon from "@mui/icons-material/SettingsRemoteRounded";

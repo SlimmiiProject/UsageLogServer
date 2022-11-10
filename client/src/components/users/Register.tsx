@@ -17,6 +17,7 @@ import {
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../../util/IOUtil";
+import { I18n } from "../../util/language/I18n";
 
 const Register = (): JSX.Element => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -56,7 +57,7 @@ const Register = (): JSX.Element => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Registreer u hier.
+        {I18n.t("register.here")}
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -67,7 +68,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 id="firstName"
-                label="First Name"
+                label={I18n.t("register.firstname")}
                 autoFocus
               />
             </Grid>
@@ -76,7 +77,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 id="lastName"
-                label="Last Name"
+                label={I18n.t("register.lastname")}
                 name="lastName"
                 autoComplete="family-name"
               />
@@ -86,7 +87,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={I18n.t("register.email")}
                 name="email"
                 autoComplete="email"
               />
@@ -96,7 +97,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 id="phoneNumber"
-                label="Phone Nummer"
+                label={I18n.t("register.phone")}
                 name="phoneNumber"
                 autoComplete="Phone-Nummer"
               />
@@ -106,7 +107,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label={I18n.t("register.password")}
                 type="password"
                 id="password"
                 autoComplete="new-password"
@@ -117,7 +118,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 name="passwordVerify"
-                label="Verify Password"
+                label={I18n.t("register.verify")}
                 type="password"
                 id="passwordVerify"
                 autoComplete="new-password"
@@ -130,12 +131,12 @@ const Register = (): JSX.Element => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Registreer je hier
+            {I18n.t("register.here")}
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href={path + "login"} variant="body2">
-                Already have an account? Sign in
+              {I18n.t("register.signIn")}
               </Link>
             </Grid>
           </Grid>
