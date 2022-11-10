@@ -17,7 +17,9 @@ router.post("/", async (req: Request, res: Response) => {
   await DataProcessor.CreateContactForm(
     data.email,
     data.description,
-    data.subject
+    data.subject,
+    data.firstname,
+    data.lastname
   );
   const mailTemplate: string = MailTemplate.create("form_Confirm", {
     name: `${data.firstname} ${data.lastname}`,

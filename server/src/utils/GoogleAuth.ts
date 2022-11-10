@@ -23,8 +23,7 @@ export class GoogleAuth {
                 audience: this.CLIENT_ID
             });
 
-            if (callback)
-                await callback(ticket.getPayload());
+            if (callback) await callback(ticket.getPayload());
 
             return true;
         } catch (_ignored) { }

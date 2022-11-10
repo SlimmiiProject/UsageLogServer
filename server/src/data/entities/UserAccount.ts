@@ -21,7 +21,6 @@ import {
   MinLength,
 } from "class-validator";
 
-
 @Entity()
 export class UserAccount extends BaseEntity {
   @PrimaryGeneratedColumn({
@@ -49,7 +48,7 @@ export class UserAccount extends BaseEntity {
   @IsDefined()
   lastname: string;
 
-  @Column("text", { nullable: true, unique: false, name: "hashedPassword" })
+  @Column("text", { nullable: false, unique: false, name: "hashedPassword" })
   @MinLength(5)
   @IsDefined()
   password: string | undefined;
@@ -85,17 +84,10 @@ export class UserAccount extends BaseEntity {
       this.password &&
       (await new Promise((resolve, reject) => {
         const hashedPassword = Crypt.encrypt(this.password);
-        hashedPassword
-          ? resolve((this.password = hashedPassword))
-          : reject(
-              console.log("hashing password failed password: " + hashedPassword)
-            );
+        hashedPassword ? resolve((this.password = hashedPassword)) : reject(console.log("Hashing password failed"));
       }))
     );
   }
 
-  async isAdmin() {
-
-    return await AccountManager.isAdministrator(this.userId); 
-  }
+  isAdmin = async () => await AccountManager.isAdministrator(this.userId);
 }

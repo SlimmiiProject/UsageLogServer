@@ -24,6 +24,5 @@ export class AccountManager {
 
     public static async isAdministrator(userId:number): Promise<boolean> {
         return await DataProcessor.GetAdministrator(userId) !== null;
-
     }
 }
