@@ -20,17 +20,26 @@ export interface DeviceSpecificData {
  * every 24 hours execute cleanTemporaryData()
  * this wil thin out the temporary data and combine all data for the current day to data
  *
- * if validation fails for any Create... functions this will throw an Error with a discriptive text
+ * CREATE::
+ * if validation fails for any Create... functions this will throw an Error
+ * CreateUser is only one that will return userId
+ * CreateData needs an existing device (deviceId)
+ * CreateTempData is what devices will will need to use to insert new data.
  *
- *
+ *GET::
  * All Get functions will return an empty array if nothing is found.
  * exceptions:
  * GetData returns an object consisting of a combination of Device, Data[], TemporaryData for each device that this user has.
  * GetPasswordReset returns a boolean if the reset for this userAcount exists and is valid.
  *
- * more to come...
+ * ALTER::
+ * EditAcount, addDevicetoUser, ChangeDeviceAlias: if device or user is not found this will throw an error.
+ *
+ * DELETE::
+ *
+ *
+ *
  */
-
 
 export class DataProcessor {
   //#region Create Data
@@ -41,7 +50,10 @@ export class DataProcessor {
    * @param DeviceId string of 64 characters
    * @param alias undefined | string of 1 to 50 characters
    */
-  public static async CreateDevice(DeviceId: string, alias?: string): Promise<void> {
+  public static async CreateDevice(
+    DeviceId: string,
+    alias?: string
+  ): Promise<void> {
     const newDevice = new Device();
     newDevice.deviceId = DeviceId;
     if (alias) newDevice.friendlyName = alias;
@@ -163,12 +175,16 @@ export class DataProcessor {
   public static async CreateContactForm(
     email: string,
     message: string,
-    message_topic: string
+    message_topic: string,
+    firstname: string,
+    lastname: string
   ): Promise<void> {
     const newContactForm = new ContactForm();
     newContactForm.email = email;
     newContactForm.message = message;
     newContactForm.message_topic = message_topic;
+    newContactForm.firstname = firstname;
+    newContactForm.lastname = lastname;
     validate(newContactForm).then(async (result) => {
       if (result.length > 0) {
         throw new Error("validation for contactForm failed: " + result);
@@ -188,14 +204,9 @@ export class DataProcessor {
   public async CreatePasswordReset(
     token: string,
     userId?: number,
-    email?: string,
-    phoneNumber?: string
+    email?: string
   ): Promise<void> {
-    let user: UserAccount = await DataProcessor.GetUser(
-      email,
-      userId,
-      phoneNumber
-    );
+    let user: UserAccount = await DataProcessor.GetUser(email, userId);
     const newPasswordReset = new Password_Reset();
     newPasswordReset.token = token;
     newPasswordReset.user = user;
@@ -225,7 +236,6 @@ export class DataProcessor {
     return await AdminQuery;
   }
 
-
   /**
    * returns all devices from a specific user
    * @param userid number search by user id
@@ -245,17 +255,35 @@ export class DataProcessor {
    * returns an array of objects for each device coupled to the user => look at interface DeviceSpecificData
    * if lastData does not contain a full TemporaryData object this means the day and night values are the difference calculated from start of day to current time
    *  @param userid number search by user id
+   *  @param startDate Date | undefined start date if necessary
+   * @param endDate Date | undefined end of date
    * @returns Promise<DeviceSpecificData[]>
    */
-  public static async GetData(userid: number): Promise<DeviceSpecificData[]> {
-    let tempdata: TemporaryData[] = await this.GetAllTempData(userid);
-    let data: Data[] = await DatabaseConnector.INSTANCE.dataSource
-      .getRepository(Data)
-      .createQueryBuilder("data")
-      .leftJoinAndSelect("data.device", "dev")
-      .where("dev.user = :id", { id: userid })
-      .getMany();
-
+  public static async GetData(
+    userid: number,
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<DeviceSpecificData[]> {
+    let tempdata: TemporaryData[] = await DataProcessor.GetTempData(userid);
+    let data: Data[] = [];
+    if (startDate && endDate) {
+      //UNTESTED
+      data = await DatabaseConnector.INSTANCE.dataSource
+        .getRepository(Data)
+        .createQueryBuilder("data")
+        .leftJoinAndSelect("data.device", "dev")
+        .where("dev.user = :id", { id: userid })
+        .andWhere("data.created_at < :endDate", { endDate: endDate })
+        .andWhere("data.created_at > :startDate", { startDate: startDate })
+        .getMany();
+    } else {
+      data = await DatabaseConnector.INSTANCE.dataSource
+        .getRepository(Data)
+        .createQueryBuilder("data")
+        .leftJoinAndSelect("data.device", "dev")
+        .where("dev.user = :id", { id: userid })
+        .getMany();
+    }
     let devices: Device[] = await this.GetDevices(userid);
 
     let completeData: DeviceSpecificData[] = [];
@@ -274,7 +302,9 @@ export class DataProcessor {
           parseInt(filteredTempData[0].Night.toString()) -
           parseInt(filteredTempData.reverse()[0].Night.toString());
       } else {
-        currentDayData = filteredTempData[0];
+        currentDayData = null;
+        if (filteredTempData[0 && !startDate && !endDate])
+          currentDayData = filteredTempData[0];
       }
       const deviceData: DeviceSpecificData = {
         device_index: device.device_index,
@@ -293,7 +323,6 @@ export class DataProcessor {
    * @param number number search user by phonenumber
    * @returns Promise<UserAccounts>
    */
-
   public static async GetUser(
     email?: string,
     userid?: number,
@@ -312,7 +341,6 @@ export class DataProcessor {
    * @returns Promise<TemporaryData>
    */
   //i think this is now unused
-
   public async GetLastData(userid: number): Promise<TemporaryData> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
@@ -325,14 +353,12 @@ export class DataProcessor {
     return;
   }
 
-
   /**
    * withouth any parameters this will return all forms
    * @param message_topic undefined | string searches forms by topic
    * @param email undefined | string searches forms by email address
    * @returns Promise<ContactForm[]>
    */
-
   public static async GetContactForms(
     message_topic?: string,
     email?: string
@@ -345,7 +371,6 @@ export class DataProcessor {
         await ContactForm.find({ where: { email: Equal(email) } }),
       ]);
     }
-
 
     return await ContactForm.find();
   }
@@ -363,7 +388,7 @@ export class DataProcessor {
     let passwordResetAllowed: boolean = false;
     passwordResetAllowed =
       new Date().getTime() - resetToken.created_at.getTime() < 30 * 60 * 1000;
-    this.DeleteSpecificPasswordReset(token);
+    DataProcessor.DeleteSpecificPasswordReset(token);
     return passwordResetAllowed;
   }
   /**
@@ -371,7 +396,7 @@ export class DataProcessor {
    * @param userid number id of a user
    * @returns Promise<Temporarydata[]>
    */
-  private async GetTempData(userid: number): Promise<TemporaryData[]> {
+  private static async GetTempData(userid: number): Promise<TemporaryData[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
       .createQueryBuilder("Temporary_data")
@@ -400,11 +425,14 @@ export class DataProcessor {
   //possibly redundant.
   //TODO: add validation
   /**
+   * changes a single password in the database
    * @param userId number user id
    * @param password  string password of minimum 5 characters
    */
-
-  public static async ChangePassword(userId: number, password: string): Promise<void> {
+  public static async ChangePassword(
+    userId: number,
+    password: string
+  ): Promise<void> {
     let User: UserAccount = await UserAccount.findOneBy({ userId: userId });
     if (User == undefined) throw new Error("User Does not exist");
     User.password = password;
@@ -412,6 +440,7 @@ export class DataProcessor {
   }
 
   //TODO: add validation
+  // test if password change alters users password by hashing it twice
   /**
    * @param userid number user id
    * @param firstname  string of 3 to 30 characters
@@ -429,6 +458,9 @@ export class DataProcessor {
     email: string,
     phone?: string
   ): Promise<void> {
+    let userExists = await UserAccount.findAndCountBy({ userId: userid });
+    if (userExists[1] < 1)
+      throw new Error(`Acount does not exist. looking for acount: ${userid}`);
     await UserAccount.update(userid, {
       firstname: firstname,
       lastname: lastname,
@@ -439,7 +471,7 @@ export class DataProcessor {
   }
 
   /**
-   *
+   * couple an existing Device to an existing User
    * @param userId number user id
    * @param deviceid string unique id of device
    */
@@ -448,7 +480,9 @@ export class DataProcessor {
     deviceid: string
   ): Promise<void> {
     let user = await UserAccount.findOneBy({ userId: userId });
-    if (user == undefined) throw new Error("User does not exist");
+    let device = await Device.findOneBy({ deviceId: deviceid });
+    if (user == undefined || device == undefined)
+      throw new Error("Either Device or User does not exist or was not found.");
     await Device.update({ deviceId: deviceid }, { user: user });
   }
 
@@ -458,25 +492,38 @@ export class DataProcessor {
    * @param device_index number device index
    * @param alias string of 1 to 50 characters
    */
-
   public static async ChangeDeviceAlias(
     device_index: number,
     alias: string
   ): Promise<void> {
+    let device: Device = await Device.findOneBy({ device_index: device_index });
+    if (device == undefined) throw new Error("Device was not found.");
     Device.update({ device_index: device_index }, { friendlyName: alias });
   }
   //#endregion
 
   //#region  Delete Data
+  /**
+   * deletes a single administrator from database
+   * @param adminId number
+   */
   public static async DeleteAdministrator(adminId: number): Promise<void> {
     Administrator.delete({ adminId: adminId });
   }
 
   //fails if administrator is not removed first
+  /**
+   * deletes a single user form the database
+   * @param userId number
+   */
   public static async DeleteUser(userId: number): Promise<void> {
     UserAccount.delete({ userId: userId });
   }
   //fails if data is not removed first
+  /**
+   * deletes a single device from database. could fail still testing
+   * @param deviceid string
+   */
   public static async DeleteDevice(deviceid: string): Promise<void> {
     Device.delete({ deviceId: deviceid });
   }
@@ -505,9 +552,8 @@ export class DataProcessor {
     await this.DeleteExpiredTemporaryData();
     let allDevices: Device[] = await Device.find();
     allDevices.map(async (specificDevice) => {
-      let dataFromSpecificDevice: TemporaryData[] = await this.GetAllTempData(
-        specificDevice.device_index
-      );
+      let dataFromSpecificDevice: TemporaryData[] =
+        await DataProcessor.GetAllTempData(specificDevice.device_index);
       //sort all temporary data by date
       dataFromSpecificDevice = dataFromSpecificDevice.sort((a, b) =>
         a.created_at > b.created_at ? 1 : -1
@@ -536,17 +582,22 @@ export class DataProcessor {
       dataFromSpecificDevice.map(
         async (data) => await this.DeleteSpecificTemporaryData(data.index)
       );
+      //wait 10 seconds for all deletes to be completed
+      setTimeout(() => {}, 10 * 1000);
     });
   }
+
   /**
    * deletes a single entry in temporary data
    * @param index number index of the temporary data
    */
-  private static async DeleteSpecificTemporaryData(index: number): Promise<void> {
+  private static async DeleteSpecificTemporaryData(
+    index: number
+  ): Promise<void> {
     TemporaryData.delete({ index: index });
   }
   /**
-   * deletes all data older than 24 hours
+   * deletes all Temporary Data older than 24 hours
    */
   private static async DeleteExpiredTemporaryData(): Promise<void> {
     const expiringDate: Date = new Date(
@@ -564,12 +615,14 @@ export class DataProcessor {
   public static async DeleteExpiredPasswordResets() {
     const expiringDate: Date = new Date(new Date().getTime() - 30 * 60 * 1000);
 
-
     DatabaseConnector.INSTANCE.dataSource
       .getRepository(Password_Reset)
       .delete({ created_at: LessThan(expiringDate) });
   }
-
+  /**
+   * deletes a single password reset token in database
+   * @param token string
+   */
   private static async DeleteSpecificPasswordReset(token: string) {
     Password_Reset.delete({ token: token });
   }

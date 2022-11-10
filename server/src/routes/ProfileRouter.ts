@@ -26,6 +26,7 @@ router.post("/login", async (req: Request, res: Response) => {
     }
 
     if (Object.values(data).every(InputUtil.isSet)) {
+
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             await login(req, data.email)
             res.sendStatus(200);
@@ -87,7 +88,7 @@ router.post("/create-profile", async (req: Request, res: Response) => {
         if (data.password.length < 8) return res.json(errorJson("Password too short", body));
         if (data.password !== data.password_verify) return res.json(errorJson("Passwords don't match", body));
         if (await AccountManager.createAccount(data.first_name, data.last_name, data.email, hashedPassword, data.phone_number) > 0) return res.json({ succes: true });
-        
+
         res.status(500).json(errorJson("Something went wrong.", body));
         return;
     }

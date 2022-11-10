@@ -50,7 +50,6 @@ export class SessionManager {
             data.isLoggedIn = true
             data.user = {
                 id: account.userId,
-
                 firstName: account.firstname,
                 lastName: account.lastname,
                 email: account.email,
@@ -103,7 +102,7 @@ export class SessionManager {
     /**
      * "If the request has a session, get the session data, call the callback function with the session
      * data, and save the session."
-     * 
+     *
      * The callback function is a function that takes a UserSession object and returns a promise
      * @param {Request} request - The request object from the express request handler.
      * @param [callback] - A function that takes in the session data and returns a promise.

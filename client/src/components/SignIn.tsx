@@ -27,11 +27,9 @@ const SignIn = (): JSX.Element => {
     const data = new FormData(event.currentTarget);
 
     // TODO Improve data capture
-   
-
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
-  
+
     IOUtil.loginUser(email, password);
   };
   // get current location
