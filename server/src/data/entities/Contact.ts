@@ -4,7 +4,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   PrimaryGeneratedColumn,
 } from "typeorm";
 
@@ -21,7 +20,7 @@ export class ContactForm extends BaseEntity {
     name: "topic",
     length: 100,
   })
-  @Length(4, 100)
+  @Length(1, 100)
   @IsDefined()
   message_topic: string;
 

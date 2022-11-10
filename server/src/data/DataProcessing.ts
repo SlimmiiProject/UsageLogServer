@@ -4,11 +4,12 @@ import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
 import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
-import { ContactForm } from "./entities/contact";
 import { UserAccount } from "./entities/UserAccount";
-import { Password_Reset } from "./entities/Password_reset";
+import { PasswordReset } from "./entities/PasswordReset";
 import { Equal, LessThan } from "typeorm";
 import { validate } from "class-validator";
+import { ContactForm } from "./entities/Contact";
+
 export interface DeviceSpecificData {
   device_index: number;
   device_alias: string;
@@ -207,14 +208,14 @@ export class DataProcessor {
     email?: string
   ): Promise<void> {
     let user: UserAccount = await DataProcessor.GetUser(email, userId);
-    const newPasswordReset = new Password_Reset();
+    const newPasswordReset = new PasswordReset();
     newPasswordReset.token = token;
     newPasswordReset.user = user;
     validate(newPasswordReset).then(async (result) => {
       if (result.length > 0) {
         throw new Error("validation for password reset failed: " + result);
       } else {
-        Password_Reset.save(newPasswordReset);
+        PasswordReset.save(newPasswordReset);
       }
     });
   }
@@ -382,7 +383,7 @@ export class DataProcessor {
    * @returns Promise<boolean>
    */
   public static async GetPasswordReset(token: string): Promise<boolean> {
-    let resetToken: Password_Reset = await Password_Reset.findOneBy({
+    let resetToken: PasswordReset = await PasswordReset.findOneBy({
       token: token,
     });
     let passwordResetAllowed: boolean = false;
@@ -620,7 +621,7 @@ export class DataProcessor {
     const expiringDate: Date = new Date(new Date().getTime() - 30 * 60 * 1000);
 
     DatabaseConnector.INSTANCE.dataSource
-      .getRepository(Password_Reset)
+      .getRepository(PasswordReset)
       .delete({ created_at: LessThan(expiringDate) });
   }
   /**
@@ -628,7 +629,7 @@ export class DataProcessor {
    * @param token string
    */
   private static async DeleteSpecificPasswordReset(token: string) {
-    Password_Reset.delete({ token: token });
+    PasswordReset.delete({ token: token });
   }
   //#endregion
 }
