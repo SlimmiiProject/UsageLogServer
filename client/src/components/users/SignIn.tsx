@@ -14,9 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useLocation } from "react-router-dom";
 import {
-  getCurrentLanguage,
-  getCurrentLanguagePath,
-  getCurrentPath,
+  getCurrentLanguagePath
 } from "../../App";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../../util/IOUtil";
@@ -34,7 +32,7 @@ const SignIn = (): JSX.Element => {
     IOUtil.loginUser(email, password);
   };
   // get current location
-  let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
+  let path = getCurrentLanguagePath(I18n.currentLanguage);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

@@ -8,7 +8,8 @@ export const reloadBrowser = () => window.location.reload();
  * @param {string} newLang - The new language to change to.
  */
 export const replaceLanguageUrl = (prevLang:string, newLang:string) => {
-    window.location.replace(window.location.origin + window.location.pathname.replace(`/${prevLang}/`, `/${newLang}/`))
+    const newLocation = window.location.origin + window.location.pathname.replace(`/${prevLang}/`, `/${newLang}/`);
+    window.location.replace(newLocation);
 }
 
 /**
@@ -25,5 +26,5 @@ export const getLanguageUrl = (path:string) => {
  * @returns The first element of the array returned by the split method.
  */
 export const getLanguageFromUrl = () => {
-   return window.location.pathname.split("/")[1];
+    return window.location.pathname.split("/")[1];
 }

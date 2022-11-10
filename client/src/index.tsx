@@ -7,20 +7,21 @@ import { I18n } from "./util/language/I18n";
 
 (async () => {
 
+  // Setup Languages
   await I18n.setup();
-  
+
   const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
   );
 
 
-root.render(
-  <React.StrictMode>
-    <React.Suspense fallback="Loading">
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </React.Suspense>
-  </React.StrictMode>
-);
+  root.render(
+    <React.StrictMode>
+      <React.Suspense fallback="Loading">
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </React.Suspense>
+    </React.StrictMode>
+  );
 })(); 

@@ -10,9 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import {
-  getCurrentLanguage,
-  getCurrentLanguagePath,
-  getCurrentPath,
+  getCurrentLanguagePath
 } from "../../App";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -41,7 +39,7 @@ const Register = (): JSX.Element => {
       password_verify
     );
   };
-  let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
+  let path = getCurrentLanguagePath(I18n.currentLanguage);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
