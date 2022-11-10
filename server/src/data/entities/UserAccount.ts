@@ -93,6 +93,5 @@ export class UserAccount extends BaseEntity {
     );
   }
 
-  async isAdmin = () => await AccountManager.isAdministrator(this.userId);
-
+  isAdmin = async () => await AccountManager.isAdministrator(this.userId);
 }

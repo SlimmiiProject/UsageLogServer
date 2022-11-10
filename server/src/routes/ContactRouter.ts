@@ -12,7 +12,7 @@ type ContactFormData = {
 
 router.post("/", async (req: Request, res: Response) => {
     const data: ContactFormData = req.body;
-    await DataProcessor.CreateContactForm(data.email, data.description, data.subject);
+    await DataProcessor.CreateContactForm(data.email, data.description, data.subject, data.firstname, data.lastname);
 });
 
 module.exports = router;
