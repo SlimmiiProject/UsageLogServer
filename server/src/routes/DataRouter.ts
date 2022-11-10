@@ -28,17 +28,47 @@ type DataParams = { [key: string]: string } & {
     beginDate: number;
 };
 
-const dayInMS = 86_400_000;
+type DataOutput = {
+    devices: DeviceData[];
+}
 
-router.get("/data", onlyAcceptJSON, async (req: Request, res: Response) => {
+type DeviceData = {
+    nameDevice: string;
+    data: DeviceValues[];
+}
+
+type DeviceValues = {
+    name: string;
+    day: number;
+    night: number;
+}
+
+router.get("/data", /*onlyAcceptJSON, */ async (req: Request, res: Response) => {
     const userData: User = SessionManager.getSessionData(req).user;
-    const data: DeviceSpecificData[] = await DataProcessor.GetData(userData.id);
     const params: DataParams = req.params as DataParams;
 
     let begin: Date = new Date(params.beginDate);
     let endDate: Date = DateUtil.getDateOverPeriod(begin, params.period);
 
-    // TODO Wait for TypeORM changes to get data between begin and end
+    const data: DeviceSpecificData[] = await DataProcessor.GetData(userData.id, begin, endDate);
+    let output: DataOutput = { devices: [] };
+
+    data.forEach((v) => {
+        const deviceData: DeviceValues[] = v.data.map((d) => {
+            return {
+                name: DateUtil.getDisplayForPeriod(d.created_at, params.period || "Week"),
+                day: d.Day,
+                night: d.Night
+            }
+        });
+
+        output.devices.push({
+            nameDevice: v.device_alias,
+            data: deviceData
+        });
+    });
+
+    res.json(output);
 });
 
 

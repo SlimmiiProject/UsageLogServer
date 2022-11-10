@@ -399,7 +399,7 @@ export class DataProcessor {
   private static async GetTempData(userid: number): Promise<TemporaryData[]> {
     let allData = await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
-      .createQueryBuilder("Temporary_data")
+      .createQueryBuilder("temporary_data")
       .leftJoinAndSelect("temporary_data.device", "dev")
       .where("dev.user = :id", { id: userid })
       .getMany();
@@ -561,7 +561,7 @@ export class DataProcessor {
         dataFromSpecificDevice = dataFromSpecificDevice.sort((a, b) =>
           a.created_at > b.created_at ? 1 : -1
         );
-        
+
         //if temporary data array is more than 1(has been updated at least once since cleanup) use it to calculate usage
         if (dataFromSpecificDevice.length > 1) {
           let allDayData: number[] = [];

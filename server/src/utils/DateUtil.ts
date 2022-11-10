@@ -7,7 +7,7 @@ export class DateUtil {
      *
      * For example, if the start date is "1/1/2022" and the period is "Month", the function should
      * return "31/1/2022".
-     * 
+     *
      * Any
      * @param {Date} beginDate - Date - The date to start from
      * @param {Period} period - Period = "Day" | "Week" | "Month"
@@ -31,9 +31,9 @@ export class DateUtil {
 
     public static getDisplayForPeriod(date: Date, period: Period) {
         switch (period) {
-            case "Day": return "Dag";
-            case "Week": this.getDayName(date, "nl-NL");
-            case "Month": this.getDateFull(date, "nl-NL");
+            case "Day": return date.getHours().toString();
+            case "Week": return this.getDayName(date, "nl-NL");
+            case "Month": return this.getDateFull(date, "nl-NL");
         }
     }
 
