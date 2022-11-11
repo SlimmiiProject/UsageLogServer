@@ -10,15 +10,19 @@ export class Crypt {
         return 15;
     }
 
-  /**
-   * It takes a raw string and an encrypted string, decrypts the encrypted string, and then compares
-   * the two strings
-   * @param {string} rawContent - The raw content that you want to compare to the encrypted content.
-   * @param {string} encryptedContent - The encrypted content that you want to compare against.
-   * @returns The encrypted content is being returned.
-   */
+    /**
+     * It takes a raw string and an encrypted string, decrypts the encrypted string, and then compares
+     * the two strings
+     * @param {string} rawContent - The raw content that you want to compare to the encrypted content.
+     * @param {string} encryptedContent - The encrypted content that you want to compare against.
+     * @returns The encrypted content is being returned.
+     */
     public static matchesEncrypted(rawContent: string, encryptedContent: string): boolean {
-        return bcrypt.compareSync(rawContent, this.decryptToHash(encryptedContent));
+        return this.compare(rawContent, encryptedContent);
+    }
+
+    private static compare(raw: string, encryptedHash: string) {
+        return bcrypt.compareSync(raw, this.decryptToHash(encryptedHash));
     }
 
     /**
@@ -38,7 +42,7 @@ export class Crypt {
         return this.toBase64(xorInput);
     }
 
-    private static decryptToHash(encryped: string): string {
+    public static decryptToHash(encryped: string): string {
         const decryptedB64 = this.fromBase64(encryped);
         const decryptedXOR = this.xor(decryptedB64);
         const decryptedBytes = this.fromBytes(decryptedXOR);

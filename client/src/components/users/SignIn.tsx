@@ -17,7 +17,6 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import { getCurrentLanguagePath } from "../../App";
-import { useTranslation } from "react-i18next";
 import { IOUtil } from "../../util/IOUtil";
 import { useNavigate } from "react-router-dom";
 import { I18n } from "../../util/language/I18n";
@@ -32,17 +31,18 @@ const SignIn = (): JSX.Element => {
       setFailed(false);
       navigate("/dashboard");
     }
-  }, [authenticated]);
+  }, [authenticated, navigate]);
   // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    setFailed(true);
-
+    
     // TODO Improve data capture
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
     setAuthenticated(await IOUtil.loginUser(email, password));
+
+    setFailed(!authenticated);
   };
   // get current location
   let path = getCurrentLanguagePath(I18n.currentLanguage);
