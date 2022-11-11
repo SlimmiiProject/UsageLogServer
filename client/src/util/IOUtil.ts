@@ -29,7 +29,7 @@ export class IOUtil {
     }
 
     public static async registerUser(first_name: string, last_name: string, email: string, phone_number: string, password: string, password_verify: string) {
-        await this.INSTANCE.post("/profiles/create-profile/", {
+       await this.INSTANCE.post("/profiles/create-profile/", {
             first_name: first_name,
             last_name: last_name,
             email: email,
@@ -44,9 +44,7 @@ export class IOUtil {
     }
 
     public static async loginGoogle(token: string) {
-        await this.INSTANCE.post("/profiles/google-login/", {
-            google_token: token
-        });
+        await this.INSTANCE.post("/profiles/google-login/", { google_token: token });
     }
 
     public static async sendContactData(data: ContactInfo) {

@@ -83,13 +83,13 @@ router.post("/create-profile", async (req: Request, res: Response) => {
         const hashedPassword = Crypt.encrypt(data.password);
 
         // Validate entries
-        if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) return res.status(500).json(errorJson("Wrong Syntax for email or phone", body));
+        if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) return res.json(errorJson("Wrong Syntax for email or phone", body));
         if (await AccountManager.doesAccountExist(0, data.email)) return res.json(errorJson("Account already exists", body));
         if (data.password.length < 8) return res.json(errorJson("Password too short", body));
         if (data.password !== data.password_verify) return res.json(errorJson("Passwords don't match", body));
         if (await AccountManager.createAccount(data.first_name, data.last_name, data.email, hashedPassword, data.phone_number) > 0) return res.json({ succes: true });
 
-        res.status(500).json(errorJson("Something went wrong.", body));
+        res.json(errorJson("Something went wrong.", body));
         return;
     }
 

@@ -10,7 +10,7 @@ import {
 import { UserAccount } from "./UserAccount";
 
 @Entity()
-export class Password_Reset extends BaseEntity {
+export class PasswordReset extends BaseEntity {
   @PrimaryColumn("varchar", { name: "token", unique: true, nullable: false })
   @IsDefined()
   token: string;

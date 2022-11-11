@@ -4,7 +4,7 @@ import { I18n } from "../util/language/I18n";
 const PageNotFound = (): JSX.Element => {
   return (
     <>
-        <h1>404: Page not found</h1>  
+        <h1>{I18n.t("page.404")}</h1>  
     </>
     );
 };

@@ -10,14 +10,16 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import {
-  getCurrentLanguage,
-  getCurrentLanguagePath,
-  getCurrentPath,
+  getCurrentLanguagePath
 } from "../../App";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../../util/IOUtil";
+<<<<<<< HEAD
 import { Alert } from "@mui/material";
+=======
+import { I18n } from "../../util/language/I18n";
+>>>>>>> da09c146556473e4a683a738039bb2c449c9f3b0
 
 const Register = (): JSX.Element => {
   const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
@@ -60,8 +62,12 @@ const Register = (): JSX.Element => {
     setPassword("");
     setPasswordVerify("");
   };
+<<<<<<< HEAD
 
   let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
+=======
+  let path = getCurrentLanguagePath(I18n.currentLanguage);
+>>>>>>> da09c146556473e4a683a738039bb2c449c9f3b0
   return (
     <Container component="main" maxWidth="xs">
       {!passwordMatch ? (
@@ -82,7 +88,7 @@ const Register = (): JSX.Element => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Registreer u hier.
+        {I18n.t("register.here")}
         </Typography>
         <Box
           component="form"
@@ -98,11 +104,15 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 id="firstName"
+<<<<<<< HEAD
                 label="First Name"
                 value={firstName}
                 onChange={(event) => {
                   setFirstName(event.target.value);
                 }}
+=======
+                label={I18n.t("register.firstname")}
+>>>>>>> da09c146556473e4a683a738039bb2c449c9f3b0
                 autoFocus
               />
             </Grid>
@@ -111,7 +121,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 id="lastName"
-                label="Last Name"
+                label={I18n.t("register.lastname")}
                 name="lastName"
                 value={lastName}
                 onChange={(event) => {
@@ -125,7 +135,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={I18n.t("register.email")}
                 name="email"
                 type="email"
                 value={email}
@@ -140,7 +150,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 id="phoneNumber"
-                label="Phone Nummer"
+                label={I18n.t("register.phone")}
                 name="phoneNumber"
                 value={phoneNumber}
                 onChange={(event) => {
@@ -154,7 +164,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label={I18n.t("register.password")}
                 type="password"
                 id="password"
                 value={password}
@@ -169,7 +179,7 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 name="passwordVerify"
-                label="Verify Password"
+                label={I18n.t("register.verify")}
                 type="password"
                 id="passwordVerify"
                 value={passwordVerify}
@@ -186,12 +196,12 @@ const Register = (): JSX.Element => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Registreer je hier
+            {I18n.t("register.here")}
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href={path + "login"} variant="body2">
-                Already have an account? Sign in
+              {I18n.t("register.signIn")}
               </Link>
             </Grid>
           </Grid>

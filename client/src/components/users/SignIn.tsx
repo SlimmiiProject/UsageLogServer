@@ -17,13 +17,15 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import {
-  getCurrentLanguage,
-  getCurrentLanguagePath,
-  getCurrentPath,
+  getCurrentLanguagePath
 } from "../../App";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../../util/IOUtil";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
+=======
+import { I18n } from "../../util/language/I18n";
+>>>>>>> da09c146556473e4a683a738039bb2c449c9f3b0
 
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
@@ -48,7 +50,7 @@ const SignIn = (): JSX.Element => {
     setAuthenticated(await IOUtil.loginUser(email, password));
   };
   // get current location
-  let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
+  let path = getCurrentLanguagePath(I18n.currentLanguage);
   return (
     <Container component="main" maxWidth="xs">
       {isFailed ? (
@@ -77,7 +79,7 @@ const SignIn = (): JSX.Element => {
             required
             fullWidth
             id="email"
-            label="E-mailadres"
+            label={I18n.t("signIn.email")}
             name="email"
             autoComplete="email"
             autoFocus
@@ -87,14 +89,14 @@ const SignIn = (): JSX.Element => {
             required
             fullWidth
             name="password"
-            label="Wachtwoord"
+            label={I18n.t("signIn.password")}
             type="password"
             id="password"
             autoComplete="current-password"
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
-            label="Onthoud mij"
+            label={I18n.t("signIn.rememberMe")}
           />
           <Button
             type="submit"
@@ -102,17 +104,17 @@ const SignIn = (): JSX.Element => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            {I18n.t("signIn.signIn")}
           </Button>
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
-                Wachtwoord vergeten?
+              {I18n.t("signIn.forgotPassword")}
               </Link>
             </Grid>
             <Grid item>
               <Link href={`${path}register`} variant="body2">
-                {"Registreren"}
+                {I18n.t("signIn.register")}
               </Link>
             </Grid>
           </Grid>

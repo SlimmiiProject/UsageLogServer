@@ -3,10 +3,10 @@
 export class RegExpVal {
 
     // TODO Fill in RegEx
-    public static readonly phoneValidator = new RegExp('^(([+]32|0032)\s\(0\)([0-9]{9})|([+]31|0031)\s0([0-9]{9})|0([0-9]{9}))$');
-    public static readonly emailValidator = new RegExp("^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
-    public static readonly alphabetValidator = new RegExp("^[A-Za-z]+$");
-    public static readonly base64Encoded = new RegExp("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$");
+    public static readonly phoneValidator = new RegExp('');
+    public static readonly emailValidator = new RegExp('');
+    public static readonly alphabetValidator = new RegExp('');
+    public static readonly base64Encoded = new RegExp('^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$');
 
     /**
      * It takes a string and a regular expression as input and returns true if the string matches the

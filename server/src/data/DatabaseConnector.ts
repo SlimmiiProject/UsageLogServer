@@ -2,10 +2,10 @@ import { DataSource } from "typeorm";
 import { Environment } from "../utils/Environment";
 import { Logger } from "../utils/Logger";
 import { Administrator } from "./entities/Administrator";
-import { ContactForm } from "./entities/contact";
+import { ContactForm } from "./entities/Contact";
 import { Data } from "./entities/Data";
 import { Device } from "./entities/Device";
-import { Password_Reset } from "./entities/Password_reset";
+import { PasswordReset } from "./entities/PasswordReset";
 import { TemporaryData } from "./entities/TemporaryData";
 import { Translations } from "./entities/Translations";
 import { UserAccount } from "./entities/UserAccount";
@@ -38,7 +38,7 @@ export class DatabaseConnector {
         Translations,
         TemporaryData,
         ContactForm,
-        Password_Reset,
+        PasswordReset,
       ],
     });
   }

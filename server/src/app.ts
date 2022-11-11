@@ -84,7 +84,7 @@ export class App {
 
         // All routes after this require you to be logged in, else you'll be redirected to the home page
         this.App.use(SessionManager.loginRequired);
-        
+
         apiRouter.use("/users/:userId", require("./routes/UserRouter"));
         apiRouter.use("/data", require("./routes/DataRouter"));
         apiRouter.use("/profiles", require("./routes/ProfileRouter"));
