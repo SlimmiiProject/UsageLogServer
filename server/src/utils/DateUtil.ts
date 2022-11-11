@@ -16,7 +16,7 @@ export class DateUtil {
     public static getDateOverPeriod(beginDate: Date, period: Period): Date {
         switch (period) {
             case "Day": return new Date(beginDate.setDate(beginDate.getDate() + 1));
-            case "Week": return new Date(beginDate.setDate(beginDate.getDate() + (7 - beginDate.getDay())));
+            case "Week": return new Date(beginDate.setDate(beginDate.getDate() + 6));
             case "Month": return new Date(beginDate.getFullYear(), beginDate.getMonth() + 1, 0);
         }
     }
