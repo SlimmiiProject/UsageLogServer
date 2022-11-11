@@ -16,16 +16,11 @@ import {
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-import {
-  getCurrentLanguagePath
-} from "../../App";
+import { getCurrentLanguagePath } from "../../App";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../../util/IOUtil";
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
-=======
 import { I18n } from "../../util/language/I18n";
->>>>>>> da09c146556473e4a683a738039bb2c449c9f3b0
 
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
@@ -109,7 +104,7 @@ const SignIn = (): JSX.Element => {
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
-              {I18n.t("signIn.forgotPassword")}
+                {I18n.t("signIn.forgotPassword")}
               </Link>
             </Grid>
             <Grid item>

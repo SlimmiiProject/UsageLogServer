@@ -21,13 +21,9 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import DashboardComp from "./components/dashboard/Dashboard";
 import { AdminPage } from "./components/admin/AdminPage";
-<<<<<<< HEAD
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import LoginPage from "./components/users/LoginPage";
-import { getLanguageFromUrl } from "./util/BrowserUtil";
-=======
-import LoginPage from "./components/LoginPage";
->>>>>>> da09c146556473e4a683a738039bb2c449c9f3b0
+// import { getLanguageFromUrl } from "./util/BrowserUtil";
 import { I18n } from "./util/language/I18n";
 import EditProfile from "./components/EditProfile";
 
@@ -58,13 +54,13 @@ export const getCurrentPath = (location: any) => {
 
 export const getCurrentLanguagePath = (lang: string) => {
   // Set default language to en (English)
-  if (lang === undefined)  lang = "en";
+  if (lang === undefined) lang = "en";
   return `/${lang}/`;
 };
 
 const App = (): JSX.Element => {
   const [loggedIn, setLoggedIn] = useState<boolean>();
- 
+
   let lang = I18n.currentLanguage;
 
   // Add testdata from file to emulate externaldata

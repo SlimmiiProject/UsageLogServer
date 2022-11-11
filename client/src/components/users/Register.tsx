@@ -9,17 +9,12 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import {
-  getCurrentLanguagePath
-} from "../../App";
+import { getCurrentLanguagePath } from "../../App";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../../util/IOUtil";
-<<<<<<< HEAD
 import { Alert } from "@mui/material";
-=======
 import { I18n } from "../../util/language/I18n";
->>>>>>> da09c146556473e4a683a738039bb2c449c9f3b0
 
 const Register = (): JSX.Element => {
   const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
@@ -62,12 +57,7 @@ const Register = (): JSX.Element => {
     setPassword("");
     setPasswordVerify("");
   };
-<<<<<<< HEAD
-
-  let path = getCurrentLanguagePath(getCurrentLanguage(useTranslation()));
-=======
   let path = getCurrentLanguagePath(I18n.currentLanguage);
->>>>>>> da09c146556473e4a683a738039bb2c449c9f3b0
   return (
     <Container component="main" maxWidth="xs">
       {!passwordMatch ? (
@@ -88,7 +78,7 @@ const Register = (): JSX.Element => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-        {I18n.t("register.here")}
+          {I18n.t("register.here")}
         </Typography>
         <Box
           component="form"
@@ -104,15 +94,11 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 id="firstName"
-<<<<<<< HEAD
-                label="First Name"
                 value={firstName}
                 onChange={(event) => {
                   setFirstName(event.target.value);
                 }}
-=======
                 label={I18n.t("register.firstname")}
->>>>>>> da09c146556473e4a683a738039bb2c449c9f3b0
                 autoFocus
               />
             </Grid>
@@ -201,7 +187,7 @@ const Register = (): JSX.Element => {
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href={path + "login"} variant="body2">
-              {I18n.t("register.signIn")}
+                {I18n.t("register.signIn")}
               </Link>
             </Grid>
           </Grid>

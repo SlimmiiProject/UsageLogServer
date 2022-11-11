@@ -108,11 +108,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-<<<<<<< HEAD
-            Slimmii comm v
-=======
-          {I18n.t("drawercomponent.head")}
->>>>>>> da09c146556473e4a683a738039bb2c449c9f3b0
+            {I18n.t("drawercomponent.head")}
           </Typography>
         </Toolbar>
       </AppBar>
