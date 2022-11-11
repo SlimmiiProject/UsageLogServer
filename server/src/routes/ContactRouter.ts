@@ -1,7 +1,7 @@
 import { DataProcessor } from "./../data/DataProcessing";
 import express, { Request, Response } from "express";
 import { Mailer } from "./../utils/mail/Mailer";
-import { MailTemplate } from "./../utils/mail/MailTemplate";
+import { MailTemplates } from "../utils/mail/MailTemplates";
 const router = express.Router();
 
 type ContactFormData = {
@@ -21,10 +21,11 @@ router.post("/", async (req: Request, res: Response) => {
     data.firstname,
     data.lastname
   );
-  const mailTemplate: string = MailTemplate.create("form_Confirm", {
+
+  await Mailer.INSTANCE.sendMailTo(data.email, data.subject, MailTemplates.FORM_CONFIRM({
     name: `${data.firstname} ${data.lastname}`,
-  });
-  await Mailer.INSTANCE.sendMailTo(data.email, data.subject, mailTemplate);
+    time: Date.now()
+  }));
 });
 
 module.exports = router;
