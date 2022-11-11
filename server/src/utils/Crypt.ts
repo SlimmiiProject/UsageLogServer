@@ -38,7 +38,7 @@ export class Crypt {
         return this.toBase64(xorInput);
     }
 
-    private static decryptToHash(encryped: string): string {
+    public static decryptToHash(encryped: string): string {
         const decryptedB64 = this.fromBase64(encryped);
         const decryptedXOR = this.xor(decryptedB64);
         const decryptedBytes = this.fromBytes(decryptedXOR);
