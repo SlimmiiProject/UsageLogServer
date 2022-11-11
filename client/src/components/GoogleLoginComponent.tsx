@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline, GoogleLogout } from "react-google-login";
 import { gapi } from "gapi-script";
 import { IOUtil } from "../util/IOUtil";
+import { I18n } from "../util/language/I18n";
 
 const CLIENT_ID = "221342809801-g72s252qo6fqssr1taughcq32er2o6dh.apps.googleusercontent.com";
 
@@ -47,13 +48,13 @@ export const GoogleLoginComponent = () => {
         {loggedIn ? (
             <GoogleLogout
                 clientId={CLIENT_ID}
-                buttonText={"Logout"}
+                buttonText={I18n.t("googlelogincomponent.logout")}
                 onLogoutSuccess={logout}
             ></GoogleLogout>
         ) : (
             <GoogleLogin
                 clientId={CLIENT_ID}
-                buttonText="Sign In with Google"
+                buttonText={I18n.t("googlelogincomponent.signIn")}
                 onSuccess={responseGoogleSuccess}
                 onFailure={responseGoogleError}
                 isSignedIn={true}

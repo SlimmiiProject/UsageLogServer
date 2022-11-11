@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, } from "react";
 import { I18n } from "../util/language/I18n";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -38,7 +38,7 @@ const Contact = (): JSX.Element => {
                     <AssignmentIcon />
                 </Avatar>
                 <Typography variant="h6" gutterBottom>
-                    Contact Form
+                    {I18n.t("contact.form")}
                 </Typography>
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
@@ -46,7 +46,7 @@ const Contact = (): JSX.Element => {
                             required
                             id="firstName"
                             name="firstName"
-                            label="First name"
+                            label={I18n.t("contact.firstname")}
                             fullWidth
                             autoComplete="given-name"
                             variant="standard"
@@ -58,7 +58,7 @@ const Contact = (): JSX.Element => {
                             required
                             id="lastName"
                             name="lastName"
-                            label="Last name"
+                            label={I18n.t("contact.lastname")}
                             fullWidth
                             autoComplete="family-name"
                             variant="standard"
@@ -70,7 +70,7 @@ const Contact = (): JSX.Element => {
                             required
                             id="email"
                             name="email"
-                            label="e-mail"
+                            label={I18n.t("contact.email")}
                             fullWidth
                             autoComplete="email"
                             variant="standard"
@@ -82,7 +82,7 @@ const Contact = (): JSX.Element => {
                             required
                             id="subject"
                             name="subject"
-                            label="Onderwerp"
+                            label={I18n.t("contact.subject")}
                             fullWidth
                             autoComplete="ProblemWith"
                             variant="standard"
@@ -93,7 +93,7 @@ const Contact = (): JSX.Element => {
                         <TextareaAutosize
                             id="description"
                             aria-label="empty textarea"
-                            placeholder="Beschrijving"
+                            placeholder={I18n.t("contact.description")}
                             minRows={8}
                             required
                             style={{ width: 600 }}
@@ -106,7 +106,7 @@ const Contact = (): JSX.Element => {
                         style={{ width: 600, marginLeft: 23, }}
                         onClick={async (event) => await IOUtil.sendContactData(contactData)}
                     >
-                        Send
+                       {I18n.t("contact.send")}
                     </Button>
                 </Grid>
             </React.Fragment>

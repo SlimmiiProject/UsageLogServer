@@ -21,11 +21,8 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import DashboardComp from "./components/dashboard/Dashboard";
 import { AdminPage } from "./components/admin/AdminPage";
-import { useTranslation } from "react-i18next";
 import LoginPage from "./components/LoginPage";
-import { getLanguageFromUrl } from "./util/BrowserUtil";
 import { I18n } from "./util/language/I18n";
-import { url } from "inspector";
 import EditProfile from "./components/EditProfile";
 
 export interface ItestData {
@@ -53,31 +50,16 @@ export const getCurrentPath = (location: any) => {
   return location.pathname;
 };
 
-export const getCurrentLanguage = (translation: any): string => {
-  let { i18n } = translation;
-  // get language from language selector
-  return i18n.resolvedLanguage;
-};
-
 export const getCurrentLanguagePath = (lang: string) => {
   // Set default language to en (English)
-  if (lang === undefined) {
-    lang = "en";
-  }
+  if (lang === undefined)  lang = "en";
   return `/${lang}/`;
 };
 
 const App = (): JSX.Element => {
   const [loggedIn, setLoggedIn] = useState<boolean>();
-  const indexNavigate = getCurrentLanguagePath(
-    getCurrentLanguage(useTranslation())
-  );
-  let lang = getCurrentLanguage(useTranslation());
-  const urlLang = getLanguageFromUrl();
-
-  const { i18n } = useTranslation();
-  if (lang !== urlLang && I18n.doesLanguageExist(urlLang))
-    i18n.changeLanguage(urlLang);
+ 
+  let lang = I18n.currentLanguage;
 
   // Add testdata from file to emulate externaldata
   const combineddata: ItestData = require("./util/data/testData.json");

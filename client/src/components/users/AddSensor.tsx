@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { I18n } from "../../util/language/I18n";
 import Button from "@mui/material/Button";
 

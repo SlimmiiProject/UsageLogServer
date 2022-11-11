@@ -1,5 +1,7 @@
 import React from "react";
 import "../../styles.css";
+import { I18n } from "../../util/language/I18n";
+
 import {
   BarChart,
   Bar,
@@ -54,8 +56,8 @@ export default function App(props: MeerdereData) {
           <Tooltip />
           <Legend />
           <ReferenceLine y={0} stroke="#000" />
-          <Bar dataKey="dag" fill={colorDay} />
-          <Bar dataKey="nacht" fill={colorNight} />
+          <Bar dataKey={I18n.t("graph.day")} fill={colorDay} />
+          <Bar dataKey={I18n.t("graph.night")} fill={colorNight} />
         </BarChart>
       </div>
     </>
