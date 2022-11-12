@@ -5,7 +5,7 @@ export class RegExpVal {
     // TODO Fill in RegEx
     public static readonly phoneValidator = new RegExp('');
     public static readonly emailValidator = new RegExp('');
-    public static readonly alphabetValidator = new RegExp('/(^[a-zA-Z]{1})+([a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]{0,63})+([@]{1})([a-zA-Z0-9-]{1,190})+(?:\.[a-zA-Z0-9-]+)*$/g');
+    public static readonly alphabetValidator = new RegExp('/(^[a-zA-Z0-9.!#$%&’*+\\/=?^_`{|}~-]{1,63})+([@]{1})([a-zA-Z0-9-]{1,190})+(?:\.[a-zA-Z0-9-]+)*$/g');
     public static readonly base64Encoded = new RegExp('^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$');
 
     /**
