@@ -17,13 +17,6 @@ const passingEmails = [
     "personsName@coldmail.com",
     "abc@abd.Museums",
     "a@E.C",
-    "A".repeat(64) + "@" + "B".repeat(175) + ".com",
-    'Abc\\@def@example.com',
-    "Fred\\Bloggs@example.com",
-    "Joe.\\Blow@example.com",
-    'Abc@def"@example.com',
-    'Fred Bloggs"@example.com',
-    "customer/department=shipping@example.com",
 ]
 const failingEmails = [
     "personsnames.ColdMail.com",
@@ -37,6 +30,5 @@ test("Base64 Regex works correctly", () => {
 
 test("email Validators work correctly", () => {
     passingEmails.forEach((passing) => expect(RegExpVal.validate(passing, RegExpVal.emailValidator)).toBeTruthy());
-    //for some reason toBeFalsly fails when "()" is added to the end
-    failingEmails.forEach((failing) => expect(RegExpVal.validate(failing, RegExpVal.emailValidator)).toBeFalsy);
+    failingEmails.forEach((failing) => expect(RegExpVal.validate(failing, RegExpVal.emailValidator)).toBeFalsy());
 })
