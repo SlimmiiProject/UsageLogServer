@@ -17,6 +17,11 @@ const passingEmails = [
     "personsName@coldmail.com",
     "abc@abd.Museums",
     "a@E.C",
+    "shop@email.stackcommerce.com",
+    "customer/department=shipping@example.com",
+    "$A12345@example.com",
+    "!def!xyz%abc@example.com",
+    "_somename@example.com"
 ]
 const failingEmails = [
     "personsnames.ColdMail.com",
