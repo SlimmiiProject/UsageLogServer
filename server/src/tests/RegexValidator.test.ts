@@ -28,12 +28,38 @@ const failingEmails = [
     "abc@@abd.Museums",
     "abcabd.Museums"
 ]
+
+const passingPhoneNumbers = [
+    "+32491304548",
+    "+32472526864",
+    "+32475796013",
+    "+32482645345",
+    "+32478525008",
+    "+32471286085",
+    "+32499350093",
+    "+32486835965",
+]
+const failingPhoneNumbers = [
+    "+3249130454",
+    "+3247252686A",
+    "-32475796013",
+    "+42482645345",
+    "+39478525008",
+    "+32571286085",
+    "+32399350093",
+    "+324186835965"
+]
 test("Base64 Regex works correctly", () => {
     values.forEach((b) => expect(RegExpVal.validate(b, RegExpVal.base64Encoded)).toBeTruthy());
     badValues.forEach((b) => expect(RegExpVal.validate(b, RegExpVal.base64Encoded)).toBeFalsy());
 });
 
 test("email Validators work correctly", () => {
-    passingEmails.forEach((passing) => expect(RegExpVal.validate(passing, RegExpVal.emailValidator)).toBeTruthy());
-    failingEmails.forEach((failing) => expect(RegExpVal.validate(failing, RegExpVal.emailValidator)).toBeFalsy());
+    passingEmails.forEach((passingValue) => expect(RegExpVal.validate(passingValue, RegExpVal.emailValidator)).toBeTruthy());
+    failingEmails.forEach((failingValue) => expect(RegExpVal.validate(failingValue, RegExpVal.emailValidator)).toBeFalsy());
+})
+
+test("phone number validadors work correctly", () => {
+    passingPhoneNumbers.forEach((passingValue) => expect(RegExpVal.validate(passingValue, RegExpVal.phoneValidator)).toBeTruthy())
+    failingPhoneNumbers.forEach((failingValue) => expect(RegExpVal.validate(failingValue, RegExpVal.phoneValidator)).toBeFalsy())
 })
