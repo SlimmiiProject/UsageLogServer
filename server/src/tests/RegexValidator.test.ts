@@ -49,6 +49,24 @@ const failingPhoneNumbers = [
     "+32399350093",
     "+324186835965"
 ]
+const passingAlphabet = [
+    "abcd",
+    "ABCD",
+    "ABDË",
+    "Äbdce",
+    "abcëd",
+    "abdê",
+    "bjørk",
+]
+const failingAlphabet = [
+    "bj0rk",
+    "abc1d",
+    "ab:c",
+    "ab-c",
+    "@bcd",
+    "ab&cd",
+    "ab|cd",
+]
 test("Base64 Regex works correctly", () => {
     values.forEach((b) => expect(RegExpVal.validate(b, RegExpVal.base64Encoded)).toBeTruthy());
     badValues.forEach((b) => expect(RegExpVal.validate(b, RegExpVal.base64Encoded)).toBeFalsy());
@@ -62,4 +80,9 @@ test("email Validators work correctly", () => {
 test("phone number validadors work correctly", () => {
     passingPhoneNumbers.forEach((passingValue) => expect(RegExpVal.validate(passingValue, RegExpVal.phoneValidator)).toBeTruthy())
     failingPhoneNumbers.forEach((failingValue) => expect(RegExpVal.validate(failingValue, RegExpVal.phoneValidator)).toBeFalsy())
+})
+
+test("alphabet validators work correctly", () => {
+    passingAlphabet.forEach((passingValue) => expect(RegExpVal.validate(passingValue, RegExpVal.alphabetValidator)).toBeTruthy())
+    failingAlphabet.forEach((failingValue) => expect(RegExpVal.validate(failingValue, RegExpVal.alphabetValidator)).toBeFalsy())
 })
