@@ -67,6 +67,7 @@ const failingAlphabet = [
     "ab&cd",
     "ab|cd",
 ]
+
 test("Base64 Regex works correctly", () => {
     values.forEach((b) => expect(RegExpVal.validate(b, RegExpVal.base64Encoded)).toBeTruthy());
     badValues.forEach((b) => expect(RegExpVal.validate(b, RegExpVal.base64Encoded)).toBeFalsy());
