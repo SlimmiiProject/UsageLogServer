@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/SlimmiiProject/UsageLogServer/issues"
   },
-  "homepage": "https://github.com/SlimmiiProject/UsageLogServer#readme"
+  "homepage": "https://github.com/SlimmiiProject/UsageLogServer#readme",
+  "dependencies": {
+    "react-router-dom": "^6.4.3"
+  }
 }

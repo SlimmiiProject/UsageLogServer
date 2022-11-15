@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/",  (req: Request, res: Response) => {
     const translationObject = DataController.getTranslationJson();
-    res.status(200).json(translationObject);
+    res.json(translationObject);
 });
 
 module.exports = router;

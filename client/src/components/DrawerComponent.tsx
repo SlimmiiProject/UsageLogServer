@@ -108,7 +108,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-          {I18n.t("drawercomponent.head")}
+            {I18n.t("drawercomponent.head")}
           </Typography>
         </Toolbar>
       </AppBar>

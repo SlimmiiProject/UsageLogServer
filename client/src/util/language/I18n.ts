@@ -29,7 +29,7 @@ export class I18n {
     }
     
     public static doesLanguageExist(language_key:string):boolean {
-       return Object.keys(I18n.translationConfig).find((key) => key === language_key) != undefined;
+       return Object.keys(I18n.translationConfig).find((key) => key === language_key) !== undefined;
     }
 
     /**

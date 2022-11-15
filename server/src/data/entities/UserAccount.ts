@@ -51,7 +51,7 @@ export class UserAccount extends BaseEntity {
   @Column("text", { nullable: false, unique: false, name: "hashedPassword" })
   @MinLength(5)
   @IsDefined()
-  password: string | undefined;
+  password: string;
 
   @Column("varchar", {
     nullable: false,
@@ -65,7 +65,7 @@ export class UserAccount extends BaseEntity {
   email: string;
 
   @Column("varchar", { nullable: true, unique: false, length: 12 })
-  @Length(12, 12)
+  @Length(0, 13)
   @IsPhoneNumber("BE")
   @IsOptional()
   phone: string;

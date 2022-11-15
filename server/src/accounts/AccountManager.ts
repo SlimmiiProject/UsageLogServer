@@ -25,4 +25,8 @@ export class AccountManager {
     public static async isAdministrator(userId:number): Promise<boolean> {
         return await DataProcessor.GetAdministrator(userId) !== null;
     }
+
+    public static async getEncryptedPassword(userId?: number, email?: string): Promise<string> {
+        return (await this.getAccount(userId, email)).password;
+    }
 }
