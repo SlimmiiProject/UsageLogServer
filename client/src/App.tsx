@@ -12,6 +12,7 @@ import {
 import Register from "./components/users/Register";
 import Devices from "./components/users/Devices";
 import SignIn from "./components/users/SignIn";
+import Logout from "./components/users/Logout";
 import Drawer from "./components/DrawerComponent";
 import Contact from "./components/Contact";
 import PageNotFound from "./components/404";
@@ -87,6 +88,7 @@ const App = (): JSX.Element => {
           <Route path="devices" element={<Devices />} />
           <Route path="login" element={<SignIn />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="logout" element={<Logout />} />
           <Route path="admin" element={<AdminPage />}>
             <Route path="allusers" element={<AdminPage />} />
             <Route path="alldevices" element={<AdminPage />} />

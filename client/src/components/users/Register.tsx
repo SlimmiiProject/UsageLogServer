@@ -17,7 +17,7 @@ import { Alert } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 
 const Register = (): JSX.Element => {
-  const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
+  const [registerd, setRegisterd] = React.useState<Boolean>(false);
   const [error, setError] = React.useState<string>("");
   const [firstName, setFirstName] = React.useState<string>("");
   const [lastName, setLastName] = React.useState<string>("");
@@ -32,29 +32,36 @@ const Register = (): JSX.Element => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (authenticated) navigate("/login");
-  }, [authenticated, navigate]);
+    if (registerd) {
+      IOUtil.loginUser(email, password).then(() => {
+        navigate("/dashboard");
+      });
+    }
+  }, [registerd, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordMatch(password === passwordVerify);
     let phone = phoneNumber;
 
-    if (phone[0] == "0") setPhoneNumber((phoneNumber) => {
-      phone = "+32" + phoneNumber.slice(1);
-      return phone;
-    });
+    if (phone[0] == "0")
+      setPhoneNumber((phoneNumber) => {
+        phone = "+32" + phoneNumber.slice(1);
+        return phone;
+      });
 
     if (passwordMatch) {
-      setAuthenticated(await IOUtil.registerUser(
-        firstName,
-        lastName,
-        email,
-        phone,
-        password,
-        passwordVerify,
-        (err) => setError(err)
-      ));
+      setRegisterd(
+        await IOUtil.registerUser(
+          firstName,
+          lastName,
+          email,
+          phone,
+          password,
+          passwordVerify,
+          (err) => setError(err)
+        )
+      );
     }
 
     setPassword("");
@@ -68,9 +75,7 @@ const Register = (): JSX.Element => {
         <Alert severity="error">Passwords don't match, try again!</Alert>
       )}
 
-      {hasError && (
-        <Alert severity="error">{error}</Alert>
-      )}
+      {hasError && <Alert severity="error">{error}</Alert>}
 
       <CssBaseline />
       <Box
