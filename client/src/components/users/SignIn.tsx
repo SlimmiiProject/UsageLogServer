@@ -41,7 +41,7 @@ const SignIn = (): JSX.Element => {
     // TODO Improve data capture
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
-    setAuthenticated(await IOUtil.loginUser(email, password));
+    await setAuthenticated(await IOUtil.loginUser(email, password));
     setFailed(!authenticated);
   };
   // get current location

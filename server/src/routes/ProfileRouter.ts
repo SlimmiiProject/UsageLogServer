@@ -79,7 +79,9 @@ router.post("/create-profile", async (req: Request, res: Response) => {
 
     /* Checking if all the values in the data object are set. */
     if (Object.values(data).every(InputUtil.isSet)) {
+       
         // Validate entries
+        if(data.first_name.length < 3 && data.last_name.length < 3) return res.json(errorJson("Name needs to be minimum of 3 letters"));
         if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) return res.json(errorJson("Wrong Syntax for email or phone", body));
         if (await AccountManager.doesAccountExist(0, data.email)) return res.json(errorJson("Account already exists", body));
         if (data.password.length < 8) return res.json(errorJson("Password too short", body));
