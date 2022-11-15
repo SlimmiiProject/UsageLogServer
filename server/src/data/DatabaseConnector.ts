@@ -71,8 +71,9 @@ export class DatabaseConnector {
     try {
       this._dataSource = await this._dataSource.initialize();
       Logger.info("Connected to database.");
-    } catch (error) {
+    } catch (error: any) {
       Logger.error(error);
+      Logger.error(error.stack);
       throw new Error("Something went wrong when connecting to the database");
     }
   }
