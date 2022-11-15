@@ -7,7 +7,7 @@ import { TextEncoder } from "util";
 export class Crypt {
 
     private static get saltRounds() {
-        return 15;
+        return 10;
     }
 
     /**
