@@ -63,7 +63,6 @@ const login = async (req: Request, email: string) => {
 
 router.post("/logout", SessionManager.loginRequired, async (req: Request, res: Response) => {
     SessionManager.destroy(req, res);
-    res.json({ succes: true })
 });
 
 router.post("/create-profile", async (req: Request, res: Response) => {
