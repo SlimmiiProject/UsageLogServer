@@ -13,6 +13,7 @@ const Logout = () => {
   // calling logout function, assigning return value to loggedOut
   React.useEffect(() => {
     IOUtil.logoutUser().then((res) => {
+      console.log(res);
       res === undefined ? setLoggedOut(false) : setLoggedOut(res);
     });
   }, []);

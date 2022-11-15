@@ -67,9 +67,8 @@ export class IOUtil {
 
   public static async logoutUser() {
     try {
-      await this.INSTANCE.post("/profiles/logout/").then((res) => {
-        return res.data.succes;
-      });
+      let res = await this.INSTANCE.post("/profiles/logout/");
+      return res.data.succes;
     } catch (err) {
       return false;
     }
