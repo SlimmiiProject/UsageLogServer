@@ -26,8 +26,6 @@ const Register = (): JSX.Element => {
   const [password, setPassword] = React.useState<string>("");
   const [passwordVerify, setPasswordVerify] = React.useState<string>("");
   const [passwordMatch, setPasswordMatch] = React.useState<boolean>(true);
-  const [phoneNumberCorrectLength, setPhoneNumberCorrectLength] =
-    React.useState<boolean>();
 
   const navigate = useNavigate();
 

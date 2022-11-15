@@ -178,7 +178,6 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
               <NavLink
                 to={element.link}
                 style={{ textDecoration: "none", color: "inherit" }}
-                key={key}
               >
                 <ListItem key={element.id} disablePadding>
                   <ListItemButton>
