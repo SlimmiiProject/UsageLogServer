@@ -91,7 +91,7 @@ export class DatabaseConnector {
       Logger.info("Connected to database.");
     } catch (error: any) {
       Logger.error(error);
-      console.log(error);
+      Logger.error(error.stack);
       throw new Error("Something went wrong when connecting to the database");
     }
   }
