@@ -1,5 +1,3 @@
-
-
 export class RegExpVal {
 
     // TODO Fill in RegEx

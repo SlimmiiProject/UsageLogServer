@@ -9,39 +9,62 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import {
-  getCurrentLanguagePath
-} from "../../App";
-import { useLocation } from "react-router-dom";
+import { getCurrentLanguagePath } from "../../App";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IOUtil } from "../../util/IOUtil";
+import { Alert } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 
 const Register = (): JSX.Element => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
+  const [register, setRegister] = React.useState<Boolean>(false);
+  const [firstName, setFirstName] = React.useState<string>("");
+  const [lastName, setLastName] = React.useState<string>("");
+  const [email, setEmail] = React.useState<string>("");
+  const [phoneNumber, setPhoneNumber] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [passwordVerify, setPasswordVerify] = React.useState<string>("");
+  const [passwordMatch, setPasswordMatch] = React.useState<boolean>(true);
+  const [phoneNumberCorrectLength, setPhoneNumberCorrectLength] =
+    React.useState<boolean>();
 
-    // TODO Improve data capture
-    const first_name = data.get("firstName")!.toString();
-    const last_name = data.get("lastName")!.toString();
-    const email = data.get("email")!.toString();
-    const phone_number = data.get("phoneNumber")!.toString();
-    const password = data.get("password")!.toString();
-    const password_verify = data.get("passwordVerify")!.toString();
-
-    IOUtil.registerUser(
-      first_name,
-      last_name,
-      email,
-      phone_number,
-      password,
-      password_verify
+  const navigate = useNavigate();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    password === passwordVerify
+      ? setPasswordMatch(true)
+      : setPasswordMatch(false);
+    phoneNumber[0] === "0" ? (
+      setPhoneNumber("+32" + phoneNumber.slice(1))
+    ) : (
+      <></>
     );
+
+    if (passwordMatch) {
+      console.log(
+        await IOUtil.registerUser(
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          password,
+          passwordVerify
+        )
+      );
+    }
+
+    setPassword("");
+    setPasswordVerify("");
   };
   let path = getCurrentLanguagePath(I18n.currentLanguage);
   return (
     <Container component="main" maxWidth="xs">
+      {!passwordMatch ? (
+        <Alert severity="error">Passwords don't match, try again!</Alert>
+      ) : (
+        <></>
+      )}
       <CssBaseline />
       <Box
         sx={{
@@ -55,9 +78,14 @@ const Register = (): JSX.Element => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-        {I18n.t("register.here")}
+          {I18n.t("register.here")}
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box
+          component="form"
+          noValidate
+          onSubmit={(e) => handleSubmit(e)}
+          sx={{ mt: 3 }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -66,6 +94,10 @@ const Register = (): JSX.Element => {
                 required
                 fullWidth
                 id="firstName"
+                value={firstName}
+                onChange={(event) => {
+                  setFirstName(event.target.value);
+                }}
                 label={I18n.t("register.firstname")}
                 autoFocus
               />
@@ -77,6 +109,10 @@ const Register = (): JSX.Element => {
                 id="lastName"
                 label={I18n.t("register.lastname")}
                 name="lastName"
+                value={lastName}
+                onChange={(event) => {
+                  setLastName(event.target.value);
+                }}
                 autoComplete="family-name"
               />
             </Grid>
@@ -87,6 +123,11 @@ const Register = (): JSX.Element => {
                 id="email"
                 label={I18n.t("register.email")}
                 name="email"
+                type="email"
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                }}
                 autoComplete="email"
               />
             </Grid>
@@ -97,6 +138,10 @@ const Register = (): JSX.Element => {
                 id="phoneNumber"
                 label={I18n.t("register.phone")}
                 name="phoneNumber"
+                value={phoneNumber}
+                onChange={(event) => {
+                  setPhoneNumber(event.target.value);
+                }}
                 autoComplete="Phone-Nummer"
               />
             </Grid>
@@ -108,6 +153,10 @@ const Register = (): JSX.Element => {
                 label={I18n.t("register.password")}
                 type="password"
                 id="password"
+                value={password}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                }}
                 autoComplete="new-password"
               />
             </Grid>
@@ -119,6 +168,10 @@ const Register = (): JSX.Element => {
                 label={I18n.t("register.verify")}
                 type="password"
                 id="passwordVerify"
+                value={passwordVerify}
+                onChange={(event) => {
+                  setPasswordVerify(event.target.value);
+                }}
                 autoComplete="new-password"
               />
             </Grid>
@@ -134,7 +187,7 @@ const Register = (): JSX.Element => {
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href={path + "login"} variant="body2">
-              {I18n.t("register.signIn")}
+                {I18n.t("register.signIn")}
               </Link>
             </Grid>
           </Grid>

@@ -1,40 +1,58 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useLocation } from "react-router-dom";
 import {
-  getCurrentLanguagePath
-} from "../../App";
-import { useTranslation } from "react-i18next";
+  Avatar,
+  Alert,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
+import { getCurrentLanguagePath } from "../../App";
 import { IOUtil } from "../../util/IOUtil";
+import { useNavigate } from "react-router-dom";
 import { I18n } from "../../util/language/I18n";
 
 const SignIn = (): JSX.Element => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
+  const [isFailed, setFailed] = React.useState<Boolean>(false);
+
+  React.useEffect(() => {
+    if (authenticated) {
+      setFailed(false);
+      navigate("/dashboard");
+    }
+  }, [authenticated, navigate]);
+  // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+    
     // TODO Improve data capture
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
+    setAuthenticated(await IOUtil.loginUser(email, password));
 
-    IOUtil.loginUser(email, password);
+    setFailed(!authenticated);
   };
   // get current location
   let path = getCurrentLanguagePath(I18n.currentLanguage);
   return (
     <Container component="main" maxWidth="xs">
+      {isFailed ? (
+        <Alert severity="error">Login has failed, try again!</Alert>
+      ) : (
+        <></>
+      )}
       <CssBaseline />
       <Box
         sx={{
@@ -86,7 +104,7 @@ const SignIn = (): JSX.Element => {
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
-              {I18n.t("signIn.forgotPassword")}
+                {I18n.t("signIn.forgotPassword")}
               </Link>
             </Grid>
             <Grid item>
