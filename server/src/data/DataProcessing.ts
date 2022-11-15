@@ -574,7 +574,6 @@ export class DataProcessor {
             //get diferential between first and last entry
             const totalDayUsage: number = allDayData.at(-1) - allDayData.at(0);
             const totalNightUsasge: number = allNightData.at(-1) - allDayData.at(0);
-
             await this.CreateData(
               specificDevice.deviceId,
               new Date(),

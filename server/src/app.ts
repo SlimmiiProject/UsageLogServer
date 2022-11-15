@@ -103,5 +103,4 @@ export class App {
         return server_port;
     }
 }
-
 App.INSTANCE.start();
