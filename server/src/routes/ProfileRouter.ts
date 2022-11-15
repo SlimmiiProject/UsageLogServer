@@ -30,13 +30,12 @@ router.post("/login", async (req: Request, res: Response) => {
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             if (Crypt.matchesEncrypted(data.password, await AccountManager.getEncryptedPassword(undefined, data.email))) {
                 await login(req, data.email)
-                res.sendStatus(200);
-                return;
+                return res.json({ succes: true });
             }
         };
     }
 
-    res.sendStatus(401);
+    res.json({ succes: false })
 });
 
 router.post("/google-login", async (req: Request, res: Response) => {
@@ -49,13 +48,13 @@ router.post("/google-login", async (req: Request, res: Response) => {
             if (!(await AccountManager.doesAccountExist(undefined, payload.email)))
                 await AccountManager.createAccount(payload.given_name, payload.family_name, payload.email, Crypt.createRandomPassword(24), "");
 
-            await login(req, payload.email)
-            res.sendStatus(200);
+            await login(req, payload.email);
+            res.json({ succes: true });
             return;
         });
     }
 
-    res.sendStatus(401);
+    res.json({ succes: false });
 });
 
 const login = async (req: Request, email: string) => {

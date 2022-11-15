@@ -25,14 +25,15 @@ export class IOUtil {
                 password: password
             });
 
-            return res.status === 200;
+            return res.data.succes;
         }catch(e) {
             return false;
         }
     }
 
     public static async registerUser(first_name: string, last_name: string, email: string, phone_number: string, password: string, password_verify: string) {
-       await this.INSTANCE.post("/profiles/create-profile/", {
+      try {
+        const res = await this.INSTANCE.post("/profiles/create-profile/", {
             first_name: first_name,
             last_name: last_name,
             email: email,
@@ -40,6 +41,11 @@ export class IOUtil {
             password: password,
             password_verify: password_verify
         });
+
+        return res.data.succes;
+      }catch(_ignored) {
+        return false;
+      }
     }
 
     public static async logoutUser() {

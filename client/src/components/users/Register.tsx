@@ -30,28 +30,31 @@ const Register = (): JSX.Element => {
     React.useState<boolean>();
 
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (authenticated) navigate("/login");
+  }, [authenticated, navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     password === passwordVerify
       ? setPasswordMatch(true)
       : setPasswordMatch(false);
-    phoneNumber[0] === "0" ? (
+    phoneNumber[0] == "0" ? (
       setPhoneNumber("+32" + phoneNumber.slice(1))
     ) : (
       <></>
     );
 
     if (passwordMatch) {
-      console.log(
-        await IOUtil.registerUser(
-          firstName,
-          lastName,
-          email,
-          phoneNumber,
-          password,
-          passwordVerify
-        )
-      );
+      setAuthenticated(await IOUtil.registerUser(
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        password,
+        passwordVerify
+      ));
     }
 
     setPassword("");
