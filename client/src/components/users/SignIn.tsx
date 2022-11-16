@@ -33,11 +33,12 @@ const SignIn = (): JSX.Element => {
     }
   }, [authenticated, navigate]);
 
+
   // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+    
     // TODO Improve data capture
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
