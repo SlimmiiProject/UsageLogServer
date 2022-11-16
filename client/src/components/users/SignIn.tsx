@@ -38,7 +38,7 @@ const SignIn = (): JSX.Element => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    
+
     // TODO Improve data capture
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
@@ -49,11 +49,11 @@ const SignIn = (): JSX.Element => {
   let path = getCurrentLanguagePath(I18n.currentLanguage);
   return (
     <Container component="main" maxWidth="xs">
-      {isFailed ? (
+
+      {isFailed && (
         <Alert severity="error">Login has failed, try again!</Alert>
-      ) : (
-        <></>
       )}
+
       <CssBaseline />
       <Box
         sx={{
