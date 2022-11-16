@@ -30,7 +30,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 const drawerWidth = 240;
 
 const isLoggedIn = require("../util/data/testData.json").isLoggedIn;
-const isAdmin = require("../util/data/testData.json").isAdmin;
+// const isAdmin: boolean = require("../util/data/testData.json").isAdmin;
+const isAdmin: boolean = true;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
