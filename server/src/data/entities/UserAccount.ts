@@ -77,6 +77,14 @@ export class UserAccount extends BaseEntity {
   @IsOptional()
   device: Device[];
 
+  @Column("varchar", { name: "day", nullable: true, unique: false, length: 20 })
+  @IsOptional()
+  colorDay: string;
+
+  @Column("varchar", { name: "night", nullable: true, unique: false, length: 20 })
+  @IsOptional()
+  colorNight: string;
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
