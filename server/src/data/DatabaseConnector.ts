@@ -7,7 +7,6 @@ import { Data } from "./entities/Data";
 import { Device } from "./entities/Device";
 import { PasswordReset } from "./entities/PasswordReset";
 import { TemporaryData } from "./entities/TemporaryData";
-import { Translations } from "./entities/Translations";
 import { UserAccount } from "./entities/UserAccount";
 
 export class DatabaseConnector {
@@ -45,7 +44,6 @@ export class DatabaseConnector {
       Device,
       Data,
       Administrator,
-      Translations,
       TemporaryData,
       ContactForm,
       PasswordReset,
@@ -80,17 +78,14 @@ export class DatabaseConnector {
   }
 
   public async initialize() {
-    if (this._dataSource.isInitialized) {
-      Logger.warn("Database can't be initialized more than one time!");
-      return;
-    }
-
+    if (this._dataSource.isInitialized) return Logger.warn("Database can't be initialized more than one time!");
+  
     try {
       this._dataSource = await this._dataSource.initialize();
+      await this.dataSource.synchronize(false);
       Logger.info("Connected to database.");
     } catch (error: any) {
-      Logger.error(error);
-      Logger.error(error.stack);
+      Logger.error([error, error.stack]);
       throw new Error("Something went wrong when connecting to the database");
     }
   }

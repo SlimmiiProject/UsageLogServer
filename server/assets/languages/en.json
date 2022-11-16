@@ -1,5 +1,5 @@
 {
-    "page.404": "404: page not found",
+    "page.404": "404: Page not found",
     "sensor.add": "Add sensor",
     "admin.panel": "Admin Panel",
     "admin.allUsers": "All users",
@@ -30,8 +30,8 @@
     "editprofile.editprofile": "Edit Profile",
     "googlelogincomponent.logout": "Logout",
     "googlelogincomponent.signIn": "Sign in with Google",
-    "graph.day": "day",
-    "graph.night": "night",
+    "graph.day": "Day",
+    "graph.night": "Night",
     "logger.title": "Logger",
     "metercard.name": "Metercard Name",
     "metercard.id": "Metercard Id",
@@ -51,5 +51,18 @@
     "signIn.rememberMe": "Remember Me",
     "signIn.signIn": "Sign In",
     "signIn.forgotPassword": "Forgot Password?",
-    "signIn.register": "Register Here"
+    "signIn.register": "Register Here",
+    "error.missing_fields": "Missing fields:",
+    "error.name_minimum_three": "Name needs to be minimum of 3 letters",
+    "error.wrong_e_p_syntax": "Wrong Syntax for email or phone",
+    "error.account_already_exists": "Account already exists",
+    "error.password_short": "Password is too short, needs minimum of 8 characters",
+    "error.passwords_no_match": "Passwords don't match",
+    "error.undefined_error": "Something went wrong",
+    "field.first_name": "First Name",
+    "field.last_name": "Last Name",
+    "field.email": "Email",
+    "field.phone_number": "Phone Number",
+    "field.password": "Password",
+    "field.password_verify": "Password Verify"
 }
