@@ -75,8 +75,7 @@ export class DatabaseConnector {
   private static _INSTANCE: DatabaseConnector;
 
   public static get INSTANCE(): DatabaseConnector {
-    if (!this._INSTANCE)
-      this._INSTANCE = this.createConnector(Environment.CONFIG.database);
+    if (!this._INSTANCE) this._INSTANCE = this.createConnector(Environment.CONFIG.database);
     return this._INSTANCE;
   }
 
