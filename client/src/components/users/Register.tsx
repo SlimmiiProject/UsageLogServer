@@ -17,8 +17,8 @@ import { Alert } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 
 const Register = (): JSX.Element => {
-  const [authenticated, setAuthenticated] = React.useState<Boolean>(false);
-  const [register, setRegister] = React.useState<Boolean>(false);
+  const [registerd, setRegisterd] = React.useState<Boolean>(false);
+  const [error, setError] = React.useState<string>("");
   const [firstName, setFirstName] = React.useState<string>("");
   const [lastName, setLastName] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
@@ -26,30 +26,38 @@ const Register = (): JSX.Element => {
   const [password, setPassword] = React.useState<string>("");
   const [passwordVerify, setPasswordVerify] = React.useState<string>("");
   const [passwordMatch, setPasswordMatch] = React.useState<boolean>(true);
-  const [phoneNumberCorrectLength, setPhoneNumberCorrectLength] =
-    React.useState<boolean>();
 
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (registerd) {
+      IOUtil.loginUser(email, password).then(() => {
+        navigate("/dashboard");
+      });
+    }
+  }, [registerd, navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    password === passwordVerify
-      ? setPasswordMatch(true)
-      : setPasswordMatch(false);
-    phoneNumber[0] === "0" ? (
-      setPhoneNumber("+32" + phoneNumber.slice(1))
-    ) : (
-      <></>
-    );
+    setPasswordMatch(password === passwordVerify);
+    let phone = phoneNumber;
+
+    if (phone[0] == "0")
+      setPhoneNumber((phoneNumber) => {
+        phone = "+32" + phoneNumber.slice(1);
+        return phone;
+      });
 
     if (passwordMatch) {
-      console.log(
+      setRegisterd(
         await IOUtil.registerUser(
           firstName,
           lastName,
           email,
-          phoneNumber,
+          phone,
           password,
-          passwordVerify
+          passwordVerify,
+          (err) => setError(err)
         )
       );
     }
@@ -58,13 +66,15 @@ const Register = (): JSX.Element => {
     setPasswordVerify("");
   };
   let path = getCurrentLanguagePath(I18n.currentLanguage);
+  const hasError = error.length > 0;
   return (
     <Container component="main" maxWidth="xs">
-      {!passwordMatch ? (
+      {!passwordMatch && (
         <Alert severity="error">Passwords don't match, try again!</Alert>
-      ) : (
-        <></>
       )}
+
+      {hasError && <Alert severity="error">{error}</Alert>}
+
       <CssBaseline />
       <Box
         sx={{

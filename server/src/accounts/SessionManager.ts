@@ -80,7 +80,7 @@ export class SessionManager {
      * @param {Response} response - The response object that will be sent back to the client.
      */
     public static destroy(request: Request, response: Response) {
-        request.session && request.session.destroy((e) => response.redirect("/"));
+        request.session && request.session.destroy((e) => response.json({succes:true}));
     }
 
     public static logout(request: Request) {

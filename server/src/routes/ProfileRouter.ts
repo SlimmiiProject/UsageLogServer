@@ -30,13 +30,12 @@ router.post("/login", async (req: Request, res: Response) => {
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             if (Crypt.matchesEncrypted(data.password, await AccountManager.getEncryptedPassword(undefined, data.email))) {
                 await login(req, data.email)
-                res.sendStatus(200);
-                return;
+                return res.json({ succes: true });
             }
         };
     }
 
-    res.sendStatus(401);
+    res.json({ succes: false })
 });
 
 router.post("/google-login", async (req: Request, res: Response) => {
@@ -49,13 +48,13 @@ router.post("/google-login", async (req: Request, res: Response) => {
             if (!(await AccountManager.doesAccountExist(undefined, payload.email)))
                 await AccountManager.createAccount(payload.given_name, payload.family_name, payload.email, Crypt.createRandomPassword(24), "");
 
-            await login(req, payload.email)
-            res.sendStatus(200);
+            await login(req, payload.email);
+            res.json({ succes: true });
             return;
         });
     }
 
-    res.sendStatus(401);
+    res.json({ succes: false });
 });
 
 const login = async (req: Request, email: string) => {
@@ -80,7 +79,9 @@ router.post("/create-profile", async (req: Request, res: Response) => {
 
     /* Checking if all the values in the data object are set. */
     if (Object.values(data).every(InputUtil.isSet)) {
+
         // Validate entries
+        if (data.first_name.length < 3 && data.last_name.length < 3) return res.json(errorJson("Name needs to be minimum of 3 letters"));
         if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) return res.json(errorJson("Wrong Syntax for email or phone", body));
         if (await AccountManager.doesAccountExist(0, data.email)) return res.json(errorJson("Account already exists", body));
         if (data.password.length < 8) return res.json(errorJson("Password too short", body));

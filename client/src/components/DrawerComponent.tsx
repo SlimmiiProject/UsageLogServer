@@ -173,7 +173,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
               icon: <LogoutIcon />,
               link: `${lang}/logout`,
             },
-          ].map((element) =>
+          ].map((element, key) =>
             isLoggedIn === true ? (
               <NavLink
                 to={element.link}

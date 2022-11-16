@@ -11,7 +11,6 @@ import { Translations } from "./entities/Translations";
 import { UserAccount } from "./entities/UserAccount";
 
 export class DatabaseConnector {
-
   private static CONNECTORS: Map<string, DatabaseConnector> = new Map();
 
   private _dataSource: DataSource;
@@ -19,11 +18,23 @@ export class DatabaseConnector {
     return this._dataSource;
   }
 
-  public static createConnector({ database_name, host, port, username, password }: typeof Environment.CONFIG.database) {
+  public static createConnector({
+    database_name,
+    host,
+    port,
+    username,
+    password,
+  }: typeof Environment.CONFIG.database) {
     const namePair = `${host}:${port}`;
     if (this.CONNECTORS.has(namePair)) return this.CONNECTORS.get(namePair);
 
-    const connector = new DatabaseConnector(host, port, username, password, database_name);
+    const connector = new DatabaseConnector(
+      host,
+      port,
+      username,
+      password,
+      database_name
+    );
     this.CONNECTORS.set(namePair, connector);
     return connector;
   }
@@ -41,7 +52,13 @@ export class DatabaseConnector {
     ];
   }
 
-  private constructor(host: string, port: number, username: string, password: string, database_name: string) {
+  private constructor(
+    host: string,
+    port: number,
+    username: string,
+    password: string,
+    database_name: string
+  ) {
     this._dataSource = new DataSource({
       type: "mysql",
       host: host,
@@ -58,7 +75,8 @@ export class DatabaseConnector {
   private static _INSTANCE: DatabaseConnector;
 
   public static get INSTANCE(): DatabaseConnector {
-    if (!this._INSTANCE) this._INSTANCE = this.createConnector(Environment.CONFIG.database);
+    if (!this._INSTANCE)
+      this._INSTANCE = this.createConnector(Environment.CONFIG.database);
     return this._INSTANCE;
   }
 
@@ -71,8 +89,9 @@ export class DatabaseConnector {
     try {
       this._dataSource = await this._dataSource.initialize();
       Logger.info("Connected to database.");
-    } catch (error) {
+    } catch (error: any) {
       Logger.error(error);
+      Logger.error(error.stack);
       throw new Error("Something went wrong when connecting to the database");
     }
   }
