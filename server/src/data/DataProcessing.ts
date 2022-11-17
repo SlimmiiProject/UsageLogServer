@@ -433,7 +433,9 @@ export class DataProcessor {
     lastname: string,
     password: string,
     email: string,
-    phone?: string
+    phone?: string,
+    colorDay?: string,
+    colorNight?: string
   ): Promise<void> {
     let userExists = await UserAccount.findAndCountBy({ userId: userid });
     if (userExists[1] < 1)
@@ -444,6 +446,8 @@ export class DataProcessor {
       password: password,
       email: email,
       phone: phone,
+      colorDay: colorDay,
+      colorNight: colorNight
     });
   }
 
