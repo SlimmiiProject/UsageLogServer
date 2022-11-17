@@ -431,7 +431,6 @@ export class DataProcessor {
     userid: number,
     firstname: string,
     lastname: string,
-    password: string,
     email: string,
     phone?: string,
     colorDay?: string,
@@ -443,7 +442,6 @@ export class DataProcessor {
     await UserAccount.update(userid, {
       firstname: firstname,
       lastname: lastname,
-      password: password,
       email: email,
       phone: phone,
       colorDay: colorDay,
