@@ -1,4 +1,3 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,43 +13,59 @@ import { useNavigate } from "react-router-dom";
 import { Error, IOUtil } from "../../util/IOUtil";
 import { Alert } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
+import React, { useState } from "react";
+import { StateUtil } from "../../util/StateUtil";
+
+export type RegisterFormData = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string;
+  password: string;
+  password_verify: string;
+};
 
 const Register = (): JSX.Element => {
-  const [registered, setRegistered] = React.useState<Boolean>(false);
-  const [error, setError] = React.useState<Error>();
-  const [firstName, setFirstName] = React.useState<string>("");
-  const [lastName, setLastName] = React.useState<string>("");
-  const [email, setEmail] = React.useState<string>("");
-  const [phoneNumber, setPhoneNumber] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
-  const [passwordVerify, setPasswordVerify] = React.useState<string>("");
-  const [passwordMatch, setPasswordMatch] = React.useState<boolean>(true);
+  const [registered, setRegistered] = useState<Boolean>(false);
+  const [error, setError] = useState<Error>();
+  const [passwordMatch, setPasswordMatch] = useState<boolean>(true);
+  const [formData, setFormData] = useState<RegisterFormData>({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    password: "",
+    password_verify: ""
+  });
 
   const navigate = useNavigate();
   const hasError = error !== undefined;
 
+  const setValue = (key: keyof RegisterFormData, data: string) => StateUtil.setValue<RegisterFormData>(key, data, setFormData);
+
   React.useEffect(() => {
-    if (registered) IOUtil.loginUser(email, password).then(() => navigate("/dashboard"));
-  }, [registered, navigate, email, password]);
+    if (registered) IOUtil.loginUser(formData.email, formData.password).then(() => navigate("/dashboard"));
+  }, [registered, navigate, formData.email, formData.password]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setPasswordMatch(password === passwordVerify);
+    setPasswordMatch(formData.password === formData.password_verify);
 
-    let phone = phoneNumber;
-    
-    if (phone[0] === "0") setPhoneNumber((phoneNumber) => phone = "+32" + phoneNumber.slice(1));
-    if (passwordMatch) setRegistered(await IOUtil.registerUser(firstName, lastName, email, phone, password, passwordVerify, (err) => setError(err)));
+    let phone = formData.phone_number;
 
-    setPassword("");
-    setPasswordVerify("");
+    if (phone[0] === "0") setFormData((formData) => { return { ...formData, phone_number: phone = "+32" + phone.slice(1) }; });
+
+    const { first_name, last_name, email, password, password_verify } = formData;
+    if (passwordMatch) setRegistered(await IOUtil.registerUser(first_name, last_name, email, phone, password, password_verify, (err) => setError(err)));
+
+    setFormData((formData) => { return { ...formData, password: "", password_verify: "" }; })
   };
-  
+
   return (
     <Container component="main" maxWidth="xs">
 
-      {!passwordMatch && (<Alert severity="error">Passwords don't match, try again!</Alert>)}
+      {!passwordMatch && (<Alert severity="error">{I18n.t("error.passwords_no_match")}</Alert>)}
       {hasError && <Alert severity="error">{
         <>
           {I18n.t(error.error)}
@@ -73,8 +88,8 @@ const Register = (): JSX.Element => {
 
             <Grid item xs={12} sm={6}>
               <TextField autoComplete="given-name" name="firstName" required fullWidth id="firstName"
-                value={firstName}
-                onChange={(event) => setFirstName(event.target.value)}
+                value={formData.first_name}
+                onChange={(event) => setValue("first_name", event.target.value)}
                 label={I18n.t("register.firstname")}
                 autoFocus
               />
@@ -82,8 +97,8 @@ const Register = (): JSX.Element => {
 
             <Grid item xs={12} sm={6}>
               <TextField required fullWidth id="lastName" label={I18n.t("register.lastname")} name="lastName"
-                value={lastName}
-                onChange={(event) => setLastName(event.target.value)}
+                value={formData.last_name}
+                onChange={(event) => setValue("last_name", event.target.value)}
                 autoComplete="family-name"
               />
             </Grid>
@@ -92,8 +107,8 @@ const Register = (): JSX.Element => {
               <TextField required fullWidth id="email" label={I18n.t("register.email")}
                 name="email"
                 type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                value={formData.email}
+                onChange={(event) => setValue("email", event.target.value)}
                 autoComplete="email"
               />
             </Grid>
@@ -101,8 +116,8 @@ const Register = (): JSX.Element => {
             <Grid item xs={12}>
               <TextField required fullWidth id="phoneNumber" label={I18n.t("register.phone")}
                 name="phoneNumber"
-                value={phoneNumber}
-                onChange={(event) => setPhoneNumber(event.target.value)}
+                value={formData.phone_number}
+                onChange={(event) => setValue("phone_number", event.target.value)}
                 autoComplete="Phone-Nummer"
               />
             </Grid>
@@ -111,8 +126,8 @@ const Register = (): JSX.Element => {
               <TextField required fullWidth name="password" label={I18n.t("register.password")}
                 type="password"
                 id="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                value={formData.password}
+                onChange={(event) => setValue("password", event.target.value)}
                 autoComplete="new-password"
               />
             </Grid>
@@ -121,8 +136,8 @@ const Register = (): JSX.Element => {
               <TextField required fullWidth name="passwordVerify" label={I18n.t("register.verify")}
                 type="password"
                 id="passwordVerify"
-                value={passwordVerify}
-                onChange={(event) => setPasswordVerify(event.target.value)}
+                value={formData.password_verify}
+                onChange={(event) => setValue("password_verify", event.target.value)}
                 autoComplete="new-password"
               />
             </Grid>
