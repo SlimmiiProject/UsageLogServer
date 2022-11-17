@@ -3,8 +3,8 @@ import MeterCard from "../dashboard/MeterCard";
 const Devices = (): JSX.Element => {
   return (
     <>
-      <h1>apparaatbeheer</h1>
-      <h2>sample metercard</h2>
+      <h1>Apparaatbeheer</h1>
+      <h2>Sample metercard</h2>
       <MeterCard />
     </>
   );

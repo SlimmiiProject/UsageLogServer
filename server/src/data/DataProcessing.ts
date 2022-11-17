@@ -493,9 +493,10 @@ export class DataProcessor {
    * deletes a single user form the database
    * @param userId number
    */
-  public static async DeleteUser(userId: number): Promise<void> {
-    UserAccount.delete({ userId: userId });
+  public static async DeleteUser(userId: number): Promise<boolean> {
+    return (await UserAccount.delete({ userId: userId })).affected >= 1;
   }
+
   //fails if data is not removed first
   /**
    * deletes a single device from database. could fail still testing

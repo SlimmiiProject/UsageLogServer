@@ -1,10 +1,10 @@
 import { RegExpVal } from './../utils/RegexValidator';
 import { AccountManager } from './../accounts/AccountManager';
-import { InputUtil } from './../utils/InputUtil';
 import express, { Request, Response } from "express";
 import { Crypt } from '../utils/Crypt';
 import { GoogleAuth } from '../utils/GoogleAuth';
 import { SessionManager } from '../accounts/SessionManager';
+import { ObjectUtil } from '../utils/ObjectUtil';
 const router = express.Router();
 
 type CreationData = {
@@ -25,7 +25,7 @@ router.post("/login", async (req: Request, res: Response) => {
         password: body.password
     }
 
-    if (Object.values(data).every(InputUtil.isSet)) {
+    if (Object.values(data).every(ObjectUtil.isSet)) {
 
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             if (Crypt.matchesEncrypted(data.password, await AccountManager.getEncryptedPassword(undefined, data.email))) {
@@ -41,8 +41,9 @@ router.post("/login", async (req: Request, res: Response) => {
 router.post("/google-login", async (req: Request, res: Response) => {
     const { google_token } = req.body;
 
+
     if (google_token) {
-        await GoogleAuth.verifyTokenAct(google_token, async (payload) => {
+       return await GoogleAuth.verifyTokenAct(google_token, async (payload) => {
 
             // If they don't have an account, create one
             if (!(await AccountManager.doesAccountExist(undefined, payload.email)))
@@ -50,7 +51,6 @@ router.post("/google-login", async (req: Request, res: Response) => {
 
             await login(req, payload.email);
             res.json({ succes: true });
-            return;
         });
     }
 
@@ -78,24 +78,24 @@ router.post("/create-profile", async (req: Request, res: Response) => {
     }
 
     /* Checking if all the values in the data object are set. */
-    if (Object.values(data).every(InputUtil.isSet)) {
+    if (Object.values(data).every(ObjectUtil.isSet)) {
 
         // Validate entries
-        if (data.first_name.length < 3 && data.last_name.length < 3) return res.json(errorJson("Name needs to be minimum of 3 letters"));
-        if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) return res.json(errorJson("Wrong Syntax for email or phone", body));
-        if (await AccountManager.doesAccountExist(0, data.email)) return res.json(errorJson("Account already exists", body));
-        if (data.password.length < 8) return res.json(errorJson("Password too short", body));
-        if (data.password !== data.password_verify) return res.json(errorJson("Passwords don't match", body));
+        if (data.first_name.length < 3 && data.last_name.length < 3) return res.json(errorJson("error.name_minimum_three"));
+        if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) return res.json(errorJson("error.wrong_e_p_syntax", body));
+        if (await AccountManager.doesAccountExist(0, data.email)) return res.json(errorJson("error.account_already_exists", body));
+        if (data.password.length < 8) return res.json(errorJson("error.password_short", body));
+        if (data.password !== data.password_verify) return res.json(errorJson("error.passwords_no_match", body));
         if (await AccountManager.createAccount(data.first_name, data.last_name, data.email, data.password, data.phone_number) > 0) return res.json({ succes: true });
 
-        res.json(errorJson("Something went wrong.", body));
+        res.json(errorJson("error.undefined_error.", body));
         return;
     }
 
     res.json(errorJson(
-        "Missing fields",
+        "error.missing_fields",
         body,
-        Object.entries(data).filter((entry) => !InputUtil.isSet(entry[1])).map((entry) => entry[0]))
+        Object.entries(data).filter((entry) => !ObjectUtil.isSet(entry[1])).map((entry) => entry[0]))
     );
 });
 
@@ -107,7 +107,7 @@ const errorJson = (errorType: string, fields?: { [key: string]: string }, missin
     const errorJson: any = {};
 
     if (fields) errorJson["fields"] = { ...fields, password: undefined, password_verify: undefined };
-    if (missingFields) errorJson["missing_fields"] = missingFields;
+    if (missingFields) errorJson["missing_fields"] = missingFields.map((field) => `field.${field}`);
 
     return {
         succes: false,

@@ -1,4 +1,3 @@
-import { Translations } from "./entities/Translations";
 import fs from "fs";
 import path from "path";
 import { AssetUtil } from "../utils/AssetUtil";
