@@ -15,8 +15,11 @@ test("Database has equal tables to entity count + session", async () => {
         expect(out.length).toEqual(DatabaseConnector.entities.length + 1); // Also count sessions
     } catch (_ignored) { Logger.error("Failed to connect to db during test"); }
     finally {
+       await destroyDb();
     }
 });
+
+
 test("Database creates a new user", async () => {
     let userid: number = 0;
     let expectedResult: number = 0
@@ -38,4 +41,4 @@ test("Database creates a new user", async () => {
         expect(expectedResult).toEqual(receivedResult);
         await destroyDb();
     }
-})
+});
