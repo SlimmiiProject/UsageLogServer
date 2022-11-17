@@ -1,10 +1,10 @@
 import { RegExpVal } from './../utils/RegexValidator';
 import { AccountManager } from './../accounts/AccountManager';
-import { InputUtil } from './../utils/InputUtil';
 import express, { Request, Response } from "express";
 import { Crypt } from '../utils/Crypt';
 import { GoogleAuth } from '../utils/GoogleAuth';
 import { SessionManager } from '../accounts/SessionManager';
+import { ObjectUtil } from '../utils/ObjectUtil';
 const router = express.Router();
 
 type CreationData = {
@@ -25,44 +25,43 @@ router.post("/login", async (req: Request, res: Response) => {
         password: body.password
     }
 
-    if (Object.values(data).every(InputUtil.isSet)) {
+    if (Object.values(data).every(ObjectUtil.isSet)) {
 
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
-            await login(req, data.email)
-            res.sendStatus(200);
-            return;
+            if (Crypt.matchesEncrypted(data.password, await AccountManager.getEncryptedPassword(undefined, data.email))) {
+                await login(req, data.email)
+                return res.json({ succes: true });
+            }
         };
     }
 
-    res.sendStatus(401);
+    res.json({ succes: false })
 });
 
 router.post("/google-login", async (req: Request, res: Response) => {
     const { google_token } = req.body;
 
+
     if (google_token) {
-        await GoogleAuth.verifyTokenAct(google_token, async (payload) => {
+       return await GoogleAuth.verifyTokenAct(google_token, async (payload) => {
 
             // If they don't have an account, create one
             if (!(await AccountManager.doesAccountExist(undefined, payload.email)))
                 await AccountManager.createAccount(payload.given_name, payload.family_name, payload.email, Crypt.createRandomPassword(24), "");
 
-            await login(req, payload.email)
-            res.sendStatus(200);
-            return;
+            await login(req, payload.email);
+            res.json({ succes: true });
         });
     }
 
-    res.sendStatus(401);
+    res.json({ succes: false });
 });
 
 const login = async (req: Request, email: string) => {
     await SessionManager.createLoggedInSession(req, await AccountManager.getAccount(undefined, email));
 }
 
-
 router.post("/logout", SessionManager.loginRequired, async (req: Request, res: Response) => {
-
     SessionManager.destroy(req, res);
 });
 
@@ -79,24 +78,24 @@ router.post("/create-profile", async (req: Request, res: Response) => {
     }
 
     /* Checking if all the values in the data object are set. */
-    if (Object.values(data).every(InputUtil.isSet)) {
-        const hashedPassword = Crypt.encrypt(data.password);
+    if (Object.values(data).every(ObjectUtil.isSet)) {
 
         // Validate entries
-        if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) return res.json(errorJson("Wrong Syntax for email or phone", body));
-        if (await AccountManager.doesAccountExist(0, data.email)) return res.json(errorJson("Account already exists", body));
-        if (data.password.length < 8) return res.json(errorJson("Password too short", body));
-        if (data.password !== data.password_verify) return res.json(errorJson("Passwords don't match", body));
-        if (await AccountManager.createAccount(data.first_name, data.last_name, data.email, hashedPassword, data.phone_number) > 0) return res.json({ succes: true });
+        if (data.first_name.length < 3 && data.last_name.length < 3) return res.json(errorJson("error.name_minimum_three"));
+        if (!RegExpVal.validate(data.email, RegExpVal.emailValidator) || !RegExpVal.validate(data.phone_number, RegExpVal.phoneValidator)) return res.json(errorJson("error.wrong_e_p_syntax", body));
+        if (await AccountManager.doesAccountExist(0, data.email)) return res.json(errorJson("error.account_already_exists", body));
+        if (data.password.length < 8) return res.json(errorJson("error.password_short", body));
+        if (data.password !== data.password_verify) return res.json(errorJson("error.passwords_no_match", body));
+        if (await AccountManager.createAccount(data.first_name, data.last_name, data.email, data.password, data.phone_number) > 0) return res.json({ succes: true });
 
-        res.json(errorJson("Something went wrong.", body));
+        res.json(errorJson("error.undefined_error.", body));
         return;
     }
 
     res.json(errorJson(
-        "Missing fields",
+        "error.missing_fields",
         body,
-        Object.entries(data).filter((entry) => !InputUtil.isSet(entry[1])).map((entry) => entry[0]))
+        Object.entries(data).filter((entry) => !ObjectUtil.isSet(entry[1])).map((entry) => entry[0]))
     );
 });
 
@@ -108,7 +107,7 @@ const errorJson = (errorType: string, fields?: { [key: string]: string }, missin
     const errorJson: any = {};
 
     if (fields) errorJson["fields"] = { ...fields, password: undefined, password_verify: undefined };
-    if (missingFields) errorJson["missing_fields"] = missingFields;
+    if (missingFields) errorJson["missing_fields"] = missingFields.map((field) => `field.${field}`);
 
     return {
         succes: false,

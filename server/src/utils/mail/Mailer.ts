@@ -18,7 +18,7 @@ export class Mailer {
         this._transporter = nodemailer.createTransport({
             host: smtp_host,
             port: smtp_port,
-            secure: false, // true for 465, false for other ports
+            secure: smtp_port === 465, // true for 465, false for other ports
             auth: {
                 user: username,
                 pass: password
@@ -48,7 +48,7 @@ export class Mailer {
     public async sendMailToAll(receivers: string[], subject: string, htmlContent: string) {
         if (receivers.length === 0 || subject === "") return;
 
-        for (let receiver of receivers) {
+        for (const receiver of receivers) {
             if (!RegExpVal.validate(receiver, RegExpVal.emailValidator)) continue;
 
             this._transporter.sendMail({

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -16,7 +15,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
@@ -26,11 +24,13 @@ import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSetting
 import { LanguageSelector } from "./LanguageSelector";
 import { I18n } from "../util/language/I18n";
 import LogoutIcon from "@mui/icons-material/Logout";
+import React from "react";
 
 const drawerWidth = 240;
 
 const isLoggedIn = require("../util/data/testData.json").isLoggedIn;
-const isAdmin = require("../util/data/testData.json").isAdmin;
+// const isAdmin: boolean = require("../util/data/testData.json").isAdmin;
+const isAdmin: boolean = true;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
@@ -108,7 +108,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-          {I18n.t("drawercomponent.head")}
+            {I18n.t("drawercomponent.head")}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -173,7 +173,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
               icon: <LogoutIcon />,
               link: `${lang}/logout`,
             },
-          ].map((element) =>
+          ].map((element, key) =>
             isLoggedIn === true ? (
               <NavLink
                 to={element.link}
@@ -211,6 +211,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
         </List>
         <Divider />
       </Drawer>
+      
       <Main open={open}>
         <DrawerHeader />
       </Main>

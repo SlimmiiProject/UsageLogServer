@@ -7,20 +7,56 @@ import { Data } from "./entities/Data";
 import { Device } from "./entities/Device";
 import { PasswordReset } from "./entities/PasswordReset";
 import { TemporaryData } from "./entities/TemporaryData";
-import { Translations } from "./entities/Translations";
 import { UserAccount } from "./entities/UserAccount";
 
-const {
-  database: { database_name, host, port, username, password }
-} = Environment.CONFIG;
-
 export class DatabaseConnector {
+  private static CONNECTORS: Map<string, DatabaseConnector> = new Map();
+
   private _dataSource: DataSource;
   public get dataSource() {
     return this._dataSource;
   }
 
-  private constructor() {
+  public static createConnector({
+    database_name,
+    host,
+    port,
+    username,
+    password,
+  }: typeof Environment.CONFIG.database) {
+    const namePair = `${host}:${port}`;
+    if (this.CONNECTORS.has(namePair)) return this.CONNECTORS.get(namePair);
+
+    const connector = new DatabaseConnector(
+      host,
+      port,
+      username,
+      password,
+      database_name
+    );
+    this.CONNECTORS.set(namePair, connector);
+    return connector;
+  }
+
+  public static get entities() {
+    return [
+      UserAccount,
+      Device,
+      Data,
+      Administrator,
+      TemporaryData,
+      ContactForm,
+      PasswordReset,
+    ];
+  }
+
+  private constructor(
+    host: string,
+    port: number,
+    username: string,
+    password: string,
+    database_name: string
+  ) {
     this._dataSource = new DataSource({
       type: "mysql",
       host: host,
@@ -30,38 +66,32 @@ export class DatabaseConnector {
       database: database_name,
       synchronize: true,
       logging: Environment.isDebug(),
-      entities: [
-        UserAccount,
-        Device,
-        Data,
-        Administrator,
-        Translations,
-        TemporaryData,
-        ContactForm,
-        PasswordReset,
-      ],
+      entities: DatabaseConnector.entities,
     });
   }
 
   private static _INSTANCE: DatabaseConnector;
 
   public static get INSTANCE(): DatabaseConnector {
-    if (!this._INSTANCE) this._INSTANCE = new DatabaseConnector();
+    if (!this._INSTANCE) this._INSTANCE = this.createConnector(Environment.CONFIG.database);
     return this._INSTANCE;
   }
 
   public async initialize() {
-    if (this.dataSource.isInitialized) {
-      Logger.warn("Database can't be initialized more than one time!");
-      return;
-    }
-
+    if (this._dataSource.isInitialized) return Logger.warn("Database can't be initialized more than one time!");
+  
     try {
-      this._dataSource = await this.dataSource.initialize();
+      this._dataSource = await this._dataSource.initialize();
+      await this.dataSource.synchronize(false);
       Logger.info("Connected to database.");
-    } catch (error) {
-      Logger.error(error);
+    } catch (error: any) {
+      Logger.error([error, error.stack]);
       throw new Error("Something went wrong when connecting to the database");
     }
+  }
+
+  public async disconnect() {
+    if (!this._dataSource.isInitialized) return;
+    this._dataSource.destroy();
   }
 }

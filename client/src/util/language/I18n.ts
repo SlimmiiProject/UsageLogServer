@@ -1,5 +1,5 @@
 import { IOUtil } from './../IOUtil';
-import i18n, { TFunction, TOptions } from "i18next";
+import i18n, { Callback, TFunction, TOptions } from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import LanguageDetector from "i18next-browser-languagedetector";
@@ -27,9 +27,9 @@ export class I18n {
                 resources: this.translationConfig
             });
     }
-    
-    public static doesLanguageExist(language_key:string):boolean {
-       return Object.keys(I18n.translationConfig).find((key) => key === language_key) != undefined;
+
+    public static doesLanguageExist(language_key: string): boolean {
+        return Object.keys(I18n.translationConfig).find((key) => key === language_key) !== undefined;
     }
 
     /**
@@ -46,6 +46,10 @@ export class I18n {
     public static t(key: string, tFunction?: TFunction | TOptions): string {
         if (!this.containsTranslationKey(key)) console.warn("Couldn't find translation for:", key);
         return i18n.t(key, tFunction);
+    }
+
+    public static changeLanguage(language_key: string, callback: Callback) {
+        i18n.changeLanguage(language_key, callback);
     }
 
     public static get currentLanguage() {

@@ -8,6 +8,8 @@ import { User } from '../types/express-session';
 import { DateUtil, Period } from '../utils/DateUtil';
 const router = express.Router();
 
+router.use(SessionManager.loginRequired);
+
 router.post("raw-meter-entry", (req: Request, res: Response) => {
     // TODO Redirect Raw Base64 image to local Python OCR Program
     const imageBase64 = req.body.image;
@@ -19,9 +21,6 @@ router.post("raw-meter-entry", (req: Request, res: Response) => {
 router.post("/meter-entry", (req: Request, res: Response) => {
     // TODO Receives data from local python program with JSON data about the meter entry
 });
-
-
-
 
 type DataParams = { [key: string]: string } & {
     period: Period,

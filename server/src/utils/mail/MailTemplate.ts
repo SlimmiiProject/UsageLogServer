@@ -3,7 +3,6 @@ import fs from "fs";
 import path from "path";
 import { parse } from 'node-html-parser';
 import { AssetUtil } from "../AssetUtil";
-import Mail from "nodemailer/lib/mailer";
 
 export class MailTemplate {
 

@@ -17,14 +17,10 @@ export const replaceLanguageUrl = (prevLang:string, newLang:string) => {
  * @param {string} path - The path to the page you want to link to.
  * @returns The current language + the path.
  */
-export const getLanguageUrl = (path:string) => {
-    return I18n.currentLanguage + path;
-}
+export const getLanguageUrl = (path:string) => I18n.currentLanguage + path;
 
 /**
  * It takes the URL of the page and grabs the language from it.
  * @returns The first element of the array returned by the split method.
  */
-export const getLanguageFromUrl = () => {
-    return window.location.pathname.split("/")[1];
-}
+export const getLanguageFromUrl = () => window.location.pathname.split("/")[1];

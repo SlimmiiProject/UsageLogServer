@@ -11,11 +11,12 @@ import { UserAccount } from "./UserAccount";
 
 @Entity()
 export class PasswordReset extends BaseEntity {
+ 
   @PrimaryColumn("varchar", { name: "token", unique: true, nullable: false })
   @IsDefined()
   token: string;
 
-  @OneToOne(() => UserAccount, { nullable: false, cascade: false })
+  @OneToOne(() => UserAccount, { nullable: false, cascade: true })
   @JoinColumn({ name: "user" })
   @IsDefined()
   user: UserAccount;

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { UserAccount } from "../data/entities/UserAccount";
 import { UserSession } from "../types/express-session";
+import { ObjectUtil } from "../utils/ObjectUtil";
 
 export class SessionManager {
 
@@ -40,7 +41,7 @@ export class SessionManager {
      * @returns a promise.
      */
     public static async createLoggedInSession(request: Request, account: UserAccount) {
-        if ([null, undefined].includes(account)) return;
+        if(!ObjectUtil.isSet(account)) return;
 
         await SessionManager.updateSessionData(request, async (data) => {
             data.isLoggedIn = true
@@ -80,7 +81,7 @@ export class SessionManager {
      * @param {Response} response - The response object that will be sent back to the client.
      */
     public static destroy(request: Request, response: Response) {
-        request.session && request.session.destroy((e) => response.redirect("/"));
+        request.session && request.session.destroy((e) => response.json({succes:true}));
     }
 
     public static logout(request: Request) {

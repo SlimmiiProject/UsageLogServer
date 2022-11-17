@@ -11,5 +11,4 @@ export class MathUtil {
     public static clamp(input: number, minimum: number, maximum: number): number {
         return Math.min(Math.max(input, minimum), maximum);
     }
-
 }

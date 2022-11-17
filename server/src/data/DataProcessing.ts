@@ -59,11 +59,7 @@ export class DataProcessor {
     newDevice.deviceId = DeviceId;
     if (alias) newDevice.friendlyName = alias;
     validate(newDevice).then(async (result) => {
-      if (result.length > 0) {
-        throw new Error("device validation failed:\n" + result.toString());
-      } else {
-        await newDevice.save();
-      }
+      if (result.length <= 0) await newDevice.save();
     });
   }
 
@@ -94,11 +90,7 @@ export class DataProcessor {
     newUser.phone = phonenumber;
     newUser.device = devices;
     return validate(newUser).then(async (result) => {
-      if (result.length > 0) {
-        throw new Error("validation for user failed:" + result);
-      } else {
-        return (await UserAccount.save(newUser)).userId;
-      }
+      if (result.length <= 0) return (await UserAccount.save(newUser)).userId;
     });
   }
 
@@ -123,11 +115,7 @@ export class DataProcessor {
     if (dataDay) newData.Day = dataDay;
     if (DataNight) newData.Night = DataNight;
     validate(newData).then(async (result) => {
-      if (result.length > 0) {
-        throw new Error("validation for Data failed: " + result);
-      } else {
-        await Data.save(newData);
-      }
+      if (result.length <= 0) await Data.save(newData);
     });
   }
 
@@ -149,11 +137,7 @@ export class DataProcessor {
     if (dataDay) newData.Day = dataDay;
     if (dataNight) newData.Night = dataNight;
     validate(newData).then(async (result) => {
-      if (result.length > 0) {
-        throw new Error("validation for temporary Data failed: " + result);
-      } else {
-        await TemporaryData.save(newData);
-      }
+      if (result.length <= 0) await TemporaryData.save(newData);
     });
   }
 
@@ -187,11 +171,7 @@ export class DataProcessor {
     newContactForm.firstname = firstname;
     newContactForm.lastname = lastname;
     validate(newContactForm).then(async (result) => {
-      if (result.length > 0) {
-        throw new Error("validation for contactForm failed: " + result);
-      } else {
-        ContactForm.save(newContactForm);
-      }
+      if (result.length <= 0) await ContactForm.save(newContactForm);
     });
   }
   /**
@@ -212,11 +192,7 @@ export class DataProcessor {
     newPasswordReset.token = token;
     newPasswordReset.user = user;
     validate(newPasswordReset).then(async (result) => {
-      if (result.length > 0) {
-        throw new Error("validation for password reset failed: " + result);
-      } else {
-        PasswordReset.save(newPasswordReset);
-      }
+      if (result.length <= 0) await PasswordReset.save(newPasswordReset);
     });
   }
   //#endregion
@@ -517,9 +493,10 @@ export class DataProcessor {
    * deletes a single user form the database
    * @param userId number
    */
-  public static async DeleteUser(userId: number): Promise<void> {
-    UserAccount.delete({ userId: userId });
+  public static async DeleteUser(userId: number): Promise<boolean> {
+    return (await UserAccount.delete({ userId: userId })).affected >= 1;
   }
+
   //fails if data is not removed first
   /**
    * deletes a single device from database. could fail still testing
