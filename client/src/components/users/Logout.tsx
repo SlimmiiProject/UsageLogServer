@@ -8,7 +8,7 @@ const Logout = () => {
   // Calling logout function, go to right page.
   React.useEffect(() => {
     IOUtil.logoutUser().then((res) =>
-      res !== undefined ? navigate("/") : navigate("/dashboard")
+      !res ? navigate("/") : navigate("/dashboard")
     );
   }, [navigate]);
 
