@@ -8,7 +8,11 @@ const Logout = () => {
   React.useEffect(() => {
     IOUtil.logoutUser().then((res) => {
       console.log(`Initial load useEffect ${res}`);
-      res === undefined ? navigate("/dashboard") : navigate("/");
+      res === undefined
+        ? navigate("/dashboard")
+        : res === false
+        ? navigate("/dashboard")
+        : navigate("/");
     });
   }, []);
   return (
