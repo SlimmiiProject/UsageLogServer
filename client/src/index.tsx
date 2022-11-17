@@ -14,7 +14,6 @@ import { I18n } from "./util/language/I18n";
     document.getElementById("root") as HTMLElement
   );
 
-
   root.render(
     <React.StrictMode>
       <React.Suspense fallback="Loading">
