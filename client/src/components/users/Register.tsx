@@ -90,13 +90,13 @@ const Register = (): JSX.Element => {
               <TextField autoComplete="given-name" name="firstName" required fullWidth id="firstName"
                 value={formData.first_name}
                 onChange={(event) => setValue("first_name", event.target.value)}
-                label={I18n.t("register.firstname")}
+                label={I18n.t("field.first_name")}
                 autoFocus
               />
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <TextField required fullWidth id="lastName" label={I18n.t("register.lastname")} name="lastName"
+              <TextField required fullWidth id="lastName" label={I18n.t("field.last_name")} name="lastName"
                 value={formData.last_name}
                 onChange={(event) => setValue("last_name", event.target.value)}
                 autoComplete="family-name"
@@ -104,7 +104,7 @@ const Register = (): JSX.Element => {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth id="email" label={I18n.t("register.email")}
+              <TextField required fullWidth id="email" label={I18n.t("field.email")}
                 name="email"
                 type="email"
                 value={formData.email}
@@ -114,7 +114,7 @@ const Register = (): JSX.Element => {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth id="phoneNumber" label={I18n.t("register.phone")}
+              <TextField required fullWidth id="phoneNumber" label={I18n.t("field.phone_number")}
                 name="phoneNumber"
                 value={formData.phone_number}
                 onChange={(event) => setValue("phone_number", event.target.value)}
@@ -123,7 +123,7 @@ const Register = (): JSX.Element => {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth name="password" label={I18n.t("register.password")}
+              <TextField required fullWidth name="password" label={I18n.t("field.password")}
                 type="password"
                 id="password"
                 value={formData.password}
@@ -133,7 +133,7 @@ const Register = (): JSX.Element => {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth name="passwordVerify" label={I18n.t("register.verify")}
+              <TextField required fullWidth name="passwordVerify" label={I18n.t("field.password_verify")}
                 type="password"
                 id="passwordVerify"
                 value={formData.password_verify}

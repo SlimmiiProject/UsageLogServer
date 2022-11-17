@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { I18n } from "../../util/language/I18n";
 import { getPath } from "../../App";
 import { Container, Alert, CssBaseline, Box, Avatar, Typography, TextField, FormControlLabel, Checkbox, Button, Grid, Link } from "@mui/material";
-import React, { Dispatch, FC, SetStateAction } from "react";
+import React from "react";
 
 
 const SignIn = (): JSX.Element => {
@@ -19,7 +19,6 @@ const SignIn = (): JSX.Element => {
       navigate("/dashboard");
     }
   }, [authenticated, navigate]);
-
 
   // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
