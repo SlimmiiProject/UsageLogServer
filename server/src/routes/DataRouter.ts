@@ -20,9 +20,6 @@ router.post("/meter-entry", (req: Request, res: Response) => {
     // TODO Receives data from local python program with JSON data about the meter entry
 });
 
-
-
-
 type DataParams = { [key: string]: string } & {
     period: Period,
     beginDate: number;
