@@ -1,49 +1,22 @@
-import {
-  BaseEntity,
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
 import { Device } from "./Device";
 import { Crypt } from "../../utils/Crypt";
 import { AccountManager } from "../../accounts/AccountManager";
-import {
-  IsDefined,
-  IsEmail,
-  IsOptional,
-  IsPhoneNumber,
-  Length,
-  MaxLength,
-  MinLength,
-} from "class-validator";
+import { Logger } from "../../utils/Logger";
+import { IsDefined, Length, MinLength, IsEmail, MaxLength, IsPhoneNumber, IsOptional } from "class-validator";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate } from "typeorm";
 
 @Entity()
 export class UserAccount extends BaseEntity {
-  @PrimaryGeneratedColumn({
-    name: "userId",
-  })
+
+  @PrimaryGeneratedColumn({ name: "userId" })
   userId: number;
 
-  @Column("varchar", {
-    nullable: false,
-    unique: false,
-    name: "firstname",
-    length: 30,
-  })
+  @Column("varchar", { nullable: false, unique: false, name: "firstname", length: 30 })
   @IsDefined()
   @Length(3, 30)
   firstname: string;
 
-  @Column("varchar", {
-    nullable: false,
-    unique: false,
-    name: "lastname",
-    length: 30,
-  })
+  @Column("varchar", { nullable: false, unique: false, name: "lastname", length: 30 })
   @Length(3, 30)
   @IsDefined()
   lastname: string;
@@ -53,12 +26,7 @@ export class UserAccount extends BaseEntity {
   @IsDefined()
   password: string;
 
-  @Column("varchar", {
-    nullable: false,
-    unique: true,
-    length: 50,
-    name: "email",
-  })
+  @Column("varchar", { nullable: false, unique: true, length: 50, name: "email" })
   @IsEmail()
   @MaxLength(50)
   @IsDefined()
@@ -70,9 +38,7 @@ export class UserAccount extends BaseEntity {
   @IsOptional()
   phone: string;
 
-  @OneToMany(() => Device, (device) => device.deviceId, {
-    nullable: true,
-  })
+  @OneToMany(() => Device, (device) => device.deviceId, { nullable: true })
   @JoinColumn({ name: "device" })
   @IsOptional()
   device: Device[];
@@ -80,13 +46,10 @@ export class UserAccount extends BaseEntity {
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    return (
-      this.password &&
-      (await new Promise((resolve, reject) => {
+    return this.password && await new Promise((resolve, reject) => {
         const hashedPassword = Crypt.encrypt(this.password);
-        hashedPassword ? resolve((this.password = hashedPassword)) : reject(console.log("Hashing password failed"));
-      }))
-    );
+        hashedPassword ? resolve((this.password = hashedPassword)) : reject(Logger.error("Hashing password failed"))
+      });
   }
 
   isAdmin = async () => await AccountManager.isAdministrator(this.userId);

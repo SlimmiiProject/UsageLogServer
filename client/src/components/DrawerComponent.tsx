@@ -1,4 +1,3 @@
-import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -16,7 +15,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
@@ -26,6 +24,7 @@ import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSetting
 import { LanguageSelector } from "./LanguageSelector";
 import { I18n } from "../util/language/I18n";
 import LogoutIcon from "@mui/icons-material/Logout";
+import React from "react";
 
 const drawerWidth = 240;
 
@@ -212,6 +211,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
         </List>
         <Divider />
       </Drawer>
+      
       <Main open={open}>
         <DrawerHeader />
       </Main>

@@ -1,6 +1,5 @@
-import * as React from "react";
-import {Button,CssBaseline,TextField,Grid,Box,Container,Alert} from "@mui/material";
-import { I18n } from "../util/language/I18n";
+import { Button, CssBaseline, TextField, Grid, Box, Container } from "@mui/material";
+import { I18n } from "../../util/language/I18n";
 import { Link } from "react-router-dom";
 
 const EditProfile = (): JSX.Element => {
@@ -8,40 +7,23 @@ const EditProfile = (): JSX.Element => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      firstName:data.get("firstName"),
-      lastName:data.get("lastName"),
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
       email: data.get("email"),
       password: data.get("password"),
-      password2:data.get("password2"),
+      password2: data.get("password2"),
     });
   };
-
-
-
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 5,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
+      <Box sx={{ marginTop: 5, display: "flex", flexDirection: "column", alignItems: "center" }}
       >
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label={I18n.t("editprofile.firstname")}
-                autoFocus
-              />
+              <TextField autoComplete="given-name"  name="firstName"   required fullWidth  id="firstName" label={I18n.t("editprofile.firstname")} autoFocus />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -88,14 +70,14 @@ const EditProfile = (): JSX.Element => {
           </Grid>
           <Link to="/profile" replace>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            {I18n.t("editprofile.editprofile")}
-          </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              {I18n.t("editprofile.editprofile")}
+            </Button>
           </Link>
         </Box>
       </Box>

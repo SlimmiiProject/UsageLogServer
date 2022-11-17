@@ -1,12 +1,12 @@
+import { Dispatch, FC, SetStateAction } from "react";
 import SignIn from "./SignIn";
+
 
 const LoginPage = (): JSX.Element => {
   return (
-    <>
-      <section>
-        <SignIn />
-      </section>
-    </>
+    <section>
+      <SignIn />
+    </section>
   );
 };
 

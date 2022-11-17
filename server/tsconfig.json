@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext" ,
-    "experimentalDecorators": true ,
+    "target": "esnext",
+    "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",
     "rootDir": "./src",
@@ -12,6 +12,12 @@
     "strict": true,
     "strictNullChecks": false,
     "skipLibCheck": true,
-    "typeRoots": ["./src/types", "./node_modules/@types"]
-  }
+    "typeRoots": [
+      "./src/types",
+      "./node_modules/@types"
+    ]
+  },
+   "exclude": [
+      "./src/tests/*.test.ts"
+    ]
 }

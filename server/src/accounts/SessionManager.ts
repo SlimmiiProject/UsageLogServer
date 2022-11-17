@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { UserAccount } from "../data/entities/UserAccount";
 import { UserSession } from "../types/express-session";
+import { ObjectUtil } from "../utils/ObjectUtil";
 
 export class SessionManager {
 
@@ -40,7 +41,7 @@ export class SessionManager {
      * @returns a promise.
      */
     public static async createLoggedInSession(request: Request, account: UserAccount) {
-        if ([null, undefined].includes(account)) return;
+        if(!ObjectUtil.isSet(account)) return;
 
         await SessionManager.updateSessionData(request, async (data) => {
             data.isLoggedIn = true

@@ -9,9 +9,9 @@ import { Logger } from "./utils/Logger";
 import path from "path";
 import bodyParser from "body-parser";
 import { SessionManager } from "./accounts/SessionManager";
+import session from 'express-session';
 
 const cors = require("cors");
-const session = require('express-session');
 const { server_port, url, developmentEnv } = Environment.CONFIG;
 const mysqlStore = require('express-mysql-session')(session);
 
@@ -58,7 +58,6 @@ export class App {
         }
 
         const sessionStore = new mysqlStore(options);
-
         this.App.use(session({
             name: process.env.SESS_NAME,
             resave: true,
@@ -69,7 +68,7 @@ export class App {
                 sameSite: true,
                 secure: !developmentEnv
             }
-        }))
+        }));
     }
 
     private setupRoutes() {
@@ -82,9 +81,6 @@ export class App {
         apiRouter.use("/translation", require("./routes/TranslationRoutes"));
         apiRouter.use("/contact", require("./routes/ContactRouter"));
 
-        // All routes after this require you to be logged in, else you'll be redirected to the home page
-        this.App.use(SessionManager.loginRequired);
-
         apiRouter.use("/users/:userId", require("./routes/UserRouter"));
         apiRouter.use("/data", require("./routes/DataRouter"));
         apiRouter.use("/profiles", require("./routes/ProfileRouter"));
@@ -92,7 +88,7 @@ export class App {
         apiRouter.use("/contact", require("./routes/ContactRouter"));
 
         // !! This has to stay at the end of this method to assure it's only executed if the url doesn't match any of the above cases
-        this.App.get("*", (req: Request, res: Response) => res.sendFile(path.join(__dirname, "../public/", "index.html")));
+        this.App.get("*", (_req: Request, res: Response) => res.sendFile(path.join(__dirname, "../public/", "index.html")));
     }
 
     public start() {
@@ -103,4 +99,5 @@ export class App {
         return server_port;
     }
 }
+
 App.INSTANCE.start();
