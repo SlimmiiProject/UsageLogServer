@@ -51,10 +51,6 @@
   "signIn.rememberMe": "An mich erinnern",
   "signIn.signIn": "Anmelden",
   "signIn.forgotPassword": "Passwort vergessen?",
-<<<<<<< HEAD
-  "signIn.register": "Hier registrieren"
-}
-=======
   "signIn.register": "Hier registrieren",
   "error.missing_fields": "Fehlende Felder:",
   "error.name_minimum_three": "Der Name muss aus mindestens 3 Buchstaben bestehen",
@@ -64,4 +60,3 @@
   "error.passwords_no_match": "Passwörter stimmen nicht überein",
   "error.undefined_error": "Etwas ist schief gelaufen"
 }
->>>>>>> cd726b6168e700e810cd93ab0a8f61e42393dfba
