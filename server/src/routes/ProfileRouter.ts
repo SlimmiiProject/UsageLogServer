@@ -87,7 +87,7 @@ router.post("/create-profile", async (req: Request, res: Response) => {
         if (data.password.length < 8) return res.json(errorJson("error.password_short", body));
         if (data.password !== data.password_verify) return res.json(errorJson("error.passwords_no_match", body));
         if (await AccountManager.createAccount(data.first_name, data.last_name, data.email, data.password, data.phone_number) > 0) return res.json({ succes: true });
-
+        
         res.json(errorJson("error.undefined_error.", body));
         return;
     }

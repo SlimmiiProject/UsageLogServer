@@ -18,6 +18,7 @@ import {
   Link,
 } from "@mui/material";
 import React, { Dispatch, FC, SetStateAction } from "react";
+import { GoogleLoginComponent } from "../GoogleLoginComponent";
 
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
@@ -99,7 +100,13 @@ const SignIn = (): JSX.Element => {
           >
             {I18n.t("signIn.signIn")}
           </Button>
-          {/* <GoogleLoginComponent auth={setAuthenticated} isLoggedIn={isLoggedIn} setLoggedIn={setLoggedIn} /> */}
+          {/* {
+            <GoogleLoginComponent
+              auth={setAuthenticated}
+              isLoggedIn={isLoggedIn}
+              setLoggedIn={setLoggedIn}
+            />
+          } */}
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">

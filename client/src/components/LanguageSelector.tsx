@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { replaceLanguageUrl } from "../util/BrowserUtil";
 import { I18n } from "../util/language/I18n";
 import Select from '@mui/material/Select';
