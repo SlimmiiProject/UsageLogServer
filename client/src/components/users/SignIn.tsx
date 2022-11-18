@@ -3,6 +3,7 @@ import { IOUtil } from "../../util/IOUtil";
 import { useNavigate } from "react-router-dom";
 import { I18n } from "../../util/language/I18n";
 import { getPath } from "../../App";
+<<<<<<< HEAD
 import {
   Container,
   Alert,
@@ -19,6 +20,11 @@ import {
 } from "@mui/material";
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { GoogleLoginComponent } from "../GoogleLoginComponent";
+=======
+import { Container, Alert, CssBaseline, Box, Avatar, Typography, TextField, FormControlLabel, Checkbox, Button, Grid, Link } from "@mui/material";
+import React from "react";
+
+>>>>>>> cd726b6168e700e810cd93ab0a8f61e42393dfba
 
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
