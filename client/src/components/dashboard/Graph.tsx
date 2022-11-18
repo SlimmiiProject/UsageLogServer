@@ -33,8 +33,8 @@ export default function App(props: MeerdereData) {
           <Tooltip />
           <Legend />
           <ReferenceLine y={0} stroke="#000" />
-          <Bar dataKey={I18n.t("graph.day")} fill={colorDay} />
-          <Bar dataKey={I18n.t("graph.night")} fill={colorNight} />
+          <Bar dataKey={"day"} name={I18n.t("graph.day")} fill={colorDay} />
+          <Bar dataKey={"night"} name={I18n.t("graph.night")} fill={colorNight} />
         </BarChart>
       </div>
     </>
