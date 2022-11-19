@@ -437,15 +437,15 @@ export class DataProcessor {
     colorNight?: GraphColors
   ): Promise<void> {
     let userExists = await UserAccount.findAndCountBy({ userId: userid });
-    if (userExists[1] < 1)
-      throw new Error(`Acount does not exist. looking for acount: ${userid}`);
+    if (userExists[1] < 1 && userExists[1] > 1)
+      throw new Error(`Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`);
     await UserAccount.update(userid, {
       firstname: firstname,
       lastname: lastname,
       email: email,
       phone: phone,
-      colorDay: GraphColors.ORANGE,
-      colorNight: GraphColors.BLUE
+      colorDay: colorDay,
+      colorNight: colorNight
     });
   }
 
