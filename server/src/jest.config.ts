@@ -5,4 +5,5 @@ const config = {
         '^.+\\.tsx?$': 'ts-jest',
     },
 };
+
 exports.default = config;
