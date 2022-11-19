@@ -4,7 +4,7 @@ import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
 import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
-import { UserAccount } from "./entities/UserAccount";
+import { GraphColors, UserAccount } from "./entities/UserAccount";
 import { PasswordReset } from "./entities/PasswordReset";
 import { Equal, LessThan } from "typeorm";
 import { validate } from "class-validator";
@@ -433,8 +433,8 @@ export class DataProcessor {
     lastname: string,
     email: string,
     phone?: string,
-    colorDay?: string,
-    colorNight?: string
+    colorDay?: GraphColors,
+    colorNight?: GraphColors
   ): Promise<void> {
     let userExists = await UserAccount.findAndCountBy({ userId: userid });
     if (userExists[1] < 1)
@@ -444,8 +444,8 @@ export class DataProcessor {
       lastname: lastname,
       email: email,
       phone: phone,
-      colorDay: colorDay,
-      colorNight: colorNight
+      colorDay: GraphColors.ORANGE,
+      colorNight: GraphColors.BLUE
     });
   }
 
