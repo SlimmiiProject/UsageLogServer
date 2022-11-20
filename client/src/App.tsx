@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import Profile from "./components/users/Profile";
 import Register from "./components/users/Register";
@@ -35,17 +35,35 @@ export interface IData {
   nacht: number;
 }
 
-export const getCurrentPath = (location: any) => {
-  if (location.pathname[location.pathname.length - 1] === "/") location.pathname = location.pathname.substring(0, location.pathname.length - 1);
-  return location.pathname;
+interface IContext {
+  loggedIn: boolean;
+  isAdmin: boolean;
+  userId: string;
 }
+
+export const Context = React.createContext<IContext>({
+  loggedIn: false,
+  isAdmin: false,
+  userId: "",
+});
+
+export const getCurrentPath = (location: any) => {
+  if (location.pathname[location.pathname.length - 1] === "/")
+    location.pathname = location.pathname.substring(
+      0,
+      location.pathname.length - 1
+    );
+  return location.pathname;
+};
 
 export const getPath = (path: string) => {
   return `/${I18n.currentLanguage}/${path}`;
-}
+};
 
 const App = (): JSX.Element => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string>("");
 
   const lang = I18n.currentLanguage;
 
@@ -54,31 +72,42 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      <Drawer lang={lang} />
-      <Routes>
-        <Route path="/" element={<Navigate to={`/${lang}/`} />} />
-        <Route path="/dashboard" element={<Navigate to={`/${lang}/dashboard`} />} />
-
-        <Route path="/:lang">
-          <Route index element={<LoginPage/>} />
-          <Route path="dashboard" element={<DashboardComp data={combineddata} />} />
-          <Route path="register" element={<Register />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="profile/edit-profile" element={<EditProfile />} />
-          <Route path="devices" element={<Devices />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="logout" element={<Logout />} />
-
-          <Route path="admin" element={<AdminPage />}>
-            <Route path="allusers" element={<AdminPage />} />
-            <Route path="alldevices" element={<AdminPage />} />
-            <Route path="logfile" element={<AdminPage />} />
+      <Context.Provider
+        value={{
+          loggedIn: loggedIn,
+          isAdmin: isAdmin,
+          userId: userId,
+        }}
+      >
+        <Drawer lang={lang} />
+        <Routes>
+          <Route path="/" element={<Navigate to={`/${lang}/`} />} />
+          <Route
+            path="/dashboard"
+            element={<Navigate to={`/${lang}/dashboard`} />}
+          />
+          <Route path="/:lang">
+            <Route index element={<LoginPage />} />
+            <Route
+              path="dashboard"
+              element={<DashboardComp data={combineddata} />}
+            />
+            <Route path="register" element={<Register />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="profile/edit-profile" element={<EditProfile />} />
+            <Route path="devices" element={<Devices />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="logout" element={<Logout />} />
+            <Route path="admin" element={<AdminPage />}>
+              <Route path="allusers" element={<AdminPage />} />
+              <Route path="alldevices" element={<AdminPage />} />
+              <Route path="logfile" element={<AdminPage />} />
+            </Route>
           </Route>
-        </Route>
-
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Context.Provider>
     </>
   );
 };

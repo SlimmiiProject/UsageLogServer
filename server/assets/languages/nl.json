@@ -52,7 +52,7 @@
   "signIn.rememberMe": "Onthoud me",
   "signIn.signIn": "Sign In",
   "signIn.forgotPassword": "Wachtwoord vergeten?",
-  "signIn.register": "Registreer hier",
+  "signIn.register": "Registreer je hier",
   "error.missing_fields": "Niet ingevulde velden:",
   "error.name_minimum_three": "Naam moet minimum 3 karakters bevatten",
   "error.wrong_e_p_syntax": "Verkeerd email of telefoon nummer",
