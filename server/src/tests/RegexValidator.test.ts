@@ -15,11 +15,17 @@ const badValues = [
 
 const passingEmails = [
     "personsName@coldmail.com",
+    "james,andother@hello.world",
     "abc@abd.Museums",
     "a@E.C",
     "shop@email.stackcommerce.com",
     "customer/department=shipping@example.com",
     "$A12345@example.com",
+    "james!ornot@gmail.com",
+    "$A123@exmaple.com",
+    "thisisanotherweirdemail*cool@hello.world",
+    "\\it's_athing_ok___?@mailmail.mail",
+    "nooneonearth=letsmakeaweirdem@il.com",
     "!def!xyz%abc@example.com",
     "_somename@example.com"
 ]
