@@ -15,6 +15,8 @@ export interface DeviceSpecificData {
   device_alias: string;
   data: Data[];
   lastData: TemporaryData;
+  colorDay?: GraphColors;
+  colorNight?: GraphColors;
 }
 /*
  *implementation:
@@ -242,6 +244,7 @@ export class DataProcessor {
     endDate?: Date
   ): Promise<DeviceSpecificData[]> {
     let tempdata: TemporaryData[] = await DataProcessor.GetTempData(userid);
+    let user: UserAccount = await DataProcessor.GetUser(undefined, userid);
     let data: Data[] = [];
     if (startDate && endDate) {
       //UNTESTED
@@ -283,11 +286,14 @@ export class DataProcessor {
         if (filteredTempData[0] && !startDate && !endDate)
           currentDayData = filteredTempData[0];
       }
+
       const deviceData: DeviceSpecificData = {
         device_index: device.device_index,
         device_alias: device.friendlyName,
         data: data.filter((a) => a.device.device_index === device.device_index),
         lastData: currentDayData,
+        colorDay: user.colorDay,
+        colorNight: user.colorNight,
       };
       completeData.push(deviceData);
     });
