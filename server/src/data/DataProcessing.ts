@@ -32,14 +32,14 @@ export interface DeviceSpecificData {
  *GET::
  * All Get functions will return an empty array if nothing is found.
  * exceptions:
- * GetData returns an object consisting of a combination of Device, Data[], TemporaryData for each device that this user has.
+ * GetData returns an object of DeviceSpecificData,for each device that this user has.
  * GetPasswordReset returns a boolean if the reset for this userAcount exists and is valid.
  *
  * ALTER::
  * EditAcount, addDevicetoUser, ChangeDeviceAlias: if device or user is not found this will throw an error.
  *
  * DELETE::
- *
+ * to delete a row of data, all the relations it is connected to need to be empty or it will fail.
  *
  *
  */
