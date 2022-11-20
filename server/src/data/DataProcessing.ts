@@ -4,7 +4,7 @@ import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
 import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
-import { UserAccount } from "./entities/UserAccount";
+import { GraphColors, UserAccount } from "./entities/UserAccount";
 import { PasswordReset } from "./entities/PasswordReset";
 import { Equal, LessThan } from "typeorm";
 import { validate } from "class-validator";
@@ -15,6 +15,8 @@ export interface DeviceSpecificData {
   device_alias: string;
   data: Data[];
   lastData: TemporaryData;
+  colorDay?: GraphColors;
+  colorNight?: GraphColors;
 }
 /*
  *implementation:
@@ -30,14 +32,14 @@ export interface DeviceSpecificData {
  *GET::
  * All Get functions will return an empty array if nothing is found.
  * exceptions:
- * GetData returns an object consisting of a combination of Device, Data[], TemporaryData for each device that this user has.
+ * GetData returns an object of DeviceSpecificData,for each device that this user has.
  * GetPasswordReset returns a boolean if the reset for this userAcount exists and is valid.
  *
  * ALTER::
  * EditAcount, addDevicetoUser, ChangeDeviceAlias: if device or user is not found this will throw an error.
  *
  * DELETE::
- *
+ * to delete a row of data, all the relations it is connected to need to be empty or it will fail.
  *
  *
  */
@@ -242,6 +244,7 @@ export class DataProcessor {
     endDate?: Date
   ): Promise<DeviceSpecificData[]> {
     let tempdata: TemporaryData[] = await DataProcessor.GetTempData(userid);
+    let user: UserAccount = await DataProcessor.GetUser(undefined, userid);
     let data: Data[] = [];
     if (startDate && endDate) {
       //UNTESTED
@@ -283,11 +286,14 @@ export class DataProcessor {
         if (filteredTempData[0] && !startDate && !endDate)
           currentDayData = filteredTempData[0];
       }
+
       const deviceData: DeviceSpecificData = {
         device_index: device.device_index,
         device_alias: device.friendlyName,
         data: data.filter((a) => a.device.device_index === device.device_index),
         lastData: currentDayData,
+        colorDay: user.colorDay,
+        colorNight: user.colorNight,
       };
       completeData.push(deviceData);
     });
@@ -433,12 +439,12 @@ export class DataProcessor {
     lastname: string,
     email: string,
     phone?: string,
-    colorDay?: string,
-    colorNight?: string
+    colorDay?: GraphColors,
+    colorNight?: GraphColors
   ): Promise<void> {
     let userExists = await UserAccount.findAndCountBy({ userId: userid });
-    if (userExists[1] < 1)
-      throw new Error(`Acount does not exist. looking for acount: ${userid}`);
+    if (userExists[1] < 1 && userExists[1] > 1)
+      throw new Error(`Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`);
     await UserAccount.update(userid, {
       firstname: firstname,
       lastname: lastname,
