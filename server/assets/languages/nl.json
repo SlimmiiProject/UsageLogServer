@@ -42,6 +42,7 @@
   "field.first_name": "Voornaam",
   "field.last_name": "Achternaam",
   "field.email": "Email",
+  "field.landcode": "Landcode",
   "field.phone_number": "Telefoon Nummer",
   "field.password": "Wachtwoord",
   "field.password_verify": "Verifieer Wachtwoord",
@@ -56,7 +57,8 @@
   "error.name_minimum_three": "Naam moet minimum 3 karakters bevatten",
   "error.wrong_e_p_syntax": "Verkeerd email of telefoon nummer",
   "error.account_already_exists": "Dit account bestaat al",
-  "error.password_short": "Wachtwoord is te kort, minmum 8 karakters",
+  "error.password_short": "Wachtwoord is te kort, minimum 8 karakters",
   "error.passwords_no_match": "Wachtwoorden komen niet overeen",
-  "error.undefined_error": "Er ging iets mis"
+  "error.undefined_error": "Er ging iets mis",
+  "error.no_landcode": "Je bent de landcode vergeten"
 }

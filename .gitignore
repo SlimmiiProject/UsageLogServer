@@ -15,7 +15,7 @@ build
 server/public/*
 
 # security
-.env
+*.env
 
 # misc
 .DS_Store
