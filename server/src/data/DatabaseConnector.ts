@@ -67,6 +67,8 @@ export class DatabaseConnector {
       synchronize: true,
       logging: Environment.isDebug(),
       entities: DatabaseConnector.entities,
+      connectTimeout: 20000,
+      acquireTimeout: 20000
     });
   }
 
