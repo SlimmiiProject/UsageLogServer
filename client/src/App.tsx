@@ -35,13 +35,13 @@ export interface IData {
   nacht: number;
 }
 
-interface IContext {
+interface IuserContext {
   loggedIn: boolean;
   isAdmin: boolean;
   userId: string;
 }
 
-export const Context = React.createContext<IContext>({
+export const userContext = React.createContext<IuserContext>({
   loggedIn: false,
   isAdmin: false,
   userId: "",
@@ -72,7 +72,7 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      <Context.Provider
+      <userContext.Provider
         value={{
           loggedIn: loggedIn,
           isAdmin: isAdmin,
@@ -107,7 +107,7 @@ const App = (): JSX.Element => {
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Routes>
-      </Context.Provider>
+      </userContext.Provider>
     </>
   );
 };

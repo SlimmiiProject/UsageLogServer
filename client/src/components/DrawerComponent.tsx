@@ -24,13 +24,14 @@ import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSetting
 import { LanguageSelector } from "./LanguageSelector";
 import { I18n } from "../util/language/I18n";
 import LogoutIcon from "@mui/icons-material/Logout";
-import React from "react";
+import React, { useContext } from "react";
+import { userContext } from "../App";
 
 const drawerWidth = 240;
 
-const isLoggedIn = require("../util/data/testData.json").isLoggedIn;
-// const isAdmin: boolean = require("../util/data/testData.json").isAdmin;
-const isAdmin: boolean = true;
+// const isLoggedIn = require("../util/data/testData.json").isLoggedIn;
+// // const isAdmin: boolean = require("../util/data/testData.json").isAdmin;
+// const isAdmin: boolean = true;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
@@ -93,6 +94,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
     setOpen(false);
   };
 
+  const { loggedIn, isAdmin } = useContext(userContext);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -174,7 +176,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
               link: `${lang}/logout`,
             },
           ].map((element, key) =>
-            isLoggedIn === true ? (
+            loggedIn === true ? (
               <NavLink
                 to={element.link}
                 style={{ textDecoration: "none", color: "inherit" }}
@@ -211,7 +213,7 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
         </List>
         <Divider />
       </Drawer>
-      
+
       <Main open={open}>
         <DrawerHeader />
       </Main>
