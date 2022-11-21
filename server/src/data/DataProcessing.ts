@@ -40,6 +40,7 @@ export interface DeviceSpecificData {
  *
  * DELETE::
  * to delete a row of data, all the relations it is connected to need to be empty or it will fail.
+ *  cleanTemporaryData needs to be executed once a day.
  *
  *
  */
@@ -269,22 +270,16 @@ export class DataProcessor {
     let completeData: DeviceSpecificData[] = [];
     devices.forEach((device) => {
       let currentDayData: TemporaryData = new TemporaryData();
-      let filteredTempData: TemporaryData[] = tempdata.filter(
-        (a) => a.device.device_index === device.device_index
-      );
+      let filteredTempData: TemporaryData[] = tempdata.filter((a) => a.device.device_index === device.device_index);
+
       if (filteredTempData.length >= 2) {
-        //incredibly annoying thing the Day and Night would return as string,
+        //incredibly annoying bug Day & Night returns as string,
         //but not be recognised as string, so i had to convert it to string and then back to integer.
-        currentDayData.Day =
-          parseInt(filteredTempData[0].Day.toString()) -
-          parseInt(filteredTempData.reverse()[0].Day.toString());
-        currentDayData.Night =
-          parseInt(filteredTempData[0].Night.toString()) -
-          parseInt(filteredTempData.reverse()[0].Night.toString());
+        currentDayData.Day = parseInt(filteredTempData[0].Day.toString()) - parseInt(filteredTempData.reverse()[0].Day.toString());
+        currentDayData.Night = parseInt(filteredTempData[0].Night.toString()) - parseInt(filteredTempData.reverse()[0].Night.toString());
       } else {
         currentDayData = null;
-        if (filteredTempData[0] && !startDate && !endDate)
-          currentDayData = filteredTempData[0];
+        if (filteredTempData[0] && !startDate && !endDate) currentDayData = filteredTempData[0];
       }
 
       const deviceData: DeviceSpecificData = {
@@ -348,9 +343,7 @@ export class DataProcessor {
   ): Promise<ContactForm[]> {
     if (message_topic || email) {
       return ObjectUtil.firstNonUndefined([
-        await ContactForm.find({
-          where: { message_topic: Equal(message_topic) },
-        }),
+        await ContactForm.find({ where: { message_topic: Equal(message_topic) } }),
         await ContactForm.find({ where: { email: Equal(email) } }),
       ]);
     }
@@ -358,19 +351,19 @@ export class DataProcessor {
     return await ContactForm.find();
   }
 
-  //not sure what input this will get (assuming it will get the token)
+  //not sure what input this will get (assuming it will get some kind of unique string token)
   /**
    * returns true or false if the token is valied or expired
+   * deletes the token after checking if it is valid.
    * @param token string the unique id of the reset
    * @returns Promise<boolean>
    */
   public static async GetPasswordReset(token: string): Promise<boolean> {
-    let resetToken: PasswordReset = await PasswordReset.findOneBy({
-      token: token,
-    });
+    let resetToken: PasswordReset = await PasswordReset.findOneBy({ token: token });
     let passwordResetAllowed: boolean = false;
-    passwordResetAllowed =
-      new Date().getTime() - resetToken.created_at.getTime() < 30 * 60 * 1000;
+    //30* 60 * 1000 = 30 minutes
+    //anything over 30 mins will be denied.
+    passwordResetAllowed = new Date().getTime() - resetToken.created_at.getTime() < 30 * 60 * 1000;
     DataProcessor.DeleteSpecificPasswordReset(token);
     return passwordResetAllowed;
   }
@@ -405,8 +398,13 @@ export class DataProcessor {
   //#endregion
 
   //#region Alter Data
-  //possibly redundant.
-  //TODO: add validation
+  /**
+   * TODO:
+   * add validation to updating functions
+  */
+
+
+
   /**
    * changes a single password in the database
    * @param userId number user id
@@ -422,18 +420,19 @@ export class DataProcessor {
     User.save();
   }
 
-  //TODO: add validation
   // test if password change alters users password by hashing it twice
   /**
+   * changes the values of a single user object in database.
    * @param userid number user id
    * @param firstname  string of 3 to 30 characters
    * @param lastname string of 3 to 30 characters
    * @param email string of max 50 characters needs to be a valid email
-   * @param password string of minimum 5 characters
    * @param phone undefined | string of 12 characters that needs to start with +32
+   * @param colorDay GraphColor | undefined enum of colors
+   * @param colorNight | undefined enum of colors
    * @returns Promise<void>
    */
-  public static async EditAcount(
+  public static async EditAccount(
     userid: number,
     firstname: string,
     lastname: string,
@@ -443,8 +442,7 @@ export class DataProcessor {
     colorNight?: GraphColors
   ): Promise<void> {
     let userExists = await UserAccount.findAndCountBy({ userId: userid });
-    if (userExists[1] < 1 && userExists[1] > 1)
-      throw new Error(`Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`);
+    if (userExists[1] < 1 && userExists[1] > 1) throw new Error(`Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`);
     await UserAccount.update(userid, {
       firstname: firstname,
       lastname: lastname,
@@ -466,12 +464,10 @@ export class DataProcessor {
   ): Promise<void> {
     let user = await UserAccount.findOneBy({ userId: userId });
     let device = await Device.findOneBy({ deviceId: deviceid });
-    if (user == undefined || device == undefined)
-      throw new Error("Either Device or User does not exist or was not found.");
+    if (user == undefined || device == undefined) throw new Error("Either Device or User does not exist or was not found.");
     await Device.update({ deviceId: deviceid }, { user: user });
   }
 
-  //TODO: add validation
   /**
    * change alternate name for device
    * @param device_index number device index
@@ -535,20 +531,21 @@ export class DataProcessor {
    *  and deletes all data except for latest entry
    */
   public static async cleanTemporaryData(): Promise<void> {
+    // Delete all leftover data(if any) that is no longer relevant
     await this.DeleteExpiredTemporaryData();
-    let allDevices: Device[] = await Device.find();
 
+    //for each device get TempData, process data and delete tempData
+    let allDevices: Device[] = await Device.find();
     allDevices.map(async (specificDevice, index) => {
       setTimeout(async () => {
-        let dataFromSpecificDevice: TemporaryData[] =
-          await DataProcessor.GetAllTempData(specificDevice.device_index);
-        if (dataFromSpecificDevice.length > 0) {
-          //sort all temporary data by date
-          dataFromSpecificDevice = dataFromSpecificDevice.sort((a, b) =>
-            a.created_at < b.created_at ? 1 : -1
-          );
+        let dataFromSpecificDevice: TemporaryData[] = await DataProcessor.GetAllTempData(specificDevice.device_index);
 
-          //if temporary data array is more than 1(has been updated at least once since cleanup) use it to calculate usage
+        //make sure we don't insert empty Data in database
+        if (dataFromSpecificDevice.length > 0) {
+          //probably unnessecary but avoids issues during testing
+          dataFromSpecificDevice = dataFromSpecificDevice.sort((a, b) => a.created_at < b.created_at ? 1 : -1);
+
+          //if temporary data array is more than 1(has been updated at least once since previous cleanup) use it to calculate usage.
           if (dataFromSpecificDevice.length > 1) {
             let allDayData: number[] = [];
             let allNightData: number[] = [];
@@ -556,7 +553,7 @@ export class DataProcessor {
               allDayData.push(specificData.Day);
               allNightData.push(specificData.Night);
             });
-            //get diferential between first and last entry
+            //get difference between first and last entry => insert into new Data object
             const totalDayUsage: number = allDayData.at(-1) - allDayData.at(0);
             const totalNightUsasge: number = allNightData.at(-1) - allDayData.at(0);
             await this.CreateData(
@@ -568,9 +565,7 @@ export class DataProcessor {
           }
           //delete all temp data except for newest row.
           dataFromSpecificDevice.shift();
-          dataFromSpecificDevice.map(
-            async (data) => await this.DeleteSpecificTemporaryData(data.index)
-          );
+          dataFromSpecificDevice.map(async (data) => await this.DeleteSpecificTemporaryData(data.index));
         }
       }, 3_000 * (index + 1));
     });
@@ -580,18 +575,14 @@ export class DataProcessor {
    * deletes a single entry in temporary data
    * @param index number index of the temporary data
    */
-  private static async DeleteSpecificTemporaryData(
-    index: number
-  ): Promise<void> {
+  private static async DeleteSpecificTemporaryData(index: number): Promise<void> {
     TemporaryData.delete({ index: index });
   }
   /**
    * deletes all Temporary Data older than 24 hours
    */
   private static async DeleteExpiredTemporaryData(): Promise<void> {
-    const expiringDate: Date = new Date(
-      new Date().getTime() - 24 * 60 * 60 * 1000
-    );
+    const expiringDate: Date = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
     await DatabaseConnector.INSTANCE.dataSource
       .getRepository(TemporaryData)
       .delete({ created_at: LessThan(expiringDate) });
