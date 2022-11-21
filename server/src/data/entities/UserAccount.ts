@@ -41,7 +41,6 @@ export class UserAccount extends BaseEntity {
 
   @Column("varchar", { nullable: true, unique: false, length: 12 })
   @Length(0, 13)
-  @IsPhoneNumber("BE")
   @IsOptional()
   phone: string;
 
