@@ -41,10 +41,20 @@ interface IuserContext {
   userId: string;
 }
 
+interface ISetUserContext {
+  setLoggedIn: (loggedIn: boolean) => void;
+  setAdmin: (isAdmin: boolean) => void;
+}
+
 export const userContext = React.createContext<IuserContext>({
   loggedIn: false,
   isAdmin: false,
   userId: "",
+});
+
+export const setUserContext = React.createContext<ISetUserContext>({
+  setLoggedIn: (loggedIn: boolean) => {},
+  setAdmin: (isAdmin: boolean) => {},
 });
 
 export const getCurrentPath = (location: any) => {
@@ -92,13 +102,18 @@ const App = (): JSX.Element => {
               path="dashboard"
               element={<DashboardComp data={combineddata} />}
             />
-            <Route path="register" element={<Register />} />
+            <setUserContext.Provider value={{
+              setLoggedIn: setLoggedIn,
+              setAdmin: setIsAdmin
+            }}>
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<Register />} />
+              <Route path="logout" element={<Logout />} />
+            </setUserContext>
             <Route path="profile" element={<Profile />} />
             <Route path="profile/edit-profile" element={<EditProfile />} />
             <Route path="devices" element={<Devices />} />
-            <Route path="login" element={<LoginPage />} />
             <Route path="contact" element={<Contact />} />
-            <Route path="logout" element={<Logout />} />
             <Route path="admin" element={<AdminPage />}>
               <Route path="allusers" element={<AdminPage />} />
               <Route path="alldevices" element={<AdminPage />} />
