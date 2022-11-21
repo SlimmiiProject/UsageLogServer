@@ -102,14 +102,16 @@ const App = (): JSX.Element => {
               path="dashboard"
               element={<DashboardComp data={combineddata} />}
             />
-            <setUserContext.Provider value={{
-              setLoggedIn: setLoggedIn,
-              setAdmin: setIsAdmin
-            }}>
+            <setUserContext.Provider
+              value={{
+                setLoggedIn: setLoggedIn,
+                setAdmin: setIsAdmin,
+              }}
+            >
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<Register />} />
               <Route path="logout" element={<Logout />} />
-            </setUserContext>
+            </setUserContext.Provider>
             <Route path="profile" element={<Profile />} />
             <Route path="profile/edit-profile" element={<EditProfile />} />
             <Route path="devices" element={<Devices />} />
