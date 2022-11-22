@@ -417,7 +417,7 @@ export class DataProcessor {
    * @param description string
    * @param ipaddress string
    */
-  public static CreateLog = async (userId:number, description: string, ipaddress: string): Promise<void0> => {
+  public static CreateLog = async (userId:number, description: string, ipaddress: string): Promise<void> => {
     let user = UserAccount.findOneBy({userId: userId});
     let newLog = new Logfile()
     newLog.account_id = await user;
