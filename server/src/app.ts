@@ -84,6 +84,7 @@ export class App {
         apiRouter.use("/users/:userId", require("./routes/UserRouter"));
         apiRouter.use("/data", require("./routes/DataRouter"));
         apiRouter.use("/profiles", require("./routes/ProfileRouter"));
+        apiRouter.use("/session", require("./routes/SessionRouter"));
 
         apiRouter.use("/contact", require("./routes/ContactRouter"));
 
