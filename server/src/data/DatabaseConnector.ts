@@ -68,20 +68,22 @@ export class DatabaseConnector {
       logging: Environment.isDebug(),
       entities: DatabaseConnector.entities,
       connectTimeout: 20000,
-      acquireTimeout: 20000
+      acquireTimeout: 20000,
     });
   }
 
   private static _INSTANCE: DatabaseConnector;
 
   public static get INSTANCE(): DatabaseConnector {
-    if (!this._INSTANCE) this._INSTANCE = this.createConnector(Environment.CONFIG.database);
+    if (!this._INSTANCE)
+      this._INSTANCE = this.createConnector(Environment.CONFIG.database);
     return this._INSTANCE;
   }
 
   public async initialize() {
-    if (this._dataSource.isInitialized) return Logger.warn("Database can't be initialized more than one time!");
-  
+    if (this._dataSource.isInitialized)
+      return Logger.warn("Database can't be initialized more than one time!");
+
     try {
       this._dataSource = await this._dataSource.initialize();
       await this.dataSource.synchronize(false);
