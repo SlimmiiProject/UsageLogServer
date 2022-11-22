@@ -25,8 +25,8 @@ export default function App(props: MeerdereData) {
   return (
     <>
       <h3>{props.titel}</h3>
-      <div className="flex">
-        <BarChart width={900} height={500} data={props.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }} >
+      <div className="flex" style={{backgroundColor:"rgba(0, 0, 0, 0.0)"}}>
+        <BarChart width={900} height={500} data={props.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }} style={{backgroundColor:"rgba(0, 0, 0, 0.0)"}}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
