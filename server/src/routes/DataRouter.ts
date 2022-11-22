@@ -1,4 +1,3 @@
-import { onlyAcceptJSON } from './../utils/Middleware';
 import { DeviceSpecificData } from './../data/DataProcessing';
 import { RegExpVal } from '../utils/RegexValidator';
 import express, { Request, Response } from "express";
@@ -7,6 +6,7 @@ import { DataProcessor } from '../data/DataProcessing';
 import { User } from '../types/express-session';
 import { DateUtil, Period } from '../utils/DateUtil';
 import { ObjectUtil } from '../utils/ObjectUtil';
+import { Middleware } from '../utils/Middleware';
 const router = express.Router();
 
 router.use(SessionManager.loginRequired);
@@ -31,8 +31,6 @@ router.post("/meter-entry", async (req: Request, res: Response) => {
 
     if (!Object.values(data).every(ObjectUtil.isSet))
         return res.json({ error: true });
-
-    
 });
 
 type DataParams = { [key: string]: string } & {
@@ -55,7 +53,7 @@ type DeviceValues = {
     night: number;
 }
 
-router.get("/data", /*onlyAcceptJSON, */ async (req: Request, res: Response) => {
+router.get("/data", /*Middleware.onlyAcceptJSON,*/ async (req: Request, res: Response) => {
     const userData: User = SessionManager.getSessionData(req).user;
     const params: DataParams = req.params as DataParams;
 

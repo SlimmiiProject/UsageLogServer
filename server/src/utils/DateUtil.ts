@@ -13,7 +13,7 @@ export class DateUtil {
      * @param {Period} period - Period = "Day" | "Week" | "Month"
      * @returns A date object.
      */
-    public static getDateOverPeriod(beginDate: Date, period: Period): Date {
+    public static getDateOverPeriod = (beginDate: Date, period: Period): Date => {
         switch (period) {
             case "Day": return new Date(beginDate.setDate(beginDate.getDate() + 1));
             case "Week": return new Date(beginDate.setDate(beginDate.getDate() + 6));
@@ -21,15 +21,11 @@ export class DateUtil {
         }
     }
 
-    public static getDayOfMonth(year: number, month: number, day: number) {
-        return new Date(year, month, day);
-    }
+    public static getDayOfMonth = (year: number, month: number, day: number) => new Date(year, month, day)
 
-    public static get dayInMillis(): number {
-        return 86_400_000;
-    }
+    public static get dayInMillis(): number { return 86_400_000; }
 
-    public static getDisplayForPeriod(date: Date, period: Period) {
+    public static getDisplayForPeriod = (date: Date, period: Period) => {
         switch (period) {
             case "Day": return date.getHours().toString();
             case "Week": return this.getDayName(date, "nl-NL");
@@ -37,15 +33,9 @@ export class DateUtil {
         }
     }
 
-    public static getDayName(date:Date, locale:string) {
-        return date.toLocaleDateString(locale, { weekday: 'long' });
-    }
+    public static getDayName = (date: Date, locale: string) => date.toLocaleDateString(locale, { weekday: 'long' });
+    
+    public static getDateFull = (date: Date, locale: string) => date.toLocaleDateString(locale, { weekday: "long", day: '2-digit', month: "2-digit", year: "2-digit" });
 
-    public static getDateFull(date:Date, locale:string) {
-        return date.toLocaleDateString(locale, { weekday:"long", day: '2-digit', month: "2-digit", year:"2-digit" });
-    }
-
-    public static getCurrentDate() {
-        return new Date(Date.now());
-    }
+    public static getCurrentDate = () => new Date(Date.now());
 }

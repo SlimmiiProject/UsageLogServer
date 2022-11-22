@@ -7,11 +7,11 @@ export type DefaultData = {[key:string]:any} & {
 
 export class MailTemplates {
 
-    public static VERIFY_EMAIL(options: DefaultData): string {
+    public static VERIFY_EMAIL = (options: DefaultData): string => {
         return MailTemplate.create("verify_email", options);
     }
 
-    public static FORM_CONFIRM(options: DefaultData) {
+    public static FORM_CONFIRM = (options: DefaultData) => {
        return MailTemplate.create("form_Confirm", options);
     }
 }

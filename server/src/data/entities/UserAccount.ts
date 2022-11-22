@@ -15,7 +15,7 @@ export enum GraphColors {
 @Entity()
 export class UserAccount extends BaseEntity {
 
-  public static createUser(firstName: string, lastName: string, email: string, phone: string, password: string) {
+  public static createUser = (firstName: string, lastName: string, email: string, phone: string, password: string) => {
     const userAccount = new UserAccount();
     userAccount.firstname = firstName;
     userAccount.lastname = lastName;
