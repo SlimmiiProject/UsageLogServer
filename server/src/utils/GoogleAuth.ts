@@ -1,11 +1,12 @@
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
+import { Environment } from './Environment';
 
 export class GoogleAuth {
 
-    private static readonly CLIENT_ID = "221342809801-g72s252qo6fqssr1taughcq32er2o6dh.apps.googleusercontent.com";
+    private static readonly CLIENT_ID = Environment.CONFIG.google.client_id;
     private static _client = new OAuth2Client(this.CLIENT_ID);
 
-    public static async verifyToken(token: string): Promise<boolean> {
+    public static verifyToken = async (token: string): Promise<boolean> => {
         return this.verifyTokenAct(token);
     }
 
@@ -16,12 +17,12 @@ export class GoogleAuth {
      * passed the payload of the token.
      * @returns The token payload.
      */
-    public static async verifyTokenAct(token: string, callback?: { (payload: TokenPayload): Promise<void> }): Promise<boolean> {
+    public static verifyTokenAct = async (token: string, callback?: { (payload: TokenPayload): Promise<void> }): Promise<boolean> => {
         try {
             const ticket = await this._client.verifyIdToken({ idToken: token, audience: this.CLIENT_ID });
             if (callback) await callback(ticket.getPayload());
             return true;
-        } catch (_ignored) { 
+        } catch (_ignored) {
             return false;
         }
     }

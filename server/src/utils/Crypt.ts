@@ -6,9 +6,7 @@ import { TextEncoder } from "util";
  */
 export class Crypt {
 
-    private static get saltRounds() {
-        return 10;
-    }
+    private static get saltRounds() { return 10; }
 
     /**
      * It takes a raw string and an encrypted string, decrypts the encrypted string, and then compares
@@ -17,13 +15,9 @@ export class Crypt {
      * @param {string} encryptedContent - The encrypted content that you want to compare against.
      * @returns The encrypted content is being returned.
      */
-    public static matchesEncrypted(rawContent: string, encryptedContent: string): boolean {
-        return this.compare(rawContent, encryptedContent);
-    }
+    public static matchesEncrypted = (rawContent: string, encryptedContent: string): boolean => this.compare(rawContent, encryptedContent);
 
-    private static compare(raw: string, encryptedHash: string) {
-        return bcrypt.compareSync(raw, this.decryptToHash(encryptedHash));
-    }
+    private static compare = (raw: string, encryptedHash: string) => bcrypt.compareSync(raw, this.decryptToHash(encryptedHash));
 
     /**
      * "Create an array of length `length` and reduce it to a string by adding a random character to it
@@ -31,41 +25,30 @@ export class Crypt {
      * @param {number} length - number - The length of the password to generate.
      * @returns A string of random characters.
      */
-    public static createRandomPassword(length: number): string {
-        return [...new Array(length).keys()].reduce((password) => password + String.fromCharCode(Math.floor(Math.random() * 128)), "");
-    }
+    public static createRandomPassword = (length: number): string =>
+        [...new Array(length).keys()].reduce((password) => password + String.fromCharCode(Math.floor(Math.random() * 128)), "");
 
-    public static encrypt(content: string): string {
+    public static encrypt = (content: string): string => {
         const hashedInput = bcrypt.hashSync(content, this.saltRounds);
         const bytesInput = this.toBytes(hashedInput);
         const xorInput = this.xor(bytesInput);
         return this.toBase64(xorInput);
     }
 
-    public static decryptToHash(encryped: string): string {
+    public static decryptToHash = (encryped: string): string => {
         const decryptedB64 = this.fromBase64(encryped);
         const decryptedXOR = this.xor(decryptedB64);
         const decryptedBytes = this.fromBytes(decryptedXOR);
         return decryptedBytes;
     }
 
-    private static toBytes(content: string): Uint8Array {
-        return new TextEncoder().encode(content);
-    }
+    private static toBytes = (content: string): Uint8Array => new TextEncoder().encode(content);
 
-    private static fromBytes(bytes: Uint8Array): string {
-        return new TextDecoder().decode(bytes);
-    }
+    private static fromBytes = (bytes: Uint8Array): string => new TextDecoder().decode(bytes);
 
-    private static xor(bytes: Uint8Array): Uint8Array {
-        return bytes.map((byte) => byte ^ 129);
-    }
+    private static xor = (bytes: Uint8Array): Uint8Array => bytes.map((byte) => byte ^ 129);
 
-    private static toBase64(bytes: Uint8Array) {
-        return Buffer.from(bytes).toString("base64");
-    }
+    private static toBase64 = (bytes: Uint8Array) => Buffer.from(bytes).toString("base64");
 
-    private static fromBase64(base64: string): Uint8Array {
-        return Buffer.from(base64, "base64");
-    }
+    private static fromBase64 = (base64: string): Uint8Array => Buffer.from(base64, "base64");
 }

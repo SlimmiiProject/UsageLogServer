@@ -1,7 +1,6 @@
 import { DateUtil } from "../utils/DateUtil";
 import { ObjectUtil } from "../utils/ObjectUtil";
 import { DataProcessor } from "./DataProcessing";
-import { Data } from "./entities/Data";
 import { TemporaryData } from "./entities/TemporaryData";
 
 export class MeterEntryProcessor {

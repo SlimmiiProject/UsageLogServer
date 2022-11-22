@@ -80,7 +80,7 @@ export class DatabaseConnector {
     return this._INSTANCE;
   }
 
-  public async initialize() {
+  public  initialize = async () => {
     if (this._dataSource.isInitialized)
       return Logger.warn("Database can't be initialized more than one time!");
 

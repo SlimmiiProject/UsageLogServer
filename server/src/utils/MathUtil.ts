@@ -8,7 +8,7 @@ export class MathUtil {
      * @param {number} maximum - The maximum value that the input can be.
      * @returns Value between or equal to minimum and maximum
      */
-    public static clamp(input: number, minimum: number, maximum: number): number {
+    public static clamp = (input: number, minimum: number, maximum: number): number => {
         return Math.min(Math.max(input, minimum), maximum);
     }
 }
