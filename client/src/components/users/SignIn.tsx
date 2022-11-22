@@ -2,7 +2,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { IOUtil } from "../../util/IOUtil";
 import { useNavigate } from "react-router-dom";
 import { I18n } from "../../util/language/I18n";
-import { getPath } from "../../App";
+import { getPath, setUserContext, userContext } from "../../App";
 import {
   Container,
   Alert,
@@ -17,11 +17,11 @@ import {
   Grid,
   Link,
 } from "@mui/material";
-import React, { Dispatch, FC, SetStateAction } from "react";
-import { GoogleLoginComponent } from "../GoogleLoginComponent";
+import React from "react";
 
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
+  const userSetContext = React.useContext(setUserContext);  
 
   const [authenticated, setAuthenticated] = React.useState<boolean>(false);
   const [isFailed, setFailed] = React.useState<Boolean>(false);
@@ -29,6 +29,7 @@ const SignIn = (): JSX.Element => {
   React.useEffect(() => {
     if (authenticated) {
       setFailed(false);
+      userSetContext.setLoggedIn(true);
       navigate("/dashboard");
     }
   }, [authenticated]);
@@ -65,6 +66,7 @@ const SignIn = (): JSX.Element => {
           {" "}
           <LockOutlinedIcon />{" "}
         </Avatar>
+        
         <Typography component="h1" variant="h5">
           Log in
         </Typography>

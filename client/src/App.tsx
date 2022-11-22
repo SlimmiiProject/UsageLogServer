@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -16,7 +16,7 @@ import { AdminPage } from "./components/admin/AdminPage";
 import LoginPage from "./components/users/LoginPage";
 import { I18n } from "./util/language/I18n";
 import EditProfile from "./components/users/EditProfile";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Location } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 
 export interface ITestData {
@@ -36,7 +36,7 @@ export interface IData {
   nacht: number;
 }
 
-interface IuserContext {
+interface IUserContext {
   loggedIn: boolean;
   isAdmin: boolean;
   userId: string;
@@ -47,7 +47,7 @@ interface ISetUserContext {
   setAdmin: (isAdmin: boolean) => void;
 }
 
-export const userContext = React.createContext<IuserContext>({
+export const userContext = React.createContext<IUserContext>({
   loggedIn: false,
   isAdmin: false,
   userId: "",
@@ -59,20 +59,25 @@ export const setUserContext = React.createContext<ISetUserContext>({
 });
 
 // Get the current path to use for the correct links
-export const getCurrentPath = (location: any) => {
+export const getCurrentPath = (location: Location) => {
   if (location.pathname[location.pathname.length - 1] === "/") location.pathname = location.pathname.substring(0, location.pathname.length - 1);
   return location.pathname;
 };
 
+// Get path with current language prefix
 export const getPath = (path: string) => {
   return `/${I18n.currentLanguage}/${path}`;
 };
 
 const App = (): JSX.Element => {
-  const [loggedIn, setLoggedIn] = useState<boolean>(true);
-  const [isAdmin, setIsAdmin] = useState<boolean>(true);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem("darkMode")!) || false);
   const [userId, setUserId] = useState<string>("");
+
+  useEffect(() => {
+    // Request session data, check if you're still logged in, set session data (make state with data)
+  }, [])
 
   const lang = I18n.currentLanguage;
 
@@ -80,23 +85,16 @@ const App = (): JSX.Element => {
   const combineddata: ITestData = require("./util/data/testData.json");
 
   // Change darkmode
-  const darkModeChoice = darkMode ? "dark" : "light";
-  const darkTheme = createTheme({
-    palette: {
-      mode: darkModeChoice,
-    },
-  });
-  const handleDarkMode = () => {
-    setDarkMode((prevDarkMode) => {
-      const afterToggle = !prevDarkMode;
-      localStorage.setItem("darkMode", JSON.stringify(afterToggle));
-      return afterToggle;
-    });
+  const darkTheme = createTheme({ palette: { mode: darkMode ? "dark" : "light" } });
 
-  };
+  const handleDarkMode = () => setDarkMode((prevDarkMode) => {
+    const afterToggle = !prevDarkMode;
+    localStorage.setItem("darkMode", JSON.stringify(afterToggle));
+    return afterToggle;
+  });
+
   return (
     <>
-
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <userContext.Provider value={{ loggedIn: loggedIn, isAdmin: isAdmin, userId: userId }} >
@@ -104,17 +102,11 @@ const App = (): JSX.Element => {
             <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />
             <Routes>
               <Route path="/" element={<Navigate to={`/${lang}/`} />} />
-              <Route
-                path="/dashboard"
-                element={<Navigate to={`/${lang}/dashboard`} />}
-              />
+              <Route path="/dashboard" element={<Navigate to={`/${lang}/dashboard`} />} />
 
               <Route path="/:lang">
                 <Route index element={<LoginPage />} />
-                <Route
-                  path="dashboard"
-                  element={<DashboardComp data={combineddata} />}
-                />
+                <Route path="dashboard" element={<DashboardComp data={combineddata} />} />
 
                 <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<Register />} />
@@ -122,14 +114,15 @@ const App = (): JSX.Element => {
 
                 <Route path="profile" element={<Profile />} />
                 <Route path="profile/edit-profile" element={<EditProfile />} />
+
                 <Route path="devices" element={<Devices />} />
                 <Route path="contact" element={<Contact />} />
+
                 <Route path="admin" element={<AdminPage />}>
                   <Route path="allusers" element={<AdminPage />} />
                   <Route path="alldevices" element={<AdminPage />} />
                   <Route path="logfile" element={<AdminPage />} />
                 </Route>
-
               </Route>
 
               <Route path="*" element={<PageNotFound />} />
