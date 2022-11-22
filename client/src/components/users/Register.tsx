@@ -20,6 +20,7 @@ export type RegisterFormData = {
   first_name: string;
   last_name: string;
   email: string;
+  landcode: string;
   phone_number: string;
   password: string;
   password_verify: string;
@@ -29,22 +30,28 @@ const Register = (): JSX.Element => {
   const [registered, setRegistered] = useState<Boolean>(false);
   const [error, setError] = useState<Error>();
   const [passwordMatch, setPasswordMatch] = useState<boolean>(true);
+  const [landcodeError, setLandcodeError] = useState<boolean>(false);
   const [formData, setFormData] = useState<RegisterFormData>({
     first_name: "",
     last_name: "",
     email: "",
+    landcode: "",
     phone_number: "",
     password: "",
-    password_verify: ""
+    password_verify: "",
   });
 
   const navigate = useNavigate();
   const hasError = error !== undefined;
 
-  const setValue = (key: keyof RegisterFormData, data: string) => StateUtil.setValue<RegisterFormData>(key, data, setFormData);
+  const setValue = (key: keyof RegisterFormData, data: string) =>
+    StateUtil.setValue<RegisterFormData>(key, data, setFormData);
 
   React.useEffect(() => {
-    if (registered) IOUtil.loginUser(formData.email, formData.password).then(() => navigate("/dashboard"));
+    if (registered)
+      IOUtil.loginUser(formData.email, formData.password).then(() =>
+        navigate("/dashboard")
+      );
   }, [registered, navigate, formData.email, formData.password]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,27 +61,73 @@ const Register = (): JSX.Element => {
 
     let phone = formData.phone_number;
 
-    if (phone[0] === "0") setFormData((formData) => { return { ...formData, phone_number: phone = "+32" + phone.slice(1) }; });
+    if (phone[0] === "0")
+      setFormData((formData) => {
+        return {
+          ...formData,
+          phone_number: (phone += formData.phone_number.slice(1)),
+        };
+      });
 
-    const { first_name, last_name, email, password, password_verify } = formData;
-    if (passwordMatch) setRegistered(await IOUtil.registerUser(first_name, last_name, email, phone, password, password_verify, (err) => setError(err)));
+    if (formData.landcode !== "") {
+      if (formData.landcode.startsWith("+")) {
+        phone = formData.landcode + formData.phone_number;
+      } else if (formData.landcode[0] === "0" && formData.landcode[1] === "0") {
+        phone = "+" + formData.landcode.slice(2) + formData.phone_number;
+      }
+    } else {
+      setLandcodeError(true);
+    }
 
-    setFormData((formData) => { return { ...formData, password: "", password_verify: "" }; })
+    const { first_name, last_name, email, password, password_verify } =
+      formData;
+    if (passwordMatch)
+      setRegistered(
+        await IOUtil.registerUser(
+          first_name,
+          last_name,
+          email,
+          phone,
+          password,
+          password_verify,
+          (err) => setError(err)
+        )
+      );
+
+    setFormData((formData) => {
+      return { ...formData, password: "", password_verify: "" };
+    });
   };
 
   return (
     <Container component="main" maxWidth="xs">
-
-      {!passwordMatch && (<Alert severity="error">{I18n.t("error.passwords_no_match")}</Alert>)}
-      {hasError && <Alert severity="error">{
-        <>
-          {I18n.t(error.error)}
-          {error.missing_fields && error.missing_fields.map((field) => <div>{I18n.t(field)}</div>)}
-        </>
-      }</Alert>}
+      {landcodeError && (
+        <Alert severity="error">{I18n.t("error.no_landcode")}</Alert>
+      )}
+      {!passwordMatch && (
+        <Alert severity="error">{I18n.t("error.passwords_no_match")}</Alert>
+      )}
+      {hasError && (
+        <Alert severity="error">
+          {
+            <>
+              {I18n.t(error.error)}
+              {error.missing_fields &&
+                error.missing_fields.map((field) => <div>{I18n.t(field)}</div>)}
+            </>
+          }
+        </Alert>
+      )}
 
       <CssBaseline />
-      <Box sx={{ marginTop: 5, display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <Box
+        sx={{
+          marginTop: 5,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <Avatar sx={{ m: 1, bgcolor: "rgba(25,118,210,255)" }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -83,11 +136,20 @@ const Register = (): JSX.Element => {
           {I18n.t("register.here")}
         </Typography>
 
-        <Box component="form" noValidate onSubmit={(e) => handleSubmit(e)} sx={{ mt: 3 }} >
+        <Box
+          component="form"
+          noValidate
+          onSubmit={(e) => handleSubmit(e)}
+          sx={{ mt: 3 }}
+        >
           <Grid container spacing={2}>
-
             <Grid item xs={12} sm={6}>
-              <TextField autoComplete="given-name" name="firstName" required fullWidth id="firstName"
+              <TextField
+                autoComplete="given-name"
+                name="firstName"
+                required
+                fullWidth
+                id="firstName"
                 value={formData.first_name}
                 onChange={(event) => setValue("first_name", event.target.value)}
                 label={I18n.t("field.first_name")}
@@ -96,7 +158,12 @@ const Register = (): JSX.Element => {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <TextField required fullWidth id="lastName" label={I18n.t("field.last_name")} name="lastName"
+              <TextField
+                required
+                fullWidth
+                id="lastName"
+                label={I18n.t("field.last_name")}
+                name="lastName"
                 value={formData.last_name}
                 onChange={(event) => setValue("last_name", event.target.value)}
                 autoComplete="family-name"
@@ -104,7 +171,11 @@ const Register = (): JSX.Element => {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth id="email" label={I18n.t("field.email")}
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label={I18n.t("field.email")}
                 name="email"
                 type="email"
                 value={formData.email}
@@ -113,17 +184,40 @@ const Register = (): JSX.Element => {
               />
             </Grid>
 
-            <Grid item xs={12}>
-              <TextField required fullWidth id="phoneNumber" label={I18n.t("field.phone_number")}
+            <Grid item xs={12} sm={4}>
+              <TextField
+                required
+                fullWidth
+                id="landcode"
+                label={I18n.t("field.landcode")}
+                name="landcode"
+                value={formData.landcode}
+                onChange={(event) => setValue("landcode", event.target.value)}
+                autoComplete="landcode"
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={8}>
+              <TextField
+                required
+                fullWidth
+                id="phoneNumber"
+                label={I18n.t("field.phone_number")}
                 name="phoneNumber"
                 value={formData.phone_number}
-                onChange={(event) => setValue("phone_number", event.target.value)}
+                onChange={(event) =>
+                  setValue("phone_number", event.target.value)
+                }
                 autoComplete="Phone-Nummer"
               />
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth name="password" label={I18n.t("field.password")}
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label={I18n.t("field.password")}
                 type="password"
                 id="password"
                 value={formData.password}
@@ -133,17 +227,28 @@ const Register = (): JSX.Element => {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField required fullWidth name="passwordVerify" label={I18n.t("field.password_verify")}
+              <TextField
+                required
+                fullWidth
+                name="passwordVerify"
+                label={I18n.t("field.password_verify")}
                 type="password"
                 id="passwordVerify"
                 value={formData.password_verify}
-                onChange={(event) => setValue("password_verify", event.target.value)}
+                onChange={(event) =>
+                  setValue("password_verify", event.target.value)
+                }
                 autoComplete="new-password"
               />
             </Grid>
           </Grid>
 
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} >
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
             {I18n.t("register.here")}
           </Button>
 

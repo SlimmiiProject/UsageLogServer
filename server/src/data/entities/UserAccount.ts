@@ -4,7 +4,14 @@ import { AccountManager } from "../../accounts/AccountManager";
 import { Logger } from "../../utils/Logger";
 import { IsDefined, Length, MinLength, IsEmail, MaxLength, IsPhoneNumber, IsOptional } from "class-validator";
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate } from "typeorm";
-
+export enum GraphColors {
+  RED = "red",
+  GREEN = "green",
+  ORANGE = "orange",
+  YELLOW = "yellow",
+  BLUE = "blue",
+  PURPLE = "purple"
+}
 @Entity()
 export class UserAccount extends BaseEntity {
 
@@ -43,13 +50,21 @@ export class UserAccount extends BaseEntity {
   @IsOptional()
   device: Device[];
 
+  @Column("enum", { enum: GraphColors, default: GraphColors.ORANGE, name: "color_day", nullable: true, unique: false })
+  @IsOptional()
+  colorDay: GraphColors;
+
+  @Column("enum", { enum: GraphColors, default: GraphColors.PURPLE, name: "color_night", nullable: true, unique: false })
+  @IsOptional()
+  colorNight: GraphColors;
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
     return this.password && await new Promise((resolve, reject) => {
-        const hashedPassword = Crypt.encrypt(this.password);
-        hashedPassword ? resolve((this.password = hashedPassword)) : reject(Logger.error("Hashing password failed"))
-      });
+      const hashedPassword = Crypt.encrypt(this.password);
+      hashedPassword ? resolve((this.password = hashedPassword)) : reject(Logger.error("Hashing password failed"))
+    });
   }
 
   isAdmin = async () => await AccountManager.isAdministrator(this.userId);
