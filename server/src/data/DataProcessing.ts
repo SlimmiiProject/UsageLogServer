@@ -1,3 +1,4 @@
+import { Logfile } from './entities/Logfile';
 import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
@@ -630,6 +631,13 @@ export class DataProcessor {
    */
   private static async DeleteSpecificPasswordReset(token: string) {
     PasswordReset.delete({ token: token });
+  }
+
+  /**
+   * Returns all the data in the logfile
+  */
+  public static async GetLogfileData(){
+    return Logfile.find()
   }
 
   //#endregion

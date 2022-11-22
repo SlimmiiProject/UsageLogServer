@@ -1,3 +1,4 @@
+import { Logfile } from './entities/Logfile';
 import { DataSource } from "typeorm";
 import { Environment } from "../utils/Environment";
 import { Logger } from "../utils/Logger";
@@ -47,6 +48,7 @@ export class DatabaseConnector {
       TemporaryData,
       ContactForm,
       PasswordReset,
+      Logfile,
     ];
   }
 
