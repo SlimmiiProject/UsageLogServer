@@ -10,7 +10,7 @@ const Logout = () => {
     IOUtil.logoutUser().then((res) =>
       !res ? navigate("/") : navigate("/dashboard")
     );
-  }, [navigate]);
+  }, []);
 
   return <h1>Loggin out ...</h1>;
 };
