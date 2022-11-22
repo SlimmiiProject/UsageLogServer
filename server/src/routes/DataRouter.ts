@@ -31,8 +31,6 @@ router.post("/meter-entry", async (req: Request, res: Response) => {
 
     if (!Object.values(data).every(ObjectUtil.isSet))
         return res.json({ error: true });
-
-
 });
 
 type DataParams = { [key: string]: string } & {
