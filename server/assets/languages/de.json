@@ -31,7 +31,7 @@
   "googlelogincomponent.logout": "Abmelden",
   "googlelogincomponent.signIn": "Bei Google anmelden",
   "graph.day": "Tag",
-  "graph.night": "nacht",
+  "graph.night": "Nacht",
   "logger.title": "Logger",
   "metercard.name": "Zählerkartenname",
   "metercard.id": "Zählerkarten-ID",
@@ -42,6 +42,7 @@
   "field.first_name": "Vorname",
   "field.last_name": "Nachname",
   "field.email": "E-Mail",
+  "field.landcode": "Landesvorwahl",
   "field.phone_number": "Telefonnummer",
   "feld.password": "Passwort",
   "field.password_verify": "Passwort verifizieren",
@@ -58,5 +59,6 @@
   "error.account_already_exists": "Konto existiert bereits",
   "error.password_short": "Passwort ist zu kurz, benötigt mindestens 8 Zeichen",
   "error.passwords_no_match": "Passwörter stimmen nicht überein",
-  "error.undefined_error": "Etwas ist schief gelaufen"
+  "error.undefined_error": "Etwas ist schief gelaufen",
+  "error.no_landcode": "Sie haben die Ländervorwahl vergessen"
 }

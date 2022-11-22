@@ -4,7 +4,7 @@ import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
 import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
-import { UserAccount } from "./entities/UserAccount";
+import { GraphColors, UserAccount } from "./entities/UserAccount";
 import { PasswordReset } from "./entities/PasswordReset";
 import { Equal, LessThan } from "typeorm";
 import { validate } from "class-validator";
@@ -15,6 +15,8 @@ export interface DeviceSpecificData {
   device_alias: string;
   data: Data[];
   lastData: TemporaryData;
+  colorDay?: GraphColors;
+  colorNight?: GraphColors;
 }
 /*
  *implementation:
@@ -30,14 +32,14 @@ export interface DeviceSpecificData {
  *GET::
  * All Get functions will return an empty array if nothing is found.
  * exceptions:
- * GetData returns an object consisting of a combination of Device, Data[], TemporaryData for each device that this user has.
+ * GetData returns an object of DeviceSpecificData,for each device that this user has.
  * GetPasswordReset returns a boolean if the reset for this userAcount exists and is valid.
  *
  * ALTER::
  * EditAcount, addDevicetoUser, ChangeDeviceAlias: if device or user is not found this will throw an error.
  *
  * DELETE::
- *
+ * to delete a row of data, all the relations it is connected to need to be empty or it will fail.
  *
  *
  */
@@ -47,7 +49,7 @@ export class DataProcessor {
 
   /**
    * creates a new device in the database
-   * throws an Error if input is not valied
+   * throws an Error if input is not valid
    * @param DeviceId string of 64 characters
    * @param alias undefined | string of 1 to 50 characters
    */
@@ -65,7 +67,7 @@ export class DataProcessor {
 
   /**
    * creates a new user in the database, returns the new user id
-   * throws an Error if input is not valied
+   * throws an Error if input is not valid
    * @param firstname  string of 3 to 30 characters
    * @param lastname string of 3 to 30 characters
    * @param email string of max 50 characters needs to be a valid email
@@ -96,24 +98,25 @@ export class DataProcessor {
 
   /**
    * creates new Data coupled to a specific device
-   * throws an Error if input is not valied
+   * throws an Error if input is not valid
    * @param deviceId string id from device
    * @param date Date when data was created
    * @param dataDay undefined | number amount of power used during day time
-   * @param DataNight undefined | number amount of power used during night time
+   * @param dataNight undefined | number amount of power used during night time
    */
+
   private static async CreateData(
     deviceId: string,
     date: Date,
     dataDay?: number,
-    DataNight?: number
+    dataNight?: number
   ): Promise<void> {
     let dataDevice = await Device.findOneBy({ deviceId: deviceId });
     const newData = new Data();
     newData.device = dataDevice;
     newData.created_at = date;
     if (dataDay) newData.Day = dataDay;
-    if (DataNight) newData.Night = DataNight;
+    if (dataNight) newData.Night = dataNight;
     validate(newData).then(async (result) => {
       if (result.length <= 0) await Data.save(newData);
     });
@@ -121,7 +124,7 @@ export class DataProcessor {
 
   /**
    * creates TempData coupled to a device
-   * throws an Error if input is not valied
+   * throws an Error if input is not valid
    * @param deviceId string id of device
    * @param dataDay undefined | number power usage during day
    * @param dataNight undefined | number power useage during night
@@ -152,8 +155,8 @@ export class DataProcessor {
 
   /**
    * creates a new contactform.
-   * throws an Error if input is not valied
-   * @param email string valied email adress of max 50 characters
+   * throws an Error if input is not valid
+   * @param email string valid email adress of max 50 characters
    * @param message string of max 1000 characters
    * @param message_topic string of 4 to 100 characters
    */
@@ -176,7 +179,7 @@ export class DataProcessor {
   }
   /**
    *  you need at least one of the optional values to use this function.
-   * throws an Error if input is not valied.
+   * throws an Error if input is not valid.
    * @param token string serves as unique id for reset
    * @param userId undefined | number user id
    * @param email undefined | string email adress of a user
@@ -242,6 +245,7 @@ export class DataProcessor {
     endDate?: Date
   ): Promise<DeviceSpecificData[]> {
     let tempdata: TemporaryData[] = await DataProcessor.GetTempData(userid);
+    let user: UserAccount = await DataProcessor.GetUser(undefined, userid);
     let data: Data[] = [];
     if (startDate && endDate) {
       //UNTESTED
@@ -283,11 +287,14 @@ export class DataProcessor {
         if (filteredTempData[0] && !startDate && !endDate)
           currentDayData = filteredTempData[0];
       }
+
       const deviceData: DeviceSpecificData = {
         device_index: device.device_index,
         device_alias: device.friendlyName,
         data: data.filter((a) => a.device.device_index === device.device_index),
         lastData: currentDayData,
+        colorDay: user.colorDay,
+        colorNight: user.colorNight,
       };
       completeData.push(deviceData);
     });
@@ -354,7 +361,7 @@ export class DataProcessor {
 
   //not sure what input this will get (assuming it will get the token)
   /**
-   * returns true or false if the token is valied or expired
+   * returns true or false if the token is valid or expired
    * @param token string the unique id of the reset
    * @returns Promise<boolean>
    */
@@ -431,19 +438,23 @@ export class DataProcessor {
     userid: number,
     firstname: string,
     lastname: string,
-    password: string,
     email: string,
-    phone?: string
+    phone?: string,
+    colorDay?: GraphColors,
+    colorNight?: GraphColors
   ): Promise<void> {
     let userExists = await UserAccount.findAndCountBy({ userId: userid });
-    if (userExists[1] < 1)
-      throw new Error(`Acount does not exist. looking for acount: ${userid}`);
+    if (userExists[1] < 1 && userExists[1] > 1)
+      throw new Error(
+        `Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`
+      );
     await UserAccount.update(userid, {
       firstname: firstname,
       lastname: lastname,
-      password: password,
       email: email,
       phone: phone,
+      colorDay: colorDay,
+      colorNight: colorNight,
     });
   }
 
@@ -550,7 +561,8 @@ export class DataProcessor {
             });
             //get diferential between first and last entry
             const totalDayUsage: number = allDayData.at(-1) - allDayData.at(0);
-            const totalNightUsasge: number = allNightData.at(-1) - allDayData.at(0);
+            const totalNightUsasge: number =
+              allNightData.at(-1) - allDayData.at(0);
             await this.CreateData(
               specificDevice.deviceId,
               new Date(),
@@ -607,5 +619,6 @@ export class DataProcessor {
   private static async DeleteSpecificPasswordReset(token: string) {
     PasswordReset.delete({ token: token });
   }
+
   //#endregion
 }

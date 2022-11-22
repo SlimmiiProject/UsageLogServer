@@ -8,38 +8,38 @@
       "data": [
         {
           "name": "Page A",
-          "dag": 4000,
-          "nacht": 2400
+          "day": 4000,
+          "night": 2400
         },
         {
           "name": "Page B",
-          "dag": -3000,
-          "nacht": 1398
+          "day": -3000,
+          "night": 1398
         },
         {
           "name": "Page C",
-          "dag": -2000,
-          "nacht": -3000
+          "day": -2000,
+          "night": -3000
         },
         {
           "name": "Page D",
-          "dag": 2780,
-          "nacht": 3908
+          "day": 2780,
+          "night": 3908
         },
         {
           "name": "Page E",
-          "dag": -1890,
-          "nacht": 4800
+          "day": -1890,
+          "night": 4800
         },
         {
           "name": "Page F",
-          "dag": 2390,
-          "nacht": -3800
+          "day": 2390,
+          "night": -3800
         },
         {
           "name": "Page G",
-          "dag": 3490,
-          "nacht": 4300
+          "day": 3490,
+          "night": 4300
         }
       ]
     },
@@ -47,39 +47,39 @@
       "nameDevice": "Testmeter 2",
       "data": [
         {
-          "name": "Dinsdag",
-          "dag": 500,
-          "nacht": 20
+          "name": "Dinsday",
+          "day": 500,
+          "night": 20
         },
         {
-          "name": "Woensdag",
-          "dag": 200,
-          "nacht": -10
+          "name": "Woensday",
+          "day": 200,
+          "night": -10
         },
         {
-          "name": "Donderdag",
-          "dag": 5000,
-          "nacht": 360
+          "name": "Donderday",
+          "day": 5000,
+          "night": 360
         },
         {
-          "name": "Vrijdag",
-          "dag": 2500,
-          "nacht": 2500
+          "name": "Vrijday",
+          "day": 2500,
+          "night": 2500
         },
         {
-          "name": "Zaterdag",
-          "dag": -150,
-          "nacht": 28
+          "name": "Zaterday",
+          "day": -150,
+          "night": 28
         },
         {
-          "name": "Zondag",
-          "dag": 248,
-          "nacht": -36
+          "name": "Zonday",
+          "day": 248,
+          "night": -36
         },
         {
-          "name": "Maandag",
-          "dag": 898,
-          "nacht": 247
+          "name": "Maanday",
+          "day": 898,
+          "night": 247
         }
       ]
     },
@@ -88,73 +88,73 @@
       "data": [
         {
           "name": "Page A",
-          "dag": 4000,
-          "nacht": 2400
+          "day": 4000,
+          "night": 2400
         },
         {
           "name": "Page B",
-          "dag": -3000,
-          "nacht": 1398
+          "day": -3000,
+          "night": 1398
         },
         {
           "name": "Page C",
-          "dag": -2000,
-          "nacht": -3000
+          "day": -2000,
+          "night": -3000
         },
         {
           "name": "Page D",
-          "dag": 2780,
-          "nacht": 3908
+          "day": 2780,
+          "night": 3908
         },
         {
           "name": "Page E",
-          "dag": -1890,
-          "nacht": 4800
+          "day": -1890,
+          "night": 4800
         },
         {
           "name": "Page F",
-          "dag": 2390,
-          "nacht": -3800
+          "day": 2390,
+          "night": -3800
         },
         {
           "name": "Page G",
-          "dag": 3490,
-          "nacht": 4300
+          "day": 3490,
+          "night": 4300
         },
         {
-          "name": "Dinsdag",
-          "dag": 500,
-          "nacht": 20
+          "name": "Dinsday",
+          "day": 500,
+          "night": 20
         },
         {
-          "name": "Woensdag",
-          "dag": 200,
-          "nacht": -10
+          "name": "Woensday",
+          "day": 200,
+          "night": -10
         },
         {
-          "name": "Donderdag",
-          "dag": 5000,
-          "nacht": 360
+          "name": "Donderday",
+          "day": 5000,
+          "night": 360
         },
         {
-          "name": "Vrijdag",
-          "dag": 2500,
-          "nacht": 2500
+          "name": "Vrijday",
+          "day": 2500,
+          "night": 2500
         },
         {
-          "name": "Zaterdag",
-          "dag": -150,
-          "nacht": 28
+          "name": "Zaterday",
+          "day": -150,
+          "night": 28
         },
         {
-          "name": "Zondag",
-          "dag": 248,
-          "nacht": -36
+          "name": "Zonday",
+          "day": 248,
+          "night": -36
         },
         {
-          "name": "Maandag",
-          "dag": 898,
-          "nacht": 247
+          "name": "Maanday",
+          "day": 898,
+          "night": 247
         }
       ]
     },
@@ -164,38 +164,38 @@
       "data": [
         {
           "name": "Page A",
-          "dag": 4000,
-          "nacht": 2400
+          "day": 4000,
+          "night": 2400
         },
         {
           "name": "Page B",
-          "dag": 3000,
-          "nacht": 1398
+          "day": 3000,
+          "night": 1398
         },
         {
           "name": "Page C",
-          "dag": 2000,
-          "nacht": 3000
+          "day": 2000,
+          "night": 3000
         },
         {
           "name": "Page D",
-          "dag": 2780,
-          "nacht": 3908
+          "day": 2780,
+          "night": 3908
         },
         {
           "name": "Page E",
-          "dag": 1890,
-          "nacht": 4800
+          "day": 1890,
+          "night": 4800
         },
         {
           "name": "Page F",
-          "dag": 2390,
-          "nacht": 3800
+          "day": 2390,
+          "night": 3800
         },
         {
           "name": "Page G",
-          "dag": 3490,
-          "nacht": 1000
+          "day": 3490,
+          "night": 1000
         }
       ]
     }
