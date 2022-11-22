@@ -26,12 +26,14 @@ import { I18n } from "../util/language/I18n";
 import LogoutIcon from "@mui/icons-material/Logout";
 import React, { useContext } from "react";
 import { userContext } from "../App";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 
 const drawerWidth = 240;
 
-// const isLoggedIn = require("../util/data/testData.json").isLoggedIn;
-// // const isAdmin: boolean = require("../util/data/testData.json").isAdmin;
-// const isAdmin: boolean = true;
+interface IOnDarkmode {
+  (): void;
+}
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
@@ -82,7 +84,15 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function PersistentDrawerLeft({ lang }: { lang: string }) {
+export default function PersistentDrawerLeft({
+  lang,
+  mode,
+  onDarkmode,
+}: {
+  lang: string;
+  mode: boolean;
+  onDarkmode: IOnDarkmode;
+}) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -112,6 +122,15 @@ export default function PersistentDrawerLeft({ lang }: { lang: string }) {
           <Typography variant="h6" noWrap component="div">
             {I18n.t("drawercomponent.head")}
           </Typography>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={onDarkmode}
+            edge="end"
+            style={{ marginLeft: "auto" }}
+          >
+            {mode ? <LightModeIcon /> : <DarkModeIcon />}
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer

@@ -17,6 +17,12 @@ import LoginPage from "./components/users/LoginPage";
 import { I18n } from "./util/language/I18n";
 import EditProfile from "./components/users/EditProfile";
 import { Routes, Route, Navigate } from "react-router-dom";
+import {
+  createTheme,
+  CssBaseline,
+  ThemeProvider,
+  useMediaQuery,
+} from "@mui/material";
 
 export interface ITestData {
   devices: IDevice[];
@@ -56,7 +62,7 @@ export const setUserContext = React.createContext<ISetUserContext>({
   setLoggedIn: (loggedIn: boolean) => {},
   setAdmin: (isAdmin: boolean) => {},
 });
-
+// get the current path to use for the correct links
 export const getCurrentPath = (location: any) => {
   if (location.pathname[location.pathname.length - 1] === "/")
     location.pathname = location.pathname.substring(
@@ -71,8 +77,9 @@ export const getPath = (path: string) => {
 };
 
 const App = (): JSX.Element => {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [loggedIn, setLoggedIn] = useState<boolean>(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>(true);
+  const [darkMode, setDarkMode] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>("");
 
   const lang = I18n.currentLanguage;
@@ -80,51 +87,64 @@ const App = (): JSX.Element => {
   // Add testdata from file to emulate externaldata
   const combineddata: ITestData = require("./util/data/testData.json");
 
+  // Change darkmode
+  const darkModeChoice = darkMode ? "dark" : "light";
+  const darkTheme = createTheme({
+    palette: {
+      mode: darkModeChoice,
+    },
+  });
+  const handleDarkMode = () => {
+    setDarkMode((prevDarkMode) => !prevDarkMode);
+  };
   return (
     <>
-      <userContext.Provider
-        value={{
-          loggedIn: loggedIn,
-          isAdmin: isAdmin,
-          userId: userId,
-        }}
-      >
-        <Drawer lang={lang} />
-        <Routes>
-          <Route path="/" element={<Navigate to={`/${lang}/`} />} />
-          <Route
-            path="/dashboard"
-            element={<Navigate to={`/${lang}/dashboard`} />}
-          />
-          <Route path="/:lang">
-            <Route index element={<LoginPage />} />
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <userContext.Provider
+          value={{
+            loggedIn: loggedIn,
+            isAdmin: isAdmin,
+            userId: userId,
+          }}
+        >
+          <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />
+          <Routes>
+            <Route path="/" element={<Navigate to={`/${lang}/`} />} />
             <Route
-              path="dashboard"
-              element={<DashboardComp data={combineddata} />}
+              path="/dashboard"
+              element={<Navigate to={`/${lang}/dashboard`} />}
             />
-            <setUserContext.Provider
-              value={{
-                setLoggedIn: setLoggedIn,
-                setAdmin: setIsAdmin,
-              }}
-            >
+            <Route path="/:lang">
+              <Route index element={<LoginPage />} />
+              <Route
+                path="dashboard"
+                element={<DashboardComp data={combineddata} />}
+              />
+              {/* <setUserContext.Provider
+                value={{
+                  setLoggedIn: setLoggedIn,
+                  setAdmin: setIsAdmin,
+                }}
+              > */}
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<Register />} />
               <Route path="logout" element={<Logout />} />
-            </setUserContext.Provider>
-            <Route path="profile" element={<Profile />} />
-            <Route path="profile/edit-profile" element={<EditProfile />} />
-            <Route path="devices" element={<Devices />} />
-            <Route path="contact" element={<Contact />} />
-            <Route path="admin" element={<AdminPage />}>
-              <Route path="allusers" element={<AdminPage />} />
-              <Route path="alldevices" element={<AdminPage />} />
-              <Route path="logfile" element={<AdminPage />} />
+              {/* </setUserContext.Provider> */}
+              <Route path="profile" element={<Profile />} />
+              <Route path="profile/edit-profile" element={<EditProfile />} />
+              <Route path="devices" element={<Devices />} />
+              <Route path="contact" element={<Contact />} />
+              <Route path="admin" element={<AdminPage />}>
+                <Route path="allusers" element={<AdminPage />} />
+                <Route path="alldevices" element={<AdminPage />} />
+                <Route path="logfile" element={<AdminPage />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </userContext.Provider>
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </userContext.Provider>
+      </ThemeProvider>
     </>
   );
 };
