@@ -34,7 +34,7 @@ export class DateUtil {
     }
 
     public static getDayName = (date: Date, locale: string) => date.toLocaleDateString(locale, { weekday: 'long' });
-
+    
     public static getDateFull = (date: Date, locale: string) => date.toLocaleDateString(locale, { weekday: "long", day: '2-digit', month: "2-digit", year: "2-digit" });
 
     public static getCurrentDate = () => new Date(Date.now());

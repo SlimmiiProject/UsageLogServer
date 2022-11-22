@@ -12,7 +12,7 @@ export class AccountManager {
         const user = (await DataProcessor.getUser(email));
         return user && await DataProcessor.DeleteUser(user.userId);
     }
-
+    
     public static doesAccountExist = async (userId?: number, email?: string): Promise<boolean> => ObjectUtil.isSet(await DataProcessor.getUser(email, userId));
 
     public static getAccount = async (userId?: number, email?: string): Promise<UserAccount> => await DataProcessor.getUser(email, userId);
