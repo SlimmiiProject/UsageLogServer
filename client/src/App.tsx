@@ -81,6 +81,7 @@ const App = (): JSX.Element => {
   const [isAdmin, setIsAdmin] = useState<boolean>(true);
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>("");
+  const [data, setData] = useState();
 
   const lang = I18n.currentLanguage;
 
