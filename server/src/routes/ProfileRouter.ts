@@ -110,7 +110,7 @@ router.route("/account-data")
     .get(async (req: Request, res: Response) => {
         const sessionData = SessionManager.getSessionData(req);
 
-        res.json(await DataProcessor.GetUser(undefined, sessionData.user.id));
+        res.json(await DataProcessor.getUser(undefined, sessionData.user.id));
     })
     .post((req: Request, res: Response) => {
         // TODO
