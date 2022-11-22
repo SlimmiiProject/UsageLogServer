@@ -5,6 +5,14 @@ import { Device } from "./Device";
 @Entity()
 export class Data extends BaseEntity {
 
+  public static createData = (device:Device, day?:number, night?:number) => {
+    const data:Data = Data.create();
+    data.device = device;
+    data.Day = day;
+    data.Night = night;
+    return data;
+  }
+
   @PrimaryGeneratedColumn({ name: "dataid" })
   dataId: number;
 

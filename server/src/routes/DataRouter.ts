@@ -1,4 +1,3 @@
-import { onlyAcceptJSON } from './../utils/Middleware';
 import { DeviceSpecificData } from './../data/DataProcessing';
 import { RegExpVal } from '../utils/RegexValidator';
 import express, { Request, Response } from "express";
@@ -6,9 +5,12 @@ import { SessionManager } from '../accounts/SessionManager';
 import { DataProcessor } from '../data/DataProcessing';
 import { User } from '../types/express-session';
 import { DateUtil, Period } from '../utils/DateUtil';
+import { ObjectUtil } from '../utils/ObjectUtil';
+import { Middleware } from '../utils/Middleware';
 const router = express.Router();
 
 router.use(SessionManager.loginRequired);
+
 
 router.post("raw-meter-entry", (req: Request, res: Response) => {
     // TODO Redirect Raw Base64 image to local Python OCR Program
@@ -18,8 +20,17 @@ router.post("raw-meter-entry", (req: Request, res: Response) => {
     }
 });
 
-router.post("/meter-entry", (req: Request, res: Response) => {
-    // TODO Receives data from local python program with JSON data about the meter entry
+
+interface MeterEntryData {
+    device_id: string;
+
+}
+
+router.post("/meter-entry", async (req: Request, res: Response) => {
+    const data: MeterEntryData = req.body;
+
+    if (!Object.values(data).every(ObjectUtil.isSet))
+        return res.json({ error: true });
 });
 
 type DataParams = { [key: string]: string } & {
@@ -42,14 +53,14 @@ type DeviceValues = {
     night: number;
 }
 
-router.get("/data", /*onlyAcceptJSON, */ async (req: Request, res: Response) => {
+router.get("/data", /*Middleware.onlyAcceptJSON,*/ async (req: Request, res: Response) => {
     const userData: User = SessionManager.getSessionData(req).user;
     const params: DataParams = req.params as DataParams;
 
     let begin: Date = new Date(params.beginDate);
     let endDate: Date = DateUtil.getDateOverPeriod(begin, params.period);
 
-    const data: DeviceSpecificData[] = await DataProcessor.GetData(userData.id, begin, endDate);
+    const data: DeviceSpecificData[] = await DataProcessor.getData(userData.id, begin, endDate);
     let output: DataOutput = { devices: [] };
 
     data.forEach((v) => {
@@ -69,6 +80,5 @@ router.get("/data", /*onlyAcceptJSON, */ async (req: Request, res: Response) => 
 
     res.json(output);
 });
-
 
 module.exports = router;

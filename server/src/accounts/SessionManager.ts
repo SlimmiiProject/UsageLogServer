@@ -12,7 +12,7 @@ export class SessionManager {
      * @param {NextFunction} next - This is a function that you call when you're done with your
      * middleware.
      */
-    public static setup(request: Request, response: Response, next: NextFunction) {
+    public static setup = (request: Request, _response: Response, next: NextFunction) => {
         if (SessionManager.hasSession(request)) SessionManager.updateSessionData(request);
         next();
     }
@@ -26,7 +26,7 @@ export class SessionManager {
      * middleware.
      * @returns the session data.
      */
-    public static loginRequired(request: Request, response: Response, next: NextFunction) {
+    public static loginRequired = (request: Request, response: Response, next: NextFunction) => {
         if (SessionManager.getSessionData(request).isLoggedIn) return next();
         response.redirect("/");
     }
@@ -40,8 +40,8 @@ export class SessionManager {
      * @param {UserAccount} account - UserAccount - The account that is logged in
      * @returns a promise.
      */
-    public static async createLoggedInSession(request: Request, account: UserAccount) {
-        if(!ObjectUtil.isSet(account)) return;
+    public static createLoggedInSession = async (request: Request, account: UserAccount) => {
+        if (!ObjectUtil.isSet(account)) return;
 
         await SessionManager.updateSessionData(request, async (data) => {
             data.isLoggedIn = true
@@ -50,46 +50,34 @@ export class SessionManager {
                 firstName: account.firstname,
                 lastName: account.lastname,
                 email: account.email,
-                phoneNumber: account.phone,
                 isAdmin: await account.isAdmin()
             };
         });
     }
 
-    public static getSession(request: Request) {
-        return request.session;
-    }
+    public static getSession = (request: Request) => request.session;
 
-    public static getSessionData(request: Request) {
+    public static getSessionData = (request: Request) => {
         const data = request.session.data;
         if (!data) request.session.data = { isLoggedIn: false }
-
         return request.session.data;
     }
 
-    public static hasSession(request: Request) {
-        return request.session !== undefined;
-    }
+    public static hasSession = (request: Request) => request.session !== undefined;
 
-    public static save(request: Request) {
-        request.session && request.session.save();
-    }
+    public static save = (request: Request) => request.session && request.session.save();
 
     /**
      * It destroys the session and redirects the user to the home page.
      * @param {Request} request - This is the request object that contains the session.
      * @param {Response} response - The response object that will be sent back to the client.
      */
-    public static destroy(request: Request, response: Response) {
-        request.session && request.session.destroy((e) => response.json({succes:true}));
-    }
+    public static destroy = (request: Request, response: Response) => request.session && request.session.destroy((e) => response.json({ succes: true }));
 
-    public static logout(request: Request) {
-        SessionManager.updateSessionData(request, async (data) => {
-            data.isLoggedIn = true;
-            data.user = undefined;
-        });
-    }
+    public static logout = (request: Request) => SessionManager.updateSessionData(request, async (data) => {
+        data.isLoggedIn = true;
+        data.user = undefined;
+    });
 
     /**
      * "If the request has a session, get the session data, call the callback function with the session
@@ -99,7 +87,7 @@ export class SessionManager {
      * @param {Request} request - The request object from the express request handler.
      * @param [_callback] - A function that takes in the session data and returns a promise.
      */
-    public static async updateSessionData(request: Request, _callback?: { (data: UserSession): Promise<void> }): Promise<void> {
+    public static updateSessionData = async (request: Request, _callback?: { (data: UserSession): Promise<void> }): Promise<void> => {
         if (SessionManager.hasSession(request)) {
             const data = SessionManager.getSessionData(request);
             if (_callback) await _callback(data);

@@ -11,7 +11,14 @@ import { UserAccount } from "./UserAccount";
 
 @Entity()
 export class PasswordReset extends BaseEntity {
- 
+
+  public static createPasswordReset = (user: UserAccount, token: string) => {
+    const passwordReset = PasswordReset.create();
+    passwordReset.user = user;
+    passwordReset.token = token;
+    return passwordReset;
+  }
+
   @PrimaryColumn("varchar", { name: "token", unique: true, nullable: false })
   @IsDefined()
   token: string;
