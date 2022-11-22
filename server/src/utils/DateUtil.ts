@@ -44,4 +44,8 @@ export class DateUtil {
     public static getDateFull(date:Date, locale:string) {
         return date.toLocaleDateString(locale, { weekday:"long", day: '2-digit', month: "2-digit", year:"2-digit" });
     }
+
+    public static getCurrentDate() {
+        return new Date(Date.now());
+    }
 }

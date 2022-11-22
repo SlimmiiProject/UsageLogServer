@@ -15,6 +15,16 @@ export enum GraphColors {
 @Entity()
 export class UserAccount extends BaseEntity {
 
+  public static createUser(firstName: string, lastName: string, email: string, phone: string, password: string) {
+    const userAccount = new UserAccount();
+    userAccount.firstname = firstName;
+    userAccount.lastname = lastName;
+    userAccount.email = email;
+    userAccount.phone = phone;
+    userAccount.password = password;
+    return userAccount;
+  }
+
   @PrimaryGeneratedColumn({ name: "userId" })
   userId: number;
 
@@ -41,8 +51,6 @@ export class UserAccount extends BaseEntity {
 
   @Column("varchar", { nullable: true, unique: false, length: 12 })
   @Length(0, 13)
-  @IsPhoneNumber("BE")
-  @IsOptional()
   phone: string;
 
   @OneToMany(() => Device, (device) => device.deviceId, { nullable: true })
@@ -67,5 +75,15 @@ export class UserAccount extends BaseEntity {
     });
   }
 
-  isAdmin = async () => await AccountManager.isAdministrator(this.userId);
+  public setPassword = (password: string) => {
+    this.password = password
+    return this;
+  };
+
+  public setDevices = (devices: Device[]) => {
+    this.device = devices
+    return this;
+  };
+
+  public isAdmin = async () => await AccountManager.isAdministrator(this.userId);
 }
