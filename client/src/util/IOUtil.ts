@@ -18,12 +18,12 @@ export class IOUtil {
     return this._instance;
   }
 
-  public static async getTranslationConfig() {
+  public static getTranslationConfig = async () => {
     const conn = await this.INSTANCE.get("/translation/");
     return conn.data;
   }
 
-  public static async registerUser(
+  public static registerUser = async (
     first_name: string,
     last_name: string,
     email: string,
@@ -31,7 +31,7 @@ export class IOUtil {
     password: string,
     password_verify: string,
     callback: DataCallback
-  ) {
+  ) => {
     try {
       const res = await this.INSTANCE.post("/profiles/create-profile/", {
         first_name: first_name,
@@ -52,7 +52,7 @@ export class IOUtil {
     }
   }
 
-  public static async loginUser(email: string, password: string) {
+  public static loginUser = async (email: string, password: string) => {
     try {
       let res = await this.INSTANCE.post("/profiles/login", {
         email: email,
@@ -65,7 +65,7 @@ export class IOUtil {
     }
   }
 
-  public static async loginGoogle(token: string) {
+  public static loginGoogle = async (token: string) => {
     try {
       const res = await this.INSTANCE.post("/profiles/google-login/", { google_token: token });
       return res.data.succes;
@@ -74,7 +74,7 @@ export class IOUtil {
     }
   }
 
-  public static async logoutUser() {
+  public static logoutUser = async () => {
     try {
       const res = await this.INSTANCE.post("/profiles/logout/");
       return res.data.succes;
@@ -83,7 +83,5 @@ export class IOUtil {
     }
   }
 
-  public static async sendContactData(data: ContactInfo) {
-    await this.INSTANCE.post("/contact/", data);
-  }
+  public static sendContactData = async (data: ContactInfo) => await this.INSTANCE.post("/contact/", data);
 }
