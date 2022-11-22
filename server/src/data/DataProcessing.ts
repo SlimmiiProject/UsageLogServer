@@ -21,8 +21,8 @@ export interface DeviceSpecificData {
 }
 
 export interface ILog {
-  id?:number,
-  account_id:number,
+  id?: number,
+  account_id: number,
   date: Date,
   description: string,
   ipaddress: string
@@ -397,19 +397,17 @@ export class DataProcessor {
    * @param dataid number
    */
   public static DeleteData = async (dataid: number): Promise<DeleteResult> => await Data.delete({ dataId: dataid });
- 
- /**
-   * deletes a single contact form.
-   * @param id number
-   */
+
+  /**
+    * deletes a single contact form.
+    * @param id number
+    */
   public static DeleteContactForm = async (id: number): Promise<DeleteResult> => await ContactForm.delete({ contactId: id });
-  
+
   /**
    * Returns all the data in the logfile
   */
-  public static async GetLogfileData(){
-    return Logfile.find()
-  }
+  public static GetLogfileData = async () => Logfile.find()
 
   /**
    * This creates a logfile and adds it to the database if Logfile is complete
@@ -417,12 +415,11 @@ export class DataProcessor {
    * @param description string
    * @param ipaddress string
    */
-  public static CreateLog = async (userId:number, description: string, ipaddress: string): Promise<void> => {
-    let user = UserAccount.findOneBy({userId: userId});
-    let newLog = new Logfile()
-    newLog.account_id = await user;
-    newLog.description = description;
-    newLog.ipaddress = ipaddress;
+  public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
+    let user = await UserAccount.findOne({ where: { userId: Equal(userId) } });
+    if(!ObjectUtil.isSet(user)) return;
+    
+    let newLog = Logfile.createLogFile(user, description, ipaddress);
     validate(newLog).then(async (result) => {
       if (result.length <= 0) await Logfile.save(newLog);
     });
