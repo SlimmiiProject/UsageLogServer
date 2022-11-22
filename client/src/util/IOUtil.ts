@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import { timeStamp } from "console";
 import { ContactInfo } from "../components/Contact";
 
 export type Error = {
@@ -85,5 +86,9 @@ export class IOUtil {
 
   public static async sendContactData(data: ContactInfo) {
     await this.INSTANCE.post("/contact/", data);
+  }
+
+  public static async getData(){
+    return await this.INSTANCE.get("/data")
   }
 }
