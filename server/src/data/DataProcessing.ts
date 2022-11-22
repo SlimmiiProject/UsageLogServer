@@ -19,6 +19,14 @@ export interface DeviceSpecificData {
   colorDay?: GraphColors;
   colorNight?: GraphColors;
 }
+
+export interface ILog {
+  id?:number,
+  account_id:number,
+  date: Date,
+  description: string,
+  ipaddress: string
+}
 /*
  *implementation:
  * every 24 hours execute cleanTemporaryData()
@@ -513,7 +521,9 @@ export class DataProcessor {
    * deletes a single user form the database
    * @param userId number
    */
-  public static async DeleteUser(userId: number): Promise<boolean> {
+  public static async DeleteUser(
+    userId: number
+    ): Promise<boolean> {
     return (await UserAccount.delete({ userId: userId })).affected >= 1;
   }
 
@@ -530,7 +540,9 @@ export class DataProcessor {
    * deletes a single data row
    * @param dataid number
    */
-  public static async DeleteData(dataid: number): Promise<void> {
+  public static async DeleteData(
+    dataid: number
+    ): Promise<void> {
     Data.delete({ dataId: dataid });
   }
   /**
@@ -539,6 +551,34 @@ export class DataProcessor {
    */
   public static async DeleteContactForm(id: number): Promise<void> {
     ContactForm.delete({ contactId: id });
+  }
+  
+  /**
+   * Returns all the data in the logfile
+  */
+  public static async GetLogfileData(){
+    return Logfile.find()
+  }
+
+  /**
+   * This creates a logfile and adds it to the database if Logfile is complete
+   * @param userId number user id
+   * @param description string
+   * @param ipaddress string
+   */
+  public static async CreateLog(
+    userId:number, 
+    description: string, 
+    ipaddress: string
+    ): Promise<void>{
+    let user = UserAccount.findOneBy({userId: userId});
+    let newLog = new Logfile()
+    newLog.account_id = await user;
+    newLog.description = description;
+    newLog.ipaddress = ipaddress;
+    validate(newLog).then(async (result) => {
+      if (result.length <= 0) await Logfile.save(newLog);
+    });
   }
 
   /**
@@ -549,14 +589,14 @@ export class DataProcessor {
   public static async cleanTemporaryData(): Promise<void> {
     // Delete all leftover data(if any) that is no longer relevant
     await this.DeleteExpiredTemporaryData();
-
+    
     //for each device get TempData, process data and delete tempData
     let allDevices: Device[] = await Device.find();
     allDevices.map(async (specificDevice, index) => {
       setTimeout(async () => {
         let dataFromSpecificDevice: TemporaryData[] =
-          await DataProcessor.GetAllTempData(specificDevice.device_index);
-
+        await DataProcessor.GetAllTempData(specificDevice.device_index);
+        
         //make sure we don't insert empty Data in database
         if (dataFromSpecificDevice.length > 0) {
           //probably unnessecary but avoids issues during testing
@@ -633,12 +673,6 @@ export class DataProcessor {
     PasswordReset.delete({ token: token });
   }
 
-  /**
-   * Returns all the data in the logfile
-  */
-  public static async GetLogfileData(){
-    return Logfile.find()
-  }
 
   //#endregion
 }
