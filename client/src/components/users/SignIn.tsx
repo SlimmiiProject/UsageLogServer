@@ -31,7 +31,7 @@ const SignIn = (): JSX.Element => {
       setFailed(false);
       navigate("/dashboard");
     }
-  }, [authenticated, navigate]);
+  }, [authenticated]);
 
   // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -41,8 +41,11 @@ const SignIn = (): JSX.Element => {
     // TODO Improve data capture
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
-    await setAuthenticated(await IOUtil.loginUser(email, password));
-    setFailed(!authenticated);
+
+    IOUtil.loginUser(email, password).then(res => {
+      setAuthenticated(res);
+      setFailed(!authenticated);
+    });
   };
 
   return (
