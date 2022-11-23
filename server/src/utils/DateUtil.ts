@@ -1,6 +1,16 @@
 export type Period = "Day" | "Week" | "Month";
 
+
+
 export class DateUtil {
+
+    public static getStartOfPeriod = (currentDate: Date, period: Period) => {
+        switch(period) {
+            case "Day": return new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+            case "Week": return new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - (((currentDate.getDay() - 1) + 7) % 7));
+            case "Month": return new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        }
+    }
 
     /**
      * "Given a date and a period, return the date that is the end of that period."
@@ -14,10 +24,12 @@ export class DateUtil {
      * @returns A date object.
      */
     public static getDateOverPeriod = (beginDate: Date, period: Period): Date => {
+        const tempDate = new Date(beginDate.getFullYear(), beginDate.getMonth(), beginDate.getDate());
+        
         switch (period) {
-            case "Day": return new Date(beginDate.setDate(beginDate.getDate() + 1));
-            case "Week": return new Date(beginDate.setDate(beginDate.getDate() + 6));
-            case "Month": return new Date(beginDate.getFullYear(), beginDate.getMonth() + 1, 0);
+            case "Day": return new Date(tempDate.setDate(beginDate.getDate() + 1));
+            case "Week": return new Date(tempDate.setDate(beginDate.getDate() + 6));
+            case "Month": return new Date(tempDate.getFullYear(), beginDate.getMonth() + 1, 0);
         }
     }
 
@@ -34,7 +46,7 @@ export class DateUtil {
     }
 
     public static getDayName = (date: Date, locale: string) => date.toLocaleDateString(locale, { weekday: 'long' });
-    
+
     public static getDateFull = (date: Date, locale: string) => date.toLocaleDateString(locale, { weekday: "long", day: '2-digit', month: "2-digit", year: "2-digit" });
 
     public static getCurrentDate = () => new Date(Date.now());
