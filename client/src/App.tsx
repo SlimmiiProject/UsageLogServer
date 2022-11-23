@@ -19,6 +19,8 @@ import EditProfile from "./components/users/EditProfile";
 import { Routes, Route, Navigate, Location } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
+import { getLanguageFromUrl } from "./util/BrowserUtil";
+import { url } from "inspector";
 
 export interface ITestData {
   devices: IDevice[];
@@ -77,6 +79,10 @@ const App = (): JSX.Element => {
   const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem("darkMode")!) || false);
 
   useEffect(() => {
+    // Change Language, in case it's different to what's currently selected
+    const urlLang = getLanguageFromUrl();
+    if (I18n.currentLanguage != urlLang) I18n.changeLanguage(urlLang)
+    
     IOUtil.getSessionData().then((res) => {
       setAccountData((_accountData) => res);
       setLoading(false);

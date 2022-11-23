@@ -45,7 +45,7 @@ export class I18n {
         return key.split(" ").map((keyPart) => i18n.t(keyPart, tFunction)).join(" ");
     }
 
-    public static changeLanguage = (language_key: string, callback: Callback) => i18n.changeLanguage(language_key, callback);
+    public static changeLanguage = (language_key: string, callback?: Callback) => i18n.changeLanguage(language_key, callback);
 
 
     public static get currentLanguage() {
