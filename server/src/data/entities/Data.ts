@@ -32,4 +32,9 @@ export class Data extends BaseEntity {
 
   @CreateDateColumn({ name: "created_at" })
   created_at: Date;
+
+  public add = (day: number, night: number) => {
+    this.Day += day;
+    this.Night += night;
+  }
 }

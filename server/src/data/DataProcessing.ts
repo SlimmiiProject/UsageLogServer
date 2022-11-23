@@ -12,6 +12,7 @@ import { ContactForm } from "./entities/Contact";
 
 export interface DeviceSpecificData {
   device_index: number;
+  deviceId:string;
   device_alias: string;
   data: Data[];
   colorDay?: GraphColors;
@@ -180,6 +181,7 @@ export class DataProcessor {
     let devices: Device[] = await this.getDevices(userId);
     let data: Data[] = [];
 
+
     if (startDate && endDate) {
       data = await Data.createQueryBuilder("data").leftJoinAndSelect("data.device", "device")
         .where("device.user = :id", { id: userId }).andWhere("data.created_at < :endDate", { endDate: endDate })
@@ -195,6 +197,7 @@ export class DataProcessor {
       const deviceData: DeviceSpecificData = {
         device_index: device.device_index,
         device_alias: device.friendlyName,
+        deviceId: device.deviceId,
         data: data.filter((a) => a.device.device_index === device.device_index),
         colorDay: user.colorDay,
         colorNight: user.colorNight,
