@@ -4,6 +4,7 @@ import { AccountManager } from "../../accounts/AccountManager";
 import { Logger } from "../../utils/Logger";
 import { IsDefined, Length, MinLength, IsEmail, MaxLength, IsPhoneNumber, IsOptional } from "class-validator";
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate } from "typeorm";
+
 export enum GraphColors {
   RED = "red",
   GREEN = "green",
@@ -12,6 +13,7 @@ export enum GraphColors {
   BLUE = "blue",
   PURPLE = "purple"
 }
+
 @Entity()
 export class UserAccount extends BaseEntity {
 

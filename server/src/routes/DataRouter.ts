@@ -38,10 +38,6 @@ type DataParams = { [key: string]: string } & {
     beginDate: number;
 };
 
-type DataOutput = {
-    devices: DeviceData[];
-}
-
 type DeviceData = {
     nameDevice: string;
     data: DeviceValues[];
@@ -55,27 +51,28 @@ type DeviceValues = {
 
 router.get("/data", /*Middleware.onlyAcceptJSON,*/ async (req: Request, res: Response) => {
     const userData: User = SessionManager.getSessionData(req).user;
-    const params: DataParams = req.params as DataParams;
+    const params: DataParams = req.query as DataParams;
+    const period = params.period || "Week";
 
-    const begin: Date = new Date(params.beginDate);
-    const endDate: Date = DateUtil.getDateOverPeriod(begin, params.period);
+    // Fix so it gets start of period
+    const begin: Date = params.beginDate ? new Date(params.beginDate) : DateUtil.getStartOfPeriod(DateUtil.getCurrentDate(), period);
+
+    // Fix so it gets last day properly
+    const endDate: Date = DateUtil.getDateOverPeriod(begin, period);
 
     const data: DeviceSpecificData[] = await DataProcessor.getData(userData.id, begin, endDate);
-    const output: DataOutput = { devices: [] };
+    const output: DeviceData[] = [];
 
     data.forEach((v) => {
         const deviceData: DeviceValues[] = v.data.map((d) => {
             return {
-                name: DateUtil.getDisplayForPeriod(d.created_at, params.period || "Week"),
+                name: DateUtil.getDisplayForPeriod(d.created_at, period),
                 day: d.Day,
                 night: d.Night
             }
         });
 
-        output.devices.push({
-            nameDevice: v.device_alias,
-            data: deviceData
-        });
+        output.push({ nameDevice: v.device_alias, data: deviceData });
     });
 
     res.json(output);

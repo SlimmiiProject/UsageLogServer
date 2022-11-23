@@ -14,7 +14,6 @@ export interface DeviceSpecificData {
   device_index: number;
   device_alias: string;
   data: Data[];
-  lastData: TemporaryData;
   colorDay?: GraphColors;
   colorNight?: GraphColors;
 }
@@ -153,12 +152,10 @@ export class DataProcessor {
    * @returns Promise<Device[]>
    */
   public static getDevices = async (userId: number): Promise<Device[]> => {
-    const devices = await DatabaseConnector.INSTANCE.dataSource
-      .getRepository(Device)
-      .createQueryBuilder("device")
+    const devices = await Device.createQueryBuilder("device")
       .leftJoinAndSelect("device.user", "user")
-      .where("user.userid = :id", { id: userId })
-      .getMany();
+      .where("user.userid = :id", { id: userId }).getMany();
+
     return devices;
   }
 
@@ -178,60 +175,34 @@ export class DataProcessor {
    * @returns Promise<DeviceSpecificData[]>
    */
   public static getData = async (userId: number, startDate?: Date, endDate?: Date): Promise<DeviceSpecificData[]> => {
-    let tempdata: TemporaryData[] = await DataProcessor.GetTempData(userId);
+
     let user: UserAccount = await DataProcessor.getUser(undefined, userId);
-    let data: Data[] = [];
-    if (startDate && endDate) {
-      //UNTESTED
-      data = await DatabaseConnector.INSTANCE.dataSource
-        .getRepository(Data)
-        .createQueryBuilder("data")
-        .leftJoinAndSelect("data.device", "dev")
-        .where("dev.user = :id", { id: userId })
-        .andWhere("data.created_at < :endDate", { endDate: endDate })
-        .andWhere("data.created_at > :startDate", { startDate: startDate })
-        .getMany();
-    } else {
-      data = await DatabaseConnector.INSTANCE.dataSource
-        .getRepository(Data)
-        .createQueryBuilder("data")
-        .leftJoinAndSelect("data.device", "dev")
-        .where("dev.user = :id", { id: userId })
-        .getMany();
-    }
     let devices: Device[] = await this.getDevices(userId);
+    let data: Data[] = [];
+
+    if (startDate && endDate) {
+      data = await Data.createQueryBuilder("data").leftJoinAndSelect("data.device", "device")
+        .where("device.user = :id", { id: userId }).andWhere("data.created_at < :endDate", { endDate: endDate })
+        .andWhere("data.created_at >= :startDate", { startDate: startDate }).getMany();
+    } else {
+      data = await Data.createQueryBuilder("data").leftJoinAndSelect("data.device", "device")
+        .where("device.user = :id", { id: userId }).getMany();
+    }
 
     let completeData: DeviceSpecificData[] = [];
+   
     devices.forEach((device) => {
-      let currentDayData: TemporaryData = new TemporaryData();
-      let filteredTempData: TemporaryData[] = tempdata.filter(
-        (a) => a.device.device_index === device.device_index
-      );
-      if (filteredTempData.length >= 2) {
-        //incredibly annoying thing the Day and Night would return as string,
-        //but not be recognised as string, so i had to convert it to string and then back to integer.
-        currentDayData.Day =
-          parseInt(filteredTempData[0].Day.toString()) -
-          parseInt(filteredTempData.reverse()[0].Day.toString());
-        currentDayData.Night =
-          parseInt(filteredTempData[0].Night.toString()) -
-          parseInt(filteredTempData.reverse()[0].Night.toString());
-      } else {
-        currentDayData = null;
-        if (filteredTempData[0] && !startDate && !endDate)
-          currentDayData = filteredTempData[0];
-      }
-
       const deviceData: DeviceSpecificData = {
         device_index: device.device_index,
         device_alias: device.friendlyName,
         data: data.filter((a) => a.device.device_index === device.device_index),
-        lastData: currentDayData,
         colorDay: user.colorDay,
         colorNight: user.colorNight,
       };
+
       completeData.push(deviceData);
     });
+
     return completeData;
   }
 
