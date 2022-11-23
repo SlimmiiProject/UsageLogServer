@@ -1,7 +1,6 @@
 import { DateUtil } from "../utils/DateUtil";
 import { ObjectUtil } from "../utils/ObjectUtil";
 import { DataProcessor } from "./DataProcessing";
-import { Data } from "./entities/Data";
 import { TemporaryData } from "./entities/TemporaryData";
 
 export class MeterEntryProcessor {
@@ -25,7 +24,7 @@ export class MeterEntryProcessor {
 
     private migrateToHourlyData = async () => {
         await DataProcessor.createHourlyData(this.deviceId, this.tempEntry.Day, this.tempEntry.Night);
-        await this.tempEntry.remove()
+        await this.tempEntry.remove();
     };
 
     private getDevice = async () => await DataProcessor.getDevice(this.deviceId);

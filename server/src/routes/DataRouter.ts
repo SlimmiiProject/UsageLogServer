@@ -57,11 +57,11 @@ router.get("/data", /*Middleware.onlyAcceptJSON,*/ async (req: Request, res: Res
     const userData: User = SessionManager.getSessionData(req).user;
     const params: DataParams = req.params as DataParams;
 
-    let begin: Date = new Date(params.beginDate);
-    let endDate: Date = DateUtil.getDateOverPeriod(begin, params.period);
+    const begin: Date = new Date(params.beginDate);
+    const endDate: Date = DateUtil.getDateOverPeriod(begin, params.period);
 
     const data: DeviceSpecificData[] = await DataProcessor.getData(userData.id, begin, endDate);
-    let output: DataOutput = { devices: [] };
+    const output: DataOutput = { devices: [] };
 
     data.forEach((v) => {
         const deviceData: DeviceValues[] = v.data.map((d) => {
