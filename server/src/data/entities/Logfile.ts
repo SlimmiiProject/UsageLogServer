@@ -6,7 +6,13 @@ import { UserAccount } from "./UserAccount";
 
 @Entity()
 export class Logfile extends BaseEntity {
-
+/**
+ * create a logfile to add to the database
+ * @param user UserAccount
+ * @param description string
+ * @param ipAdress string
+ * @returns Logfile
+ */
   public static createLogFile(user: UserAccount, description: string, ipAdress: string) {
     const logFile = Logfile.create();
     logFile.account_id = user;
