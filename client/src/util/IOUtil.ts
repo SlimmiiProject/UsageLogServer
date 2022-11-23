@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import { IDevice } from "../App";
 import { ContactInfo } from "../components/Contact";
 
 export type Error = {
@@ -9,6 +10,8 @@ export type Error = {
 export type DataCallback = {
   (error: Error): void;
 };
+
+export type Period = "Day" | "Week" | "Month";
 
 export class IOUtil {
 
@@ -81,6 +84,12 @@ export class IOUtil {
     } catch (err) {
       return false;
     }
+  }
+
+
+  public static getDevicesData = async (period:Period, controller: AbortController): Promise<IDevice[]> => {
+    const res = await this.INSTANCE.get(`/data/data?period=${period}`, { signal: controller.signal });
+    return res.data;
   }
 
   public static sendContactData = async (data: ContactInfo) => await this.INSTANCE.post("/contact/", data);

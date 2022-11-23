@@ -81,8 +81,7 @@ const App = (): JSX.Element => {
 
   const lang = I18n.currentLanguage;
 
-  // Add testdata from file to emulate externaldata
-  const combineddata: ITestData = require("./util/data/testData.json");
+
 
   // Change darkmode
   const darkTheme = createTheme({ palette: { mode: darkMode ? "dark" : "light" } });
@@ -106,7 +105,7 @@ const App = (): JSX.Element => {
 
               <Route path="/:lang">
                 <Route index element={<LoginPage />} />
-                <Route path="dashboard" element={<DashboardComp data={combineddata} />} />
+                <Route path="dashboard" element={<DashboardComp />} />
 
                 <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<Register />} />
