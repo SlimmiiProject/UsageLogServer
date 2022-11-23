@@ -40,6 +40,7 @@
   "metercard.chart": "Insert chart here",
   "metercard.battery": "battery %",
   "profile.edit": "Edit your profile",
+  "profile.title": "Profile",
   "register.here": "Register here",
   "field.first_name": "First Name",
   "field.last_name": "Last Name",

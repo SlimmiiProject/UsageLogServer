@@ -36,7 +36,7 @@ const Profile = (): JSX.Element => {
 
   return (
     <div className="box">
-      <h1>Profiel</h1>
+      <h1>{I18n.t("profile.title")}</h1>
       <div className="flex">
         <Avatar {...stringAvatar(fullName)} />
         <h2>{fullName}</h2>
