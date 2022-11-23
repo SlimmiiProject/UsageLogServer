@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { IDevice } from "../App";
+import { AccountData, IDevice } from "../App";
 import { ContactInfo } from "../components/Contact";
 
 export type Error = {
@@ -55,16 +55,18 @@ export class IOUtil {
     }
   }
 
-  public static loginUser = async (email: string, password: string) => {
+  public static loginUser = async (email: string, password: string, dataConsumer: { (data: AccountData): void }) => {
     try {
       let res = await this.INSTANCE.post("/profiles/login", {
         email: email,
         password: password,
       });
 
+      dataConsumer(res.data);
+
       return res.data.succes;
     } catch (e) {
-      return false;
+      return undefined;
     }
   }
 
@@ -81,6 +83,24 @@ export class IOUtil {
     try {
       const res = await this.INSTANCE.post("/profiles/logout/");
       return res.data.succes;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  public static getSessionData = async (): Promise<AccountData | undefined> => {
+    try {
+      const res = await this.INSTANCE.get("/session/");
+      return !res.data.error ? res.data.user : undefined;
+    } catch (err) {
+      return undefined;
+    }
+  }
+
+  public static isAdmin = async (): Promise<boolean> => {
+    try {
+      const res = await this.INSTANCE.get("/session/admin-check");
+      return !res.data.error ? res.data.isAdmin : false;
     } catch (err) {
       return false;
     }

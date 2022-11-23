@@ -89,7 +89,7 @@ export default function PersistentDrawerLeft({ lang, mode, onDarkmode }: { lang:
 
   const handleDrawerClose = () => setOpen(false);
 
-  const { loggedIn, isAdmin } = useContext(userContext);
+  const { isLoggedIn, isAdmin } = useContext(userContext);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -148,43 +148,43 @@ export default function PersistentDrawerLeft({ lang, mode, onDarkmode }: { lang:
               text: I18n.t("drawercomponent.dashboard"),
               icon: <DashboardRoundedIcon />,
               link: getPath("dashboard"),
-              render: loggedIn
+              render: isLoggedIn
             },
             {
               text: I18n.t("drawercomponent.profile"),
               icon: <AccountCircleRoundedIcon />,
               link: getPath("profile"),
-              render: loggedIn
+              render: isLoggedIn
             },
             {
               text: I18n.t("drawercomponent.meters"),
               icon: <SpeedRoundedIcon />,
               link: getPath("devices"),
-              render: loggedIn
+              render: isLoggedIn
             },
             {
               text: I18n.t("drawercomponent.contact"),
               icon: <MailIcon />,
               link: getPath("contact"),
-              render: loggedIn
+              render: isLoggedIn
             },
             {
               text: I18n.t("drawercomponent.admin"),
               icon: <AdminPanelSettingsRoundedIcon />,
               link: getPath("admin"),
-              render: loggedIn && isAdmin
+              render: isLoggedIn && isAdmin
             },
             {
               text: I18n.t("drawercomponent.login"),
               icon: <LoginIcon />,
               link: getPath(""),
-              render: !loggedIn
+              render: !isLoggedIn
             },
             {
               text: I18n.t("drawercomponent.logout"),
               icon: <LogoutIcon />,
               link: getPath("logout"),
-              render: loggedIn
+              render: isLoggedIn
             }
           ].map((element, key) =>
             element.render && <NavLink to={element.link} style={{ textDecoration: "none", color: "inherit" }} onClick={handleDrawerClose}>

@@ -1,9 +1,12 @@
 import { Avatar, Button } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { Link } from "react-router-dom";
+import { userContext } from "../../App";
+import { useContext } from "react";
 
 const Profile = (): JSX.Element => {
-  let fullName = "Raven Van Hove";
+  const userContextData = useContext(userContext);
+  let fullName = [userContextData.userAccount?.firstName, userContextData.userAccount?.lastName].join(" ");
 
   const stringToColor = (string: string) => {
     let hash = 0;

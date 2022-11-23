@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { getPath } from "../../App";
+import { getPath, userContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { Error, IOUtil } from "../../util/IOUtil";
 import { Alert } from "@mui/material";
@@ -27,6 +27,8 @@ export type RegisterFormData = {
 };
 
 const Register = (): JSX.Element => {
+  const userContextData = React.useContext(userContext);
+
   const [registered, setRegistered] = useState<Boolean>(false);
   const [error, setError] = useState<Error>();
   const [passwordMatch, setPasswordMatch] = useState<boolean>(true);
@@ -48,7 +50,7 @@ const Register = (): JSX.Element => {
     StateUtil.setValue<RegisterFormData>(key, data, setFormData);
 
   React.useEffect(() => {
-    if (registered) IOUtil.loginUser(formData.email, formData.password).then(() => navigate(getPath("dashboard")));
+    if (registered) IOUtil.loginUser(formData.email, formData.password, userContextData.setAccountData).then(() => navigate(getPath("dashboard")));
   }, [registered, formData.email, formData.password]);
 
   const handleSubmit = async (e: React.FormEvent) => {

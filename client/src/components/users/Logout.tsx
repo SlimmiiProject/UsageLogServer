@@ -1,17 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { getPath, setUserContext } from "../../App";
+import { getPath, userContext } from "../../App";
 import { IOUtil } from "../../util/IOUtil";
 
 const Logout = () => {
   const navigate = useNavigate();
-  const userSetContext = React.useContext(setUserContext);
+  const userContextData = React.useContext(userContext);
 
   // Calling logout function, go to right page.
   React.useEffect(() => {
     IOUtil.logoutUser().then((res) => {
       if (res) {
-        userSetContext.setLoggedIn(false);
+        userContextData.logout();
         return navigate(getPath(""));
       }
 

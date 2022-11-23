@@ -18,6 +18,7 @@ import { I18n } from "./util/language/I18n";
 import EditProfile from "./components/users/EditProfile";
 import { Routes, Route, Navigate, Location } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { IOUtil } from "./util/IOUtil";
 
 export interface ITestData {
   devices: IDevice[];
@@ -36,26 +37,27 @@ export interface IData {
   nacht: number;
 }
 
-interface IUserContext {
-  loggedIn: boolean;
+export interface AccountData {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
   isAdmin: boolean;
-  userId: string;
 }
 
-interface ISetUserContext {
-  setLoggedIn: (loggedIn: boolean) => void;
-  setAdmin: (isAdmin: boolean) => void;
+interface IUserContext {
+  userAccount?: AccountData
+  isLoggedIn: boolean;
+  isAdmin: boolean;
+  setAccountData: (data: AccountData) => void;
+  logout: () => void;
 }
 
 export const userContext = React.createContext<IUserContext>({
-  loggedIn: false,
+  isLoggedIn: false,
   isAdmin: false,
-  userId: "",
-});
-
-export const setUserContext = React.createContext<ISetUserContext>({
-  setLoggedIn: (loggedIn: boolean) => { },
-  setAdmin: (isAdmin: boolean) => { },
+  setAccountData: (data: AccountData) => { },
+  logout: () => { }
 });
 
 // Get the current path to use for the correct links
@@ -70,18 +72,26 @@ export const getPath = (path: string) => {
 };
 
 const App = (): JSX.Element => {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [accountData, setAccountData] = useState<AccountData | undefined>(undefined);
   const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem("darkMode")!) || false);
-  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
-    // Request session data, check if you're still logged in, set session data (make state with data)
+    IOUtil.getSessionData().then((res) => {
+      setAccountData((_accountData) => res);
+      setLoading(false);
+    });
   }, [])
 
+  useEffect(() => {
+    IOUtil.isAdmin().then(res => {
+      setAccountData((accountData) => {
+        return { ...accountData!, isAdmin: res };
+      });
+    });
+  }, [accountData])
+
   const lang = I18n.currentLanguage;
-
-
 
   // Change darkmode
   const darkTheme = createTheme({ palette: { mode: darkMode ? "dark" : "light" } });
@@ -94,14 +104,21 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <userContext.Provider value={{ loggedIn: loggedIn, isAdmin: isAdmin, userId: userId }} >
-          <setUserContext.Provider value={{ setLoggedIn: setLoggedIn, setAdmin: setIsAdmin }}>
+
+      {!loading &&
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <userContext.Provider value={{
+            isLoggedIn: accountData != undefined,
+            isAdmin: accountData != undefined && accountData.isAdmin,
+            userAccount: accountData,
+            setAccountData: setAccountData,
+            logout: () => setAccountData(undefined)
+          }} >
             <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />
             <Routes>
-              <Route path="/" element={<Navigate to={`/${lang}/`} />} />
-              <Route path="/dashboard" element={<Navigate to={`/${lang}/dashboard`} />} />
+              <Route path="/" element={<Navigate to={getPath("")} />} />
+              <Route path="/dashboard" element={<Navigate to={getPath("dashboard")} />} />
 
               <Route path="/:lang">
                 <Route index element={<LoginPage />} />
@@ -126,9 +143,10 @@ const App = (): JSX.Element => {
 
               <Route path="*" element={<PageNotFound />} />
             </Routes>
-          </setUserContext.Provider>
-        </userContext.Provider>
-      </ThemeProvider>
+
+          </userContext.Provider>
+        </ThemeProvider>
+      }
     </>
   );
 };

@@ -2,7 +2,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { IOUtil } from "../../util/IOUtil";
 import { useNavigate } from "react-router-dom";
 import { I18n } from "../../util/language/I18n";
-import { getPath, setUserContext, userContext } from "../../App";
+import { AccountData, getPath, userContext } from "../../App";
 import {
   Container,
   Alert,
@@ -21,15 +21,14 @@ import React from "react";
 
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
-  const userSetContext = React.useContext(setUserContext);
+  const userContextData = React.useContext(userContext);
 
-  const [authenticated, setAuthenticated] = React.useState<boolean>(false);
+  const [authenticated, setAuthenticated] = React.useState<AccountData | undefined>(undefined);
   const [isFailed, setFailed] = React.useState<Boolean>(false);
 
   React.useEffect(() => {
     if (authenticated) {
       setFailed(false);
-      userSetContext.setLoggedIn(true);
       navigate(getPath("dashboard"));
     }
   }, [authenticated]);
@@ -43,9 +42,9 @@ const SignIn = (): JSX.Element => {
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
 
-    IOUtil.loginUser(email, password).then(res => {
+    IOUtil.loginUser(email, password, userContextData.setAccountData).then(res => {
       setAuthenticated(res);
-      if(!res) setFailed(true);
+      if (!res) setFailed(true);
     });
   };
 

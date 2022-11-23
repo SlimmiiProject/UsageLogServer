@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App";
+import App, { userContext } from "./App";
+import { IOUtil } from "./util/IOUtil";
 import { I18n } from "./util/language/I18n";
 
 
@@ -10,17 +11,20 @@ import { I18n } from "./util/language/I18n";
   // Setup Languages
   await I18n.setup();
 
+
   const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
   );
 
   root.render(
     <React.StrictMode>
-      <React.Suspense fallback="Loading">
-        <BrowserRouter>
+
+      <BrowserRouter>
+        <React.Suspense fallback="Loading">
           <App />
-        </BrowserRouter>
-      </React.Suspense>
+        </React.Suspense>
+      </BrowserRouter>
+
     </React.StrictMode>
   );
 })(); 

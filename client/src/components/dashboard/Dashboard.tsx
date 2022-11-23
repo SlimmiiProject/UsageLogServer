@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { IDevice, setUserContext, userContext } from "../../App";
+import { IDevice, userContext } from "../../App";
 import { IOUtil } from "../../util/IOUtil";
 import Graph from "./Graph";
 
@@ -9,7 +9,7 @@ export default function App() {
   const [devices, setDevices] = useState<IDevice[]>([]);
 
   useEffect(() => {
-    if (context.loggedIn) {
+    if (context.isLoggedIn) {
       setLoading(true);
 
       const abortController = new AbortController();
