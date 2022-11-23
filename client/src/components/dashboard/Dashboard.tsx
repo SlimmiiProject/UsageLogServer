@@ -12,7 +12,7 @@ export default function App() {
     setLoading(true);
 
     const abortController = new AbortController();
-    IOUtil.getDevicesData("Day", abortController).then(res => {
+    IOUtil.getDevicesData("Month", abortController).then(res => {
       setDevices(res);
       setLoading(false);
     });
@@ -24,9 +24,9 @@ export default function App() {
     <div className="flex">
       {!loading && devices.map((meter) => {
         return (
-          <div className="graph" style={{ backgroundColor: "rgba(0, 0, 0, 0.0)" }}>
+          <section className="graph" style={{ backgroundColor: "rgba(0, 0, 0, 0.0)", minWidth:"700px"}}>
             <Graph data={meter.data} titel={meter.nameDevice} colorDay={meter.colorDay} colorNight={meter.colorNight} />
-          </div>
+          </section>
         );
       })}
     </div>
