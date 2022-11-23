@@ -7,10 +7,10 @@ import { User } from '../types/express-session';
 import { DateUtil, Period } from '../utils/DateUtil';
 import { ObjectUtil } from '../utils/ObjectUtil';
 import { Middleware } from '../utils/Middleware';
+import { DisplayDataManager } from '../data/DisplayDataManager';
+
 const router = express.Router();
-
 router.use(SessionManager.loginRequired);
-
 
 router.post("raw-meter-entry", (req: Request, res: Response) => {
     // TODO Redirect Raw Base64 image to local Python OCR Program
@@ -38,12 +38,12 @@ type DataParams = { [key: string]: string } & {
     beginDate: number;
 };
 
-type DeviceData = {
+export type DeviceData = {
     nameDevice: string;
     data: DeviceValues[];
 }
 
-type DeviceValues = {
+export type DeviceValues = {
     name: string;
     day: number;
     night: number;
@@ -63,17 +63,11 @@ router.get("/data", /*Middleware.onlyAcceptJSON,*/ async (req: Request, res: Res
     const data: DeviceSpecificData[] = await DataProcessor.getData(userData.id, begin, endDate);
     const output: DeviceData[] = [];
 
-    data.forEach((v) => {
-        const deviceData: DeviceValues[] = v.data.map((d) => {
-            return {
-                name: DateUtil.getDisplayForPeriod(d.created_at, period),
-                day: d.Day,
-                night: d.Night
-            }
-        });
-
+    for await (const v of data) {
+        const manager = await DisplayDataManager.create(v.deviceId, v);
+        const deviceData = manager.getByPeriod(period, begin, endDate)
         output.push({ nameDevice: v.device_alias, data: deviceData });
-    });
+    }
 
     res.json(output);
 });

@@ -86,10 +86,13 @@ export class IOUtil {
     }
   }
 
-
-  public static getDevicesData = async (period:Period, controller: AbortController): Promise<IDevice[]> => {
-    const res = await this.INSTANCE.get(`/data/data?period=${period}`, { signal: controller.signal });
-    return res.data;
+  public static getDevicesData = async (period: Period, controller: AbortController): Promise<IDevice[]> => {
+    try {
+      const res = await this.INSTANCE.get(`/data/data?period=${period}`, { signal: controller.signal });
+      return res.data;
+    } catch (error) {
+      return [];
+    }
   }
 
   public static sendContactData = async (data: ContactInfo) => await this.INSTANCE.post("/contact/", data);
