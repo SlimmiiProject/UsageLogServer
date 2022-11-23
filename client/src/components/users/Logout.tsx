@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { setUserContext } from "../../App";
+import { getPath, setUserContext } from "../../App";
 import { IOUtil } from "../../util/IOUtil";
 
 const Logout = () => {
@@ -12,10 +12,10 @@ const Logout = () => {
     IOUtil.logoutUser().then((res) => {
       if (res) {
         userSetContext.setLoggedIn(false);
-        return navigate("/");
+        return navigate(getPath(""));
       }
 
-      navigate("/dashboard");
+      navigate(getPath("dashboard"));
     });
   }, []);
 

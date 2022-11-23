@@ -48,7 +48,7 @@ const Register = (): JSX.Element => {
     StateUtil.setValue<RegisterFormData>(key, data, setFormData);
 
   React.useEffect(() => {
-    if (registered) IOUtil.loginUser(formData.email, formData.password).then(() => navigate("/dashboard"));
+    if (registered) IOUtil.loginUser(formData.email, formData.password).then(() => navigate(getPath("dashboard")));
   }, [registered, formData.email, formData.password]);
 
   const handleSubmit = async (e: React.FormEvent) => {

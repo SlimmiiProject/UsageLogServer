@@ -30,7 +30,7 @@ const SignIn = (): JSX.Element => {
     if (authenticated) {
       setFailed(false);
       userSetContext.setLoggedIn(true);
-      navigate("/dashboard");
+      navigate(getPath("dashboard"));
     }
   }, [authenticated]);
 

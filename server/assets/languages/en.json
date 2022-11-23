@@ -22,6 +22,8 @@
   "drawercomponent.meters": "Meters",
   "drawercomponent.contact": "Contact",
   "drawercomponent.admin": "Admin",
+  "drawercomponent.login": "Login",
+  "drawercomponent.logout": "Logout",
   "editprofile.firstname": "First Name",
   "editprofile.lastname": "Last Name",
   "editprofile.email": "Email Adress",

@@ -25,7 +25,7 @@ import { LanguageSelector } from "./LanguageSelector";
 import { I18n } from "../util/language/I18n";
 import LogoutIcon from "@mui/icons-material/Logout";
 import React, { useContext } from "react";
-import { userContext } from "../App";
+import { getPath, userContext } from "../App";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import LoginIcon from '@mui/icons-material/Login';
@@ -147,43 +147,43 @@ export default function PersistentDrawerLeft({ lang, mode, onDarkmode }: { lang:
               id: 0,
               text: I18n.t("drawercomponent.dashboard"),
               icon: <DashboardRoundedIcon />,
-              link: `${lang}/dashboard`,
+              link: getPath("dashboard"),
               render: loggedIn
             },
             {
               text: I18n.t("drawercomponent.profile"),
               icon: <AccountCircleRoundedIcon />,
-              link: `${lang}/profile`,
+              link: getPath("profile"),
               render: loggedIn
             },
             {
               text: I18n.t("drawercomponent.meters"),
               icon: <SpeedRoundedIcon />,
-              link: `${lang}/devices`,
+              link: getPath("devices"),
               render: loggedIn
             },
             {
               text: I18n.t("drawercomponent.contact"),
               icon: <MailIcon />,
-              link: `${lang}/contact`,
+              link: getPath("contact"),
               render: loggedIn
             },
             {
-              text: "Admin",
+              text: I18n.t("drawercomponent.admin"),
               icon: <AdminPanelSettingsRoundedIcon />,
-              link: `${lang}/admin`,
+              link: getPath("admin"),
               render: loggedIn && isAdmin
             },
             {
-              text: "Login",
+              text: I18n.t("drawercomponent.login"),
               icon: <LoginIcon />,
-              link: `${lang}/`,
+              link: getPath(""),
               render: !loggedIn
             },
             {
-              text: "Logout",
+              text: I18n.t("drawercomponent.logout"),
               icon: <LogoutIcon />,
-              link: `${lang}/logout`,
+              link: getPath("logout"),
               render: loggedIn
             }
           ].map((element, key) =>
