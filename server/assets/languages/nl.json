@@ -60,5 +60,13 @@
   "error.password_short": "Wachtwoord is te kort, minimum 8 karakters",
   "error.passwords_no_match": "Wachtwoorden komen niet overeen",
   "error.undefined_error": "Er ging iets mis",
-  "error.no_landcode": "Je bent de landcode vergeten"
+  "error.no_landcode": "Je bent de landcode vergeten",
+  "days.monday": "Maandag",
+  "days.tuesday": "Dinsdag",
+  "days.wednesday": "Woensdag",
+  "days.thursday": "Donderdag",
+  "days.friday": "Vrijdag",
+  "days.saturday": "Zaterdag",
+  "days.sunday": "Zondag",
+  "time.hour": "Uur"
 }

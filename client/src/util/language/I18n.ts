@@ -29,7 +29,7 @@ export class I18n {
     }
 
     public static doesLanguageExist = (language_key: string): boolean => Object.keys(I18n.translationConfig).find((key) => key === language_key) !== undefined;
-    
+
     /**
      * It takes a key, and returns the translation.
      * 
@@ -42,8 +42,7 @@ export class I18n {
      * @returns Translation for key
      */
     public static t = (key: string, tFunction?: TFunction | TOptions): string => {
-        if (!this.containsTranslationKey(key)) console.warn("Couldn't find translation for:", key);
-        return i18n.t(key, tFunction);
+        return key.split(" ").map((keyPart) => i18n.t(keyPart, tFunction)).join(" ");
     }
 
     public static changeLanguage = (language_key: string, callback: Callback) => i18n.changeLanguage(language_key, callback);
@@ -52,9 +51,4 @@ export class I18n {
     public static get currentLanguage() {
         return i18n.resolvedLanguage;
     };
-
-
-    private static containsTranslationKey(key: string) {
-        return this.translationConfig["en"].translation[key];
-    }
 }

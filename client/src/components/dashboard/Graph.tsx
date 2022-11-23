@@ -22,6 +22,9 @@ export default function App(props: MeerdereData) {
   if (colorDay === undefined) colorDay = "#ffbc40";
   if (colorNight === undefined) colorNight = "#00008b";
 
+  // Translate everything before applied
+  props.data.forEach((data) => data.name = I18n.t(data.name));
+
   return (
     <>
       <h3>{props.titel}</h3>

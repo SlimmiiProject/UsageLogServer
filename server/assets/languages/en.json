@@ -60,5 +60,13 @@
   "error.password_short": "Password is too short, needs minimum of 8 characters",
   "error.passwords_no_match": "Passwords don't match",
   "error.undefined_error": "Something went wrong",
-  "error.no_landcode": "You forgot the landcode"
+  "error.no_landcode": "You forgot the landcode",
+  "days.monday": "Monday",
+  "days.tuesday": "Tuesday",
+  "days.wednesday": "Wednesday",
+  "days.thursday": "Thursday",
+  "days.friday": "Friday",
+  "days.saturday": "Saturday",
+  "days.sunday": "Sunday",
+  "time.hour": "Hour"
 }
