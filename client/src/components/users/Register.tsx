@@ -76,8 +76,8 @@ const Register = (): JSX.Element => {
       setLandcodeError(true);
     }
 
-    const { first_name, last_name, email, password, password_verify } =
-      formData;
+    const { first_name, last_name, email, password, password_verify } = formData;
+
     if (passwordMatch)
       setRegistered(
         await IOUtil.registerUser(

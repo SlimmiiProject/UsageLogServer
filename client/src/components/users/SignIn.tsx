@@ -21,7 +21,7 @@ import React from "react";
 
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
-  const userSetContext = React.useContext(setUserContext);  
+  const userSetContext = React.useContext(setUserContext);
 
   const [authenticated, setAuthenticated] = React.useState<boolean>(false);
   const [isFailed, setFailed] = React.useState<Boolean>(false);
@@ -45,7 +45,7 @@ const SignIn = (): JSX.Element => {
 
     IOUtil.loginUser(email, password).then(res => {
       setAuthenticated(res);
-      setFailed(!authenticated);
+      if(!res) setFailed(true);
     });
   };
 
@@ -66,7 +66,7 @@ const SignIn = (): JSX.Element => {
           {" "}
           <LockOutlinedIcon />{" "}
         </Avatar>
-        
+
         <Typography component="h1" variant="h5">
           Log in
         </Typography>

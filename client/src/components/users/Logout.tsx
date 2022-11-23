@@ -10,10 +10,13 @@ const Logout = () => {
   // Calling logout function, go to right page.
   React.useEffect(() => {
     IOUtil.logoutUser().then((res) => {
-      userSetContext.setLoggedIn(res);
-      !res ? navigate("/") : navigate("/dashboard");
-    }
-    );
+      if (res) {
+        userSetContext.setLoggedIn(false);
+        return navigate("/");
+      }
+
+      navigate("/dashboard");
+    });
   }, []);
 
   return <h1>Loggin out ...</h1>;
