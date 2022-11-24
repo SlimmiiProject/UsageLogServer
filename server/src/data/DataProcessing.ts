@@ -271,7 +271,8 @@ export class DataProcessor {
 
   // TODO Define logic in a wrapper
   /**
-   * returns true or false if the token is valid or expired
+   * returns true or false if the token is valied or expired
+   * deletes the token after checking if it is valid.
    * @param token string the unique id of the reset
    * @returns Promise<boolean>
    */
@@ -301,8 +302,11 @@ export class DataProcessor {
   //#endregion
 
   //#region Alter Data
-  //possibly redundant.
-  //TODO: add validation
+  /**
+   * TODO:
+   * add validation to updating functions
+   */
+
   /**
    * changes a single password in the database
    * @param userId number user id
@@ -323,7 +327,6 @@ export class DataProcessor {
    * @param firstname  string of 3 to 30 characters
    * @param lastname string of 3 to 30 characters
    * @param email string of max 50 characters needs to be a valid email
-   * @param password string of minimum 5 characters
    * @param phone undefined | string of 12 characters that needs to start with +32
    * @param colorDay GraphColor | undefined enum of colors
    * @param colorNight | undefined enum of colors
@@ -394,6 +397,30 @@ export class DataProcessor {
     * @param id number
     */
   public static DeleteContactForm = async (id: number): Promise<DeleteResult> => await ContactForm.delete({ contactId: id });
+  
+  /**
+   * Returns all the data in the logfile
+  */
+  public static async GetLogfileData(){
+    return Logfile.find()
+  }
+
+  /**
+   * This creates a logfile and adds it to the database if Logfile is complete
+   * @param userId number user id
+   * @param description string
+   * @param ipaddress string
+   */
+  public static CreateLog = async (userId:number, description: string, ipaddress: string): Promise<void> => {
+    let user = UserAccount.findOneBy({userId: userId});
+    let newLog = new Logfile()
+    newLog.account_id = await user;
+    newLog.description = description;
+    newLog.ipaddress = ipaddress;
+    validate(newLog).then(async (result) => {
+      if (result.length <= 0) await Logfile.save(newLog);
+    });
+  }
 
   // /**
   //  * Returns all the data in the logfile

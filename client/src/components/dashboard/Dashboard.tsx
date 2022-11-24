@@ -24,7 +24,7 @@ export default function App() {
 
   return (<>
     <div className="flex">
-
+    
       {!loading && devices.map((meter) => <section className="graph" style={{ backgroundColor: "rgba(0, 0, 0, 0.0)", minWidth: "700px" }}>
         <Graph data={meter.data} titel={meter.nameDevice} colorDay={meter.colorDay} colorNight={meter.colorNight} />
       </section>
