@@ -369,7 +369,11 @@ export class DataProcessor {
    * @param alias string of 1 to 50 characters
    */
   public static ChangeDeviceAlias = async (device_index: number, alias: string): Promise<void> => {
-    let device: Device = await Device.findOne({ where: { device_index: Equal(device_index) } });
+    let device: Device = await Device.findOne({ 
+      where: { 
+        device_index: Equal(device_index) 
+      } 
+    });
     if (!ObjectUtil.isSet(device)) return;
     device.setFriendlyName(alias).save();
   }
@@ -381,21 +385,27 @@ export class DataProcessor {
    * deletes a single administrator from database
    * @param adminId number
    */
-  public static DeleteAdministrator = async (adminId: number): Promise<DeleteResult> => await Administrator.delete({ adminId: adminId })
+  public static DeleteAdministrator = async (
+    adminId: number
+    ): Promise<DeleteResult> => await Administrator.delete({ adminId: adminId })
 
   // Fails if administrator is not removed first
   /**
    * deletes a single user form the database
    * @param userId number
    */
-  public static DeleteUser = async (userId: number): Promise<boolean> => (await UserAccount.delete({ userId: userId })).affected >= 1;
+  public static DeleteUser = async (
+    userId: number
+    ): Promise<boolean> => (await UserAccount.delete({ userId: userId })).affected >= 1;
 
   // Fails if data is not removed first
   /**
    * deletes a single device from database. could fail still testing
    * @param deviceid string
    */
-  public static DeleteDevice = async (deviceid: string): Promise<DeleteResult> => await Device.delete({ deviceId: deviceid });
+  public static DeleteDevice = async (
+    deviceid: string
+    ): Promise<DeleteResult> => await Device.delete({ deviceId: deviceid });
 
   /**
    * deletes a single data row
@@ -412,7 +422,13 @@ export class DataProcessor {
   /**
    * Returns all the data in the logfile
   */
-  public static GetLogfileData = async () => Logfile.find()
+  public static GetLogfileData = async () => {
+    return await Logfile.find({
+      order: {
+        id: "DESC"
+      }
+    });
+  }
 
   /**
    * This creates a logfile and adds it to the database if Logfile is complete
@@ -430,40 +446,24 @@ export class DataProcessor {
     });
   }
 
-  // /**
-  //  * Returns all the data in the logfile
-  // */
-  // public static GetLogfileData = async () => Logfile.find()
-
-  // /**
-  //  * This creates a logfile and adds it to the database if Logfile is complete
-  //  * @param userId number user id
-  //  * @param description string
-  //  * @param ipaddress string
-  //  */
-  // public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
-  //   let user = await UserAccount.findOne({ where: { userId: Equal(userId) } });
-  //   if(!ObjectUtil.isSet(user)) return;
-    
-  //   let newLog = Logfile.createLogFile(user, description, ipaddress);
-  //   validate(newLog).then(async (result) => {
-  //     if (result.length <= 0) await Logfile.save(newLog);
-  //   });
-  // }
-
   /**
    * removes all password reset rows that are older than 30 minutes
    */
-  public static DeleteExpiredPasswordResets = async () => {
+  public static DeleteExpiredPasswordResets = async (
+
+  ) => {
     const expiringDate: Date = new Date(new Date().getTime() - 30 * 60 * 1000);
-    await DatabaseConnector.INSTANCE.dataSource.getRepository(PasswordReset).delete({ created_at: LessThan(expiringDate) });
+    await PasswordReset.delete({ created_at: LessThan(expiringDate) });
   }
 
   /**
    * deletes a single password reset token in database
    * @param token string
    */
-  private static DeleteSpecificPasswordReset = async (token: string): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
+  private static DeleteSpecificPasswordReset = async (
+    token: string
+    ): Promise<DeleteResult> => 
+    await PasswordReset.delete({ token: token });
 
   //#endregion
 }
