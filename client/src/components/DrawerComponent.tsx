@@ -25,9 +25,10 @@ import { LanguageSelector } from "./LanguageSelector";
 import { I18n } from "../util/language/I18n";
 import LogoutIcon from "@mui/icons-material/Logout";
 import React, { useContext } from "react";
-import { userContext } from "../App";
+import { getPath, userContext } from "../App";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import LoginIcon from '@mui/icons-material/Login';
 
 const drawerWidth = 240;
 
@@ -35,9 +36,7 @@ interface IOnDarkmode {
   (): void;
 }
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
-  open?: boolean;
-}>(({ theme, open }) => ({
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{ open?: boolean; }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
   transition: theme.transitions.create("margin", {
@@ -58,9 +57,7 @@ interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})<AppBarProps>(({ theme, open }) => ({
+const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== "open" })<AppBarProps>(({ theme, open }) => ({
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -84,27 +81,15 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function PersistentDrawerLeft({
-  lang,
-  mode,
-  onDarkmode,
-}: {
-  lang: string;
-  mode: boolean;
-  onDarkmode: IOnDarkmode;
-}) {
+export default function PersistentDrawerLeft({ lang, mode, onDarkmode }: { lang: string; mode: boolean; onDarkmode: IOnDarkmode; }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  const handleDrawerOpen = () => setOpen(true);
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const handleDrawerClose = () => setOpen(false);
 
-  const { loggedIn, isAdmin } = useContext(userContext);
+  const { isLoggedIn, isAdmin } = useContext(userContext);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -162,68 +147,55 @@ export default function PersistentDrawerLeft({
               id: 0,
               text: I18n.t("drawercomponent.dashboard"),
               icon: <DashboardRoundedIcon />,
-              link: `${lang}/dashboard`,
+              link: getPath("dashboard"),
+              render: isLoggedIn
             },
             {
-              id: 1,
               text: I18n.t("drawercomponent.profile"),
               icon: <AccountCircleRoundedIcon />,
-              link: `${lang}/profile`,
+              link: getPath("profile"),
+              render: isLoggedIn
             },
             {
-              id: 2,
               text: I18n.t("drawercomponent.meters"),
               icon: <SpeedRoundedIcon />,
-              link: `${lang}/devices`,
+              link: getPath("devices"),
+              render: isLoggedIn
             },
             {
-              id: 3,
               text: I18n.t("drawercomponent.contact"),
               icon: <MailIcon />,
-              link: `${lang}/contact`,
+              link: getPath("contact"),
+              render: isLoggedIn
             },
-            // {
-            //   id: 4,
-            //   text: I18n.t("drawercomponent.admin"),
-            //   icon: <AdminPanelSettingsRoundedIcon />,
-            //   link: `${lang}/admin`,
-            // },
             {
-              id: 5,
-              text: "Logout",
-              icon: <LogoutIcon />,
-              link: `${lang}/logout`,
+              text: I18n.t("drawercomponent.admin"),
+              icon: <AdminPanelSettingsRoundedIcon />,
+              link: getPath("admin"),
+              render: isLoggedIn && isAdmin
             },
+            {
+              text: I18n.t("drawercomponent.login"),
+              icon: <LoginIcon />,
+              link: getPath(""),
+              render: !isLoggedIn
+            },
+            {
+              text: I18n.t("drawercomponent.logout"),
+              icon: <LogoutIcon />,
+              link: getPath("logout"),
+              render: isLoggedIn
+            }
           ].map((element, key) =>
-            loggedIn === true ? (
-              <NavLink
-                to={element.link}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <ListItem key={element.id} disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>{element.icon}</ListItemIcon>
-                    <ListItemText primary={element.text} />
-                  </ListItemButton>
-                </ListItem>
-              </NavLink>
-            ) : null
-          )}
-          {isAdmin ? (
-            <NavLink
-              to={`${lang}/admin`}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <ListItem key={5} disablePadding>
+            element.render && <NavLink to={element.link} style={{ textDecoration: "none", color: "inherit" }} onClick={handleDrawerClose}>
+              <ListItem key={key} disablePadding>
                 <ListItemButton>
-                  <ListItemIcon>
-                    {<AdminPanelSettingsRoundedIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={"Admin"} />
+                  <ListItemIcon>{element.icon}</ListItemIcon>
+                  <ListItemText primary={element.text} />
                 </ListItemButton>
               </ListItem>
             </NavLink>
-          ) : null}
+          )}
         </List>
         <List></List>
         <List>

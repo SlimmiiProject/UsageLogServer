@@ -4,7 +4,12 @@ import { Crypt } from "../../utils/Crypt";
 import { AccountManager } from "../../accounts/AccountManager";
 import { Logger } from "../../utils/Logger";
 import { IsDefined, Length, MinLength, IsEmail, MaxLength, IsPhoneNumber, IsOptional } from "class-validator";
+<<<<<<< HEAD
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate, OneToOne } from "typeorm";
+=======
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate } from "typeorm";
+
+>>>>>>> 0a863b10fd64d1f4ff9b0e669ac42aa26640acf2
 export enum GraphColors {
   RED = "red",
   GREEN = "green",
@@ -13,6 +18,7 @@ export enum GraphColors {
   BLUE = "blue",
   PURPLE = "purple"
 }
+
 @Entity()
 export class UserAccount extends BaseEntity {
 

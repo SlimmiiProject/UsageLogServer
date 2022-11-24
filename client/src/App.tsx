@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 import Profile from "./components/users/Profile";
 import Register from "./components/users/Register";
 import Devices from "./components/users/Devices";
@@ -7,22 +11,18 @@ import Logout from "./components/users/Logout";
 import Drawer from "./components/DrawerComponent";
 import Contact from "./components/Contact";
 import PageNotFound from "./components/404";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
 import DashboardComp from "./components/dashboard/Dashboard";
 import { AdminPage } from "./components/admin/AdminPage";
 import LoginPage from "./components/users/LoginPage";
 import { I18n } from "./util/language/I18n";
 import EditProfile from "./components/users/EditProfile";
-import { Routes, Route, Navigate } from "react-router-dom";
-import {
-  createTheme,
-  CssBaseline,
-  ThemeProvider,
-  useMediaQuery,
-} from "@mui/material";
+import { Routes, Route, Navigate, Location } from "react-router-dom";
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { IOUtil } from "./util/IOUtil";
+import { getLanguageFromUrl } from "./util/BrowserUtil";
+import { url } from "inspector";
+import { LogFile } from "./components/admin/LogFile";
+import SignIn from "./components/users/SignIn";
 
 export interface ITestData {
   devices: IDevice[];
@@ -41,29 +41,31 @@ export interface IData {
   nacht: number;
 }
 
-interface IuserContext {
-  loggedIn: boolean;
+export interface AccountData {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
   isAdmin: boolean;
-  userId: string;
 }
 
-interface ISetUserContext {
-  setLoggedIn: (loggedIn: boolean) => void;
-  setAdmin: (isAdmin: boolean) => void;
+interface IUserContext {
+  userAccount?: AccountData;
+  isLoggedIn: boolean;
+  isAdmin: boolean;
+  setAccountData: React.Dispatch<SetStateAction<AccountData | undefined>>;
+  logout: () => void;
 }
 
-export const userContext = React.createContext<IuserContext>({
-  loggedIn: false,
+export const userContext = React.createContext<IUserContext>({
+  isLoggedIn: false,
   isAdmin: false,
-  userId: "",
+  setAccountData: (data) => {},
+  logout: () => {},
 });
 
-export const setUserContext = React.createContext<ISetUserContext>({
-  setLoggedIn: (loggedIn: boolean) => {},
-  setAdmin: (isAdmin: boolean) => {},
-});
-// get the current path to use for the correct links
-export const getCurrentPath = (location: any) => {
+// Get the current path to use for the correct links
+export const getCurrentPath = (location: Location) => {
   if (location.pathname[location.pathname.length - 1] === "/")
     location.pathname = location.pathname.substring(
       0,
@@ -72,56 +74,74 @@ export const getCurrentPath = (location: any) => {
   return location.pathname;
 };
 
+// Get path with current language prefix
 export const getPath = (path: string) => {
   return `/${I18n.currentLanguage}/${path}`;
 };
 
 const App = (): JSX.Element => {
-  const [loggedIn, setLoggedIn] = useState<boolean>(true);
-  const [isAdmin, setIsAdmin] = useState<boolean>(true);
-  const [darkMode, setDarkMode] = useState<boolean>(false);
-  const [userId, setUserId] = useState<string>("");
-  const [data, setData] = useState();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [accountData, setAccountData] = useState<AccountData | undefined>(
+    undefined
+  );
+  const [darkMode, setDarkMode] = useState<boolean>(
+    JSON.parse(localStorage.getItem("darkMode")!) || false
+  );
+
+  useEffect(() => {
+    // Change Language, in case it's different to what's currently selected
+    const urlLang = getLanguageFromUrl();
+    if (I18n.currentLanguage != urlLang) I18n.changeLanguage(urlLang);
+
+    IOUtil.getSessionData().then((res) => {
+      setAccountData((_accountData) => res);
+
+      IOUtil.isAdmin().then((res) => {
+        setAccountData((accountData) => {
+          return { ...accountData!, isAdmin: res };
+        });
+      });
+
+      setLoading(false);
+    });
+  }, []);
 
   const lang = I18n.currentLanguage;
 
-  // Add testdata from file to emulate externaldata
-  const combineddata: ITestData = require("./util/data/testData.json");
-
   // Change darkmode
-  const darkModeChoice = darkMode ? "dark" : "light";
   const darkTheme = createTheme({
-    palette: {
-      mode: darkModeChoice,
-    },
+    palette: { mode: darkMode ? "dark" : "light" },
   });
-  const handleDarkMode = () => {
-    setDarkMode((prevDarkMode) => !prevDarkMode);
-  };
+
+  const handleDarkMode = () =>
+    setDarkMode((prevDarkMode) => {
+      const afterToggle = !prevDarkMode;
+      localStorage.setItem("darkMode", JSON.stringify(afterToggle));
+      return afterToggle;
+    });
+
   return (
     <>
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <userContext.Provider
-          value={{
-            loggedIn: loggedIn,
-            isAdmin: isAdmin,
-            userId: userId,
-          }}
-        >
-          <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />
-          <Routes>
-            <Route path="/" element={<Navigate to={`/${lang}/`} />} />
-            <Route
-              path="/dashboard"
-              element={<Navigate to={`/${lang}/dashboard`} />}
-            />
-            <Route path="/:lang">
-              <Route index element={<LoginPage />} />
+      {!loading && (
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <userContext.Provider
+            value={{
+              isLoggedIn: accountData != undefined,
+              isAdmin: accountData != undefined && accountData.isAdmin,
+              userAccount: accountData,
+              setAccountData: setAccountData,
+              logout: () => setAccountData(undefined),
+            }}
+          >
+            <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />
+            <Routes>
+              <Route path="/" element={<Navigate to={getPath("")} />} />
               <Route
-                path="dashboard"
-                element={<DashboardComp data={combineddata} />}
+                path="/dashboard"
+                element={<Navigate to={getPath("dashboard")} />}
               />
+<<<<<<< HEAD
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<Register />} />
               <Route path="logout" element={<Logout />} />
@@ -133,12 +153,36 @@ const App = (): JSX.Element => {
                 <Route path="allusers" element={<AdminPage />} />
                 <Route path="alldevices" element={<AdminPage />} />
                 <Route path="logfile" element={<AdminPage />} />
+=======
+
+              <Route path="/:lang">
+                <Route index element={<LoginPage />} />
+                <Route path="dashboard" element={<DashboardComp />} />
+
+                <Route path="login" element={<LoginPage />} />
+                <Route path="register" element={<Register />} />
+                <Route path="logout" element={<Logout />} />
+
+                <Route path="profile" element={<Profile />} />
+                <Route path="profile/edit-profile" element={<EditProfile />} />
+
+                <Route path="devices" element={<Devices />} />
+                <Route path="contact" element={<Contact />} />
+
+                <Route path="admin">
+                  <Route index element={<AdminPage />} />
+                  <Route path="allusers" element={<AdminPage />} />
+                  <Route path="alldevices" element={<AdminPage />} />
+                  <Route path="logfile" element={<LogFile />} />
+                </Route>
+>>>>>>> 0a863b10fd64d1f4ff9b0e669ac42aa26640acf2
               </Route>
-            </Route>
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </userContext.Provider>
-      </ThemeProvider>
+
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </userContext.Provider>
+        </ThemeProvider>
+      )}
     </>
   );
 };

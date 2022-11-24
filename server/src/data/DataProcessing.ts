@@ -1,4 +1,4 @@
-import { Logfile } from './entities/Logfile';
+// import { Logfile } from './entities/Logfile';
 import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
@@ -10,12 +10,13 @@ import { PasswordReset } from "./entities/PasswordReset";
 import { DeleteResult, Equal, LessThan } from "typeorm";
 import { validate } from "class-validator";
 import { ContactForm } from "./entities/Contact";
+import { Logfile } from "./entities/Logfile";
 
 export interface DeviceSpecificData {
   device_index: number;
+  deviceId:string;
   device_alias: string;
   data: Data[];
-  lastData: TemporaryData;
   colorDay?: GraphColors;
   colorNight?: GraphColors;
 }
@@ -210,8 +211,9 @@ export class DataProcessor {
    * @returns Promise<DeviceSpecificData[]>
    */
   public static getData = async (userId: number, startDate?: Date, endDate?: Date): Promise<DeviceSpecificData[]> => {
-    let tempdata: TemporaryData[] = await DataProcessor.GetTempData(userId);
+
     let user: UserAccount = await DataProcessor.getUser(undefined, userId);
+    let devices: Device[] = await this.getDevices(userId);
     let data: Data[] = [];
     if (startDate && endDate) {
       //UNTESTED
@@ -231,35 +233,15 @@ export class DataProcessor {
         .where("dev.user = :id", { id: userId })
         .getMany();
     }
-    let devices: Device[] = await this.getDevices(userId);
 
     let completeData: DeviceSpecificData[] = [];
+
     devices.forEach((device) => {
-      let currentDayData: TemporaryData = new TemporaryData();
-      let filteredTempData: TemporaryData[] = tempdata.filter(
-        (a) => a.device.device_index === device.device_index
-      );
-
-      if (filteredTempData.length >= 2) {
-        //incredibly annoying bug Day & Night returns as string,
-        //but not be recognised as string, so i had to convert it to string and then back to integer.
-        currentDayData.Day =
-          parseInt(filteredTempData[0].Day.toString()) -
-          parseInt(filteredTempData.reverse()[0].Day.toString());
-        currentDayData.Night =
-          parseInt(filteredTempData[0].Night.toString()) -
-          parseInt(filteredTempData.reverse()[0].Night.toString());
-      } else {
-        currentDayData = null;
-        if (filteredTempData[0] && !startDate && !endDate)
-          currentDayData = filteredTempData[0];
-      }
-
       const deviceData: DeviceSpecificData = {
         device_index: device.device_index,
         device_alias: device.friendlyName,
+        deviceId: device.deviceId,
         data: data.filter((a) => a.device.device_index === device.device_index),
-        lastData: currentDayData,
         colorDay: user.colorDay,
         colorNight: user.colorNight,
       };
@@ -447,6 +429,27 @@ export class DataProcessor {
       if (result.length <= 0) await Logfile.save(newLog);
     });
   }
+
+  // /**
+  //  * Returns all the data in the logfile
+  // */
+  // public static GetLogfileData = async () => Logfile.find()
+
+  // /**
+  //  * This creates a logfile and adds it to the database if Logfile is complete
+  //  * @param userId number user id
+  //  * @param description string
+  //  * @param ipaddress string
+  //  */
+  // public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
+  //   let user = await UserAccount.findOne({ where: { userId: Equal(userId) } });
+  //   if(!ObjectUtil.isSet(user)) return;
+    
+  //   let newLog = Logfile.createLogFile(user, description, ipaddress);
+  //   validate(newLog).then(async (result) => {
+  //     if (result.length <= 0) await Logfile.save(newLog);
+  //   });
+  // }
 
   /**
    * removes all password reset rows that are older than 30 minutes

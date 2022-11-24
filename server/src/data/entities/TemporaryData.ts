@@ -1,13 +1,7 @@
 import { IsDefined, IsInt, IsOptional } from "class-validator";
-import {
-  Entity,
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-} from "typeorm";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn } from "typeorm";
 import { Device } from "./Device";
+
 @Entity()
 export class TemporaryData extends BaseEntity {
 
