@@ -19,7 +19,7 @@ export class AdminUtil {
     }
     public static getLogs = async () => {
         try {
-            const res = await this.INSTANCE.get("/admin/logfiles/");
+            const res = await this.INSTANCE.get("/admin/logfile/");
             return res.data.success;
         } catch (_ignored) {
             return false;
