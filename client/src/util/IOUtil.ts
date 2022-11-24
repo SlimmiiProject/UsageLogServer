@@ -97,9 +97,9 @@ export class IOUtil {
     }
   }
 
-  public static isAdmin = async (controller: AbortController): Promise<boolean> => {
+  public static isAdmin = async (controller?: AbortController): Promise<boolean> => {
     try {
-      const res = await this.INSTANCE.get("/session/admin-check", { signal: controller.signal });
+      const res = await this.INSTANCE.get("/session/admin-check", { signal: controller?.signal });
       return !res.data.error ? res.data.isAdmin : false;
     } catch (err) {
       return false;

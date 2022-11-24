@@ -10,6 +10,7 @@ import { PasswordReset } from "./entities/PasswordReset";
 import { DeleteResult, Equal, LessThan } from "typeorm";
 import { validate } from "class-validator";
 import { ContactForm } from "./entities/Contact";
+import { Logfile } from "./entities/Logfile";
 
 export interface DeviceSpecificData {
   device_index: number;
