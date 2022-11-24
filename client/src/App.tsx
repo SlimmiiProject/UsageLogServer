@@ -22,6 +22,7 @@ import { IOUtil } from "./util/IOUtil";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
 import { url } from "inspector";
 import { LogFile } from "./components/admin/LogFile";
+import SignIn from "./components/users/SignIn";
 
 export interface ITestData {
   devices: IDevice[];
@@ -155,7 +156,8 @@ const App = (): JSX.Element => {
                 <Route path="devices" element={<Devices />} />
                 <Route path="contact" element={<Contact />} />
 
-                <Route path="admin" element={<AdminPage />}>
+                <Route path="admin">
+                  <Route index element={<AdminPage />} />
                   <Route path="allusers" element={<AdminPage />} />
                   <Route path="alldevices" element={<AdminPage />} />
                   <Route path="logfile" element={<LogFile />} />
