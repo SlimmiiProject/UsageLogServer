@@ -1,12 +1,5 @@
 import { IsDefined } from "class-validator";
-import {
-  BaseEntity,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryColumn,
-} from "typeorm";
+import { Entity, BaseEntity, PrimaryColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm";
 import { UserAccount } from "./UserAccount";
 
 @Entity()

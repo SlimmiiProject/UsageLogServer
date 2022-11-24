@@ -28,7 +28,7 @@ export class SessionManager {
      */
     public static loginRequired = (request: Request, response: Response, next: NextFunction) => {
         if (SessionManager.getSessionData(request).isLoggedIn) return next();
-        response.redirect("/");
+        response.sendStatus(403);
     }
 
     /**
@@ -50,7 +50,6 @@ export class SessionManager {
                 firstName: account.firstname,
                 lastName: account.lastname,
                 email: account.email,
-                isAdmin: await account.isAdmin()
             };
         });
     }

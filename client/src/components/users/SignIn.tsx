@@ -2,7 +2,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { IOUtil } from "../../util/IOUtil";
 import { useNavigate } from "react-router-dom";
 import { I18n } from "../../util/language/I18n";
-import { getPath } from "../../App";
+import { AccountData, getPath, userContext } from "../../App";
 import {
   Container,
   Alert,
@@ -17,21 +17,23 @@ import {
   Grid,
   Link,
 } from "@mui/material";
-import React, { Dispatch, FC, SetStateAction } from "react";
-import { GoogleLoginComponent } from "../GoogleLoginComponent";
+import React from "react";
 
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
+  const userContextData = React.useContext(userContext);
 
-  const [authenticated, setAuthenticated] = React.useState<boolean>(false);
+  const [authenticated, setAuthenticated] = React.useState<
+    AccountData | undefined
+  >(undefined);
   const [isFailed, setFailed] = React.useState<Boolean>(false);
 
   React.useEffect(() => {
     if (authenticated) {
       setFailed(false);
-      navigate("/dashboard");
+      navigate(getPath("dashboard"));
     }
-  }, [authenticated, navigate]);
+  }, [authenticated]);
 
   // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -41,8 +43,20 @@ const SignIn = (): JSX.Element => {
     // TODO Improve data capture
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
-    await setAuthenticated(await IOUtil.loginUser(email, password));
-    setFailed(!authenticated);
+
+    IOUtil.loginUser(email, password, userContextData.setAccountData).then(
+      (res) => {
+        setAuthenticated(res);
+
+        if (res) {
+          IOUtil.isAdmin().then((res) => {
+            userContextData.setAccountData((accountData) => {
+              return { ...accountData!, isAdmin: res };
+            });
+          });
+        } else setFailed(true);
+      }
+    );
   };
 
   return (
@@ -62,6 +76,7 @@ const SignIn = (): JSX.Element => {
           {" "}
           <LockOutlinedIcon />{" "}
         </Avatar>
+
         <Typography component="h1" variant="h5">
           Log in
         </Typography>

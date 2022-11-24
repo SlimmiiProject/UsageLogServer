@@ -11,7 +11,7 @@ export class I18n {
         return this._translationConfig;
     }
 
-    public static async setup() {
+    public static setup = async () => {
         if (this.translationConfig) return;
 
         this._translationConfig = await IOUtil.getTranslationConfig();
@@ -28,9 +28,7 @@ export class I18n {
             });
     }
 
-    public static doesLanguageExist(language_key: string): boolean {
-        return Object.keys(I18n.translationConfig).find((key) => key === language_key) !== undefined;
-    }
+    public static doesLanguageExist = (language_key: string): boolean => Object.keys(I18n.translationConfig).find((key) => key === language_key) !== undefined;
 
     /**
      * It takes a key, and returns the translation.
@@ -43,20 +41,14 @@ export class I18n {
      * @param {string} key - The key of the translation to get.
      * @returns Translation for key
      */
-    public static t(key: string, tFunction?: TFunction | TOptions): string {
-        if (!this.containsTranslationKey(key)) console.warn("Couldn't find translation for:", key);
-        return i18n.t(key, tFunction);
+    public static t = (key: string, tFunction?: TFunction | TOptions): string => {
+        return key.split(" ").map((keyPart) => i18n.t(keyPart, tFunction)).join(" ");
     }
 
-    public static changeLanguage(language_key: string, callback: Callback) {
-        i18n.changeLanguage(language_key, callback);
-    }
+    public static changeLanguage = (language_key: string, callback?: Callback) => i18n.changeLanguage(language_key, callback);
+
 
     public static get currentLanguage() {
         return i18n.resolvedLanguage;
-    }
-
-    private static containsTranslationKey(key: string) {
-        return this.translationConfig["en"].translation[key];
-    }
+    };
 }
