@@ -1,5 +1,6 @@
 import { I18n } from "../../util/language/I18n";
 import {List,ListItem,ListItemText,Typography} from "@mui/material";
+import {Logfile} from "../../../../server/src/data/entities/Logfile";
 export const LogFile = (): JSX.Element => {
   const files:Logfile[] = [];
   return (
