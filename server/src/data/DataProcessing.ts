@@ -154,8 +154,7 @@ export class DataProcessor {
     //   .where("user.userid = :adminid", { adminid: userId })
     //   .getOne();
 
-      return await DatabaseConnector.INSTANCE.dataSource
-      .getRepository(Administrator)
+      return await Administrator
       .findOne({
         relations: {
           user: true,
