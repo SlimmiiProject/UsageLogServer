@@ -1,10 +1,14 @@
 import express, { Request, Response } from "express";
-import { AccountManager } from "../accounts/AccountManager";
+import { SessionManager } from "../accounts/SessionManager";
 import { DataProcessor } from "../data/DataProcessing";
+import { Middleware } from "../utils/Middleware";
 const router = express.Router();
 
+router.use(SessionManager.loginRequired);
+router.use(Middleware.requireAdminpermission);
+
 router.get("/logfile", async (req: Request, res: Response) => {
-  return await DataProcessor.GetLogfileData()
+  res.json(await DataProcessor.GetLogfileData());
 });
 
 module.exports = router;
