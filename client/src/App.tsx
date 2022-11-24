@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -20,6 +20,7 @@ import { Routes, Route, Navigate, Location } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
+import { LogFile } from "./components/admin/LogFile";
 
 export interface ITestData {
   devices: IDevice[];
@@ -47,23 +48,27 @@ export interface AccountData {
 }
 
 interface IUserContext {
-  userAccount?: AccountData
+  userAccount?: AccountData;
   isLoggedIn: boolean;
   isAdmin: boolean;
-  setAccountData: (data: AccountData) => void;
+  setAccountData: React.Dispatch<SetStateAction<AccountData | undefined>>;
   logout: () => void;
 }
 
 export const userContext = React.createContext<IUserContext>({
   isLoggedIn: false,
   isAdmin: false,
-  setAccountData: (data: AccountData) => { },
-  logout: () => { }
+  setAccountData: (data) => { },
+  logout: () => { },
 });
 
 // Get the current path to use for the correct links
 export const getCurrentPath = (location: Location) => {
-  if (location.pathname[location.pathname.length - 1] === "/") location.pathname = location.pathname.substring(0, location.pathname.length - 1);
+  if (location.pathname[location.pathname.length - 1] === "/")
+    location.pathname = location.pathname.substring(
+      0,
+      location.pathname.length - 1
+    );
   return location.pathname;
 };
 
@@ -74,8 +79,12 @@ export const getPath = (path: string) => {
 
 const App = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [accountData, setAccountData] = useState<AccountData | undefined>(undefined);
-  const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem("darkMode")!) || false);
+  const [accountData, setAccountData] = useState<AccountData | undefined>(
+    undefined
+  );
+  const [darkMode, setDarkMode] = useState<boolean>(
+    JSON.parse(localStorage.getItem("darkMode")!) || false
+  );
 
   useEffect(() => {
     // Change Language, in case it's different to what's currently selected
@@ -101,30 +110,38 @@ const App = (): JSX.Element => {
   const lang = I18n.currentLanguage;
 
   // Change darkmode
-  const darkTheme = createTheme({ palette: { mode: darkMode ? "dark" : "light" } });
-
-  const handleDarkMode = () => setDarkMode((prevDarkMode) => {
-    const afterToggle = !prevDarkMode;
-    localStorage.setItem("darkMode", JSON.stringify(afterToggle));
-    return afterToggle;
+  const darkTheme = createTheme({
+    palette: { mode: darkMode ? "dark" : "light" },
   });
+
+  const handleDarkMode = () =>
+    setDarkMode((prevDarkMode) => {
+      const afterToggle = !prevDarkMode;
+      localStorage.setItem("darkMode", JSON.stringify(afterToggle));
+      return afterToggle;
+    });
 
   return (
     <>
-      {!loading &&
+      {!loading && (
         <ThemeProvider theme={darkTheme}>
           <CssBaseline />
-          <userContext.Provider value={{
-            isLoggedIn: accountData != undefined,
-            isAdmin: accountData != undefined && accountData.isAdmin,
-            userAccount: accountData,
-            setAccountData: setAccountData,
-            logout: () => setAccountData(undefined)
-          }} >
+          <userContext.Provider
+            value={{
+              isLoggedIn: accountData != undefined,
+              isAdmin: accountData != undefined && accountData.isAdmin,
+              userAccount: accountData,
+              setAccountData: setAccountData,
+              logout: () => setAccountData(undefined),
+            }}
+          >
             <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />
             <Routes>
               <Route path="/" element={<Navigate to={getPath("")} />} />
-              <Route path="/dashboard" element={<Navigate to={getPath("dashboard")} />} />
+              <Route
+                path="/dashboard"
+                element={<Navigate to={getPath("dashboard")} />}
+              />
 
               <Route path="/:lang">
                 <Route index element={<LoginPage />} />
@@ -140,19 +157,19 @@ const App = (): JSX.Element => {
                 <Route path="devices" element={<Devices />} />
                 <Route path="contact" element={<Contact />} />
 
-                <Route path="admin" element={<AdminPage />}>
+                <Route path="admin">
+                  <Route index element={<AdminPage />} />
                   <Route path="allusers" element={<AdminPage />} />
                   <Route path="alldevices" element={<AdminPage />} />
-                  <Route path="logfile" element={<AdminPage />} />
+                  <Route path="logfile" element={<LogFile />} />
                 </Route>
               </Route>
 
               <Route path="*" element={<PageNotFound />} />
             </Routes>
-
           </userContext.Provider>
         </ThemeProvider>
-      }
+      )}
     </>
   );
 };

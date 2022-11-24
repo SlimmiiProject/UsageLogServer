@@ -1,3 +1,4 @@
+// import { Logfile } from './entities/Logfile';
 import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
@@ -17,6 +18,14 @@ export interface DeviceSpecificData {
   data: Data[];
   colorDay?: GraphColors;
   colorNight?: GraphColors;
+}
+
+export interface ILog {
+  id?: number,
+  account_id: number,
+  date: Date,
+  description: string,
+  ipaddress: string
 }
 
 export class DataProcessor {
@@ -138,13 +147,26 @@ export class DataProcessor {
    * @returns Promise<Administrator>
    */
   public static getAdministrator = async (userId: number): Promise<Administrator> => {
-    let AdminQuery = DatabaseConnector.INSTANCE.dataSource
-      .getRepository(Administrator)
-      .createQueryBuilder("administrator")
-      .innerJoinAndSelect("administrator.user", "user")
-      .where("user.userid = :adminid", { adminid: userId })
-      .getOne();
-    return await AdminQuery;
+    // let AdminQuery = DatabaseConnector.INSTANCE.dataSource
+    //   .getRepository(Administrator)
+    //   .createQueryBuilder("administrator")
+    //   .innerJoinAndSelect("administrator.user", "user")
+    //   .where("user.userid = :adminid", { adminid: userId })
+    //   .getOne();
+
+      return await Administrator
+      .findOne({
+        relations: {
+          user: true,
+        },
+        where: {
+          user:{
+            userId: userId 
+          },
+        },
+      })
+      
+    // return await AdminQuery
   }
 
   /**
@@ -153,10 +175,12 @@ export class DataProcessor {
    * @returns Promise<Device[]>
    */
   public static getDevices = async (userId: number): Promise<Device[]> => {
-    const devices = await Device.createQueryBuilder("device")
+    const devices = await DatabaseConnector.INSTANCE.dataSource
+      .getRepository(Device)
+      .createQueryBuilder("device")
       .leftJoinAndSelect("device.user", "user")
-      .where("user.userid = :id", { id: userId }).getMany();
-
+      .where("user.userid = :id", { id: userId })
+      .getMany();
     return devices;
   }
 
@@ -180,19 +204,27 @@ export class DataProcessor {
     let user: UserAccount = await DataProcessor.getUser(undefined, userId);
     let devices: Device[] = await this.getDevices(userId);
     let data: Data[] = [];
-
-
     if (startDate && endDate) {
-      data = await Data.createQueryBuilder("data").leftJoinAndSelect("data.device", "device")
-        .where("device.user = :id", { id: userId }).andWhere("data.created_at < :endDate", { endDate: endDate })
-        .andWhere("data.created_at >= :startDate", { startDate: startDate }).getMany();
+      //UNTESTED
+      data = await DatabaseConnector.INSTANCE.dataSource
+        .getRepository(Data)
+        .createQueryBuilder("data")
+        .leftJoinAndSelect("data.device", "dev")
+        .where("dev.user = :id", { id: userId })
+        .andWhere("data.created_at < :endDate", { endDate: endDate })
+        .andWhere("data.created_at > :startDate", { startDate: startDate })
+        .getMany();
     } else {
-      data = await Data.createQueryBuilder("data").leftJoinAndSelect("data.device", "device")
-        .where("device.user = :id", { id: userId }).getMany();
+      data = await DatabaseConnector.INSTANCE.dataSource
+        .getRepository(Data)
+        .createQueryBuilder("data")
+        .leftJoinAndSelect("data.device", "dev")
+        .where("dev.user = :id", { id: userId })
+        .getMany();
     }
 
     let completeData: DeviceSpecificData[] = [];
-   
+
     devices.forEach((device) => {
       const deviceData: DeviceSpecificData = {
         device_index: device.device_index,
@@ -202,10 +234,8 @@ export class DataProcessor {
         colorDay: user.colorDay,
         colorNight: user.colorNight,
       };
-
       completeData.push(deviceData);
     });
-
     return completeData;
   }
 
@@ -241,7 +271,8 @@ export class DataProcessor {
 
   // TODO Define logic in a wrapper
   /**
-   * returns true or false if the token is valid or expired
+   * returns true or false if the token is valied or expired
+   * deletes the token after checking if it is valid.
    * @param token string the unique id of the reset
    * @returns Promise<boolean>
    */
@@ -271,8 +302,11 @@ export class DataProcessor {
   //#endregion
 
   //#region Alter Data
-  //possibly redundant.
-  //TODO: add validation
+  /**
+   * TODO:
+   * add validation to updating functions
+   */
+
   /**
    * changes a single password in the database
    * @param userId number user id
@@ -288,12 +322,14 @@ export class DataProcessor {
   // TODO: add validation
   // TODO: Test if password change alters users password by hashing it twice
   /**
+   * changes the values of a single user object in database.
    * @param userid number user id
    * @param firstname  string of 3 to 30 characters
    * @param lastname string of 3 to 30 characters
    * @param email string of max 50 characters needs to be a valid email
-   * @param password string of minimum 5 characters
    * @param phone undefined | string of 12 characters that needs to start with +32
+   * @param colorDay GraphColor | undefined enum of colors
+   * @param colorNight | undefined enum of colors
    * @returns Promise<void>
    */
   public static EditAcount = async (userid: number, firstname: string, lastname: string, email: string, phone?: string, colorDay?: GraphColors, colorNight?: GraphColors): Promise<void> => {
@@ -357,10 +393,55 @@ export class DataProcessor {
   public static DeleteData = async (dataid: number): Promise<DeleteResult> => await Data.delete({ dataId: dataid });
 
   /**
-   * deletes a single contact form.
-   * @param id number
-   */
+    * deletes a single contact form.
+    * @param id number
+    */
   public static DeleteContactForm = async (id: number): Promise<DeleteResult> => await ContactForm.delete({ contactId: id });
+  
+  /**
+   * Returns all the data in the logfile
+  */
+  public static async GetLogfileData(){
+    return Logfile.find()
+  }
+
+  /**
+   * This creates a logfile and adds it to the database if Logfile is complete
+   * @param userId number user id
+   * @param description string
+   * @param ipaddress string
+   */
+  public static CreateLog = async (userId:number, description: string, ipaddress: string): Promise<void> => {
+    let user = UserAccount.findOneBy({userId: userId});
+    let newLog = new Logfile()
+    newLog.account_id = await user;
+    newLog.description = description;
+    newLog.ipaddress = ipaddress;
+    validate(newLog).then(async (result) => {
+      if (result.length <= 0) await Logfile.save(newLog);
+    });
+  }
+
+  // /**
+  //  * Returns all the data in the logfile
+  // */
+  // public static GetLogfileData = async () => Logfile.find()
+
+  // /**
+  //  * This creates a logfile and adds it to the database if Logfile is complete
+  //  * @param userId number user id
+  //  * @param description string
+  //  * @param ipaddress string
+  //  */
+  // public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
+  //   let user = await UserAccount.findOne({ where: { userId: Equal(userId) } });
+  //   if(!ObjectUtil.isSet(user)) return;
+    
+  //   let newLog = Logfile.createLogFile(user, description, ipaddress);
+  //   validate(newLog).then(async (result) => {
+  //     if (result.length <= 0) await Logfile.save(newLog);
+  //   });
+  // }
 
   /**
    * removes all password reset rows that are older than 30 minutes

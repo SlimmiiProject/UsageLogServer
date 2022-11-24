@@ -62,7 +62,7 @@ export class IOUtil {
         password: password,
       });
 
-      dataConsumer(res.data);
+      dataConsumer(res.data.user);
 
       return res.data.succes;
     } catch (e) {
