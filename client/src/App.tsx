@@ -141,19 +141,6 @@ const App = (): JSX.Element => {
                 path="/dashboard"
                 element={<Navigate to={getPath("dashboard")} />}
               />
-<<<<<<< HEAD
-              <Route path="login" element={<LoginPage />} />
-              <Route path="register" element={<Register />} />
-              <Route path="logout" element={<Logout />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="profile/edit-profile" element={<EditProfile />} />
-              <Route path="devices" element={<Devices />} />
-              <Route path="contact" element={<Contact />} />
-              <Route path="admin" element={<AdminPage />}>
-                <Route path="allusers" element={<AdminPage />} />
-                <Route path="alldevices" element={<AdminPage />} />
-                <Route path="logfile" element={<AdminPage />} />
-=======
 
               <Route path="/:lang">
                 <Route index element={<LoginPage />} />
@@ -175,7 +162,6 @@ const App = (): JSX.Element => {
                   <Route path="alldevices" element={<AdminPage />} />
                   <Route path="logfile" element={<LogFile />} />
                 </Route>
->>>>>>> 0a863b10fd64d1f4ff9b0e669ac42aa26640acf2
               </Route>
 
               <Route path="*" element={<PageNotFound />} />
