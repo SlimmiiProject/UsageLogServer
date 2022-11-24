@@ -23,7 +23,9 @@ const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
   const userContextData = React.useContext(userContext);
 
-  const [authenticated, setAuthenticated] = React.useState<AccountData | undefined>(undefined);
+  const [authenticated, setAuthenticated] = React.useState<
+    AccountData | undefined
+  >(undefined);
   const [isFailed, setFailed] = React.useState<Boolean>(false);
 
   React.useEffect(() => {
@@ -42,10 +44,19 @@ const SignIn = (): JSX.Element => {
     const email = data.get("email")!.toString();
     const password = data.get("password")!.toString();
 
-    IOUtil.loginUser(email, password, userContextData.setAccountData).then(res => {
-      setAuthenticated(res);
-      if (!res) setFailed(true);
-    });
+    IOUtil.loginUser(email, password, userContextData.setAccountData).then(
+      (res) => {
+        setAuthenticated(res);
+
+        if (res) {
+          IOUtil.isAdmin().then((res) => {
+            userContextData.setAccountData((accountData) => {
+              return { ...accountData!, isAdmin: res };
+            });
+          });
+        } else setFailed(true);
+      }
+    );
   };
 
   return (
