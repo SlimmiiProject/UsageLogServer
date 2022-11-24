@@ -1,14 +1,12 @@
 import axios, { AxiosInstance } from "axios";
-import { AccountData, IDevice } from "../App";
 
-export type Error = {
-    succes: boolean;
-    error: string;
-    missing_fields?: string[];
+export type LogData = {
+    id: number;
+    date: Date;
+    description: string;
+    ipaddress: string;
+    account_id?:number;
 }
-export type DataCallback = {
-    (error: Error): void;
-};
 
 export class AdminUtil {
 
@@ -17,15 +15,13 @@ export class AdminUtil {
         if (!this._instance) this._instance = axios.create({ baseURL: "/api/", timeout: 5000 });
         return this._instance;
     }
-    public static getLogs = async () => {
+
+    public static getLogs = async (controller: AbortController): Promise<LogData[]> => {
         try {
-            const res = await this.INSTANCE.get("/admin/logfile/");
-            return res.data.success;
+            const res = await this.INSTANCE.get("/admin/logfile/", { signal: controller.signal });
+            return res.data;
         } catch (_ignored) {
-            return false;
+            return [];
         }
     }
-
-
-
 }
