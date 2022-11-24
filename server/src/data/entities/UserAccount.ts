@@ -1,9 +1,10 @@
+import { Administrator } from './Administrator';
 import { Device } from "./Device";
 import { Crypt } from "../../utils/Crypt";
 import { AccountManager } from "../../accounts/AccountManager";
 import { Logger } from "../../utils/Logger";
 import { IsDefined, Length, MinLength, IsEmail, MaxLength, IsPhoneNumber, IsOptional } from "class-validator";
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate } from "typeorm";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate, OneToOne } from "typeorm";
 export enum GraphColors {
   RED = "red",
   GREEN = "green",
@@ -65,7 +66,7 @@ export class UserAccount extends BaseEntity {
   @Column("enum", { enum: GraphColors, default: GraphColors.PURPLE, name: "color_night", nullable: true, unique: false })
   @IsOptional()
   colorNight: GraphColors;
-
+  
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {

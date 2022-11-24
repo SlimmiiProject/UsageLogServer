@@ -147,13 +147,27 @@ export class DataProcessor {
    * @returns Promise<Administrator>
    */
   public static getAdministrator = async (userId: number): Promise<Administrator> => {
-    let AdminQuery = DatabaseConnector.INSTANCE.dataSource
+    // let AdminQuery = DatabaseConnector.INSTANCE.dataSource
+    //   .getRepository(Administrator)
+    //   .createQueryBuilder("administrator")
+    //   .innerJoinAndSelect("administrator.user", "user")
+    //   .where("user.userid = :adminid", { adminid: userId })
+    //   .getOne();
+
+      return await DatabaseConnector.INSTANCE.dataSource
       .getRepository(Administrator)
-      .createQueryBuilder("administrator")
-      .innerJoinAndSelect("administrator.user", "user")
-      .where("user.userid = :adminid", { adminid: userId })
-      .getOne();
-    return await AdminQuery;
+      .findOne({
+        relations: {
+          user: true,
+        },
+        where: {
+          user:{
+            userId: userId 
+          },
+        },
+      })
+      
+    // return await AdminQuery
   }
 
   /**
