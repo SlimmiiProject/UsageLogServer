@@ -24,8 +24,8 @@ return (
             {isloading ? ( files.map((file)=>(
                 <ListItemText primary={file.date.toString()} secondary={
                   <>
-                  <Typography sx={{display:"inline"}} component="span" color="text.primary"><>{I18n.t("logger.acount_id")}: {file.account_id}</></Typography>
-                  {`${I18n.t("logger.Description")}: ${file.description} ${I18n.t("logger.address")}: ${file.ipaddress}`}
+                  <Typography sx={{display:"inline"}} component="span" color="text.primary"><>{I18n.t("logger.account_id")}: {file.account_id}</></Typography>
+                  {`${I18n.t("logger.Description")}: ${file.description} ${I18n.t("logger.Address")}: ${file.ipaddress}`}
                   </>
                 }/>
             ))) : (<><h2>LOADING...</h2></>)}
