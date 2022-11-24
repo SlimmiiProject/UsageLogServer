@@ -119,8 +119,6 @@ const App = (): JSX.Element => {
       return afterToggle;
     });
 
-  console.log(accountData);
-
   return (
     <>
       {!loading && (

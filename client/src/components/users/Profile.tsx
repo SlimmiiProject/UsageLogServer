@@ -7,7 +7,7 @@ import { useContext } from "react";
 const Profile = (): JSX.Element => {
   const userContextData = useContext(userContext);
   let fullName = [userContextData.userAccount?.firstName, userContextData.userAccount?.lastName].join(" ");
-
+  
   const stringToColor = (string: string) => {
     let hash = 0;
     let i;
