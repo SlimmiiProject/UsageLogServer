@@ -20,7 +20,6 @@ import { Routes, Route, Navigate, Location } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
-import { url } from "inspector";
 
 export interface ITestData {
   devices: IDevice[];
@@ -82,20 +81,22 @@ const App = (): JSX.Element => {
     // Change Language, in case it's different to what's currently selected
     const urlLang = getLanguageFromUrl();
     if (I18n.currentLanguage != urlLang) I18n.changeLanguage(urlLang)
-    
-    IOUtil.getSessionData().then((res) => {
+
+    const controller = new AbortController();
+
+    IOUtil.getSessionData(controller).then((res) => {
       setAccountData((_accountData) => res);
       setLoading(false);
     });
-  }, [])
 
-  useEffect(() => {
-    IOUtil.isAdmin().then(res => {
+    IOUtil.isAdmin(controller).then(res => {
       setAccountData((accountData) => {
         return { ...accountData!, isAdmin: res };
       });
     });
-  }, [accountData])
+
+    return () => controller.abort();
+  }, [])
 
   const lang = I18n.currentLanguage;
 
@@ -110,7 +111,6 @@ const App = (): JSX.Element => {
 
   return (
     <>
-
       {!loading &&
         <ThemeProvider theme={darkTheme}>
           <CssBaseline />
