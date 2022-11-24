@@ -175,13 +175,23 @@ export class DataProcessor {
    * @returns Promise<Device[]>
    */
   public static getDevices = async (userId: number): Promise<Device[]> => {
-    const devices = await DatabaseConnector.INSTANCE.dataSource
-      .getRepository(Device)
-      .createQueryBuilder("device")
-      .leftJoinAndSelect("device.user", "user")
-      .where("user.userid = :id", { id: userId })
-      .getMany();
-    return devices;
+    // const devices = await DatabaseConnector.INSTANCE.dataSource
+    //   .getRepository(Device)
+    //   .createQueryBuilder("device")
+    //   .leftJoinAndSelect("device.user", "user")
+    //   .where("user.userid = :id", { id: userId })
+    //   .getMany();
+
+      return await Device.find({
+        relations: {
+          user: true
+        },
+        where: {
+          user: {
+            userId: userId
+          }
+        }
+      })
   }
 
   public static getTempEntry = async (deviceId: string) => {
