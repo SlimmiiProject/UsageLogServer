@@ -1,7 +1,6 @@
 import { DateUtil } from "../utils/DateUtil";
 import { ObjectUtil } from "../utils/ObjectUtil";
 import { DataProcessor } from "./DataProcessing";
-import { Data } from "./entities/Data";
 import { TemporaryData } from "./entities/TemporaryData";
 
 export class MeterEntryProcessor {
@@ -25,7 +24,7 @@ export class MeterEntryProcessor {
 
     private migrateToHourlyData = async () => {
         await DataProcessor.createHourlyData(this.deviceId, this.tempEntry.Day, this.tempEntry.Night);
-        await this.tempEntry.remove()
+        await this.tempEntry.remove();
     };
 
     private getDevice = async () => await DataProcessor.getDevice(this.deviceId);
@@ -33,16 +32,12 @@ export class MeterEntryProcessor {
     public process = async () => {
         await this.setup();
 
-        // Does it have an entry, and did it pass the previous hour
-        if (this.hasEntry() && this.hasPassedHour()) await this.migrateToHourlyData();
+        if (this.hasEntry() && this.hasPassedHour()) await this.migrateToHourlyData(); // Does it have an entry, and did it pass the previous hour
 
-        // Does any temporary data entry already exist for this hour and device
-        if (!this.hasEntry()) {
-            // Create new temp data for this hour
-            this.tempEntry = TemporaryData.createTempData(await this.getDevice(), this.day, this.night);
+        if (!this.hasEntry()) { // Does any temporary data entry already exist for this hour and device
+            this.tempEntry = TemporaryData.createTempData(await this.getDevice(), this.day, this.night);  // Create new temp data for this hour
         } else {
-            // Add values to existing temp data
-            this.tempEntry.add(this.day, this.night);
+            this.tempEntry.add(this.day, this.night);   // Add values to existing temp data
         }
 
         // Save temporary data

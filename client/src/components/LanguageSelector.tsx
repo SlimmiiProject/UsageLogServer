@@ -2,6 +2,7 @@ import { replaceLanguageUrl } from "../util/BrowserUtil";
 import { I18n } from "../util/language/I18n";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { cp } from "fs";
 
 export const LanguageSelector: React.FC = () => {
 
@@ -12,7 +13,8 @@ export const LanguageSelector: React.FC = () => {
       id="languageSelector"
       onChange={(e) => {
         const value = e.target.value;
-        return I18n.changeLanguage(value, () => replaceLanguageUrl(I18n.currentLanguage, value));
+        const previous = I18n.currentLanguage;
+        return I18n.changeLanguage(value, () => replaceLanguageUrl(previous, value));
       }}
       value={I18n.currentLanguage}
     >

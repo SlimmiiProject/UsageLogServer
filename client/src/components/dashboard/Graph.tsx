@@ -1,4 +1,4 @@
-import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ReferenceLine, Bar } from "recharts";
+import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ReferenceLine, Bar, ResponsiveContainer } from "recharts";
 import "../../styles.css";
 import { I18n } from "../../util/language/I18n";
 
@@ -22,11 +22,15 @@ export default function App(props: MeerdereData) {
   if (colorDay === undefined) colorDay = "#ffbc40";
   if (colorNight === undefined) colorNight = "#00008b";
 
+  // Translate everything before applied
+  props.data.forEach((data) => data.name = I18n.t(data.name));
+
   return (
     <>
       <h3>{props.titel}</h3>
-      <div className="flex" style={{backgroundColor:"rgba(0, 0, 0, 0.0)"}}>
-        <BarChart width={900} height={500} data={props.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }} style={{backgroundColor:"rgba(0, 0, 0, 0.0)"}}>
+
+      <ResponsiveContainer maxHeight={400} minWidth={596}>
+        <BarChart height={500} data={props.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }} style={{ backgroundColor: "rgba(0, 0, 0, 0.0)" }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
@@ -36,7 +40,7 @@ export default function App(props: MeerdereData) {
           <Bar dataKey={"day"} name={I18n.t("graph.day")} fill={colorDay} />
           <Bar dataKey={"night"} name={I18n.t("graph.night")} fill={colorNight} />
         </BarChart>
-      </div>
+      </ResponsiveContainer>
     </>
   );
 }
