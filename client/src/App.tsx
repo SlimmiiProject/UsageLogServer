@@ -21,6 +21,7 @@ import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
 import { url } from "inspector";
+import { LogFile } from "./components/admin/LogFile";
 
 export interface ITestData {
   devices: IDevice[];
@@ -143,7 +144,7 @@ const App = (): JSX.Element => {
                 <Route path="admin" element={<AdminPage />}>
                   <Route path="allusers" element={<AdminPage />} />
                   <Route path="alldevices" element={<AdminPage />} />
-                  <Route path="logfile" element={<AdminPage />} />
+                  <Route path="logfile" element={<LogFile />} />
                 </Route>
               </Route>
 
