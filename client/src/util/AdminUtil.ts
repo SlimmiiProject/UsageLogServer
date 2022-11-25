@@ -5,7 +5,7 @@ export type LogData = {
     date: Date;
     description: string;
     ipaddress: string;
-    account_id?:number;
+    account_id?: number;
 }
 
 export class AdminUtil {
@@ -19,6 +19,9 @@ export class AdminUtil {
     public static getLogs = async (controller: AbortController): Promise<LogData[]> => {
         try {
             const res = await this.INSTANCE.get("/admin/logfile/", { signal: controller.signal });
+            console.log(res.data[0].date.toString())
+            //doesn't work?
+            //console.log(res.data[0].date.toDateString())
             return res.data;
         } catch (_ignored) {
             return [];
