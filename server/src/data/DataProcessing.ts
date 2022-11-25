@@ -446,6 +446,27 @@ export class DataProcessor {
     });
   }
 
+  // /**
+  //  * Returns all the data in the logfile
+  // */
+  // public static GetLogfileData = async () => Logfile.find()
+
+  // /**
+  //  * This creates a logfile and adds it to the database if Logfile is complete
+  //  * @param userId number user id
+  //  * @param description string
+  //  * @param ipaddress string
+  //  */
+  // public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
+  //   let user = await UserAccount.findOne({ where: { userId: Equal(userId) } });
+  //   if(!ObjectUtil.isSet(user)) return;
+    
+  //   let newLog = Logfile.createLogFile(user, description, ipaddress);
+  //   validate(newLog).then(async (result) => {
+  //     if (result.length <= 0) await Logfile.save(newLog);
+  //   });
+  // }
+
   /**
    * removes all password reset rows that are older than 30 minutes
    */

@@ -1,7 +1,5 @@
-import { IsDefined, IsOptional, Length } from "class-validator";
+import { IsDefined } from "class-validator";
 import { Entity, BaseEntity, PrimaryGeneratedColumn, PrimaryColumn, OneToMany, JoinColumn, Column, ManyToOne, CreateDateColumn } from "typeorm";
-import { Data } from "./Data";
-import { TemporaryData } from "./TemporaryData";
 import { UserAccount } from "./UserAccount";
 
 @Entity()
