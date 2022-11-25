@@ -88,30 +88,18 @@ export class IOUtil {
     }
   }
 
-<<<<<<< HEAD
-  public static getSessionData = async (): Promise<AccountData | undefined> => {
-    try {
-      const res = await this.INSTANCE.get("/session/");
-=======
   public static getSessionData = async (controller: AbortController): Promise<AccountData | undefined> => {
     try {
       const res = await this.INSTANCE.get("/session/", { signal: controller.signal });
->>>>>>> e072bb52ecf3170a6a6cda69f077e5cafb8af3fe
       return !res.data.error ? res.data.user : undefined;
     } catch (err) {
       return undefined;
     }
   }
 
-<<<<<<< HEAD
-  public static isAdmin = async (): Promise<boolean> => {
-    try {
-      const res = await this.INSTANCE.get("/session/admin-check");
-=======
   public static isAdmin = async (controller?: AbortController): Promise<boolean> => {
     try {
       const res = await this.INSTANCE.get("/session/admin-check", { signal: controller?.signal });
->>>>>>> e072bb52ecf3170a6a6cda69f077e5cafb8af3fe
       return !res.data.error ? res.data.isAdmin : false;
     } catch (err) {
       return false;
