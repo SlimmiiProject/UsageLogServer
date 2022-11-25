@@ -1,5 +1,13 @@
 import axios, { AxiosInstance } from "axios";
 
+export enum GraphColors {
+    RED = "red",
+    GREEN = "green",
+    ORANGE = "orange",
+    YELLOW = "yellow",
+    BLUE = "blue",
+    PURPLE = "purple"
+}
 export type LogData = {
     id: number;
     date: Date;
@@ -7,7 +15,16 @@ export type LogData = {
     ipaddress: string;
     account_id?: number;
 }
-
+export type userData = {
+    userId: number;
+    firstname: string;
+    lastname: string;
+    password: string;
+    email: string;
+    device: number[];
+    colorDay: GraphColors;
+    colorNight: GraphColors;
+}
 export class AdminUtil {
 
     private static _instance: AxiosInstance;
@@ -27,4 +44,13 @@ export class AdminUtil {
             return [];
         }
     }
+    public static getUsers = async (controller: AbortController): Promise<userData[]> => {
+        try {
+            const res = await this.INSTANCE.get("/admin/allusers/", { signal: controller.signal });
+            return res.data;
+        } catch (_ignored) {
+            return [];
+        }
+    }
+
 }
