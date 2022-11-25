@@ -19,9 +19,10 @@ export const AllUsers = (): JSX.Element => {
   },[])
   return (
     <>
-      <Box className="flexbox">
+      <Box className="flexbox" style={{margin:"auto",justifyContent:"center",flexDirection:"column",display:"flex",backgroundColor:"rgba(0,0,0,0.0)"}}>
         <AccountCircleRoundedIcon />
         <h2>{I18n.t("allUsers.List")}</h2>
+        
       </Box>
     </>
   );
