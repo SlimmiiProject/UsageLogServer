@@ -156,11 +156,11 @@ const App = (): JSX.Element => {
               <Route path="/:lang">
                 <Route index element={<LoginPage />} />
                 <Route path="login" element={<LoginPage />} />
+                <Route path="register" element={<Register />} />
 
                 {accountData !== undefined && (
                   <>
                     <Route path="dashboard" element={<DashboardComp />} />
-                    <Route path="register" element={<Register />} />
                     <Route path="logout" element={<Logout />} />
 
                     <Route path="profile" element={<Profile />} />
