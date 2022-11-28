@@ -16,7 +16,13 @@ import { AdminPage } from "./components/admin/AdminPage";
 import LoginPage from "./components/users/LoginPage";
 import { I18n } from "./util/language/I18n";
 import EditProfile from "./components/users/EditProfile";
-import { Routes, Route, Navigate, Location } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  Location,
+  useNavigate,
+} from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
@@ -58,8 +64,8 @@ interface IUserContext {
 export const userContext = React.createContext<IUserContext>({
   isLoggedIn: false,
   isAdmin: false,
-  setAccountData: (data) => { },
-  logout: () => { },
+  setAccountData: (data) => {},
+  logout: () => {},
 });
 
 // Get the current path to use for the correct links
@@ -89,23 +95,25 @@ const App = (): JSX.Element => {
   useEffect(() => {
     // Change Language, in case it's different to what's currently selected
     const urlLang = getLanguageFromUrl();
-    if (I18n.currentLanguage != urlLang) I18n.changeLanguage(urlLang)
+    if (I18n.currentLanguage != urlLang) I18n.changeLanguage(urlLang);
 
     const controller = new AbortController();
 
     IOUtil.getSessionData(controller).then((res) => {
       setAccountData((_accountData) => res);
       setLoading(false);
-    });
 
-    IOUtil.isAdmin(controller).then(res => {
-      setAccountData((accountData) => {
-        return { ...accountData!, isAdmin: res };
-      });
+      if (res) {
+        IOUtil.isAdmin(controller).then((res) => {
+          setAccountData((accountData) => {
+            return { ...accountData!, isAdmin: res };
+          });
+        });
+      }
     });
 
     return () => controller.abort();
-  }, [])
+  }, []);
 
   const lang = I18n.currentLanguage;
 
@@ -120,6 +128,8 @@ const App = (): JSX.Element => {
       localStorage.setItem("darkMode", JSON.stringify(afterToggle));
       return afterToggle;
     });
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -147,31 +157,32 @@ const App = (): JSX.Element => {
                 <Route index element={<LoginPage />} />
                 <Route path="login" element={<LoginPage />} />
 
-                {accountData !== undefined && <>
-                {console.log("aaaaaaaaaaaaaaaaaaaaaa")}
-                  <Route path="dashboard" element={<DashboardComp />} />
-                  <Route path="register" element={<Register />} />
-                  <Route path="logout" element={<Logout />} />
+                {accountData !== undefined && (
+                  <>
+                    <Route path="dashboard" element={<DashboardComp />} />
+                    <Route path="register" element={<Register />} />
+                    <Route path="logout" element={<Logout />} />
 
-                  <Route path="profile" element={<Profile />} />
-                  <Route
-                    path="profile/edit-profile"
-                    element={<EditProfile />}
-                  />
+                    <Route path="profile" element={<Profile />} />
+                    <Route
+                      path="profile/edit-profile"
+                      element={<EditProfile />}
+                    />
 
-                  <Route path="devices" element={<Devices />} />
-                  <Route path="contact" element={<Contact />} />
+                    <Route path="devices" element={<Devices />} />
+                    <Route path="contact" element={<Contact />} />
 
-                  <Route path="admin">
-                    <Route index element={<AdminPage />} />
-                    <Route path="allusers" element={<AdminPage />} />
-                    <Route path="alldevices" element={<AdminPage />} />
-                    <Route path="logfile" element={<LogFile />} />
-                  </Route>
-                  </>}
+                    <Route path="admin">
+                      <Route index element={<AdminPage />} />
+                      <Route path="allusers" element={<AdminPage />} />
+                      <Route path="alldevices" element={<AdminPage />} />
+                      <Route path="logfile" element={<LogFile />} />
+                    </Route>
+                  </>
+                )}
               </Route>
 
-              <Route path="*" element={<PageNotFound />} />
+              <Route path="*" element={<Navigate to={getPath("/")} />} />
             </Routes>
           </userContext.Provider>
         </ThemeProvider>
