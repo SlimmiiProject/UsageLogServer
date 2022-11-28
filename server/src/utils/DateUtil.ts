@@ -25,7 +25,6 @@ export class DateUtil {
      */
     public static getDateOverPeriod = (beginDate: Date, period: Period): Date => {
         const tempDate = new Date(beginDate.getFullYear(), beginDate.getMonth(), beginDate.getDate());
-
         switch (period) {
             case "Day": return new Date(tempDate.setDate(beginDate.getDate() + 1));
             case "Week": return new Date(tempDate.setDate(beginDate.getDate() + 6));

@@ -26,5 +26,8 @@
   "homepage": "https://github.com/SlimmiiProject/UsageLogServer#readme",
   "dependencies": {
     "react-router-dom": "^6.4.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.2.3"
   }
 }
