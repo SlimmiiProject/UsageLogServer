@@ -20,9 +20,7 @@ import { Routes, Route, Navigate, Location } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
 import { getLanguageFromUrl } from "./util/BrowserUtil";
-import { url } from "inspector";
 import { LogFile } from "./components/admin/LogFile";
-import SignIn from "./components/users/SignIn";
 
 export interface ITestData {
   devices: IDevice[];
@@ -144,24 +142,30 @@ const App = (): JSX.Element => {
 
               <Route path="/:lang">
                 <Route index element={<LoginPage />} />
-                <Route path="dashboard" element={<DashboardComp />} />
-
                 <Route path="login" element={<LoginPage />} />
-                <Route path="register" element={<Register />} />
-                <Route path="logout" element={<Logout />} />
 
-                <Route path="profile" element={<Profile />} />
-                <Route path="profile/edit-profile" element={<EditProfile />} />
+                {accountData !== undefined && <>
+                {console.log("aaaaaaaaaaaaaaaaaaaaaa")}
+                  <Route path="dashboard" element={<DashboardComp />} />
+                  <Route path="register" element={<Register />} />
+                  <Route path="logout" element={<Logout />} />
 
-                <Route path="devices" element={<Devices />} />
-                <Route path="contact" element={<Contact />} />
+                  <Route path="profile" element={<Profile />} />
+                  <Route
+                    path="profile/edit-profile"
+                    element={<EditProfile />}
+                  />
 
-                <Route path="admin">
-                  <Route index element={<AdminPage />} />
-                  <Route path="allusers" element={<AdminPage />} />
-                  <Route path="alldevices" element={<AdminPage />} />
-                  <Route path="logfile" element={<LogFile />} />
-                </Route>
+                  <Route path="devices" element={<Devices />} />
+                  <Route path="contact" element={<Contact />} />
+
+                  <Route path="admin">
+                    <Route index element={<AdminPage />} />
+                    <Route path="allusers" element={<AdminPage />} />
+                    <Route path="alldevices" element={<AdminPage />} />
+                    <Route path="logfile" element={<LogFile />} />
+                  </Route>
+                  </>}
               </Route>
 
               <Route path="*" element={<PageNotFound />} />
