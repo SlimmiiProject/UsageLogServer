@@ -25,7 +25,6 @@ export class Logfile extends BaseEntity {
   @ManyToOne(() => UserAccount, (account_id) => account_id.userId, {
     onDelete: "SET NULL",
   })
-  @IsDefined()
   account_id: UserAccount;
 
   @CreateDateColumn({ name: "date" })

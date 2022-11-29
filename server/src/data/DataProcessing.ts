@@ -48,6 +48,14 @@ export interface IDevice {
   firstname: string | undefined;
   lastname: string | undefined;
 }
+
+export interface ILogData {
+  id: number;
+  date: Date;
+  description: string;
+  ipaddress: string;
+  account_id?: number | undefined;
+}
 export class DataProcessor {
   //#region Create Data
 
@@ -298,7 +306,6 @@ export class DataProcessor {
         user: true,
       },
     });
-    console.log(devices);
     const newDevices: IDevice[] = [];
 
     for (let device of devices) {
@@ -621,12 +628,31 @@ export class DataProcessor {
   /**
    * Returns all the data in the logfile
    */
-  public static GetLogfileData = async () => {
-    return await Logfile.find({
+  public static GetLogfileData = async (): Promise<ILogData[]> => {
+    let logs : Logfile[] = await Logfile.find({
+      relations: {
+        account_id:true
+      },
       order: {
         id: "DESC",
       },
     });
+    // console.log(logs)
+    let newLogs : ILogData[] = [];
+    for (let log of logs){
+      let account_id : number | undefined = undefined;
+      if (log.account_id !== null){
+        account_id = log.account_id.userId
+      }
+      newLogs.push({
+        id: log.id,
+        date: log.date,
+        description: log.description,
+        ipaddress: log.ipaddress,
+        account_id: account_id
+    })
+    }
+    return newLogs
   };
 
   /**

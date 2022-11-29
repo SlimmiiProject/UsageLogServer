@@ -13,7 +13,7 @@ export type LogData = {
     date: Date;
     description: string;
     ipaddress: string;
-    account_id?: number;
+    account_id?: number | null;
 }
 export type userData = {
     userId: number;
