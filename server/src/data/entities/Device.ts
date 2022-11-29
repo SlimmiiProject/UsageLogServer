@@ -22,7 +22,7 @@ export class Device extends BaseEntity {
   @Length(64, 64)
   deviceId!: string;
 
-  @OneToMany(() => Data, (data) => data.dataId, { nullable: true, cascade: true })
+  @OneToMany(() => Data, (data) => data.dataId, { nullable: true})
   @JoinColumn({ name: "data" })
   data!: Data[];
 

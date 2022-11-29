@@ -1,3 +1,4 @@
+import { UserAccount } from './../data/entities/UserAccount';
 import { DataProcessor } from "./../data/DataProcessing";
 import { responseEncoding } from "axios";
 import express, { Request, Response } from "express";
@@ -31,7 +32,6 @@ router
 
 router.post("/delete-user", async (req: Request, res: Response) => {
     const userId: number = parseInt(req.params.userId);
-    console.log(userId)
     res.json(await DataProcessor.DeleteUser(userId));
 });
 
