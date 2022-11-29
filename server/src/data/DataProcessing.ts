@@ -44,6 +44,8 @@ export interface IDevice {
   id: string;
   alias: string;
   owner: number;
+  firstname: string;
+  lastname: string;
 }
 export class DataProcessor {
   //#region Create Data
@@ -301,7 +303,9 @@ export class DataProcessor {
         index: device.device_index,
         id: device.deviceId,
         owner: device.user.userId,
-        alias: device.friendlyName
+        alias: device.friendlyName,
+        firstname: device.user.firstname,
+        lastname: device.user.lastname
       })
     }
     
