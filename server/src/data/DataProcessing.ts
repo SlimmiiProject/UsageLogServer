@@ -589,11 +589,13 @@ export class DataProcessor {
   }
 
   /**
-   * deletes a single user form the database
-   * @param userId number
-   */
+ * deletes a single user from the database using the userId
+ * If user is an administrator then it removes the admin permissions first
+ * @param userId number
+ */
   public static DeleteUser = async (userId: number): Promise<boolean> =>
   {
+    console.log(userId)
   if ((await UserAccount.findOneBy({userId: userId})).isAdmin){
     await this.DeleteAdministrator(userId);
   }
