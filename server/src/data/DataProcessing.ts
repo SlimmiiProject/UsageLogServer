@@ -277,12 +277,9 @@ export class DataProcessor {
    * @param token string the unique id of the reset
    * @returns Promise<boolean>
    */
-  public static GetPasswordReset = async (token: string): Promise<boolean> => {
+  public static GetPasswordReset = async (token: string) => {
     let resetToken: PasswordReset = await PasswordReset.findOneBy({ token: token });
-    let passwordResetAllowed: boolean = false;
-    passwordResetAllowed = new Date().getTime() - resetToken.created_at.getTime() < 30 * 60 * 1000;
-    DataProcessor.DeleteSpecificPasswordReset(token);
-    return passwordResetAllowed;
+    return resetToken;
   }
 
   /**
