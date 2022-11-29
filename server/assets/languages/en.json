@@ -74,5 +74,8 @@
   "days.friday": "Friday",
   "days.saturday": "Saturday",
   "days.sunday": "Sunday",
-  "time.hour": "Hour"
+  "time.hour": "Hour",
+  "allUsers.email": "Email",
+  "allUsers.FullName": "Full Name",
+  "allUsers.graphColors": "Graph Colors"
 }

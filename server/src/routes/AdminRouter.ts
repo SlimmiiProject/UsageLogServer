@@ -12,7 +12,7 @@ router.get("/logfile", async (req: Request, res: Response) => {
 });
 
 router.get("/allusers", async (req: Request, res: Response) => {
-  //res.json(await DataProcessor.GetAllusers());
+  res.json(await DataProcessor.getAllusers());
 })
 
 module.exports = router;

@@ -74,5 +74,8 @@
   "days.friday": "Vrijdag",
   "days.saturday": "Zaterdag",
   "days.sunday": "Zondag",
-  "time.hour": "Uur"
+  "time.hour": "Uur",
+  "allUsers.email": "E-mailadres",
+  "allUsers.FullName": "Volledige naam",
+  "allUsers.graphColors": "Grafiek kleuren"
 }

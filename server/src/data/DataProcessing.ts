@@ -63,6 +63,14 @@ export class DataProcessor {
     });
   }
 
+  public static getAllusers = async (): Promise<UserAccount[]> => {
+    return await UserAccount.find({
+      select: {
+        password:false,
+      }
+    });
+  }
+
   /**
    * creates new Data coupled to a specific device
    * throws an Error if input is not valid
