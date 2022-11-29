@@ -1,9 +1,8 @@
-// import { Logfile } from './entities/Logfile';
+import { Device } from './entities/Device';
 import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
-import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
 import { GraphColors, UserAccount } from "./entities/UserAccount";
 import { PasswordReset } from "./entities/PasswordReset";
@@ -225,6 +224,7 @@ export class DataProcessor {
         .andWhere("data.created_at < :endDate", { endDate: endDate })
         .andWhere("data.created_at > :startDate", { startDate: startDate })
         .getMany();
+        
     } else {
       data = await DatabaseConnector.INSTANCE.dataSource
         .getRepository(Data)
@@ -343,10 +343,27 @@ export class DataProcessor {
    * @param colorNight | undefined enum of colors
    * @returns Promise<void>
    */
-  public static EditAcount = async (userid: number, firstname: string, lastname: string, email: string, phone?: string, colorDay?: GraphColors, colorNight?: GraphColors): Promise<void> => {
+  public static EditAcount = async (
+    userid: number, 
+    firstname: string, 
+    lastname: string, 
+    email: string, 
+    phone?: string, 
+    colorDay?: GraphColors, 
+    colorNight?: GraphColors
+    ): Promise<void> => {
     let userExists = await UserAccount.findAndCountBy({ userId: userid });
-    if (userExists[1] < 1 && userExists[1] > 1) throw new Error(`Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`);
-    await UserAccount.update(userid, { firstname: firstname, lastname: lastname, email: email, phone: phone, colorDay: colorDay, colorNight: colorNight });
+    if (userExists[1] < 1 && userExists[1] > 1) 
+    throw new Error(`Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`);
+    await UserAccount.update(
+      userid, 
+      { firstname: firstname, 
+        lastname: lastname, 
+        email: email, 
+        phone: phone, 
+        colorDay: colorDay, 
+        colorNight: colorNight 
+      });
   }
 
   /**
@@ -362,7 +379,6 @@ export class DataProcessor {
     await Device.update({ deviceId: deviceid }, { user: user });
   }
 
-  //TODO: Add validation
   /**
    * change alternate name for device
    * @param device_index number device index

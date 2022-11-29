@@ -20,7 +20,7 @@ router.route("/meters")
         //TODO Get meters
     })
     .delete((req: Request, res: Response) => {
-        // Delete meter
+        // TODO Delete meter
     });
 
 module.exports = router;
