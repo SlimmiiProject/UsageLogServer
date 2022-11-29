@@ -38,13 +38,13 @@ export const AllUsers = (): JSX.Element => {
         <Table sx={{minWidth: 650}} arial-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Id</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Colors \(Day, Night\)</TableCell>
-              <TableCell>Devices</TableCell>
-              <TableCell>Admin</TableCell>
+              <TableCell>{I18n.t("allUsers.tableId")}</TableCell>
+              <TableCell>{I18n.t("allUsers.tableEmail")}</TableCell>
+              <TableCell>{I18n.t("allUsers.tableName")}</TableCell>
+              <TableCell>{I18n.t("allUsers.tablePhone")}</TableCell>
+              <TableCell>{I18n.t("allUsers.tableColors")} \({I18n.t("allUsers.tableColorsDay")}, {I18n.t("allUsers.tableColorsNight")}\)</TableCell>
+              <TableCell>{I18n.t("allUsers.tableDevices")}</TableCell>
+              <TableCell>{I18n.t("allUsers.tableAdmin")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -56,12 +56,12 @@ export const AllUsers = (): JSX.Element => {
                   <TableCell align="right">{user.firstname} {user.lastname}</TableCell>
                   <TableCell align="right">{user.phone}</TableCell>
                   <TableCell align="right">{user.colorDay}, {user.colorNight}</TableCell>
-                  <TableCell align="right">{user.isAdmin ? (<Chip label="Remove Admin" variant="outlined" style={{backgroundColor:"red"}} onClick={(event)=>{console.log("remove admin")}}/>) : 
-                  (<Chip label="Make Admin" variant="outlined" style={{backgroundColor:"blue"}} onClick={(event)=>{console.log("make admin")}}/>)}</TableCell>
-                  <TableCell align="right"><Chip label="Remove User" variant="outlined" style={{backgroundColor:"red"}} onClick={(event)=>{console.log("delete user")}}/></TableCell>
+                  <TableCell align="right">{user.isAdmin ? (<Chip label={I18n.t("allUsers.tableChipRemoveAdmin")} variant="outlined" style={{backgroundColor:"red"}} onClick={(event)=>{console.log("remove admin")}}/>) : 
+                  (<Chip label={I18n.t("allUsers.tableChipMakeAdmin")} variant="outlined" style={{backgroundColor:"blue"}} onClick={(event)=>{console.log("make admin")}}/>)}</TableCell>
+                  <TableCell align="right"><Chip label={I18n.t("allUsers.tableChipRemoveUser")} variant="outlined" style={{backgroundColor:"red"}} onClick={(event)=>{console.log("delete user")}}/></TableCell>
                 </TableRow>
               ))
-            ):(<h2>Loading...</h2>)}
+            ):(<h2>{I18n.t("allUsers.loading")}</h2>)}
           </TableBody>
         </Table>
 </TableContainer>
