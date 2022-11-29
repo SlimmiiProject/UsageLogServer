@@ -89,21 +89,19 @@ export class DataProcessor {
     });
   };
 
-  public static getAllusers = async (): Promise<IUserData[]> => {
+  public static getAllUsers = async (): Promise<IUserData[]> => {
     const users: UserAccount[] = await UserAccount.find({
-      relations: {
-        device: true
-      },
       select: {
         password: false,
       },
     });
     let response : IUserData[] = []; 
-    users.forEach(async user => {
-       const answer = await user.isAdmin();
+    
+    for(let user of users){
+      const isAdmin = await user.isAdmin();
        const devices: Device[] = await this.getDevices(user.userId);
        const deviceIds:number[] = devices.map((device)=> device.device_index)
-       response.push({
+       let newValue:IUserData = {
         userId: user.userId,
         firstname: user.firstname,
         lastname: user.lastname,
@@ -111,9 +109,12 @@ export class DataProcessor {
         device: deviceIds,
         colorDay: user.colorDay,
         colorNight: user.colorNight,
-        isAdmin: answer
-       })
-    });
+        isAdmin: isAdmin
+      }
+      response.push(newValue);
+    }
+
+    console.log(response)
     return response;
   };
 

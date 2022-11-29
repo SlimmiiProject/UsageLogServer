@@ -1,3 +1,4 @@
+import { DisplayDataManager } from './../data/DisplayDataManager';
 import { DeviceSpecificData } from './../data/DataProcessing';
 import { RegExpVal } from '../utils/RegexValidator';
 import express, { Request, Response } from "express";
@@ -8,7 +9,6 @@ import { DateUtil, Period } from '../utils/DateUtil';
 import {PythonShell} from 'python-shell';
 import { ObjectUtil } from '../utils/ObjectUtil';
 import { Middleware } from '../utils/Middleware';
-import { DisplayDataManager } from '../data/DisplayDataManager';
 
 const router = express.Router();
 router.use(SessionManager.loginRequired);
@@ -22,7 +22,7 @@ router.get("/raw-meter-entry", (req: Request, res: Response) => {
             console.log('finished');
           });
     }*/
-    PythonShell.run(__dirname+'/test.py', null, function (err) {
+    PythonShell.run(__dirname+'/test.py', null, function (err: any) {
         if (err) throw err;
         console.log('finished');
       });

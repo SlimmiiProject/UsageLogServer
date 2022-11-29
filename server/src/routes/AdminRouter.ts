@@ -13,7 +13,7 @@ router.get("/logfile", async (req: Request, res: Response) =>
 
 /* A route that is used to get all the users. */
 router.get("/allusers", async (req: Request, res: Response) => {
-  res.json(await DataProcessor.getAllusers());
+  res.json(await DataProcessor.getAllUsers());
 })
 
 /* A route that is used to get all the devices. */
