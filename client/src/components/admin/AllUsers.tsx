@@ -61,7 +61,7 @@ export const AllUsers = (): JSX.Element => {
                   <TableCell align="right"><Chip label="Remove User" variant="outlined" style={{backgroundColor:"red"}} onClick={(event)=>{console.log("delete user")}}/></TableCell>
                 </TableRow>
               ))
-            ):<></>}
+            ):(<h2>Loading...</h2>)}
           </TableBody>
         </Table>
 </TableContainer>
