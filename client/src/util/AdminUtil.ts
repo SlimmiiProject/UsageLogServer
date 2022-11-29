@@ -65,7 +65,7 @@ export class AdminUtil {
 
     public static getAllDevices = async (controller: AbortController) => {
         try {
-            const res = await this.INSTANCE.get("admin/getAllDevices");
+            const res = await this.INSTANCE.get("admin/allDevices");
             console.log(res.data)
             return res.data;
         } catch (_ignored) {

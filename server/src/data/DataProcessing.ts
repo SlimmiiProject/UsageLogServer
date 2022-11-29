@@ -116,8 +116,6 @@ export class DataProcessor {
       };
       response.push(newValue);
     }
-
-    console.log(response);
     return response;
   };
 
@@ -286,7 +284,9 @@ export class DataProcessor {
 
   /* A static method that returns a promise of an array of Device objects. */
   public static getAllDevices = async (): Promise<Device[]> => {
-    return await Device.find({});
+    const devices : Device[] =  await Device.find();
+    console.log(devices)
+    return devices;
   };
 
   public static getTempEntry = async (deviceId: string) => {
