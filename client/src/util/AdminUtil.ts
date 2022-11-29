@@ -26,6 +26,12 @@ export type userData = {
     phone: string;
     isAdmin: boolean;
 }
+export type deviceData = {
+    index: number;
+    id: string;
+    alias: string;
+    owner: number;
+}
 export class AdminUtil {
 
     private static _instance: AxiosInstance;
@@ -57,7 +63,7 @@ export class AdminUtil {
         }
     }
 
-    public static getAllDevices = async () => {
+    public static getAllDevices = async (controller: AbortController) => {
         try {
             const res = await this.INSTANCE.get("admin/getAllDevices");
             return res.data;
@@ -69,8 +75,17 @@ export class AdminUtil {
     /* A function that is called when a user is created. */
     public static createAdmin = async (userId: number) => {
         try {
-            const res = await this.INSTANCE.post("admin/create-admin", {userId: userId});
+            const res = await this.INSTANCE.post("admin/create-admin", { userId: userId });
             return res.data;
+        } catch (err) {
+            console.error(err)
+        }
+    }
+    public static DeleteAdmin = async (userId: number) => {
+        try {
+            const res = await this.INSTANCE.post("admin/delete-admin", { userId: userId });
+            return res.data;
+
         } catch (err) {
             console.error(err)
         }
