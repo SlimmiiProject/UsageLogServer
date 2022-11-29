@@ -70,8 +70,8 @@ export class AdminUtil {
         try {
             const res = await this.INSTANCE.post("admin/create-admin", {userId: userId});
             return res.data;
-        } catch (err) {
-            console.error(err)
+        } catch (_ignore) {
+            return 
         }
     }
 
