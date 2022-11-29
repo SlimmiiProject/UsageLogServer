@@ -172,6 +172,7 @@ const App = (): JSX.Element => {
                     <Route path="devices" element={<Devices />} />
                     <Route path="contact" element={<Contact />} />
 
+                    
                     <Route path="admin">
                       <Route index element={<AdminPage />} />
                       <Route path="allusers" element={<AdminPage />} />
