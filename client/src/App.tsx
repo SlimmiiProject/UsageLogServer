@@ -85,12 +85,8 @@ export const getPath = (path: string) => {
 
 const App = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [accountData, setAccountData] = useState<AccountData | undefined>(
-    undefined
-  );
-  const [darkMode, setDarkMode] = useState<boolean>(
-    JSON.parse(localStorage.getItem("darkMode")!) || false
-  );
+  const [accountData, setAccountData] = useState<AccountData | undefined>(undefined);
+  const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem("darkMode")!) || false);
 
   useEffect(() => {
     // Change Language, in case it's different to what's currently selected

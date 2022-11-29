@@ -14,7 +14,7 @@ import { Logfile } from "./entities/Logfile";
 
 export interface DeviceSpecificData {
   device_index: number;
-  deviceId:string;
+  deviceId: string;
   device_alias: string;
   data: Data[];
   colorDay?: GraphColors;
@@ -122,6 +122,23 @@ export class DataProcessor {
   }
 
   /**
+   * This creates a logfile and adds it to the database if Logfile is complete
+   * @param userId number user id
+   * @param description string
+   * @param ipaddress string
+   */
+  public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
+    let user = UserAccount.findOneBy({ userId: userId });
+    let newLog = new Logfile()
+    newLog.account_id = await user;
+    newLog.description = description;
+    newLog.ipaddress = ipaddress;
+    validate(newLog).then(async (result) => {
+      if (result.length <= 0) await Logfile.save(newLog);
+    });
+  }
+
+  /**
    *  you need at least one of the optional values to use this function.
    * throws an Error if input is not valid.
    * @param token string serves as unique id for reset
@@ -139,7 +156,6 @@ export class DataProcessor {
 
   //#endregion
 
-  // TODO: Needs fixing, no more manual data grabbing
   //#region Get Data
 
   /**
@@ -155,18 +171,18 @@ export class DataProcessor {
     //   .where("user.userid = :adminid", { adminid: userId })
     //   .getOne();
 
-      return await Administrator
+    return await Administrator
       .findOne({
         relations: {
           user: true,
         },
         where: {
-          user:{
-            userId: userId 
+          user: {
+            userId: userId
           },
         },
       })
-      
+
     // return await AdminQuery
   }
 
@@ -188,6 +204,13 @@ export class DataProcessor {
   public static getTempEntry = async (deviceId: string) => {
     const device = await this.getDevice(deviceId);
     return await TemporaryData.findOne({ where: { device: Equal(device) } });
+  }
+
+  /**
+   * Returns all the data in the logfile
+  */
+  public static async GetLogfileData() {
+    return Logfile.find()
   }
 
   public static getDevice = async (deviceId: string) => await Device.findOne({ where: { deviceId: Equal(deviceId) } });
@@ -278,25 +301,9 @@ export class DataProcessor {
    * @returns Promise<boolean>
    */
   public static GetPasswordReset = async (token: string) => {
-    let resetToken: PasswordReset = await PasswordReset.findOneBy({ token: token });
+    const resetToken: PasswordReset = await PasswordReset.findOneBy({ token: token });
     return resetToken;
   }
-
-  /**
-   * gets user specific TemporaryData
-   * @param userid number id of a user
-   * @returns Promise<Temporarydata[]>
-   */
-  private static GetTempData = async (userid: number): Promise<TemporaryData[]> => {
-    let allData = await DatabaseConnector.INSTANCE.dataSource
-      .getRepository(TemporaryData)
-      .createQueryBuilder("temporary_data")
-      .leftJoinAndSelect("temporary_data.device", "dev")
-      .where("dev.user = :id", { id: userid })
-      .getMany();
-    return allData;
-  }
-
   //#endregion
 
   //#region Alter Data
@@ -395,51 +402,6 @@ export class DataProcessor {
     * @param id number
     */
   public static DeleteContactForm = async (id: number): Promise<DeleteResult> => await ContactForm.delete({ contactId: id });
-  
-  /**
-   * Returns all the data in the logfile
-  */
-  public static async GetLogfileData(){
-    return Logfile.find()
-  }
-
-  /**
-   * This creates a logfile and adds it to the database if Logfile is complete
-   * @param userId number user id
-   * @param description string
-   * @param ipaddress string
-   */
-  public static CreateLog = async (userId:number, description: string, ipaddress: string): Promise<void> => {
-    let user = UserAccount.findOneBy({userId: userId});
-    let newLog = new Logfile()
-    newLog.account_id = await user;
-    newLog.description = description;
-    newLog.ipaddress = ipaddress;
-    validate(newLog).then(async (result) => {
-      if (result.length <= 0) await Logfile.save(newLog);
-    });
-  }
-
-  // /**
-  //  * Returns all the data in the logfile
-  // */
-  // public static GetLogfileData = async () => Logfile.find()
-
-  // /**
-  //  * This creates a logfile and adds it to the database if Logfile is complete
-  //  * @param userId number user id
-  //  * @param description string
-  //  * @param ipaddress string
-  //  */
-  // public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
-  //   let user = await UserAccount.findOne({ where: { userId: Equal(userId) } });
-  //   if(!ObjectUtil.isSet(user)) return;
-    
-  //   let newLog = Logfile.createLogFile(user, description, ipaddress);
-  //   validate(newLog).then(async (result) => {
-  //     if (result.length <= 0) await Logfile.save(newLog);
-  //   });
-  // }
 
   /**
    * removes all password reset rows that are older than 30 minutes
@@ -453,7 +415,11 @@ export class DataProcessor {
    * deletes a single password reset token in database
    * @param token string
    */
-  private static DeleteSpecificPasswordReset = async (token: string): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
+  public static DeleteSpecificPasswordReset = async (token: string): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
+
+  public static DeletePasswordResetForUser = async (user: UserAccount): Promise<DeleteResult> => await PasswordReset.delete({ user: {
+    userId: user.userId
+  }});
 
   //#endregion
 }
