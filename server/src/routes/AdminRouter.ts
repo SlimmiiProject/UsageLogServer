@@ -27,4 +27,10 @@ router.post("/create-admin", async (req: Request, res: Response) => {
   res.json(await DataProcessor.createAdministrator(userId))
 })
 
+/* This is a route that is used to delete an administrator. */
+router.post("/delete-admin", async (req: Request, res:Response) => {
+  const {userId} : {userId:number} = req.body;
+  res.json(await DataProcessor.DeleteAdministrator(userId))
+})
+
 module.exports = router;

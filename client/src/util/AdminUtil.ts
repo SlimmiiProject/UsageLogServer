@@ -84,11 +84,10 @@ export class AdminUtil {
             return
         }
     }
-    public static DeleteAdmin = async (userId: number) => {
+    public static deleteAdmin = async (userId: number) => {
         try {
             const res = await this.INSTANCE.post("admin/delete-admin", { userId: userId });
             return res.data;
-
         } catch (err) {
             console.error(err)
         }

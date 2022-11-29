@@ -1,3 +1,4 @@
+import { User } from './../types/express-session/index.d';
 import { Device } from "./entities/Device";
 import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
@@ -564,11 +565,28 @@ export class DataProcessor {
 
   /**
    * deletes a single administrator from database
-   * @param adminId number
+   * @param userId number
    */
   public static DeleteAdministrator = async (
-    adminId: number
-  ): Promise<DeleteResult> => await Administrator.delete({ adminId: adminId });
+    userId: number
+  ): Promise<DeleteResult> => {
+    const admin = await Administrator.find({
+      relations: {
+        user: true
+      },
+      where: {
+        user: {
+          userId: userId
+        }
+      }
+    })
+
+    if (admin.length === 1){
+      return await Administrator.delete(
+        { adminId: admin[0].adminId });
+    }
+    return null
+  }
 
   // Fails if administrator is not removed first
   /**
@@ -576,7 +594,11 @@ export class DataProcessor {
    * @param userId number
    */
   public static DeleteUser = async (userId: number): Promise<boolean> =>
-    (await UserAccount.delete({ userId: userId })).affected >= 1;
+    (await UserAccount.delete(
+      { 
+        userId: userId
+       }
+      )).affected >= 1;
 
   // Fails if data is not removed first
   /**
