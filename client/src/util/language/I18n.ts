@@ -6,7 +6,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 export class I18n {
 
-    private static _translationConfig: { [key: string]: { nativeName: string, translation: { [key: string]: string } } };
+    private static _translationConfig: { [key: string]: { nativeName: string, render:boolean, translation: { [key: string]: string } } };
     public static get translationConfig() {
         return this._translationConfig;
     }

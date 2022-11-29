@@ -1,7 +1,7 @@
 {
-    "en": "English",
-    "nl": "Nederlands",
-    "fr": "Frans",
-    "de": "Deutsch",
-    "pi": "Pirate"
+    "en": ["English", true],
+    "nl": ["Nederlands", true],
+    "fr": ["Frans", true],
+    "de": ["Deutsch", true],
+    "pi": ["Pirate", false]
 }

@@ -6,7 +6,6 @@ import { DataProcessor } from '../data/DataProcessing';
 import { User } from '../types/express-session';
 import { DateUtil, Period } from '../utils/DateUtil';
 import { ObjectUtil } from '../utils/ObjectUtil';
-import { Middleware } from '../utils/Middleware';
 import { DisplayDataManager } from '../data/DisplayDataManager';
 
 const router = express.Router();

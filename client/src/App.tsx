@@ -131,6 +131,8 @@ const App = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  const loggedInExecutor = (children: {():void}) => accountData !== undefined && children();
+
   return (
     <>
       {!loading && (
@@ -155,6 +157,7 @@ const App = (): JSX.Element => {
 
               <Route path="/:lang">
                 <Route index element={<LoginPage />} />
+                <Route path="contact" element={<Contact />} />
                 <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<Register />} />
 
@@ -170,9 +173,7 @@ const App = (): JSX.Element => {
                     />
 
                     <Route path="devices" element={<Devices />} />
-                    <Route path="contact" element={<Contact />} />
 
-                    
                     <Route path="admin">
                       <Route index element={<AdminPage />} />
                       <Route path="allusers" element={<AdminPage />} />
