@@ -134,4 +134,13 @@ export class IOUtil {
       console.error(err);
     }
   }
+
+  public static addDevice = async (deviceId: string, alias: string) => {
+    try {
+      const res = await this.INSTANCE.post("/admin/add-device", {deviceId: deviceId, alias: alias});
+      return res.data;
+    } catch (err) {
+      console.error(err)
+    }
+  }
 }

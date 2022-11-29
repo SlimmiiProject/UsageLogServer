@@ -37,6 +37,12 @@ router.post("/delete-admin", async (req: Request, res:Response) => {
 router.post("/delete-device", async (req: Request, res: Response) => {
   const {deviceId} = req.body;
   res.json(await DataProcessor.DeleteDevice(deviceId));
+});
+
+router.post("/add-device", async (req: Request, res: Response)=> {
+  const {deviceId, alias} = req.body;
+  let result = await DataProcessor.createDevice(deviceId, alias)
+  res.json(result)
 })
 
 module.exports = router;

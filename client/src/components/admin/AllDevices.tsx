@@ -20,6 +20,8 @@ import { IOUtil } from "../../util/IOUtil";
 export const AllDevices = (): JSX.Element => {
   const [devices, setDevices] = useState<deviceData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
+  const [deviceId, setDeviceId] = useState<string>("");
+  const [alias, setAlias] = useState<string>("");
   useEffect(() => {
     const controller = new AbortController();
 
@@ -106,6 +108,32 @@ export const AllDevices = (): JSX.Element => {
             ) : (
               <h2>{I18n.t("allDevices.loading")}</h2>
             )}
+            <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                <TableCell align="left" >
+                    <label>Id:</label>
+                </TableCell>
+                <TableCell align="left">
+                    <input type="text" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} />
+                </TableCell>
+                <TableCell align="left">
+                    <label>Alias:</label>
+                </TableCell>
+                <TableCell align="left">
+                    <input type="text" value={alias} onChange={(e) => setAlias(e.target.value)} />
+                </TableCell>
+                <TableCell align="center">
+                <Chip
+                      label={I18n.t("allDevices.tableChipAdd")}
+                      variant="outlined"
+                      style={{ backgroundColor: "blue" }}
+                      onClick={(event) => {
+                        IOUtil.addDevice(deviceId, alias)
+                        console.log("create a new user")
+                    }
+                    }
+                    />
+                </TableCell>
+            </TableRow>
           </TableBody>
         </TableContainer>
       </Box>

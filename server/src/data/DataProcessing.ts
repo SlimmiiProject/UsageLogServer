@@ -70,9 +70,9 @@ export class DataProcessor {
     alias?: string
   ): Promise<void> => {
     const newDevice = Device.createDevice(deviceId, alias);
-    validate(newDevice).then(async (result) => {
-      if (result.length <= 0) await newDevice.save();
-    });
+    console.log(newDevice)
+    newDevice.save();
+    
   };
 
   /**
