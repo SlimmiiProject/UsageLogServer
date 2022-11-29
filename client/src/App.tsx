@@ -24,6 +24,7 @@ import { url } from "inspector";
 import { LogFile } from "./components/admin/LogFile";
 import SignIn from "./components/users/SignIn";
 import { AllUsers } from "./components/admin/AllUsers";
+import { AllDevices } from "./components/admin/AllDevices";
 
 export interface ITestData {
   devices: IDevice[];
@@ -163,7 +164,7 @@ const App = (): JSX.Element => {
                 <Route path="admin">
                   <Route index element={<AdminPage />} />
                   <Route path="allusers" element={<AllUsers />} />
-                  <Route path="alldevices" element={<AdminPage />} />
+                  <Route path="alldevices" element={<AllDevices />} />
                   <Route path="logfile" element={<LogFile />} />
                 </Route>
               </Route>
