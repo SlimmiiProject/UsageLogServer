@@ -29,8 +29,10 @@ export type userData = {
 export type deviceData = {
     index: number;
     id: string;
-    alias: string;
-    owner: number;
+    alias: string | undefined;
+    owner: number | undefined;
+    firstname: string | undefined;
+    lastname: string | undefined;
 }
 export class AdminUtil {
 
@@ -79,7 +81,7 @@ export class AdminUtil {
             const res = await this.INSTANCE.post("admin/create-admin", { userId: userId });
             return res.data;
         } catch (_ignore) {
-            return 
+            return
         }
     }
     public static DeleteAdmin = async (userId: number) => {
