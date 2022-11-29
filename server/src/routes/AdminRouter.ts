@@ -41,8 +41,12 @@ router.post("/delete-device", async (req: Request, res: Response) => {
 
 router.post("/add-device", async (req: Request, res: Response)=> {
   const {deviceId, alias} = req.body;
-  let result = await DataProcessor.createDevice(deviceId, alias)
-  res.json(result)
+  res.json(await DataProcessor.createDevice(deviceId, alias))
+})
+
+router.put("/add-device-user", async (req:Request, res:Response)=>{
+  const {deviceId, userId} = req.body;
+  res.json(await DataProcessor.AddDevicetoUser(userId, deviceId))
 })
 
 module.exports = router;

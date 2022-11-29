@@ -93,4 +93,13 @@ export class AdminUtil {
         }
     }
 
+    public static addDeviceToUser = async (userId: number, deviceId: string) => {
+        try {
+            const res = await this.INSTANCE.put("/admin/add-device-user", {userId: userId, deviceId: deviceId});
+            return res.data;
+        } catch (err){
+            console.error(err)
+        }
+    }
+
 }
