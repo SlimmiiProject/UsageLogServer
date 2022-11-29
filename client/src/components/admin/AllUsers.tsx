@@ -1,14 +1,16 @@
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import { Box, List, ListItem, Typography, Chip } from "@mui/material";
+import { Box, List, ListItem, Typography, Chip, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@mui/material";
 import { useState, useEffect } from "react";
 import { AdminUtil, GraphColors, userData } from "../../util/AdminUtil";
 import { I18n } from "../../util/language/I18n";
-
+import React, {Component} from "react";
 export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
   useEffect(() => {
     const controller = new AbortController();
+    //<TableCell align="right">{user.device.map((device)=>(<p>{device}</p>))}</TableCell>
+
     setisloading(true);
     AdminUtil.getUsers(controller).then((result) => {
       //setusers([{userId:1,firstname:"Kasper",lastname:'Bosteels',email:"Kasperbosteels@hotmail.com",device:[1,2,3,4,5,6],colorDay:GraphColors.RED,colorNight:GraphColors.BLUE,isAdmin:true}]);
@@ -32,50 +34,37 @@ export const AllUsers = (): JSX.Element => {
         }}
       >
         <h2>{I18n.t("allUsers.List")}</h2>
-
-        <List
-          sx={{ width: "100%", maxWidth: 800, bgcolor: "background.paper" }}
-        >
-          {!isloading ? (
-            users.map((user) => (
-              <ListItem alignItems="flex-start">
-                <>
-                  <div className="ListItemContent">
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      color="text.primary"
-                    >
-                      <>
-                        {I18n.t("allUsers.email")}: {user.email}
-                        <br></br>id: {user.userId}
-                      </>
-                    </Typography>
-                    <br></br>
-                    {user.isAdmin ? (
-                      <Chip
-                        label="Admin"
-                        variant="outlined"
-                        style={{ backgroundColor: "blue" }}
-                      />
-                    ) : (
-                      <></>
-                    )}
-                    <br></br>
-                    {`${I18n.t("allUsers.FullName")} ${user.firstname} ${
-                      user.lastname
-                    }`}
-                    <br></br>
-                    {I18n.t("allUsers.graphColors")}: {user.colorDay},{" "}
-                    {user.colorNight}
-                  </div>
-                </>
-              </ListItem>
-            ))
-          ) : (
-            <h2>Loading...</h2>
-          )}
-        </List>
+<TableContainer component={Paper}>
+        <Table sx={{minWidth: 650}} arial-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Id</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Colors \(Day, Night\)</TableCell>
+              <TableCell>Devices</TableCell>
+              <TableCell>Admin</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!isloading ? (
+              users.map((user)=>(
+                <TableRow key={user.userId}sx={{'&:last-child td, &:last-child th':{border:0}}}>
+                  <TableCell component="th" scope="row">{user.userId}</TableCell>
+                  <TableCell align="right">{user.email}</TableCell>
+                  <TableCell align="right">{user.firstname} {user.lastname}</TableCell>
+                  <TableCell align="right">{user.phone}</TableCell>
+                  <TableCell align="right">{user.colorDay}, {user.colorNight}</TableCell>
+                  <TableCell align="right">{user.isAdmin ? (<Chip label="Remove Admin" variant="outlined" style={{backgroundColor:"red"}} onClick={(event)=>{console.log("remove admin")}}/>) : 
+                  (<Chip label="Make Admin" variant="outlined" style={{backgroundColor:"blue"}} onClick={(event)=>{console.log("make admin")}}/>)}</TableCell>
+                  <TableCell align="right"><Chip label="Remove User" variant="outlined" style={{backgroundColor:"red"}} onClick={(event)=>{console.log("delete user")}}/></TableCell>
+                </TableRow>
+              ))
+            ):<></>}
+          </TableBody>
+        </Table>
+</TableContainer>
       </Box>
     </>
   );
