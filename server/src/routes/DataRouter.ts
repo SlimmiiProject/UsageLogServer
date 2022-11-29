@@ -13,16 +13,16 @@ import { DisplayDataManager } from '../data/DisplayDataManager';
 const router = express.Router();
 router.use(SessionManager.loginRequired);
 
-router.get("/raw-meter-entry", (req: Request, res: Response) => {
+router.post("/raw-meter-entry", (req: Request, res: Response) => {
     // TODO Redirect Raw Base64 image to local Python OCR Program
     /*const imageBase64 = req.body.image;
     if (imageBase64 && RegExpVal.validate(imageBase64, RegExpVal.base64Encoded)) {
-        PythonShell.run(__dirname+'/test.py', null, function (err) {
+        PythonShell.run(__dirname+'/test.py', null, function (err: any) {
             if (err) throw err;
             console.log('finished');
           });
     }*/
-    PythonShell.run(__dirname+'/test.py', null, function (err) {
+    PythonShell.run(__dirname+'/test.py', null, function (err: any) {
         if (err) throw err;
         console.log('finished');
       });
