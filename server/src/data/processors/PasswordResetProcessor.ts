@@ -20,12 +20,16 @@ export class PasswordResetManager {
         return (Date.now() - this._resetEntry.created_at.getMilliseconds()) > (30 * 60 * 1000); // 30 Minutes
     }
 
-    public handle = async () => {
+    public handle = async ():Promise<boolean> => {
         await this.setup();
+
+        if(!this._resetEntry) return false;
 
         if (this.isValid) {
             await DataProcessor.ChangePassword(this._resetEntry.user.userId, this._newPassword);
-            
         }
+
+        await DataProcessor.DeleteSpecificPasswordReset(this._token);
+        return true;
     }
 }

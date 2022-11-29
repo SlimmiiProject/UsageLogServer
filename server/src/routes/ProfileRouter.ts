@@ -19,6 +19,8 @@ type CreationData = {
 
 type LoginData = Pick<CreationData, "email" | "password">;
 
+type ResetData = Pick<CreationData, "email">;
+
 router.post("/login", async (req: Request, res: Response) => {
     const body = req.body;
     const data: LoginData = {
@@ -58,13 +60,9 @@ router.post("/google-login", async (req: Request, res: Response) => {
     res.json({ succes: false });
 });
 
-const login = async (req: Request, email: string) => {
-    await SessionManager.createLoggedInSession(req, await AccountManager.getAccount(undefined, email));
-}
+const login = async (req: Request, email: string) => await SessionManager.createLoggedInSession(req, await AccountManager.getAccount(undefined, email));
 
-router.post("/logout", SessionManager.loginRequired, async (req: Request, res: Response) => {
-    SessionManager.destroy(req, res);
-});
+router.post("/logout", SessionManager.loginRequired, async (req: Request, res: Response) => SessionManager.destroy(req, res));
 
 router.post("/create-profile", async (req: Request, res: Response) => {
     const body = req.body;
@@ -100,11 +98,17 @@ router.post("/create-profile", async (req: Request, res: Response) => {
     );
 });
 
-router.delete("/delete-profile", SessionManager.loginRequired, async (req: Request, res: Response) => {
-    // Delete account
+router.post("/forgot-password", async (req: Request, res: Response) => {
+    const data: ResetData = req.body;
+
+    
 });
 
 router.use(SessionManager.loginRequired);
+
+router.delete("/delete-profile", SessionManager.loginRequired, async (req: Request, res: Response) => {
+    // Delete account
+});
 
 router.route("/account-data")
     .get(async (req: Request, res: Response) => {
