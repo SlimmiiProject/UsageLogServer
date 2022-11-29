@@ -39,6 +39,12 @@ export interface IUserData {
   isAdmin: boolean;
 }
 
+export interface IDevice {
+  index: number;
+  id: string;
+  alias: string;
+  owner: number;
+}
 export class DataProcessor {
   //#region Create Data
 
@@ -283,10 +289,23 @@ export class DataProcessor {
   };
 
   /* A static method that returns a promise of an array of Device objects. */
-  public static getAllDevices = async (): Promise<Device[]> => {
-    const devices : Device[] =  await Device.find();
-    console.log(devices)
-    return devices;
+  public static getAllDevices = async (): Promise<IDevice[]> => {
+    const devices : Device[] =  await Device.find({
+      relations: {
+        user: true
+      }
+    });
+    const newDevices : IDevice[] = [];
+    for (let device of devices){
+      newDevices.push({
+        index: device.device_index,
+        id: device.deviceId,
+        owner: device.user.userId,
+        alias: device.friendlyName
+      })
+    }
+    
+    return newDevices;
   };
 
   public static getTempEntry = async (deviceId: string) => {
