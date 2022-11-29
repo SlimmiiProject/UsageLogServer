@@ -92,20 +92,23 @@ const App = (): JSX.Element => {
   useEffect(() => {
     // Change Language, in case it's different to what's currently selected
     const urlLang = getLanguageFromUrl();
-    if (I18n.currentLanguage != urlLang) I18n.changeLanguage(urlLang);
+    if (I18n.currentLanguage != urlLang) I18n.changeLanguage(urlLang)
 
-    IOUtil.getSessionData().then((res) => {
+    const controller = new AbortController();
+
+    IOUtil.getSessionData(controller).then((res) => {
       setAccountData((_accountData) => res);
-
-      IOUtil.isAdmin().then((res) => {
-        setAccountData((accountData) => {
-          return { ...accountData!, isAdmin: res };
-        });
-      });
-
       setLoading(false);
     });
-  }, []);
+
+    IOUtil.isAdmin(controller).then(res => {
+      setAccountData((accountData) => {
+        return { ...accountData!, isAdmin: res };
+      });
+    });
+
+    return () => controller.abort();
+  }, [])
 
   const lang = I18n.currentLanguage;
 

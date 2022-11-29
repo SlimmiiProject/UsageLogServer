@@ -1,9 +1,8 @@
-// import { Logfile } from './entities/Logfile';
+import { Device } from './entities/Device';
 import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
 import { Data } from "./entities/Data";
 import { DatabaseConnector } from "./DatabaseConnector";
-import { Device } from "./entities/Device";
 import { TemporaryData } from "./entities/TemporaryData";
 import { GraphColors, UserAccount } from "./entities/UserAccount";
 import { PasswordReset } from "./entities/PasswordReset";
@@ -184,13 +183,28 @@ export class DataProcessor {
    * @returns Promise<Device[]>
    */
   public static getDevices = async (userId: number): Promise<Device[]> => {
-    const devices = await DatabaseConnector.INSTANCE.dataSource
-      .getRepository(Device)
-      .createQueryBuilder("device")
-      .leftJoinAndSelect("device.user", "user")
-      .where("user.userid = :id", { id: userId })
-      .getMany();
-    return devices;
+    // const devices = await DatabaseConnector.INSTANCE.dataSource
+    //   .getRepository(Device)
+    //   .createQueryBuilder("device")
+    //   .leftJoinAndSelect("device.user", "user")
+    //   .where("user.userid = :id", { id: userId })
+    //   .getMany();
+
+      return await Device.find({
+        relations: {
+          user: true
+        },
+        where: {
+          user: {
+            userId: userId
+          }
+        }
+      })
+  }
+
+  /* A static method that returns a promise of an array of Device objects. */
+  public static getAllDevices = async (): Promise<Device[]> => {
+    return await Device.find({});
   }
 
   public static getTempEntry = async (deviceId: string) => {
@@ -223,6 +237,7 @@ export class DataProcessor {
         .andWhere("data.created_at < :endDate", { endDate: endDate })
         .andWhere("data.created_at > :startDate", { startDate: startDate })
         .getMany();
+        
     } else {
       data = await DatabaseConnector.INSTANCE.dataSource
         .getRepository(Data)
@@ -341,10 +356,27 @@ export class DataProcessor {
    * @param colorNight | undefined enum of colors
    * @returns Promise<void>
    */
-  public static EditAcount = async (userid: number, firstname: string, lastname: string, email: string, phone?: string, colorDay?: GraphColors, colorNight?: GraphColors): Promise<void> => {
+  public static EditAcount = async (
+    userid: number, 
+    firstname: string, 
+    lastname: string, 
+    email: string, 
+    phone?: string, 
+    colorDay?: GraphColors, 
+    colorNight?: GraphColors
+    ): Promise<void> => {
     let userExists = await UserAccount.findAndCountBy({ userId: userid });
-    if (userExists[1] < 1 && userExists[1] > 1) throw new Error(`Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`);
-    await UserAccount.update(userid, { firstname: firstname, lastname: lastname, email: email, phone: phone, colorDay: colorDay, colorNight: colorNight });
+    if (userExists[1] < 1 && userExists[1] > 1) 
+    throw new Error(`Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`);
+    await UserAccount.update(
+      userid, 
+      { firstname: firstname, 
+        lastname: lastname, 
+        email: email, 
+        phone: phone, 
+        colorDay: colorDay, 
+        colorNight: colorNight 
+      });
   }
 
   /**
@@ -360,14 +392,17 @@ export class DataProcessor {
     await Device.update({ deviceId: deviceid }, { user: user });
   }
 
-  //TODO: Add validation
   /**
    * change alternate name for device
    * @param device_index number device index
    * @param alias string of 1 to 50 characters
    */
   public static ChangeDeviceAlias = async (device_index: number, alias: string): Promise<void> => {
-    let device: Device = await Device.findOne({ where: { device_index: Equal(device_index) } });
+    let device: Device = await Device.findOne({ 
+      where: { 
+        device_index: Equal(device_index) 
+      } 
+    });
     if (!ObjectUtil.isSet(device)) return;
     device.setFriendlyName(alias).save();
   }
@@ -379,21 +414,27 @@ export class DataProcessor {
    * deletes a single administrator from database
    * @param adminId number
    */
-  public static DeleteAdministrator = async (adminId: number): Promise<DeleteResult> => await Administrator.delete({ adminId: adminId })
+  public static DeleteAdministrator = async (
+    adminId: number
+    ): Promise<DeleteResult> => await Administrator.delete({ adminId: adminId })
 
   // Fails if administrator is not removed first
   /**
    * deletes a single user form the database
    * @param userId number
    */
-  public static DeleteUser = async (userId: number): Promise<boolean> => (await UserAccount.delete({ userId: userId })).affected >= 1;
+  public static DeleteUser = async (
+    userId: number
+    ): Promise<boolean> => (await UserAccount.delete({ userId: userId })).affected >= 1;
 
   // Fails if data is not removed first
   /**
    * deletes a single device from database. could fail still testing
    * @param deviceid string
    */
-  public static DeleteDevice = async (deviceid: string): Promise<DeleteResult> => await Device.delete({ deviceId: deviceid });
+  public static DeleteDevice = async (
+    deviceid: string
+    ): Promise<DeleteResult> => await Device.delete({ deviceId: deviceid });
 
   /**
    * deletes a single data row
@@ -406,11 +447,17 @@ export class DataProcessor {
     * @param id number
     */
   public static DeleteContactForm = async (id: number): Promise<DeleteResult> => await ContactForm.delete({ contactId: id });
-  
+
   /**
    * Returns all the data in the logfile
   */
-  public static GetLogfileData = async () => Logfile.find();
+  public static GetLogfileData = async () => {
+    return await Logfile.find({
+      order: {
+        id: "DESC"
+      }
+    });
+  }
 
   /**
    * This creates a logfile and adds it to the database if Logfile is complete
@@ -431,16 +478,21 @@ export class DataProcessor {
   /**
    * removes all password reset rows that are older than 30 minutes
    */
-  public static DeleteExpiredPasswordResets = async () => {
+  public static DeleteExpiredPasswordResets = async (
+
+  ) => {
     const expiringDate: Date = new Date(new Date().getTime() - 30 * 60 * 1000);
-    await DatabaseConnector.INSTANCE.dataSource.getRepository(PasswordReset).delete({ created_at: LessThan(expiringDate) });
+    await PasswordReset.delete({ created_at: LessThan(expiringDate) });
   }
 
   /**
    * deletes a single password reset token in database
    * @param token string
    */
-  private static DeleteSpecificPasswordReset = async (token: string): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
+  private static DeleteSpecificPasswordReset = async (
+    token: string
+    ): Promise<DeleteResult> => 
+    await PasswordReset.delete({ token: token });
 
   //#endregion
 }

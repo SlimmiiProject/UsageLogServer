@@ -1,3 +1,4 @@
+import { Administrator } from './Administrator';
 import { Device } from "./Device";
 import { Crypt } from "../../utils/Crypt";
 import { AccountManager } from "../../accounts/AccountManager";
@@ -67,7 +68,7 @@ export class UserAccount extends BaseEntity {
   @Column("enum", { enum: GraphColors, default: GraphColors.PURPLE, name: "color_night", nullable: true, unique: false })
   @IsOptional()
   colorNight: GraphColors;
-
+  
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {

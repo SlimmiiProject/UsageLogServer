@@ -56,7 +56,7 @@
   "signIn.email": "Email Adress",
   "signIn.password": "Wachtwoord",
   "signIn.rememberMe": "Onthoud me",
-  "signIn.signIn": "Sign In",
+  "signIn.signIn": "Log In",
   "signIn.forgotPassword": "Wachtwoord vergeten?",
   "signIn.register": "Registreer je hier",
   "error.missing_fields": "Niet ingevulde velden:",

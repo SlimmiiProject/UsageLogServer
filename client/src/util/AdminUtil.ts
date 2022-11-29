@@ -45,6 +45,8 @@ export class AdminUtil {
             return [];
         }
     }
+
+    /* A function that is called when a user is created. */
     public static getUsers = async (controller: AbortController): Promise<userData[]> => {
         console.log("received allusers request");
         try {
@@ -52,6 +54,25 @@ export class AdminUtil {
             return res.data;
         } catch (_ignored) {
             return [];
+        }
+    }
+
+    public static getAllDevices = async () => {
+        try {
+            const res = await this.INSTANCE.get("admin/getAllDevices");
+            return res.data;
+        } catch (_ignored) {
+            return [];
+        }
+    }
+
+    /* A function that is called when a user is created. */
+    public static createAdmin = async (userId: number) => {
+        try {
+            const res = await this.INSTANCE.post("admin/create-admin", {userId: userId});
+            return res.data;
+        } catch (err) {
+            console.error(err)
         }
     }
 
