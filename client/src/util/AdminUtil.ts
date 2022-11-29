@@ -23,6 +23,7 @@ export type userData = {
     device: number[];
     colorDay: GraphColors;
     colorNight: GraphColors;
+    phone: string;
     isAdmin: boolean;
 }
 export class AdminUtil {
@@ -46,12 +47,12 @@ export class AdminUtil {
     }
     public static getUsers = async (controller: AbortController): Promise<userData[]> => {
         console.log("received allusers request");
-         try {
-             const res = await this.INSTANCE.get("/admin/allusers/", { signal: controller.signal });
-             return res.data;
-         } catch (_ignored) {
-             return [];
-         }
+        try {
+            const res = await this.INSTANCE.get("/admin/allusers/", { signal: controller.signal });
+            return res.data;
+        } catch (_ignored) {
+            return [];
+        }
     }
 
 }
