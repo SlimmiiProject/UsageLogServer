@@ -41,7 +41,7 @@ export const LogFile = (): JSX.Element => {
         <TableCell align="right">{file.account_id}</TableCell>
         <TableCell align="right">{file.description}</TableCell>
         <TableCell align="right">{file.ipaddress}</TableCell>
-        <TableCell align="right">{file.date.toDateString()}</TableCell>
+        <TableCell align="right">{new Date(file.date).toDateString()}</TableCell>
         </TableRow>
             ))
           ): <h2>Loading...</h2>}
