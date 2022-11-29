@@ -39,6 +39,14 @@ export interface IUserData {
   isAdmin: boolean;
 }
 
+export interface IDevice {
+  index: number;
+  alias: string;
+  owner: number;
+  id: string | undefined ;
+  firstname: string | undefined ;
+  lastname: string | undefined ;
+}
 export class DataProcessor {
   //#region Create Data
 
@@ -283,10 +291,34 @@ export class DataProcessor {
   };
 
   /* A static method that returns a promise of an array of Device objects. */
-  public static getAllDevices = async (): Promise<Device[]> => {
-    const devices : Device[] =  await Device.find();
-    console.log(devices)
-    return devices;
+  public static getAllDevices = async (): Promise<IDevice[]> => {
+    const devices : Device[] =  await Device.find({
+      relations: {
+        user: true
+      }
+    });
+    const newDevices : IDevice[] = [];
+    for (let device of devices){
+      let owner : number  = 0;
+      let firstname : string  = "";
+      let lastname : string  = "";
+      if (device.user === null)
+      {
+        owner = -1;
+        firstname = "No";
+        lastname = "user";
+      }
+      newDevices.push({
+        index: device.device_index,
+        id: device.deviceId,
+        alias: device.friendlyName,
+        owner: owner,
+        firstname: firstname,
+        lastname:lastname
+      })
+    }
+    
+    return newDevices;
   };
 
   public static getTempEntry = async (deviceId: string) => {
