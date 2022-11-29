@@ -8,7 +8,9 @@ export class Administrator extends BaseEntity {
   @PrimaryGeneratedColumn()
   adminId: number;
 
-  @OneToOne(() => UserAccount, (user) => user.userId, { nullable: false, cascade: true })
+  @OneToOne(() => UserAccount, (user) => user.userId, { 
+    nullable: false,
+  onDelete: "CASCADE"  })
   @JoinColumn({ name: "user" })
   @IsDefined()
   user: UserAccount;

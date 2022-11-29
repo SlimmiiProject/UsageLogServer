@@ -3,7 +3,7 @@ import { responseEncoding } from "axios";
 import express, { Request, Response } from "express";
 import { SessionManager } from "../accounts/SessionManager";
 
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 
 router.use(SessionManager.loginRequired);
 

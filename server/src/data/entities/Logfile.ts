@@ -22,7 +22,9 @@ export class Logfile extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => UserAccount, (account_id) => account_id.userId)
+  @ManyToOne(() => UserAccount, (account_id) => account_id.userId, {
+    onDelete: "SET NULL",
+  })
   @IsDefined()
   account_id: UserAccount;
 

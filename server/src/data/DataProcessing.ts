@@ -1,4 +1,4 @@
-import { User } from './../types/express-session/index.d';
+import { User } from "./../types/express-session/index.d";
 import { Device } from "./entities/Device";
 import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
@@ -44,9 +44,9 @@ export interface IDevice {
   index: number;
   alias: string;
   owner: number;
-  id: string | undefined ;
-  firstname: string | undefined ;
-  lastname: string | undefined ;
+  id: string | undefined;
+  firstname: string | undefined;
+  lastname: string | undefined;
 }
 export class DataProcessor {
   //#region Create Data
@@ -98,9 +98,9 @@ export class DataProcessor {
     });
   };
 
-  /** 
+  /**
    * Getting all the users from the database and returning them in a IUserData[]t.
-  */ 
+   */
   public static getAllUsers = async (): Promise<IUserData[]> => {
     const users: UserAccount[] = await UserAccount.find({
       select: {
@@ -293,25 +293,24 @@ export class DataProcessor {
 
   /* A static method that returns a promise of an array of Device objects. */
   public static getAllDevices = async (): Promise<IDevice[]> => {
-    const devices : Device[] =  await Device.find({
+    const devices: Device[] = await Device.find({
       relations: {
-        user: true
-      }
+        user: true,
+      },
     });
-    console.log(devices)
-    const newDevices : IDevice[] = [];
-    
-    for (let device of devices){
-      let owner : number  = undefined;
-      let firstname : string  = "No";
-      let lastname : string  = "User";
-      
-      if (device.user !== null)
-      {
-        owner = device.user.userId
-        firstname  = device.user.firstname
-        lastname   = device.user.lastname
-      } 
+    console.log(devices);
+    const newDevices: IDevice[] = [];
+
+    for (let device of devices) {
+      let owner: number = undefined;
+      let firstname: string = "No";
+      let lastname: string = "User";
+
+      if (device.user !== null) {
+        owner = device.user.userId;
+        firstname = device.user.firstname;
+        lastname = device.user.lastname;
+      }
 
       newDevices.push({
         index: device.device_index,
@@ -319,10 +318,10 @@ export class DataProcessor {
         alias: device.friendlyName,
         owner: owner,
         firstname: firstname,
-        lastname:lastname
-      })
+        lastname: lastname,
+      });
     }
-    
+
     return newDevices;
   };
 
@@ -572,35 +571,29 @@ export class DataProcessor {
   ): Promise<DeleteResult> => {
     const admin = await Administrator.find({
       relations: {
-        user: true
+        user: true,
       },
       where: {
         user: {
-          userId: userId
-        }
-      }
-    })
+          userId: userId,
+        },
+      },
+    });
 
-    if (admin.length === 1){
-      return await Administrator.delete(
-        { adminId: admin[0].adminId });
+    if (admin.length === 1) {
+      return await Administrator.delete({ adminId: admin[0].adminId });
     }
-    return null
-  }
+    return null;
+  };
 
   /**
- * deletes a single user from the database using the userId
- * If user is an administrator then it removes the admin permissions first
- * @param userId number
- */
-  public static DeleteUser = async (userId: number): Promise<boolean> =>
-  {
-    console.log(userId)
-  if ((await UserAccount.findOneBy({userId: userId})).isAdmin){
-    await this.DeleteAdministrator(userId);
-  }
-  return (await UserAccount.delete({ userId: userId })).affected >= 1;
-  }
+   * deletes a single user from the database using the userId
+   * If user is an administrator then it removes the admin permissions first
+   * @param userId number
+   */
+  public static DeleteUser = async (userId: number): Promise<boolean> => {
+    return (await UserAccount.delete({ userId: userId })).affected >= 1;
+  };
 
   // Fails if data is not removed first
   /**
