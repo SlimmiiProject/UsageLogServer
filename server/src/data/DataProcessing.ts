@@ -41,11 +41,11 @@ export interface IUserData {
 
 export interface IDevice {
   index: number;
-  id: string;
   alias: string;
   owner: number;
-  firstname: string;
-  lastname: string;
+  id: string | undefined ;
+  firstname: string | undefined ;
+  lastname: string | undefined ;
 }
 export class DataProcessor {
   //#region Create Data
@@ -299,13 +299,22 @@ export class DataProcessor {
     });
     const newDevices : IDevice[] = [];
     for (let device of devices){
+      let owner : number  = 0;
+      let firstname : string  = "";
+      let lastname : string  = "";
+      if (device.user === null)
+      {
+        owner = -1;
+        firstname = "No";
+        lastname = "user";
+      }
       newDevices.push({
         index: device.device_index,
         id: device.deviceId,
-        owner: device.user.userId,
         alias: device.friendlyName,
-        firstname: device.user.firstname,
-        lastname: device.user.lastname
+        owner: owner,
+        firstname: firstname,
+        lastname:lastname
       })
     }
     
