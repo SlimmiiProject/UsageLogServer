@@ -41,6 +41,7 @@ style={{
             <TableCell>{I18n.t("allDevices.tableId")}</TableCell>
             <TableCell>{I18n.t("allDevices.tableAlias")}</TableCell>
             <TableCell>{I18n.t("allDevices.tableUser")}</TableCell>
+
         </TableRow>
     </TableHead>
     <TableBody>
@@ -51,6 +52,8 @@ style={{
             <TableCell align="right">{device.id}</TableCell>
             <TableCell align="right">{device.alias ? (<p>{device.alias}</p>) : (<p>no alias</p>)}</TableCell>
             <TableCell align="right">{device.owner ? (<p>{device.owner}</p>) : (<Chip label="assign user" variant="outlined" style={{backgroundColor:"green"}}/>)}</TableCell>
+
+            <TableCell align="right">{device.firstname ? (<p>{device.firstname} {device.lastname}</p>) : (<p> No user</p>)}</TableCell>
             <TableCell align="right"><Chip label={I18n.t("allDevices.tableChipRemove")} variant="outlined" style={{backgroundColor:"red"}}/></TableCell>
         </TableRow>
     ))
