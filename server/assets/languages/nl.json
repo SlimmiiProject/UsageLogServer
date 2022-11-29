@@ -35,6 +35,9 @@
   "graph.day": "Dag",
   "graph.night": "Nacht",
   "logger.title": "Logger",
+  "logger.Account_id":"Account",
+  "logger.Description":"Beschrijving",
+  "logger.Address":"Adres",
   "metercard.name": "Naam meterkaart",
   "metercard.id": "Id meterkaart",
   "metercard.chart": "Geef hier een grafiek in",
@@ -71,5 +74,8 @@
   "days.friday": "Vrijdag",
   "days.saturday": "Zaterdag",
   "days.sunday": "Zondag",
-  "time.hour": "Uur"
+  "time.hour": "Uur",
+  "allUsers.email": "E-mailadres",
+  "allUsers.FullName": "Volledige naam",
+  "allUsers.graphColors": "Grafiek kleuren"
 }

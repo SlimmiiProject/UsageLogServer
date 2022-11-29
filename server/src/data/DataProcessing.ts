@@ -62,6 +62,14 @@ export class DataProcessor {
     });
   }
 
+  public static getAllusers = async (): Promise<UserAccount[]> => {
+    return await UserAccount.find({
+      select: {
+        password:false,
+      }
+    });
+  }
+
   /**
    * creates new Data coupled to a specific device
    * throws an Error if input is not valid
@@ -438,6 +446,7 @@ export class DataProcessor {
   /**
    * Returns all the data in the logfile
   */
+<<<<<<< HEAD
   public static GetLogfileData = async () => {
     return await Logfile.find({
       order: {
@@ -445,6 +454,9 @@ export class DataProcessor {
       }
     });
   }
+=======
+  public static GetLogfileData = async () => Logfile.find();
+>>>>>>> e4706d135cb0ba6e3e7014d1bc2d31f6d155e9b5
 
   /**
    * This creates a logfile and adds it to the database if Logfile is complete
@@ -461,27 +473,6 @@ export class DataProcessor {
       if (result.length <= 0) await Logfile.save(newLog);
     });
   }
-
-  // /**
-  //  * Returns all the data in the logfile
-  // */
-  // public static GetLogfileData = async () => Logfile.find()
-
-  // /**
-  //  * This creates a logfile and adds it to the database if Logfile is complete
-  //  * @param userId number user id
-  //  * @param description string
-  //  * @param ipaddress string
-  //  */
-  // public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
-  //   let user = await UserAccount.findOne({ where: { userId: Equal(userId) } });
-  //   if(!ObjectUtil.isSet(user)) return;
-    
-  //   let newLog = Logfile.createLogFile(user, description, ipaddress);
-  //   validate(newLog).then(async (result) => {
-  //     if (result.length <= 0) await Logfile.save(newLog);
-  //   });
-  // }
 
   /**
    * removes all password reset rows that are older than 30 minutes

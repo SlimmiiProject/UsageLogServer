@@ -60,5 +60,8 @@
   "error.password_short": "Passwort ist zu kurz, benötigt mindestens 8 Zeichen",
   "error.passwords_no_match": "Passwörter stimmen nicht überein",
   "error.undefined_error": "Etwas ist schief gelaufen",
-  "error.no_landcode": "Sie haben die Ländervorwahl vergessen"
+  "error.no_landcode": "Sie haben die Ländervorwahl vergessen",
+  "allUsers.email": "E-mail",
+  "allUsers.FullName": "Vollständiger Name",
+  "allUsers.graphColors": "Grafik-Farben"
 }

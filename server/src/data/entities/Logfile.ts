@@ -19,6 +19,14 @@ export class Logfile extends BaseEntity {
     return logFile;
   }
 
+  public static createLogFile = (account: UserAccount, description: string, ipAdress: string) => {
+    const log = Logfile.create();
+    log.account_id = account
+    log.description = description;
+    log.ipaddress = ipAdress;
+    return log;
+  }
+
   @PrimaryGeneratedColumn()
   id!: number;
 
