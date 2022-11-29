@@ -89,19 +89,22 @@ export class DataProcessor {
     });
   };
 
+  /** 
+   * Getting all the users from the database and returning them in a IUserData[]t.
+  */ 
   public static getAllUsers = async (): Promise<IUserData[]> => {
     const users: UserAccount[] = await UserAccount.find({
       select: {
         password: false,
       },
     });
-    let response : IUserData[] = []; 
-    
-    for(let user of users){
+    let response: IUserData[] = [];
+
+    for (let user of users) {
       const isAdmin = await user.isAdmin();
-       const devices: Device[] = await this.getDevices(user.userId);
-       const deviceIds:number[] = devices.map((device)=> device.device_index)
-       let newValue:IUserData = {
+      const devices: Device[] = await this.getDevices(user.userId);
+      const deviceIds: number[] = devices.map((device) => device.device_index);
+      let newValue: IUserData = {
         userId: user.userId,
         firstname: user.firstname,
         lastname: user.lastname,
@@ -109,12 +112,12 @@ export class DataProcessor {
         device: deviceIds,
         colorDay: user.colorDay,
         colorNight: user.colorNight,
-        isAdmin: isAdmin
-      }
+        isAdmin: isAdmin,
+      };
       response.push(newValue);
     }
 
-    console.log(response)
+    console.log(response);
     return response;
   };
 

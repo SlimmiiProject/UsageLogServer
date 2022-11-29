@@ -59,6 +59,7 @@ export class AdminUtil {
     public static getAllDevices = async () => {
         try {
             const res = await this.INSTANCE.get("admin/getAllDevices");
+            console.log(res.data)
             return res.data;
         } catch (_ignored) {
             return [];
