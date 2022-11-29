@@ -53,5 +53,13 @@ export class AdminUtil {
              return [];
          }
     }
+    public static createAdmin = async (userId: number) => {
+        try {
+            const res = await this.INSTANCE.post("admin/create-admin", {userId});
+            return res.data;
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
 }

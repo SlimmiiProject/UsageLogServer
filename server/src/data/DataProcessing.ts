@@ -446,7 +446,6 @@ export class DataProcessor {
   /**
    * Returns all the data in the logfile
   */
-<<<<<<< HEAD
   public static GetLogfileData = async () => {
     return await Logfile.find({
       order: {
@@ -454,9 +453,6 @@ export class DataProcessor {
       }
     });
   }
-=======
-  public static GetLogfileData = async () => Logfile.find();
->>>>>>> e4706d135cb0ba6e3e7014d1bc2d31f6d155e9b5
 
   /**
    * This creates a logfile and adds it to the database if Logfile is complete
