@@ -10,23 +10,17 @@ import Devices from "./components/users/Devices";
 import Logout from "./components/users/Logout";
 import Drawer from "./components/DrawerComponent";
 import Contact from "./components/Contact";
-import PageNotFound from "./components/404";
 import DashboardComp from "./components/dashboard/Dashboard";
 import { AdminPage } from "./components/admin/AdminPage";
 import LoginPage from "./components/users/LoginPage";
 import { I18n } from "./util/language/I18n";
 import EditProfile from "./components/users/EditProfile";
-import {
-  Routes,
-  Route,
-  Navigate,
-  Location,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
-import { getLanguageFromUrl } from "./util/BrowserUtil";
+import { getFullPath, getLanguageFromUrl } from "./util/BrowserUtil";
 import { LogFile } from "./components/admin/LogFile";
+import ForgotPassword from "./components/users/ForgotPassword";
 
 export interface ITestData {
   devices: IDevice[];
@@ -68,15 +62,6 @@ export const userContext = React.createContext<IUserContext>({
   logout: () => { },
 });
 
-// Get the current path to use for the correct links
-export const getCurrentPath = (location: Location) => {
-  if (location.pathname[location.pathname.length - 1] === "/")
-    location.pathname = location.pathname.substring(
-      0,
-      location.pathname.length - 1
-    );
-  return location.pathname;
-};
 
 // Get path with current language prefix
 export const getPath = (path: string) => {
@@ -144,6 +129,7 @@ const App = (): JSX.Element => {
             <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />
             <Routes>
               <Route path="/" element={<Navigate to={getPath("")} />} />
+              <Route path="/forgot-password" element={<Navigate to={getPath(getFullPath())} />} />
               <Route
                 path="/dashboard"
                 element={<Navigate to={getPath("dashboard")} />}
@@ -153,6 +139,7 @@ const App = (): JSX.Element => {
                 <Route index element={!loggedIn ? <Navigate to={getPath("login")} /> : <Navigate to={getPath("dashboard")} />} />
                 <Route path="contact" element={<Contact />} />
                 <Route path="register" element={<Register />} />
+                <Route path="forgot-password" element={<ForgotPassword/>}/>
 
                 {loggedIn ? <>
                   <Route path="dashboard" element={<DashboardComp />} />

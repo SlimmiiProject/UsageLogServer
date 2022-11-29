@@ -6,6 +6,9 @@ import { Crypt } from '../utils/Crypt';
 import { GoogleAuth } from '../utils/GoogleAuth';
 import { SessionManager } from '../accounts/SessionManager';
 import { ObjectUtil } from '../utils/ObjectUtil';
+import { Mailer } from '../utils/mail/Mailer';
+import { MailTemplates } from '../utils/mail/MailTemplates';
+import { Environment } from '../utils/Environment';
 const router = express.Router();
 
 type CreationData = {
@@ -98,10 +101,22 @@ router.post("/create-profile", async (req: Request, res: Response) => {
     );
 });
 
-router.post("/forgot-password", async (req: Request, res: Response) => {
+router.post("/submit-forgot-password", async (req: Request, res: Response) => {
     const data: ResetData = req.body;
+    const userAccount = await AccountManager.getAccount(undefined, data.email);
 
-    
+    if (ObjectUtil.isSet(userAccount)) {
+        await DataProcessor.DeletePasswordResetForUser(userAccount);
+        const token = await DataProcessor.createPasswordReset(Crypt.createUrlSafeHash(41), userAccount);
+
+        const {url, server_port} = Environment.CONFIG;
+        // Send email
+        Mailer.INSTANCE.sendMailTo(data.email, "Password Reset", MailTemplates.FORGOT_PASSWORD({
+            resetUrl: `${url}:${server_port}/forgot-password?token=${token}`
+        }));
+    }
+
+    res.sendStatus(200);
 });
 
 router.use(SessionManager.loginRequired);

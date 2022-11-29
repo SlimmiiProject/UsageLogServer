@@ -22,6 +22,5 @@ export class PasswordReset extends BaseEntity {
   user: UserAccount;
 
   @CreateDateColumn({ name: "created_at" })
-  @IsDefined()
   created_at: Date;
 }

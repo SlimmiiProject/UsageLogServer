@@ -146,14 +146,12 @@ export class DataProcessor {
    * @param email undefined | string email adress of a user
    * @param phoneNumber undefined | number phonenumber of user
    */
-  public createPasswordReset = async (token: string, userId?: number, email?: string): Promise<void> => {
-    const user: UserAccount = await DataProcessor.getUser(email, userId);
-    const newPasswordReset = PasswordReset.createPasswordReset(user, token);
-    validate(newPasswordReset).then(async (result) => {
-      if (result.length <= 0) await PasswordReset.save(newPasswordReset);
+  public static createPasswordReset = async (token: string, userAccount: UserAccount): Promise<string> => {
+    const newPasswordReset = PasswordReset.createPasswordReset(userAccount, token);
+    return validate(newPasswordReset).then(async (result) => {
+      if (result.length <= 0) return (await newPasswordReset.save()).token;
     });
   }
-
   //#endregion
 
   //#region Get Data
@@ -417,9 +415,11 @@ export class DataProcessor {
    */
   public static DeleteSpecificPasswordReset = async (token: string): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
 
-  public static DeletePasswordResetForUser = async (user: UserAccount): Promise<DeleteResult> => await PasswordReset.delete({ user: {
-    userId: user.userId
-  }});
+  public static DeletePasswordResetForUser = async (user: UserAccount): Promise<DeleteResult> => await PasswordReset.delete({
+    user: {
+      userId: user.userId
+    }
+  });
 
   //#endregion
 }
