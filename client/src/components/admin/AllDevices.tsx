@@ -40,6 +40,7 @@ style={{
             <TableCell>Index</TableCell>
             <TableCell>Id</TableCell>
             <TableCell>Alias</TableCell>
+            <TableCell>User id</TableCell>
             <TableCell>User</TableCell>
         </TableRow>
     </TableHead>
@@ -51,7 +52,9 @@ style={{
             <TableCell align="right">{device.id}</TableCell>
             <TableCell align="right">{device.alias ? (<p>{device.alias}</p>) : (<p>no alias</p>)}</TableCell>
             <TableCell align="right">{device.owner ? (<p>{device.owner}</p>) : (<Chip label="assign user" variant="outlined" style={{backgroundColor:"green"}}/>)}</TableCell>
+            <TableCell align="right">{device.firstname ? (<p>{device.firstname} {device.lastname}</p>) : (<p> No user</p>)}</TableCell>
             <TableCell align="right"><Chip label="Remove" variant="outlined" style={{backgroundColor:"red"}}/></TableCell>
+        
         </TableRow>
     ))
     ) : (<h2>Loading...</h2>)}
