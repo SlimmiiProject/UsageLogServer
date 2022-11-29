@@ -64,8 +64,8 @@ interface IUserContext {
 export const userContext = React.createContext<IUserContext>({
   isLoggedIn: false,
   isAdmin: false,
-  setAccountData: (data) => {},
-  logout: () => {},
+  setAccountData: (data) => { },
+  logout: () => { },
 });
 
 // Get the current path to use for the correct links
@@ -129,9 +129,7 @@ const App = (): JSX.Element => {
       return afterToggle;
     });
 
-  const navigate = useNavigate();
-
-  const loggedInExecutor = (children: {():void}) => accountData !== undefined && children();
+  const loggedIn = accountData !== undefined;
 
   return (
     <>
@@ -140,8 +138,8 @@ const App = (): JSX.Element => {
           <CssBaseline />
           <userContext.Provider
             value={{
-              isLoggedIn: accountData != undefined,
-              isAdmin: accountData != undefined && accountData.isAdmin,
+              isLoggedIn: loggedIn,
+              isAdmin: loggedIn && accountData.isAdmin,
               userAccount: accountData,
               setAccountData: setAccountData,
               logout: () => setAccountData(undefined),
@@ -156,32 +154,34 @@ const App = (): JSX.Element => {
               />
 
               <Route path="/:lang">
-                <Route index element={<LoginPage />} />
+                <Route index element={!loggedIn ? <Navigate to={getPath("login")} /> : <Navigate to={getPath("dashboard")} />} />
                 <Route path="contact" element={<Contact />} />
-                <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<Register />} />
 
-                {accountData !== undefined && (
-                  <>
-                    <Route path="dashboard" element={<DashboardComp />} />
-                    <Route path="logout" element={<Logout />} />
+                {loggedIn ? <>
+                  <Route path="dashboard" element={<DashboardComp />} />
+                  <Route path="logout" element={<Logout />} />
 
-                    <Route path="profile" element={<Profile />} />
-                    <Route
-                      path="profile/edit-profile"
-                      element={<EditProfile />}
-                    />
+                  <Route path="profile" element={<Profile />} />
+                  <Route
+                    path="profile/edit-profile"
+                    element={<EditProfile />}
+                  />
 
-                    <Route path="devices" element={<Devices />} />
+                  <Route path="devices" element={<Devices />} />
 
+                  {accountData.isAdmin && <>
                     <Route path="admin">
                       <Route index element={<AdminPage />} />
                       <Route path="allusers" element={<AdminPage />} />
                       <Route path="alldevices" element={<AdminPage />} />
                       <Route path="logfile" element={<LogFile />} />
                     </Route>
-                  </>
-                )}
+                  </>}
+                </> : <>
+                  <Route path="login" element={<LoginPage />} />
+                </>}
+
               </Route>
 
               <Route path="*" element={<Navigate to={getPath("/")} />} />

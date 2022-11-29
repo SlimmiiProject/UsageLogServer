@@ -1,5 +1,5 @@
-import { DataProcessor } from "./DataProcessing";
-import { PasswordReset } from "./entities/PasswordReset";
+import { DataProcessor } from "../DataProcessing";
+import { PasswordReset } from "../entities/PasswordReset";
 
 export class PasswordResetManager {
 
@@ -24,6 +24,7 @@ export class PasswordResetManager {
         await this.setup();
 
         if (this.isValid) {
+            await DataProcessor.ChangePassword(this._resetEntry.user.userId, this._newPassword);
             
         }
     }
