@@ -116,4 +116,13 @@ export class IOUtil {
   }
 
   public static sendContactData = async (data: ContactInfo) => await this.INSTANCE.post("/contact/", data);
+
+  public static deleteUser = async (userId: number) => {
+    try {
+      const res = await this.INSTANCE.post("/user/delete-user", {userId: userId});
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }

@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import { AdminUtil, GraphColors, userData } from "../../util/AdminUtil";
 import { I18n } from "../../util/language/I18n";
 import React, { Component } from "react";
+import { IOUtil } from "../../util/IOUtil";
 export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
@@ -123,6 +124,9 @@ export const AllUsers = (): JSX.Element => {
                         variant="outlined"
                         style={{ backgroundColor: "red" }}
                         onClick={(event) => {
+                          IOUtil.deleteUser(user.userId).then((event)=>{
+                            setRender(true);
+                          })
                           console.log("delete user");
                         }}
                       />

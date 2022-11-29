@@ -1,6 +1,9 @@
+import { DataProcessor } from './../data/DataProcessing';
+import { responseEncoding } from "axios";
 import express, { Request, Response } from "express";
 import { SessionManager } from "../accounts/SessionManager";
-const router = express.Router({ mergeParams: true });
+
+const router = express.Router();
 
 router.use(SessionManager.loginRequired);
 
@@ -22,5 +25,10 @@ router.route("/meters")
     .delete((req: Request, res: Response) => {
         // TODO Delete meter
     });
+
+router.post("/delete-user", async (req: Request, res: Response) => {
+    const {userId} : {userId:number} = req.body;
+    res.json(await DataProcessor.DeleteUser(userId))
+})
 
 module.exports = router;

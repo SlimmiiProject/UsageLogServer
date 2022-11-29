@@ -588,17 +588,17 @@ export class DataProcessor {
     return null
   }
 
-  // Fails if administrator is not removed first
   /**
    * deletes a single user form the database
    * @param userId number
    */
   public static DeleteUser = async (userId: number): Promise<boolean> =>
-    (await UserAccount.delete(
-      { 
-        userId: userId
-       }
-      )).affected >= 1;
+  {
+  if ((await UserAccount.findOneBy({userId: userId})).isAdmin){
+    await this.DeleteAdministrator(userId);
+  }
+  return (await UserAccount.delete({ userId: userId })).affected >= 1;
+  }
 
   // Fails if data is not removed first
   /**
