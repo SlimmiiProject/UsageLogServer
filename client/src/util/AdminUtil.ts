@@ -60,8 +60,8 @@ export class AdminUtil {
         try {
             const res = await this.INSTANCE.get("admin/getAllDevices");
             return res.data;
-        } catch (err) {
-            console.error(err);
+        } catch (_ignored) {
+            return [];
         }
     }
 
