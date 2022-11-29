@@ -27,6 +27,9 @@ export class Crypt {
      */
     public static createRandomPassword = (length: number): string =>
         [...new Array(length).keys()].reduce((password) => password + String.fromCharCode(Math.floor(Math.random() * 128)), "");
+     
+    public static createUrlSafeHash = (length: number): string =>
+        this.toBase64(this.toBytes(this.createRandomPassword(length)));   
 
     public static encrypt = (content: string): string => {
         const hashedInput = bcrypt.hashSync(content, this.saltRounds);
