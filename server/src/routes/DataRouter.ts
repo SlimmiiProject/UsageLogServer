@@ -6,19 +6,27 @@ import { SessionManager } from '../accounts/SessionManager';
 import { DataProcessor } from '../data/DataProcessing';
 import { User } from '../types/express-session';
 import { DateUtil, Period } from '../utils/DateUtil';
+import {PythonShell} from 'python-shell';
 const router = express.Router();
 
 router.use(SessionManager.loginRequired);
 
-router.post("raw-meter-entry", (req: Request, res: Response) => {
+router.get("/raw-meter-entry", (req: Request, res: Response) => {
     // TODO Redirect Raw Base64 image to local Python OCR Program
-    const imageBase64 = req.body.image;
+    /*const imageBase64 = req.body.image;
     if (imageBase64 && RegExpVal.validate(imageBase64, RegExpVal.base64Encoded)) {
-
-    }
+        PythonShell.run(__dirname+'/test.py', null, function (err) {
+            if (err) throw err;
+            console.log('finished');
+          });
+    }*/
+    PythonShell.run(__dirname+'/test.py', null, function (err) {
+        if (err) throw err;
+        console.log('finished');
+      });
 });
 
-router.post("/meter-entry", (req: Request, res: Response) => {
+router.get("/meter-entry", (req: Request, res: Response) => {
     // TODO Receives data from local python program with JSON data about the meter entry
 });
 
