@@ -16,7 +16,7 @@ export type Period = "Day" | "Week" | "Month";
 export class IOUtil {
 
   private static _instance: AxiosInstance;
-  private static get INSTANCE(): AxiosInstance {
+  public static get INSTANCE(): AxiosInstance {
     if (!this._instance) this._instance = axios.create({ baseURL: "/api/", timeout: 5000 });
     return this._instance;
   }

@@ -1,3 +1,4 @@
+import { IOUtil } from './IOUtil';
 import axios, { AxiosInstance } from "axios";
 
 export enum GraphColors {
@@ -36,15 +37,9 @@ export type deviceData = {
 }
 export class AdminUtil {
 
-    private static _instance: AxiosInstance;
-    private static get INSTANCE(): AxiosInstance {
-        if (!this._instance) this._instance = axios.create({ baseURL: "/api/", timeout: 5000 });
-        return this._instance;
-    }
-
     public static getLogs = async (controller: AbortController): Promise<LogData[]> => {
         try {
-            const res = await this.INSTANCE.get("/admin/logfile/", { signal: controller.signal });
+            const res = await IOUtil.INSTANCE.get("/admin/logfile/", { signal: controller.signal });
             console.log(res.data[0].date.toString())
             //doesn't work?
             //console.log(res.data[0].date.toDateString())
@@ -58,7 +53,7 @@ export class AdminUtil {
     public static getUsers = async (controller: AbortController): Promise<userData[]> => {
         console.log("received allusers request");
         try {
-            const res = await this.INSTANCE.get("/admin/allusers/", { signal: controller.signal });
+            const res = await IOUtil.INSTANCE.get("/admin/allusers/", { signal: controller.signal });
             return res.data;
         } catch (_ignored) {
             return [];
@@ -67,7 +62,7 @@ export class AdminUtil {
 
     public static getAllDevices = async (controller: AbortController) => {
         try {
-            const res = await this.INSTANCE.get("admin/allDevices");
+            const res = await IOUtil.INSTANCE.get("admin/allDevices");
             console.log(res.data)
             return res.data;
         } catch (_ignored) {
@@ -78,7 +73,7 @@ export class AdminUtil {
     /* A function that is called when a user is created. */
     public static createAdmin = async (userId: number) => {
         try {
-            const res = await this.INSTANCE.post("admin/create-admin", { userId: userId });
+            const res = await IOUtil.INSTANCE.post("admin/create-admin", { userId: userId });
             return res.data;
         } catch (_ignore) {
             return
@@ -86,7 +81,7 @@ export class AdminUtil {
     }
     public static DeleteAdmin = async (userId: number) => {
         try {
-            const res = await this.INSTANCE.post("admin/delete-admin", { userId: userId });
+            const res = await IOUtil.INSTANCE.post("admin/delete-admin", { userId: userId });
             return res.data;
 
         } catch (err) {
