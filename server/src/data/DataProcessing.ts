@@ -297,17 +297,21 @@ export class DataProcessor {
         user: true
       }
     });
+    console.log(devices)
     const newDevices : IDevice[] = [];
+    
     for (let device of devices){
-      let owner : number  = 0;
-      let firstname : string  = "";
-      let lastname : string  = "";
-      if (device.user === null)
+      let owner : number  = undefined;
+      let firstname : string  = "No";
+      let lastname : string  = "User";
+      
+      if (device.user !== null)
       {
-        owner = -1;
-        firstname = "No";
-        lastname = "user";
-      }
+        owner = device.user.userId
+        firstname  = device.user.firstname
+        lastname   = device.user.lastname
+      } 
+
       newDevices.push({
         index: device.device_index,
         id: device.deviceId,
