@@ -202,6 +202,11 @@ export class DataProcessor {
       })
   }
 
+  /* A static method that returns a promise of an array of Device objects. */
+  public static getAllDevices = async (): Promise<Device[]> => {
+    return await Device.find({});
+  }
+
   public static getTempEntry = async (deviceId: string) => {
     const device = await this.getDevice(deviceId);
     return await TemporaryData.findOne({ where: { device: Equal(device) } });

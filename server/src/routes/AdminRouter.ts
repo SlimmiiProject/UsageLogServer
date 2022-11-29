@@ -16,8 +16,14 @@ router.get("/allusers", async (req: Request, res: Response) => {
   res.json(await DataProcessor.getAllusers());
 })
 
-/* Creating a new administrator. */
-router.post("/create-admin", async (userId: number, req: Request, res: Response) => {
+/* A route that is used to get all the devices. */
+router.get("/allDevices", async (req: Request, res: Response) => {
+  res.json(await DataProcessor.getAllDevices());
+})
+
+/* A route that is used to create an administrator. */
+router.post("/create-admin", async (req: Request, res: Response) => {
+  const {userId}:{userId:number} = req.body;
   res.json(await DataProcessor.createAdministrator(userId))
 })
 
