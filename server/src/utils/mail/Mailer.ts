@@ -32,7 +32,7 @@ export class Mailer {
      * @param {string} subject - The subject of the email
      * @param {string} htmlCOntent - The HTML content of the email.
      */
-    public async sendMailTo(receiver: string, subject: string, htmlCOntent: string) {
+    public sendMailTo = async (receiver: string, subject: string, htmlCOntent: string) => {
         this.sendMailToAll([receiver], subject, htmlCOntent);
     }
 
@@ -45,7 +45,7 @@ export class Mailer {
      * @param {string} htmlContent - string - The html content of the email
      * @returns Nothing.
      */
-    public async sendMailToAll(receivers: string[], subject: string, htmlContent: string) {
+    public sendMailToAll = async (receivers: string[], subject: string, htmlContent: string) => {
         if (receivers.length === 0 || subject === "") return;
 
         for (const receiver of receivers) {

@@ -1,9 +1,11 @@
+import { Administrator } from './Administrator';
 import { Device } from "./Device";
 import { Crypt } from "../../utils/Crypt";
 import { AccountManager } from "../../accounts/AccountManager";
 import { Logger } from "../../utils/Logger";
 import { IsDefined, Length, MinLength, IsEmail, MaxLength, IsPhoneNumber, IsOptional } from "class-validator";
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, BeforeInsert, BeforeUpdate } from "typeorm";
+
 export enum GraphColors {
   RED = "red",
   GREEN = "green",
@@ -12,8 +14,19 @@ export enum GraphColors {
   BLUE = "blue",
   PURPLE = "purple"
 }
+
 @Entity()
 export class UserAccount extends BaseEntity {
+
+  public static createUser = (firstName: string, lastName: string, email: string, phone: string, password: string) => {
+    const userAccount = new UserAccount();
+    userAccount.firstname = firstName;
+    userAccount.lastname = lastName;
+    userAccount.email = email;
+    userAccount.phone = phone;
+    userAccount.password = password;
+    return userAccount;
+  }
 
   @PrimaryGeneratedColumn({ name: "userId" })
   userId: number;
@@ -41,8 +54,6 @@ export class UserAccount extends BaseEntity {
 
   @Column("varchar", { nullable: true, unique: false, length: 12 })
   @Length(0, 13)
-  @IsPhoneNumber("BE")
-  @IsOptional()
   phone: string;
 
   @OneToMany(() => Device, (device) => device.deviceId, { nullable: true })
@@ -57,7 +68,7 @@ export class UserAccount extends BaseEntity {
   @Column("enum", { enum: GraphColors, default: GraphColors.PURPLE, name: "color_night", nullable: true, unique: false })
   @IsOptional()
   colorNight: GraphColors;
-
+  
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
@@ -67,5 +78,15 @@ export class UserAccount extends BaseEntity {
     });
   }
 
-  isAdmin = async () => await AccountManager.isAdministrator(this.userId);
+  public setPassword = (password: string) => {
+    this.password = password
+    return this;
+  };
+
+  public setDevices = (devices: Device[]) => {
+    this.device = devices
+    return this;
+  };
+
+  public isAdmin = async () => await AccountManager.isAdministrator(this.userId);
 }

@@ -33,11 +33,11 @@ export class App {
         this.setupRoutes();
     }
 
-    private async setup() {
+    private setup = async () => {
         await DatabaseConnector.INSTANCE.initialize();
     }
 
-    private appSetup() {
+    private appSetup = () => {
         this.App.use(express.static("public"));
         this.App.use(express.json());
         this.App.use(bodyParser.urlencoded({ extended: true }));
@@ -45,7 +45,7 @@ export class App {
         this.App.use(cors());
     }
 
-    private setupSession() {
+    private setupSession = () => {
         const { session_secret, database } = Environment.CONFIG;
         const options = {
             connectionLimit: 10,
@@ -71,7 +71,7 @@ export class App {
         }));
     }
 
-    private setupRoutes() {
+    private setupRoutes = () => {
         const apiRouter: Router = require("./routes/ApiRouter");
 
         // Middleware for setting up Session
@@ -84,20 +84,20 @@ export class App {
         apiRouter.use("/users/:userId", require("./routes/UserRouter"));
         apiRouter.use("/data", require("./routes/DataRouter"));
         apiRouter.use("/profiles", require("./routes/ProfileRouter"));
+        apiRouter.use("/session", require("./routes/SessionRouter"));
 
         apiRouter.use("/contact", require("./routes/ContactRouter"));
+        apiRouter.use("/admin", require("./routes/AdminRouter"));
 
         // !! This has to stay at the end of this method to assure it's only executed if the url doesn't match any of the above cases
         this.App.get("*", (_req: Request, res: Response) => res.sendFile(path.join(__dirname, "../public/", "index.html")));
     }
 
-    public start() {
+    public start = () => {
         this.App.listen(this.port, () => Logger.info(`App has started on: ${url}:${this.port}/`));
     }
 
-    private get port() {
-        return server_port;
-    }
+    private get port() { return server_port; }
 }
 
 App.INSTANCE.start();

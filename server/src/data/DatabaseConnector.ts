@@ -1,3 +1,4 @@
+import { Logfile } from './entities/Logfile';
 import { DataSource } from "typeorm";
 import { Environment } from "../utils/Environment";
 import { Logger } from "../utils/Logger";
@@ -47,6 +48,7 @@ export class DatabaseConnector {
       TemporaryData,
       ContactForm,
       PasswordReset,
+      Logfile,
     ];
   }
 
@@ -80,7 +82,7 @@ export class DatabaseConnector {
     return this._INSTANCE;
   }
 
-  public async initialize() {
+  public  initialize = async () => {
     if (this._dataSource.isInitialized)
       return Logger.warn("Database can't be initialized more than one time!");
 

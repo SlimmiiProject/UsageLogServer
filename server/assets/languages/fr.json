@@ -60,5 +60,8 @@
   "error.password_short": "Le mot de passe est trop court, il doit comporter au moins 8 caractères",
   "error.passwords_no_match": "Les mots de passe ne correspondent pas",
   "error.undefined_error": "Quelque chose s'est mal passé",
-  "error.no_landcode": "Vous oubliez la code postal"
+  "error.no_landcode": "Vous oubliez la code postal",
+  "allUsers.email": "Couriel",
+  "allUsers.FullName": "Nom et prénom",
+  "allUsers.graphColors": "Le couleurs de graphique"
 }

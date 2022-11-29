@@ -5,28 +5,19 @@ import { ObjectUtil } from "../utils/ObjectUtil";
 
 export class AccountManager {
 
-    public static async createAccount(firstName: string, lastName: string, email: string, raw_password: string, phoneNumber?: string): Promise<number> {
-        return await DataProcessor.CreateUser(firstName, lastName, email, raw_password, phoneNumber);
-    }
+    public static createAccount = async (firstName: string, lastName: string, email: string, raw_password: string, phoneNumber?: string): Promise<number> =>
+        await DataProcessor.createUser(firstName, lastName, email, raw_password, phoneNumber);
 
-    public static async removeAccount(email: string) {
-        const user = (await DataProcessor.GetUser(email));
+    public static removeAccount = async (email: string) => {
+        const user = (await DataProcessor.getUser(email));
         return user && await DataProcessor.DeleteUser(user.userId);
     }
+    
+    public static doesAccountExist = async (userId?: number, email?: string): Promise<boolean> => ObjectUtil.isSet(await DataProcessor.getUser(email, userId));
 
-    public static async doesAccountExist(userId?: number, email?: string): Promise<boolean> {
-        return ObjectUtil.isSet(await DataProcessor.GetUser(email, userId));
-    }
+    public static getAccount = async (userId?: number, email?: string): Promise<UserAccount> => await DataProcessor.getUser(email, userId);
 
-    public static async getAccount(userId?: number, email?: string): Promise<UserAccount> {
-        return await DataProcessor.GetUser(email, userId);
-    }
+    public static isAdministrator = async (userId: number): Promise<boolean> => ObjectUtil.isSet(await DataProcessor.getAdministrator(userId));
 
-    public static async isAdministrator(userId: number): Promise<boolean> {
-        return ObjectUtil.isSet(await DataProcessor.GetAdministrator(userId));
-    }
-
-    public static async getEncryptedPassword(userId?: number, email?: string): Promise<string> {
-        return (await this.getAccount(userId, email)).password;
-    }
+    public static getEncryptedPassword = async (userId?: number, email?: string): Promise<string> => (await this.getAccount(userId, email)).password;
 }

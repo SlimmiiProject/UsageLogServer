@@ -8,22 +8,17 @@ export class Environment {
     /**
      * @returns If we're currently working in a dev environment
      */
-    public static isDev(): boolean {
-        return this.CONFIG.developmentEnv;
-    }
+    public static isDev = (): boolean => this.CONFIG.developmentEnv;
 
-    public static isDebug(): boolean {
-        return this.CONFIG.debug;
-    }
+    public static isDebug = (): boolean => this.CONFIG.debug;
 
     /**
      * It reads the .env file and command line arguments and returns an object with the combination of values from the .env file and command line arguments with a prioritization for CLI.
      * 
      * @returns An object with our .env properties:
      */
-    private static setupConfig() {
-        const argv_set = process.argv.slice(2, process.argv.length).map((value, index) => index % 2 ? value : value.toUpperCase())
-            .join(" ").split(/(?!^)(?=\-\-)/);
+    private static setupConfig = () => {
+        const argv_set = process.argv.slice(2, process.argv.length).map((value, index) => index % 2 ? value : value.toUpperCase()).join(" ").split(/(?!^)(?=\-\-)/);
         const argv_conf = process.argv.length == 2 ? {} : Object.fromEntries(argv_set.map(set_string => set_string.split(" ").map((value, index) => index % 2 ? value : value.replace("--", ""))))
         const config = { ...dotenv.config()["parsed"], ...argv_conf }
 
@@ -47,6 +42,10 @@ export class Environment {
                 smtp_port: parseInt(process.env.MAIL_PORT),
                 username: process.env.MAIL_USERNAME,
                 password: process.env.MAIL_PASSWORD
+            },
+
+            google: {
+                client_id: process.env.GOOGLE_CLIENT_ID
             }
         }
     }

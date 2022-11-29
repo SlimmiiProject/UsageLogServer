@@ -7,6 +7,13 @@ import { UserAccount } from "./UserAccount";
 @Entity()
 export class Device extends BaseEntity {
 
+  public static createDevice = (deviceId: string, friendlyName?: string) => {
+    const device: Device = Device.create();
+    device.deviceId = deviceId;
+    if (friendlyName) device.setFriendlyName(friendlyName);
+    return device;
+  }
+
   @PrimaryGeneratedColumn()
   device_index!: number;
 
@@ -31,4 +38,9 @@ export class Device extends BaseEntity {
   @OneToMany(() => TemporaryData, (tempData) => tempData.device, { nullable: true, cascade: true })
   @JoinColumn({ name: "temporary_data" })
   temporary_data: TemporaryData[];
+
+  public setFriendlyName = (alias: string) => {
+    this.friendlyName = alias;
+    return this;
+  };
 }

@@ -1,5 +1,3 @@
-import { I18n } from "./language/I18n";
-
 export const reloadBrowser = () => window.location.reload();
 
 /**
@@ -11,13 +9,6 @@ export const replaceLanguageUrl = (prevLang:string, newLang:string) => {
     const newLocation = window.location.origin + window.location.pathname.replace(`/${prevLang}/`, `/${newLang}/`);
     window.location.replace(newLocation);
 }
-
-/**
- * It takes a path and returns the current language plus the path.
- * @param {string} path - The path to the page you want to link to.
- * @returns The current language + the path.
- */
-export const getLanguageUrl = (path:string) => I18n.currentLanguage + path;
 
 /**
  * It takes the URL of the page and grabs the language from it.

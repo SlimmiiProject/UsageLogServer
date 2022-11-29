@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import { AccountData, IDevice } from "../App";
 import { ContactInfo } from "../components/Contact";
 
 export type Error = {
@@ -10,6 +11,8 @@ export type DataCallback = {
   (error: Error): void;
 };
 
+export type Period = "Day" | "Week" | "Month";
+
 export class IOUtil {
 
   private static _instance: AxiosInstance;
@@ -18,12 +21,12 @@ export class IOUtil {
     return this._instance;
   }
 
-  public static async getTranslationConfig() {
+  public static getTranslationConfig = async () => {
     const conn = await this.INSTANCE.get("/translation/");
     return conn.data;
   }
 
-  public static async registerUser(
+  public static registerUser = async (
     first_name: string,
     last_name: string,
     email: string,
@@ -31,7 +34,7 @@ export class IOUtil {
     password: string,
     password_verify: string,
     callback: DataCallback
-  ) {
+  ) => {
     try {
       const res = await this.INSTANCE.post("/profiles/create-profile/", {
         first_name: first_name,
@@ -52,20 +55,22 @@ export class IOUtil {
     }
   }
 
-  public static async loginUser(email: string, password: string) {
+  public static loginUser = async (email: string, password: string, dataConsumer: { (data: AccountData): void }) => {
     try {
       let res = await this.INSTANCE.post("/profiles/login", {
         email: email,
         password: password,
       });
 
+      dataConsumer(res.data.user);
+
       return res.data.succes;
     } catch (e) {
-      return false;
+      return undefined;
     }
   }
 
-  public static async loginGoogle(token: string) {
+  public static loginGoogle = async (token: string) => {
     try {
       const res = await this.INSTANCE.post("/profiles/google-login/", { google_token: token });
       return res.data.succes;
@@ -74,7 +79,7 @@ export class IOUtil {
     }
   }
 
-  public static async logoutUser() {
+  public static logoutUser = async () => {
     try {
       const res = await this.INSTANCE.post("/profiles/logout/");
       return res.data.succes;
@@ -83,7 +88,32 @@ export class IOUtil {
     }
   }
 
-  public static async sendContactData(data: ContactInfo) {
-    await this.INSTANCE.post("/contact/", data);
+  public static getSessionData = async (controller: AbortController): Promise<AccountData | undefined> => {
+    try {
+      const res = await this.INSTANCE.get("/session/", { signal: controller.signal });
+      return !res.data.error ? res.data.user : undefined;
+    } catch (err) {
+      return undefined;
+    }
   }
+
+  public static isAdmin = async (controller?: AbortController): Promise<boolean> => {
+    try {
+      const res = await this.INSTANCE.get("/session/admin-check", { signal: controller?.signal });
+      return !res.data.error ? res.data.isAdmin : false;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  public static getDevicesData = async (period: Period, controller: AbortController): Promise<IDevice[]> => {
+    try {
+      const res = await this.INSTANCE.get(`/data/data?period=${period}`, { signal: controller.signal });
+      return res.data;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  public static sendContactData = async (data: ContactInfo) => await this.INSTANCE.post("/contact/", data);
 }
