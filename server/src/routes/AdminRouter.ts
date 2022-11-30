@@ -39,7 +39,7 @@ router.delete("/device", async (req: Request, res: Response) => {
   res.json(await DataProcessor.DeleteDevice(deviceId));
 });
 
-router.post("/add-device", async (req: Request, res: Response)=> {
+router.post("/device", async (req: Request, res: Response)=> {
   const {deviceId, alias} = req.body;
   res.json(await DataProcessor.createDevice(deviceId, alias))
 })

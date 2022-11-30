@@ -30,7 +30,7 @@ router
   });
 
 
-router.post("/delete-user", async (req: Request, res: Response) => {
+router.delete("/user", async (req: Request, res: Response) => {
     const userId: number = parseInt(req.params.userId);
     res.json(await DataProcessor.DeleteUser(userId));
 });

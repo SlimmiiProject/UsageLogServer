@@ -119,7 +119,7 @@ export class IOUtil {
 
   public static deleteUser = async (userId: number) => {
     try {
-      const res = await this.INSTANCE.post(`/users/${userId}/delete-user`);
+      const res = await this.INSTANCE.delete(`/users/${userId}/user`);
       return res.data;
     } catch (err) {
       console.error(err);
@@ -137,7 +137,7 @@ export class IOUtil {
 
   public static addDevice = async (deviceId: string, alias: string) => {
     try {
-      const res = await this.INSTANCE.post("/admin/add-device", {deviceId: deviceId, alias: alias});
+      const res = await this.INSTANCE.post("/admin/device", {deviceId: deviceId, alias: alias});
       return res.data;
     } catch (err) {
       console.error(err)
