@@ -27,7 +27,8 @@ router
     res.json(await DataProcessor.UserDevices(userId))
   })
   .delete((req: Request, res: Response) => {
-    // TODO Delete meter
+    const userId : number = parseInt(req.params.userId);
+    const { deviceId } = req.body;
   });
 
 

@@ -22,18 +22,21 @@ router.get("/allDevices", async (req: Request, res: Response) => {
   res.json(await DataProcessor.getAllDevices());
 })
 
-/* A route that is used to create an administrator. */
-router.post("/account", async (req: Request, res: Response) => {
-  const {userId}:{userId:number} = req.body;
-  res.json(await DataProcessor.createAdministrator(userId))
-})
 
-/* This is a route that is used to delete an administrator. */
-router.delete("/account", async (req: Request, res:Response) => {
-  const {userId} : {userId:number} = req.body;
-  res.json(await DataProcessor.DeleteAdministrator(userId))
-})
+/* A route that is used to create and delete administrators. */
+router
+  .route("/account")
+  .post(async (req: Request, res: Response) => {
+    const {userId}:{userId:number} = req.body;
+    res.json(await DataProcessor.createAdministrator(userId))}
+  )
+  .delete(async (req: Request, res:Response) => {
+    const {userId} : {userId:number} = req.body;
+    res.json(await DataProcessor.DeleteAdministrator(userId))
+    }
+  )
 
+/* A route that is used to delete and create devices. */
 router
   .route("/device")
   .delete(async (req: Request, res: Response) => {
