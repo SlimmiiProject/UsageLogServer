@@ -23,18 +23,18 @@ router.get("/allDevices", async (req: Request, res: Response) => {
 })
 
 /* A route that is used to create an administrator. */
-router.post("/create-admin", async (req: Request, res: Response) => {
+router.post("/account", async (req: Request, res: Response) => {
   const {userId}:{userId:number} = req.body;
   res.json(await DataProcessor.createAdministrator(userId))
 })
 
 /* This is a route that is used to delete an administrator. */
-router.post("/delete-admin", async (req: Request, res:Response) => {
+router.delete("/account", async (req: Request, res:Response) => {
   const {userId} : {userId:number} = req.body;
   res.json(await DataProcessor.DeleteAdministrator(userId))
 })
 
-router.post("/delete-device", async (req: Request, res: Response) => {
+router.delete("/device", async (req: Request, res: Response) => {
   const {deviceId} = req.body;
   res.json(await DataProcessor.DeleteDevice(deviceId));
 });

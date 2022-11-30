@@ -128,7 +128,7 @@ export class IOUtil {
 
   public static deleteDevice = async (deviceId:string) => {
     try {
-      const res = await this.INSTANCE.post(`/admin/delete-device`, {deviceId: deviceId});
+      const res = await this.INSTANCE.delete(`/admin/device`, {data: {deviceId: deviceId}});
       return res.data;
     } catch (err) {
       console.error(err);
