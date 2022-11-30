@@ -70,9 +70,7 @@ export class DataProcessor {
     alias?: string
   ): Promise<void> => {
     const newDevice = Device.createDevice(deviceId, alias);
-    console.log(newDevice)
-    newDevice.save();
-    
+    newDevice.save();  
   };
 
   /**
@@ -691,5 +689,21 @@ export class DataProcessor {
     token: string
   ): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
 
+  /**
+   * Returning the device of the user.
+   * @param userId number
+   * @returns array with devices
+  */
+  public static UserDevices = async (userId: number) : Promise<Device[]> => {
+    const user : UserAccount = await UserAccount.findOne({
+      relations: {
+        device:true
+      },
+      where: {
+        userId: userId
+      }
+    });
+    return  user.device;
+  }
   //#endregion
 }

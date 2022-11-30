@@ -22,8 +22,9 @@ router
   .post((req: Request, res: Response) => {
     //TODO Add meter
   })
-  .get((req: Request, res: Response) => {
-    //TODO Get meters
+  .get(async (req: Request, res: Response) => {
+    const userId : number = parseInt(req.params.userId);
+    res.json(await DataProcessor.UserDevices(userId))
   })
   .delete((req: Request, res: Response) => {
     // TODO Delete meter
