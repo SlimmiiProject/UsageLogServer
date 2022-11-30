@@ -34,15 +34,16 @@ router.delete("/account", async (req: Request, res:Response) => {
   res.json(await DataProcessor.DeleteAdministrator(userId))
 })
 
-router.delete("/device", async (req: Request, res: Response) => {
-  const {deviceId} = req.body;
-  res.json(await DataProcessor.DeleteDevice(deviceId));
-});
-
-router.post("/device", async (req: Request, res: Response)=> {
-  const {deviceId, alias} = req.body;
-  res.json(await DataProcessor.createDevice(deviceId, alias))
-})
+router
+  .route("/device")
+  .delete(async (req: Request, res: Response) => {
+    const {deviceId} = req.body;
+    res.json(await DataProcessor.DeleteDevice(deviceId));
+  })
+  .post(async (req: Request, res: Response)=> {
+    const {deviceId, alias} = req.body;
+    res.json(await DataProcessor.createDevice(deviceId, alias))
+  })
 
 router.put("/add-device-user", async (req:Request, res:Response)=>{
   const {deviceId, userId} = req.body;
