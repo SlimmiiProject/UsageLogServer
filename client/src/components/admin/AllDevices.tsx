@@ -103,6 +103,17 @@ export const AllDevices = (): JSX.Element => {
                       }
                     />
                   </TableCell>
+                  <TableCell>
+                    {device.owner ? (
+                      <Chip
+                        label={I18n.t("allDevvices.tableChipRemoveUser")}
+                        variant="outlined"
+                        style={{backgroundColor:'rgba(210,18,25,255)' }}
+                        onClick={(event)=> IOUtil.deleteUserFromDevice(device.id)
+                        }
+                        />
+                    ):(<></>)}
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
