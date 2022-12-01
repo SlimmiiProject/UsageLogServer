@@ -42,7 +42,7 @@ export class DisplayDataManager {
     }
 
     private createDeviceValue = (beginDate: Date, offset: number, period: Period, data: Data): DeviceValues => {
-        const date = new Date(beginDate.getFullYear(), beginDate.getMonth() + (period === "Month" ? 1 : 0), beginDate.getDate() + offset, beginDate.getHours());
+        const date = new Date(beginDate.getFullYear(), beginDate.getMonth(), beginDate.getDate() + offset, beginDate.getHours());
         const nameToDisplay = DateUtil.getDisplayForPeriod(date, period);
 
         return {
