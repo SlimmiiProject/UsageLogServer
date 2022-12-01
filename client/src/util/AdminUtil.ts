@@ -14,7 +14,7 @@ export type LogData = {
     date: Date;
     description: string;
     ipaddress: string;
-    account_id?: number;
+    account_id?: number | null;
 }
 export type userData = {
     userId: number;
@@ -79,11 +79,19 @@ export class AdminUtil {
             return
         }
     }
-    public static DeleteAdmin = async (userId: number) => {
+    public static deleteAdmin = async (userId: number) => {
         try {
             const res = await IOUtil.INSTANCE.post("admin/delete-admin", { userId: userId });
             return res.data;
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
+    public static addDeviceToUser = async (userId: number, deviceId: string) => {
+        try {
+            const res = await IOUtil.INSTANCE.put("/admin/add-device-user", { userId: userId, deviceId: deviceId });
+            return res.data;
         } catch (err) {
             console.error(err)
         }

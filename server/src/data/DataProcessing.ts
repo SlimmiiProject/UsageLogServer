@@ -1,3 +1,4 @@
+import { User } from "./../types/express-session/index.d";
 import { Device } from "./entities/Device";
 import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
@@ -43,9 +44,17 @@ export interface IDevice {
   index: number;
   alias: string;
   owner: number;
-  id: string | undefined ;
-  firstname: string | undefined ;
-  lastname: string | undefined ;
+  id: string | undefined;
+  firstname: string | undefined;
+  lastname: string | undefined;
+}
+
+export interface ILogData {
+  id: number;
+  date: Date;
+  description: string;
+  ipaddress: string;
+  account_id?: number | undefined;
 }
 export class DataProcessor {
   //#region Create Data
@@ -61,9 +70,7 @@ export class DataProcessor {
     alias?: string
   ): Promise<void> => {
     const newDevice = Device.createDevice(deviceId, alias);
-    validate(newDevice).then(async (result) => {
-      if (result.length <= 0) await newDevice.save();
-    });
+    newDevice.save();  
   };
 
   /**
@@ -97,9 +104,9 @@ export class DataProcessor {
     });
   };
 
-  /** 
+  /**
    * Getting all the users from the database and returning them in a IUserData[]t.
-  */ 
+   */
   public static getAllUsers = async (): Promise<IUserData[]> => {
     const users: UserAccount[] = await UserAccount.find({
       select: {
@@ -292,25 +299,23 @@ export class DataProcessor {
 
   /* A static method that returns a promise of an array of Device objects. */
   public static getAllDevices = async (): Promise<IDevice[]> => {
-    const devices : Device[] =  await Device.find({
+    const devices: Device[] = await Device.find({
       relations: {
-        user: true
-      }
+        user: true,
+      },
     });
-    console.log(devices)
-    const newDevices : IDevice[] = [];
-    
-    for (let device of devices){
-      let owner : number  = undefined;
-      let firstname : string  = "No";
-      let lastname : string  = "User";
-      
-      if (device.user !== null)
-      {
-        owner = device.user.userId
-        firstname  = device.user.firstname
-        lastname   = device.user.lastname
-      } 
+    const newDevices: IDevice[] = [];
+
+    for (let device of devices) {
+      let owner: number = undefined;
+      let firstname: string = "No";
+      let lastname: string = "User";
+
+      if (device.user !== null) {
+        owner = device.user.userId;
+        firstname = device.user.firstname;
+        lastname = device.user.lastname;
+      }
 
       newDevices.push({
         index: device.device_index,
@@ -318,10 +323,10 @@ export class DataProcessor {
         alias: device.friendlyName,
         owner: owner,
         firstname: firstname,
-        lastname:lastname
-      })
+        lastname: lastname,
+      });
     }
-    
+
     return newDevices;
   };
 
@@ -564,19 +569,36 @@ export class DataProcessor {
 
   /**
    * deletes a single administrator from database
-   * @param adminId number
-   */
-  public static DeleteAdministrator = async (
-    adminId: number
-  ): Promise<DeleteResult> => await Administrator.delete({ adminId: adminId });
-
-  // Fails if administrator is not removed first
-  /**
-   * deletes a single user form the database
    * @param userId number
    */
-  public static DeleteUser = async (userId: number): Promise<boolean> =>
-    (await UserAccount.delete({ userId: userId })).affected >= 1;
+  public static DeleteAdministrator = async (
+    userId: number
+  ): Promise<DeleteResult> => {
+    const admin = await Administrator.find({
+      relations: {
+        user: true,
+      },
+      where: {
+        user: {
+          userId: userId,
+        },
+      },
+    });
+
+    if (admin.length === 1) {
+      return await Administrator.delete({ adminId: admin[0].adminId });
+    }
+    return null;
+  };
+
+  /**
+   * deletes a single user from the database using the userId
+   * If user is an administrator then it removes the admin permissions first
+   * @param userId number
+   */
+  public static DeleteUser = async (userId: number): Promise<boolean> => {
+    return (await UserAccount.delete({ userId: userId })).affected >= 1;
+  };
 
   // Fails if data is not removed first
   /**
@@ -604,12 +626,31 @@ export class DataProcessor {
   /**
    * Returns all the data in the logfile
    */
-  public static GetLogfileData = async () => {
-    return await Logfile.find({
+  public static GetLogfileData = async (): Promise<ILogData[]> => {
+    let logs : Logfile[] = await Logfile.find({
+      relations: {
+        account_id:true
+      },
       order: {
         id: "DESC",
       },
     });
+    // console.log(logs)
+    let newLogs : ILogData[] = [];
+    for (let log of logs){
+      let account_id : number | undefined = undefined;
+      if (log.account_id !== null){
+        account_id = log.account_id.userId
+      }
+      newLogs.push({
+        id: log.id,
+        date: log.date,
+        description: log.description,
+        ipaddress: log.ipaddress,
+        account_id: account_id
+    })
+    }
+    return newLogs
   };
 
   /**
@@ -648,5 +689,21 @@ export class DataProcessor {
     token: string
   ): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
 
+  /**
+   * Returning the device of the user.
+   * @param userId number
+   * @returns array with devices
+  */
+  public static UserDevices = async (userId: number) : Promise<Device[]> => {
+    const user : UserAccount = await UserAccount.findOne({
+      relations: {
+        device:true
+      },
+      where: {
+        userId: userId
+      }
+    });
+    return  user.device;
+  }
   //#endregion
 }

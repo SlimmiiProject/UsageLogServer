@@ -22,8 +22,9 @@ export class Logfile extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => UserAccount, (account_id) => account_id.userId)
-  @IsDefined()
+  @ManyToOne(() => UserAccount, (account_id) => account_id.userId, {
+    onDelete: "SET NULL",
+  })
   account_id: UserAccount;
 
   @CreateDateColumn({ name: "date" })
