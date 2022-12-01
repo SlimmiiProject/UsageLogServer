@@ -79,7 +79,7 @@ export const AllDevices = (): JSX.Element => {
                       <Chip
                         label="assign user"
                         variant="outlined"
-                        style={{ backgroundColor: "green" }}
+                        style={{ backgroundColor:'rgba(0, 170, 20, 255)' }}
                       />
                     )}
                   </TableCell>
@@ -97,7 +97,7 @@ export const AllDevices = (): JSX.Element => {
                     <Chip
                       label={I18n.t("allDevices.tableChipRemove")}
                       variant="outlined"
-                      style={{ backgroundColor: "red" }}
+                      style={{backgroundColor:'rgba(210,18,25,255)' }}
                       onClick={(event) =>
                         IOUtil.deleteDevice(device.id)
                       }
@@ -125,10 +125,9 @@ export const AllDevices = (): JSX.Element => {
                 <Chip
                       label={I18n.t("allDevices.tableChipAdd")}
                       variant="outlined"
-                      style={{ backgroundColor: "blue" }}
+                      style={{   backgroundColor:'rgba(25, 118, 210, 255)' }}
                       onClick={(event) => {
                         IOUtil.addDevice(deviceId, alias)
-                        console.log("create a new user")
                     }
                     }
                     />
