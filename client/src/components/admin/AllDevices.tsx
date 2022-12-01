@@ -102,6 +102,7 @@ export const AllDevices = (): JSX.Element => {
                         IOUtil.deleteDevice(device.id)
                       }
                     />
+                    </TableCell>
                 </TableRow>
               ))
             ) : (
