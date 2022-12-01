@@ -37,8 +37,8 @@ export const AllUsers = (): JSX.Element => {
 
   useEffect(() => {
     setRender(false);
-    console.log("render");
   }, [render])
+
   return (
     <>
       <Box
@@ -67,8 +67,8 @@ export const AllUsers = (): JSX.Element => {
                   {I18n.t("allUsers.tableColorsDay")},{" "}
                   {I18n.t("allUsers.tableColorsNight")}\)
                 </TableCell>
-                <TableCell>{I18n.t("allUsers.tableDevices")}</TableCell>
                 <TableCell>{I18n.t("allUsers.tableAdmin")}</TableCell>
+                <TableCell>{I18n.t("allUsers.tableDevices")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -100,7 +100,6 @@ export const AllUsers = (): JSX.Element => {
                               user.isAdmin = false;
                               setRender(true);
                             });
-                            console.log("remove admin");
                           }}
                         />
                       ) : (
@@ -113,7 +112,6 @@ export const AllUsers = (): JSX.Element => {
                               user.isAdmin = true;
                               setRender(true);
                             });
-                            console.log("make admin");
                           }}
                         />
                       )}
@@ -125,9 +123,9 @@ export const AllUsers = (): JSX.Element => {
                         style={{ backgroundColor: "red" }}
                         onClick={(event) => {
                           IOUtil.deleteUser(user.userId).then((event)=>{
+                            setusers((users) => users.filter(u => u.userId !== user.userId))
                             setRender(true);
-                          })
-                          console.log("delete user");
+                          }) 
                         }}
                       />
                     </TableCell>
