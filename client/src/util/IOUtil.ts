@@ -116,4 +116,31 @@ export class IOUtil {
   }
 
   public static sendContactData = async (data: ContactInfo) => await this.INSTANCE.post("/contact/", data);
+
+  public static deleteUser = async (userId: number) => {
+    try {
+      const res = await this.INSTANCE.delete(`/users/${userId}/user`);
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  public static deleteDevice = async (deviceId:string) => {
+    try {
+      const res = await this.INSTANCE.delete(`/admin/device`, {data: {deviceId: deviceId}});
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  public static addDevice = async (deviceId: string, alias: string) => {
+    try {
+      const res = await this.INSTANCE.post("/admin/device", {deviceId: deviceId, alias: alias});
+      return res.data;
+    } catch (err) {
+      console.error(err)
+    }
+  }
 }

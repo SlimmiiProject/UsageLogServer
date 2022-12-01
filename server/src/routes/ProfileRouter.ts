@@ -132,7 +132,7 @@ router.route("/account-data")
         res.json(await DataProcessor.getUser(undefined, sessionData.user.id));
     })
     .post((req: Request, res: Response) => {
-        // TODO
+        // TODO update profile after user updates it
     });
 
 const errorJson = (errorType: string, fields?: { [key: string]: string }, missingFields?: string[]): {} => {

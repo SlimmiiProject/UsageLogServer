@@ -11,7 +11,7 @@ export const AdminPage = (): JSX.Element => {
         <div className="flex">
           <AdminPageOneComponent title={I18n.t("admin.allUsers")} link={`${location}/allusers`} icon="profile" />
           <AdminPageOneComponent title={I18n.t("admin.logfile")} link={`${location}/logfile`} icon="log" />
-          <AdminPageOneComponent title={I18n.t("admin.allDevices")} link={`${location}/alldevice`} icon="device" />
+          <AdminPageOneComponent title={I18n.t("admin.allDevices")} link={`${location}/alldevices`} icon="device" />
           <AdminPageOneComponent title={I18n.t("admin.translations")} link={`${location}/translate`} icon="translate" />
         </div>
       </div>

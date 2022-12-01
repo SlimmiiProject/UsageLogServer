@@ -1,7 +1,7 @@
 {
-    "en": ["English", true],
-    "nl": ["Nederlands", true],
-    "fr": ["Frans", true],
-    "de": ["Deutsch", true],
-    "pi": ["Pirate", false]
+  "en": ["English", true],
+  "nl": ["Nederlands", true],
+  "fr": ["Frans", true],
+  "de": ["Deutsch", true],
+  "pi": ["Pirate", false]
 }

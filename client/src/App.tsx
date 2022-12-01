@@ -18,9 +18,12 @@ import EditProfile from "./components/users/EditProfile";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
-import { getFullPath, getLanguageFromUrl } from "./util/BrowserUtil";
+import { getLanguageFromUrl } from "./util/BrowserUtil";
+import { url } from "inspector";
 import { LogFile } from "./components/admin/LogFile";
-import ForgotPassword from "./components/users/ForgotPassword";
+import SignIn from "./components/users/SignIn";
+import { AllUsers } from "./components/admin/AllUsers";
+import { AllDevices } from "./components/admin/AllDevices";
 
 export interface ITestData {
   devices: IDevice[];
@@ -58,8 +61,8 @@ interface IUserContext {
 export const userContext = React.createContext<IUserContext>({
   isLoggedIn: false,
   isAdmin: false,
-  setAccountData: (data) => { },
-  logout: () => { },
+  setAccountData: (data) => {},
+  logout: () => {},
 });
 
 
@@ -164,7 +167,12 @@ const App = (): JSX.Element => {
                 </> : <>
                   <Route path="login" element={<LoginPage />} />
                 </>}
-
+                <Route path="admin">
+                  <Route index element={<AdminPage />} />
+                  <Route path="allusers" element={<AllUsers />} />
+                  <Route path="alldevices" element={<AllDevices />} />
+                  <Route path="logfile" element={<LogFile />} />
+                </Route>
               </Route>
 
               <Route path="*" element={<Navigate to={getPath("/")} />} />
