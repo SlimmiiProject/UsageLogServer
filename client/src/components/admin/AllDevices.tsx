@@ -41,6 +41,7 @@ export const AllDevices = (): JSX.Element => {
           margin: "auto",
           justifyContent: "center",
           flexDirection: "column",
+          borderWidth:0,
           display: "flex",
           backgroundColor: "rgba(0,0,0,0.0)",
           height: "fit-content",

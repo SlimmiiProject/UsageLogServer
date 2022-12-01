@@ -48,6 +48,7 @@ export const AllUsers = (): JSX.Element => {
           justifyContent: "center",
           flexDirection: "column",
           display: "flex",
+          borderWidth:0,
           backgroundColor: "rgba(0,0,0,0.0)",
           height: "fit-content",
           width: "fit-content",

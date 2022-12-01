@@ -21,7 +21,7 @@ export const LogFile = (): JSX.Element => {
 
   return (
     <>
-    <Box className="flexbox" style={{margin:"auto", justifyContent:"center",flexDirection:"column", display:"flex", alignItems:"center" , borderWidth:3,borderColor:"grey",borderRadius:15, width:"70%",height:"fit-content", backgroundColor:"rgba(0,0,0,0.0)"}}>
+    <Box className="flexbox" style={{margin:"auto", justifyContent:"center",flexDirection:"column", display:"flex", alignItems:"center" , borderWidth:0,borderColor:"grey",borderRadius:15, width:"70%",height:"fit-content", backgroundColor:"rgba(0,0,0,0.0)"}}>
     <h2>{I18n.t("logger.title")}</h2>
     <TableContainer component={Paper}>
       <Table sx={{minwidth:650}} arial-label="simple table">
