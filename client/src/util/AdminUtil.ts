@@ -35,14 +35,24 @@ export type deviceData = {
     firstname: string | undefined;
     lastname: string | undefined;
 }
+export type TranslationData = {
+    //idk what to do with this.
+    language: string,
+    word: string
+}
 export class AdminUtil {
+    public static getTranslation = async (controller: AbortController): Promise<TranslationData[]> => {
+        try {
+            return [];
+        } catch (_ignored) {
+            return [];
+        }
+    }
 
     public static getLogs = async (controller: AbortController): Promise<LogData[]> => {
         try {
             const res = await IOUtil.INSTANCE.get("/admin/logfile/", { signal: controller.signal });
             console.log(res.data[0].date.toString())
-            //doesn't work?
-            //console.log(res.data[0].date.toDateString())
             return res.data;
         } catch (_ignored) {
             return [];
