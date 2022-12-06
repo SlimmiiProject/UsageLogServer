@@ -1,7 +1,7 @@
 import { I18n } from "../../util/language/I18n";
 import { AdminUtil, LogData } from "../../util/AdminUtil";
 import { useEffect, useState } from "react";
-import { Box, List, ListItem, Typography, Chip, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@mui/material";
+import { Box, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
 
 export const LogFile = (): JSX.Element => {
   const [files, setFiles] = useState<LogData[]>([]);
@@ -44,7 +44,7 @@ export const LogFile = (): JSX.Element => {
         <TableCell align="left">{new Date(file.date).toDateString()}</TableCell>
         </TableRow>
             ))
-          ): <h2>{I18n.t("loading")}</h2>}
+          ): <CircularProgress/>}
         </TableBody>
       </Table>
     </TableContainer>

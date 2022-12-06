@@ -1,9 +1,5 @@
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import {
   Box,
-  List,
-  ListItem,
-  Typography,
   Chip,
   TableContainer,
   Table,
@@ -12,11 +8,13 @@ import {
   TableHead,
   TableRow,
   Paper,
+  LinearProgress,
+  CircularProgress,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { AdminUtil, GraphColors, userData } from "../../util/AdminUtil";
 import { I18n } from "../../util/language/I18n";
-import React, { Component } from "react";
+import React from "react";
 import { IOUtil } from "../../util/IOUtil";
 export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
@@ -134,8 +132,9 @@ export const AllUsers = (): JSX.Element => {
                   </TableRow>
                 ))
               ) : (
-                <h2>{I18n.t("loading")}</h2>
+                <CircularProgress className="circularprogress"/>
               )}
+              
             </TableBody>
           </Table>
         </TableContainer>

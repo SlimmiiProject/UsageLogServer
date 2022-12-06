@@ -2,17 +2,14 @@ import { AdminUtil, deviceData } from "../../util/AdminUtil";
 import { useState, useEffect } from "react";
 import {
   Box,
-  List,
-  ListItem,
-  Typography,
   Chip,
   TableContainer,
-  Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
@@ -106,7 +103,7 @@ export const AllDevices = (): JSX.Element => {
                 </TableRow>
               ))
             ) : (
-              <h2>{I18n.t("loading")}</h2>
+              <CircularProgress/>
             )}
             <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell align="left" >
