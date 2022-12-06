@@ -218,22 +218,22 @@ export class DataProcessor {
     });
   };
 
-  /**
-   * This creates a logfile and adds it to the database if Logfile is complete
-   * @param userId number user id
-   * @param description string
-   * @param ipaddress string
-   */
-  public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
-    let user = UserAccount.findOneBy({ userId: userId });
-    let newLog = new Logfile()
-    newLog.account_id = await user;
-    newLog.description = description;
-    newLog.ipaddress = ipaddress;
-    validate(newLog).then(async (result) => {
-      if (result.length <= 0) await Logfile.save(newLog);
-    });
-  }
+  // /**
+  //  * This creates a logfile and adds it to the database if Logfile is complete
+  //  * @param userId number user id
+  //  * @param description string
+  //  * @param ipaddress string
+  //  */
+  // public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
+  //   let user = UserAccount.findOneBy({ userId: userId });
+  //   let newLog = new Logfile()
+  //   newLog.account_id = await user;
+  //   newLog.description = description;
+  //   newLog.ipaddress = ipaddress;
+  //   validate(newLog).then(async (result) => {
+  //     if (result.length <= 0) await Logfile.save(newLog);
+  //   });
+  // }
 
   /**
    *  you need at least one of the optional values to use this function.
@@ -249,10 +249,6 @@ export class DataProcessor {
       if (result.length <= 0) return (await newPasswordReset.save()).token;
     });
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> 4b9125ca1a0144516b6e3a07bd2e242acad5b55d
   //#endregion
 
   //#region Get Data
@@ -348,13 +344,6 @@ export class DataProcessor {
     const device = await this.getDevice(deviceId);
     return await TemporaryData.findOne({ where: { device: Equal(device) } });
   };
-
-  /**
-   * Returns all the data in the logfile
-  */
-  public static async GetLogfileData() {
-    return Logfile.find()
-  }
 
   public static getDevice = async (deviceId: string) => await Device.findOne({ where: { deviceId: Equal(deviceId) } });
 
@@ -613,12 +602,6 @@ export class DataProcessor {
     await Data.delete({ dataId: dataid });
 
   /**
-<<<<<<< HEAD
-    * deletes a single contact form.
-    * @param id number
-    */
-  public static DeleteContactForm = async (id: number): Promise<DeleteResult> => await ContactForm.delete({ contactId: id });
-=======
    * deletes a single contact form.
    * @param id number
    */
@@ -674,7 +657,6 @@ export class DataProcessor {
       if (result.length <= 0) await Logfile.save(newLog);
     });
   };
->>>>>>> 4b9125ca1a0144516b6e3a07bd2e242acad5b55d
 
   /**
    * removes all password reset rows that are older than 30 minutes
@@ -688,19 +670,9 @@ export class DataProcessor {
    * deletes a single password reset token in database
    * @param token string
    */
-<<<<<<< HEAD
-  public static DeleteSpecificPasswordReset = async (token: string): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
-
-  public static DeletePasswordResetForUser = async (user: UserAccount): Promise<DeleteResult> => await PasswordReset.delete({
-    user: {
-      userId: user.userId
-    }
-  });
-=======
   public static DeleteSpecificPasswordReset = async (
     token: string
   ): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
->>>>>>> 4b9125ca1a0144516b6e3a07bd2e242acad5b55d
 
   public static DeletePasswordResetForUser = async (user: UserAccount): Promise<DeleteResult> => await PasswordReset.delete({
     user: {
