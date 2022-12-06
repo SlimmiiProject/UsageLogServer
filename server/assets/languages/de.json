@@ -81,6 +81,7 @@
   "allDevices.tableAlias": "Alias",
   "allDevices.tableUser": "Benutzer",
   "allDevices.tableChipRemove": "entfernen",
+  "allDevices.tableChipAdd": "hinzufügen",
   "allUsers.tableCreateUser": "Benutzer erstellen",
   "allDevices.fullname": "Naam",
   "allDevices.noAlias": "Kein alias",

@@ -101,6 +101,7 @@
   "allDevices.tableAlias": "Alias",
   "allDevices.tableUser": "Gebruiker",
   "allDevices.tableChipRemove": "Verwijderen",
+  "allDevices.tableChipAdd": "Toevoegen",
   "logFile.id": "Id",
   "logFile.account": "Account",
   "logFile.description": "Beschrijving",

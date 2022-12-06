@@ -110,13 +110,13 @@ export const AllDevices = (): JSX.Element => {
             )}
             <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell align="left" >
-                    <label>{I18n.t("allDevices.id")}</label>
+                    <label>{I18n.t("allDevices.tableId")}</label>
                 </TableCell>
                 <TableCell align="left">
                     <input type="text" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} />
                 </TableCell>
                 <TableCell align="left">
-                    <label>{I18n.t("allDecices.alias")}</label>
+                    <label>{I18n.t("allDevices.tableAlias")}</label>
                 </TableCell>
                 <TableCell align="left">
                     <input type="text" value={alias} onChange={(e) => setAlias(e.target.value)} />

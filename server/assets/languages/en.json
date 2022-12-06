@@ -101,6 +101,7 @@
   "allDevices.tableAlias": "Alias",
   "allDevices.tableUser": "User",
   "allDevices.tableChipRemove": "Remove",
+  "allDevices.tableChipAdd": "Add",
   "translations.word": "Word",
   "translations.change": "Change",
   "logFile.id": "Id",
