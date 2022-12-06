@@ -83,7 +83,7 @@ export class AdminUtil {
     /* A function that is called when a user is created. */
     public static createAdmin = async (userId: number) => {
         try {
-            const res = await IOUtil.INSTANCE.post("admin/create-admin", { userId: userId });
+            const res = await IOUtil.INSTANCE.post("admin/account", { userId: userId });
             return res.data;
         } catch (_ignore) {
             return
@@ -91,7 +91,7 @@ export class AdminUtil {
     }
     public static deleteAdmin = async (userId: number) => {
         try {
-            const res = await IOUtil.INSTANCE.post("admin/delete-admin", { userId: userId });
+            const res = await IOUtil.INSTANCE.delete("admin/account", { data :{ userId: userId} });
             return res.data;
         } catch (err) {
             console.error(err)

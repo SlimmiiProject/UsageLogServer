@@ -1,9 +1,5 @@
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import {
   Box,
-  List,
-  ListItem,
-  Typography,
   Chip,
   TableContainer,
   Table,
@@ -12,11 +8,13 @@ import {
   TableHead,
   TableRow,
   Paper,
+  LinearProgress,
+  CircularProgress,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { AdminUtil, GraphColors, userData } from "../../util/AdminUtil";
 import { I18n } from "../../util/language/I18n";
-import React, { Component } from "react";
+import React from "react";
 import { IOUtil } from "../../util/IOUtil";
 export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
@@ -48,14 +46,13 @@ export const AllUsers = (): JSX.Element => {
           justifyContent: "center",
           flexDirection: "column",
           display: "flex",
-          borderWidth:0,
           backgroundColor: "rgba(0,0,0,0.0)",
           height: "fit-content",
           width: "fit-content",
         }}
       >
         <h2>{I18n.t("allUsers.List")}</h2>
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} style={{borderWidth:5,}}>
           <Table sx={{ minWidth: 650 }} arial-label="simple table">
             <TableHead>
               <TableRow>
@@ -64,9 +61,9 @@ export const AllUsers = (): JSX.Element => {
                 <TableCell>{I18n.t("allUsers.tableName")}</TableCell>
                 <TableCell>{I18n.t("allUsers.tablePhone")}</TableCell>
                 <TableCell>
-                  {I18n.t("allUsers.tableColors")} \(
+                  {I18n.t("allUsers.tableColors")}(
                   {I18n.t("allUsers.tableColorsDay")},{" "}
-                  {I18n.t("allUsers.tableColorsNight")}\)
+                  {I18n.t("allUsers.tableColorsNight")})
                 </TableCell>
                 <TableCell>{I18n.t("allUsers.tableAdmin")}</TableCell>
                 <TableCell><Chip label={I18n.t("allUsers.tableCreateUser")}
@@ -98,7 +95,7 @@ export const AllUsers = (): JSX.Element => {
                         <Chip
                           label={I18n.t("allUsers.tableChipRemoveAdmin")}
                           variant="outlined"
-                          style={{ backgroundColor:'rgba(210,18,25,255)'}}
+                          style={{ backgroundColor:'rgba(210,18,25,255)', color:"white"}}
                           onClick={(event) => {
                             AdminUtil.deleteAdmin(user.userId).then((event)=>{
                               user.isAdmin = false;
@@ -124,7 +121,7 @@ export const AllUsers = (): JSX.Element => {
                       <Chip
                         label={I18n.t("allUsers.tableChipRemoveUser")}
                         variant="outlined"
-                        style={{ backgroundColor:'rgba(210,18,25,255)'}}
+                        style={{ backgroundColor:'rgba(210,18,25,255)', color:"white"}}
                         onClick={(event) => {
                           IOUtil.deleteUser(user.userId).then((event)=>{
                             setRender(true);
@@ -135,8 +132,9 @@ export const AllUsers = (): JSX.Element => {
                   </TableRow>
                 ))
               ) : (
-                <h2>{I18n.t("loading")}</h2>
+                <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>
               )}
+              
             </TableBody>
           </Table>
         </TableContainer>
