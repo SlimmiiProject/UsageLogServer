@@ -18,7 +18,7 @@ const ForgotPassword = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!token) navigate(getPath("/"))
+        //if (!token) navigate(getPath("/"))
 
         //TODO Check if token is valid or expired
 
