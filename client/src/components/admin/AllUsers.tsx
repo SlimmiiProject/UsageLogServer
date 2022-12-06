@@ -132,7 +132,7 @@ export const AllUsers = (): JSX.Element => {
                   </TableRow>
                 ))
               ) : (
-                <CircularProgress className="circularprogress"/>
+                <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>
               )}
               
             </TableBody>

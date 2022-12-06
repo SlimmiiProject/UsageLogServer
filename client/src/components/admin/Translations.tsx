@@ -51,7 +51,7 @@ export const Translations = (): JSX.Element => {
                     <TableCell><Chip label="change Translation" variant="outlined" style={{backgroundColor:"rgba(0, 170, 20, 255)"}}/></TableCell>
                 </TableRow>
             ))
-        ): <CircularProgress className="loadspinner"/>}
+        ): ( <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>)}
         </TableBody>
       </Table>
     </TableContainer>

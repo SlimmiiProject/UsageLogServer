@@ -103,7 +103,7 @@ export const AllDevices = (): JSX.Element => {
                 </TableRow>
               ))
             ) : (
-              <CircularProgress/>
+              <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>
             )}
             <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell align="left" >

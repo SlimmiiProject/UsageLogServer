@@ -44,7 +44,7 @@ export const LogFile = (): JSX.Element => {
         <TableCell align="left">{new Date(file.date).toDateString()}</TableCell>
         </TableRow>
             ))
-          ): <CircularProgress/>}
+          ):( <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>)}
         </TableBody>
       </Table>
     </TableContainer>
