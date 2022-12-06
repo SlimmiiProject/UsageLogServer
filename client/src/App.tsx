@@ -19,9 +19,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
 import { getFullPath, getLanguageFromUrl } from "./util/BrowserUtil";
+import { url } from "inspector";
 import { LogFile } from "./components/admin/LogFile";
 import { AllUsers } from "./components/admin/AllUsers";
 import { AllDevices } from "./components/admin/AllDevices";
+import { Translations } from "./components/admin/Translations";
 import ForgotPassword from "./components/users/ForgotPassword";
 
 export interface ITestData {
@@ -71,12 +73,8 @@ export const getPath = (path: string) => {
 
 const App = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [accountData, setAccountData] = useState<AccountData | undefined>(
-    undefined
-  );
-  const [darkMode, setDarkMode] = useState<boolean>(
-    JSON.parse(localStorage.getItem("darkMode")!) || false
-  );
+  const [accountData, setAccountData] = useState<AccountData | undefined>(undefined);
+  const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem("darkMode")!) || false);
 
   useEffect(() => {
     // Change Language, in case it's different to what's currently selected
@@ -85,6 +83,18 @@ const App = (): JSX.Element => {
 
     const controller = new AbortController();
 
+    IOUtil.getSessionData(controller).then((res) => {
+      setAccountData((_accountData) => res);
+      setLoading(false);
+
+      if (res) {
+        IOUtil.isAdmin(controller).then((res) => {
+          setAccountData((accountData) => {
+            return { ...accountData!, isAdmin: res };
+          });
+        });
+      }
+    });
     const fetchLoginData = async () => {
       const accountData = await IOUtil.getSessionData(controller);
       setAccountData((_accoundData) => accountData);
@@ -139,6 +149,7 @@ const App = (): JSX.Element => {
             <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />
             <Routes>
               <Route path="/" element={<Navigate to={getPath("")} />} />
+              <Route path="/forgot-password" element={<Navigate to={getPath(getFullPath())} />} />
               <Route
                 path="/forgot-password"
                 element={<Navigate to={getPath(getFullPath())} />}
