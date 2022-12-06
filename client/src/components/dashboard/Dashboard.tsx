@@ -13,7 +13,7 @@ export default function App() {
       setLoading(true);
 
       const abortController = new AbortController();
-      IOUtil.getDevicesData("Week", abortController).then(res => {
+      IOUtil.getDevicesData("Day", abortController).then(res => {
         setDevices(res);
         setLoading(false);
       });

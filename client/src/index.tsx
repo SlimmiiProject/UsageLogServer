@@ -11,7 +11,6 @@ import { I18n } from "./util/language/I18n";
   // Setup Languages
   await I18n.setup();
 
-
   const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
   );
