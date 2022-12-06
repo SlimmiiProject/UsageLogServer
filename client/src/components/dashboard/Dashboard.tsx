@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { IDevice, userContext } from "../../App";
 import { IOUtil } from "../../util/IOUtil";
 import Graph from "./Graph";
+import { CircularProgress } from "@mui/material";
 
 type timePeriod = "Day"|"Week"|"Month";
 
@@ -27,7 +28,9 @@ export default function App() {
 
   return (
     <>
-    <select
+    
+      <div className="flex">
+      <select
           className="dropdown"
           onChange={(e) => {
             setLoading(true);
@@ -41,7 +44,7 @@ export default function App() {
           <option value="Week">Week</option>
           <option value="Day">Day</option>
         </select>
-      <div className="flex">
+        
         {!loading &&
           devices.map((meter) => (
             <section
@@ -57,10 +60,23 @@ export default function App() {
                 colorDay={meter.colorDay}
                 colorNight={meter.colorNight}
               />
+
             </section>
           ))}
 
-        {!loading && devices.length === 0 && <h2>No Data</h2>}
+        {loading && devices.length === 0 && 
+        <section className="graph"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.0)",
+          justifyContent:"center",
+          justifyItems:"center",
+          alignItems:"center",
+          display:"flex",
+          borderWidth:0
+
+        }}>
+          <CircularProgress/>
+          </section>}
       </div>
     </>
   );
