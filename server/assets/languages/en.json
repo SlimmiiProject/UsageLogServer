@@ -90,15 +90,17 @@
   "allUsers.tableChipRemoveAdmin": "Remove Admin",
   "allUsers.tableChipMakeAdmin": "Make Admin",
   "allUsers.tableChipRemoveUser": "Remove User",
-  "allUsers.loading": "Loading...",
+  "loading": "Loading...",
   "allDevices.tableIndex": "Index",
   "allDevices.tableId": "Id",
   "allDevices.tableAlias": "Alias",
   "allDevices.tableUser": "User",
   "allDevices.tableChipRemove": "Remove",
-  "allDevices.loading": "Loading...",
-  "adminPage.profile": "profile",
-  "adminPage.log": "log",
-  "adminPage.device": "device",
-  "adminPage.translate": "translate"
+  "translations.word": "Word",
+  "translations.change": "Change",
+  "logFile.id": "Id",
+  "logFile.account": "Account",
+  "logFile.description": "Description",
+  "logFile.IP": "IP",
+  "logFile.date": "Date"
 }

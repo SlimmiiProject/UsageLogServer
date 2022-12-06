@@ -1,6 +1,5 @@
 import { DisplayDataManager } from './../data/DisplayDataManager';
 import { DeviceSpecificData } from './../data/DataProcessing';
-import { RegExpVal } from '../utils/RegexValidator';
 import express, { Request, Response } from "express";
 import { SessionManager } from '../accounts/SessionManager';
 import { DataProcessor } from '../data/DataProcessing';
@@ -8,7 +7,6 @@ import { User } from '../types/express-session';
 import { DateUtil, Period } from '../utils/DateUtil';
 import {PythonShell} from 'python-shell';
 import { ObjectUtil } from '../utils/ObjectUtil';
-import { DisplayDataManager } from '../data/DisplayDataManager';
 
 const router = express.Router();
 router.use(SessionManager.loginRequired);

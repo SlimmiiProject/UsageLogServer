@@ -18,13 +18,13 @@ import EditProfile from "./components/users/EditProfile";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
-import { getLanguageFromUrl } from "./util/BrowserUtil";
+import { getFullPath, getLanguageFromUrl } from "./util/BrowserUtil";
 import { url } from "inspector";
 import { LogFile } from "./components/admin/LogFile";
-import SignIn from "./components/users/SignIn";
 import { AllUsers } from "./components/admin/AllUsers";
 import { AllDevices } from "./components/admin/AllDevices";
 import { Translations } from "./components/admin/Translations";
+import ForgotPassword from "./components/users/ForgotPassword";
 
 export interface ITestData {
   devices: IDevice[];
@@ -66,7 +66,6 @@ export const userContext = React.createContext<IUserContext>({
   logout: () => {},
 });
 
-
 // Get path with current language prefix
 export const getPath = (path: string) => {
   return `/${I18n.currentLanguage}/${path}`;
@@ -96,6 +95,21 @@ const App = (): JSX.Element => {
         });
       }
     });
+    const fetchLoginData = async () => {
+      const accountData = await IOUtil.getSessionData(controller);
+      setAccountData((_accoundData) => accountData);
+
+      if (accountData) {
+        const isAdmin = await IOUtil.isAdmin(controller);
+        setAccountData((accountData) => {
+          return { ...accountData!, isAdmin: isAdmin };
+        });
+      }
+
+      setLoading(false);
+    };
+
+    fetchLoginData();
 
     return () => controller.abort();
   }, []);
@@ -116,6 +130,8 @@ const App = (): JSX.Element => {
 
   const loggedIn = accountData !== undefined;
 
+  console.log(accountData?.isAdmin);
+
   return (
     <>
       {!loading && (
@@ -135,48 +151,59 @@ const App = (): JSX.Element => {
               <Route path="/" element={<Navigate to={getPath("")} />} />
               <Route path="/forgot-password" element={<Navigate to={getPath(getFullPath())} />} />
               <Route
+                path="/forgot-password"
+                element={<Navigate to={getPath(getFullPath())} />}
+              />
+              <Route
                 path="/dashboard"
                 element={<Navigate to={getPath("dashboard")} />}
               />
 
               <Route path="/:lang">
-                <Route index element={!loggedIn ? <Navigate to={getPath("login")} /> : <Navigate to={getPath("dashboard")} />} />
+                <Route
+                  index
+                  element={
+                    !loggedIn ? (
+                      <Navigate to={getPath("login")} />
+                    ) : (
+                      <Navigate to={getPath("dashboard")} />
+                    )
+                  }
+                />
                 <Route path="contact" element={<Contact />} />
                 <Route path="register" element={<Register />} />
-                <Route path="forgot-password" element={<ForgotPassword/>}/>
+                <Route path="forgot-password" element={<ForgotPassword />} />
 
-                {loggedIn ? <>
-                  <Route path="dashboard" element={<DashboardComp />} />
-                  <Route path="logout" element={<Logout />} />
+                {loggedIn ? (
+                  <>
+                    <Route path="dashboard" element={<DashboardComp />} />
+                    <Route path="logout" element={<Logout />} />
 
-                  <Route path="profile" element={<Profile />} />
-                  <Route
-                    path="profile/edit-profile"
-                    element={<EditProfile />}
-                  />
+                    <Route path="profile" element={<Profile />} />
+                    <Route
+                      path="profile/edit-profile"
+                      element={<EditProfile />}
+                    />
 
-                  <Route path="devices" element={<Devices />} />
+                    <Route path="devices" element={<Devices />} />
 
-                  {accountData.isAdmin && <>
-                    <Route path="admin">
-                      <Route index element={<AdminPage />} />
-                      <Route path="allusers" element={<AdminPage />} />
-                      <Route path="alldevices" element={<AdminPage />} />
-                      <Route path="logfile" element={<LogFile />} />
-                    </Route>
-                  </>}
-                </> : <>
-                  <Route path="login" element={<LoginPage />} />
-                </>}
-                <Route path="admin">
-                  <Route index element={<AdminPage />} />
-                  <Route path="allusers" element={<AllUsers />} />
-                  <Route path="alldevices" element={<AllDevices />} />
-                  <Route path="logfile" element={<LogFile />} />
-                  <Route path="translate" element={<Translations/>}/>
-                </Route>
+                    {accountData.isAdmin && (
+                      <>
+                        <Route path="admin">
+                          <Route index element={<AdminPage />} />
+                          <Route path="allusers" element={<AllUsers />} />
+                          <Route path="alldevices" element={<AllDevices />} />
+                          <Route path="logfile" element={<LogFile />} />
+                        </Route>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Route path="login" element={<LoginPage />} />
+                  </>
+                )}
               </Route>
-
               <Route path="*" element={<Navigate to={getPath("/")} />} />
             </Routes>
           </userContext.Provider>

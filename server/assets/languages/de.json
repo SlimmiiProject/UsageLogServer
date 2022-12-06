@@ -76,15 +76,17 @@
   "allUsers.tableChipRemoveAdmin": "Verwaltung entfernen",
   "allUsers.tableChipMakeAdmin": "Verwaltung Erstellen von",
   "allUsers.tableChipRemoveUser": "Benutzer entfernen",
-  "allUsers.loading": "Laden...",
   "allDevices.tableIndex": "Index",
   "allDevices.tableId": "Id",
   "allDevices.tableAlias": "Alias",
   "allDevices.tableUser": "Benutzer",
   "allDevices.tableChipRemove": "entfernen",
-  "allDevices.loading": "Laden...",
-  "adminPage.profile": "profil",
-  "adminPage.log": "Logbuch",
-  "adminPage.device": "Gerät",
-  "adminPage.translate": "übersetzen"
+  "loading": "Laden...",
+  "allDevices.id": "Id:",
+  "allDecices.alias": "Alias:",
+  "logFile.id": "Id",
+  "logFile.account": "Konto",
+  "logFile.description": "Beschreibung",
+  "logFile.IP": "IP",
+  "logFile.date": "Datum"
 }
