@@ -1,17 +1,10 @@
 import { AdminPageOneComponent } from "./AdminPageOneComponent";
 import { I18n } from "../../util/language/I18n";
-<<<<<<< HEAD
-import { getFullPath } from "../../util/BrowserUtil";
-
-export const AdminPage = (): JSX.Element => {
-  const location = getFullPath();
-=======
 import { getPath } from "../../App";
 
 export const AdminPage = (): JSX.Element => {
   const location =(path:string) => getPath(`admin/${path}`);
 
->>>>>>> 4b9125ca1a0144516b6e3a07bd2e242acad5b55d
   return (
     <>
       <div className="boxnoborder">
