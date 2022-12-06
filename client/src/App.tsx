@@ -155,6 +155,10 @@ const App = (): JSX.Element => {
                 element={<Navigate to={getPath(getFullPath())} />}
               />
               <Route
+                path="/forgot-password"
+                element={<Navigate to={getPath(getFullPath())} />}
+              />
+              <Route
                 path="/dashboard"
                 element={<Navigate to={getPath("dashboard")} />}
               />
