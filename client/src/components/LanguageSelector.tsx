@@ -2,11 +2,8 @@ import { replaceLanguageUrl } from "../util/BrowserUtil";
 import { I18n } from "../util/language/I18n";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { cp } from "fs";
 
 export const LanguageSelector: React.FC = () => {
-
-
   return (
     <Select
       name="languageSelector"
@@ -19,7 +16,7 @@ export const LanguageSelector: React.FC = () => {
       value={I18n.currentLanguage}
     >
 
-      {Object.entries(I18n.translationConfig).map((entry) => {
+      {Object.entries(I18n.translationConfig).filter(e => e[1].render).map((entry) => {
         const languageKey = entry[0];
         const nativeName = entry[1].nativeName;
         return (<MenuItem key={languageKey} value={languageKey}>{nativeName}</MenuItem>);

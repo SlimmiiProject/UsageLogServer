@@ -226,21 +226,15 @@ export class DataProcessor {
    * @param email undefined | string email adress of a user
    * @param phoneNumber undefined | number phonenumber of user
    */
-  public createPasswordReset = async (
-    token: string,
-    userId?: number,
-    email?: string
-  ): Promise<void> => {
-    const user: UserAccount = await DataProcessor.getUser(email, userId);
-    const newPasswordReset = PasswordReset.createPasswordReset(user, token);
-    validate(newPasswordReset).then(async (result) => {
-      if (result.length <= 0) await PasswordReset.save(newPasswordReset);
+  public static createPasswordReset = async (token: string, userAccount: UserAccount): Promise<string> => {
+    const newPasswordReset = PasswordReset.createPasswordReset(userAccount, token);
+    return validate(newPasswordReset).then(async (result) => {
+      if (result.length <= 0) return (await newPasswordReset.save()).token;
     });
-  };
-
+  }
+  
   //#endregion
 
-  // TODO: Needs fixing, no more manual data grabbing
   //#region Get Data
 
   /**
@@ -436,34 +430,10 @@ export class DataProcessor {
    * @param token string the unique id of the reset
    * @returns Promise<boolean>
    */
-  public static GetPasswordReset = async (token: string): Promise<boolean> => {
-    let resetToken: PasswordReset = await PasswordReset.findOneBy({
-      token: token,
-    });
-    let passwordResetAllowed: boolean = false;
-    passwordResetAllowed =
-      new Date().getTime() - resetToken.created_at.getTime() < 30 * 60 * 1000;
-    DataProcessor.DeleteSpecificPasswordReset(token);
-    return passwordResetAllowed;
-  };
-
-  /**
-   * gets user specific TemporaryData
-   * @param userid number id of a user
-   * @returns Promise<Temporarydata[]>
-   */
-  private static GetTempData = async (
-    userid: number
-  ): Promise<TemporaryData[]> => {
-    let allData = await DatabaseConnector.INSTANCE.dataSource
-      .getRepository(TemporaryData)
-      .createQueryBuilder("temporary_data")
-      .leftJoinAndSelect("temporary_data.device", "dev")
-      .where("dev.user = :id", { id: userid })
-      .getMany();
-    return allData;
-  };
-
+  public static GetPasswordReset = async (token: string) => {
+    const resetToken: PasswordReset = await PasswordReset.findOneBy({ token: token });
+    return resetToken;
+  }
   //#endregion
 
   //#region Alter Data
