@@ -96,5 +96,9 @@
   "allDevices.tableAlias": "Alias",
   "allDevices.tableUser": "Gebruiker",
   "allDevices.tableChipRemove": "Verwijderen",
-  "allDevices.loading": "Laden..."
+  "allDevices.loading": "Laden...",
+  "adminPage.profile": "profiel",
+  "adminPage.log": "logboek",
+  "adminPage.device": "apparaat",
+  "adminPage.translate": "vertaling"
 }
