@@ -98,7 +98,7 @@ export const AllUsers = (): JSX.Element => {
                         <Chip
                           label={I18n.t("allUsers.tableChipRemoveAdmin")}
                           variant="outlined"
-                          style={{ backgroundColor:'rgba(210,18,25,255)'}}
+                          style={{ backgroundColor:'rgba(210,18,25,255)', color:"white"}}
                           onClick={(event) => {
                             AdminUtil.deleteAdmin(user.userId).then((event)=>{
                               user.isAdmin = false;
@@ -124,7 +124,7 @@ export const AllUsers = (): JSX.Element => {
                       <Chip
                         label={I18n.t("allUsers.tableChipRemoveUser")}
                         variant="outlined"
-                        style={{ backgroundColor:'rgba(210,18,25,255)'}}
+                        style={{ backgroundColor:'rgba(210,18,25,255)', color:"white"}}
                         onClick={(event) => {
                           IOUtil.deleteUser(user.userId).then((event)=>{
                             setRender(true);
