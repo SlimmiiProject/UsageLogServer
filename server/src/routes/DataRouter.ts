@@ -7,7 +7,6 @@ import { User } from '../types/express-session';
 import { DateUtil, Period } from '../utils/DateUtil';
 import {PythonShell} from 'python-shell';
 import { ObjectUtil } from '../utils/ObjectUtil';
-import { Middleware } from '../utils/Middleware';
 
 const router = express.Router();
 router.use(SessionManager.loginRequired);

@@ -232,7 +232,6 @@ export class DataProcessor {
       if (result.length <= 0) return (await newPasswordReset.save()).token;
     });
   }
-
   //#endregion
 
   //#region Get Data

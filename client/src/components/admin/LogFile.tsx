@@ -26,11 +26,11 @@ export const LogFile = (): JSX.Element => {
     <TableContainer component={Paper}>
       <Table sx={{minwidth:650}} arial-label="simple table">
         <TableHead>
-          <TableCell>Id</TableCell>
-          <TableCell>Account</TableCell>
-          <TableCell>Description</TableCell>
-          <TableCell>IP</TableCell>
-          <TableCell>Date</TableCell>
+          <TableCell>{I18n.t("logFile.id")}</TableCell>
+          <TableCell>{I18n.t("logFile.account")}</TableCell>
+          <TableCell>{I18n.t("logFile.description")}</TableCell>
+          <TableCell>{I18n.t("logFile.IP")}</TableCell>
+          <TableCell>{I18n.t("logFile.date")}</TableCell>
         </TableHead>
 
         <TableBody>
@@ -44,7 +44,7 @@ export const LogFile = (): JSX.Element => {
         <TableCell align="left">{new Date(file.date).toDateString()}</TableCell>
         </TableRow>
             ))
-          ): <h2>Loading...</h2>}
+          ): <h2>{I18n.t("loading")}</h2>}
         </TableBody>
       </Table>
     </TableContainer>
