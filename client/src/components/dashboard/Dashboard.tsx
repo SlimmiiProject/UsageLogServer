@@ -13,7 +13,11 @@ export default function App() {
       setLoading(true);
 
       const abortController = new AbortController();
+<<<<<<< HEAD
       IOUtil.getDevicesData("Day", abortController).then(res => {
+=======
+      IOUtil.getDevicesData("Month", abortController).then(res => {
+>>>>>>> 4b9125ca1a0144516b6e3a07bd2e242acad5b55d
         setDevices(res);
         setLoading(false);
       });

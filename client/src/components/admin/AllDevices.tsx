@@ -41,7 +41,6 @@ export const AllDevices = (): JSX.Element => {
           margin: "auto",
           justifyContent: "center",
           flexDirection: "column",
-          borderWidth:0,
           display: "flex",
           backgroundColor: "rgba(0,0,0,0.0)",
           height: "fit-content",
@@ -107,17 +106,17 @@ export const AllDevices = (): JSX.Element => {
                 </TableRow>
               ))
             ) : (
-              <h2>{I18n.t("allDevices.loading")}</h2>
+              <h2>{I18n.t("loading")}</h2>
             )}
             <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell align="left" >
-                    <label>Id:</label>
+                    <label>{I18n.t("allDevices.id")}</label>
                 </TableCell>
                 <TableCell align="left">
                     <input type="text" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} />
                 </TableCell>
                 <TableCell align="left">
-                    <label>Alias:</label>
+                    <label>{I18n.t("allDecices.alias")}</label>
                 </TableCell>
                 <TableCell align="left">
                     <input type="text" value={alias} onChange={(e) => setAlias(e.target.value)} />
@@ -126,7 +125,7 @@ export const AllDevices = (): JSX.Element => {
                 <Chip
                       label={I18n.t("allDevices.tableChipAdd")}
                       variant="outlined"
-                      style={{   backgroundColor:'rgba(25, 118, 210, 255)' }}
+                      style={{backgroundColor:'rgba(25, 118, 210, 255)' }}
                       onClick={(event) => {
                         IOUtil.addDevice(deviceId, alias)
                     }

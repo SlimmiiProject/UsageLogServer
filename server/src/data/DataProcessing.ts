@@ -70,7 +70,7 @@ export class DataProcessor {
     alias?: string
   ): Promise<void> => {
     const newDevice = Device.createDevice(deviceId, alias);
-    newDevice.save();  
+    newDevice.save();
   };
 
   /**
@@ -249,6 +249,10 @@ export class DataProcessor {
       if (result.length <= 0) return (await newPasswordReset.save()).token;
     });
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4b9125ca1a0144516b6e3a07bd2e242acad5b55d
   //#endregion
 
   //#region Get Data
@@ -609,10 +613,68 @@ export class DataProcessor {
     await Data.delete({ dataId: dataid });
 
   /**
+<<<<<<< HEAD
     * deletes a single contact form.
     * @param id number
     */
   public static DeleteContactForm = async (id: number): Promise<DeleteResult> => await ContactForm.delete({ contactId: id });
+=======
+   * deletes a single contact form.
+   * @param id number
+   */
+  public static DeleteContactForm = async (id: number): Promise<DeleteResult> =>
+    await ContactForm.delete({ contactId: id });
+
+  /**
+   * Returns all the data in the logfile
+   */
+  public static GetLogfileData = async (): Promise<ILogData[]> => {
+    let logs: Logfile[] = await Logfile.find({
+      relations: {
+        account_id: true
+      },
+      order: {
+        id: "DESC",
+      },
+    });
+    // console.log(logs)
+    let newLogs: ILogData[] = [];
+    for (let log of logs) {
+      let account_id: number | undefined = undefined;
+      if (log.account_id !== null) {
+        account_id = log.account_id.userId
+      }
+      newLogs.push({
+        id: log.id,
+        date: log.date,
+        description: log.description,
+        ipaddress: log.ipaddress,
+        account_id: account_id
+      })
+    }
+    return newLogs
+  };
+
+  /**
+   * This creates a logfile and adds it to the database if Logfile is complete
+   * @param userId number user id
+   * @param description string
+   * @param ipaddress string
+   */
+  public static CreateLog = async (
+    userId: number,
+    description: string,
+    ipaddress: string
+  ): Promise<void> => {
+    let user = await UserAccount.findOne({ where: { userId: Equal(userId) } });
+    if (!ObjectUtil.isSet(user)) return;
+
+    let newLog = Logfile.createLogFile(user, description, ipaddress);
+    validate(newLog).then(async (result) => {
+      if (result.length <= 0) await Logfile.save(newLog);
+    });
+  };
+>>>>>>> 4b9125ca1a0144516b6e3a07bd2e242acad5b55d
 
   /**
    * removes all password reset rows that are older than 30 minutes
@@ -626,6 +688,7 @@ export class DataProcessor {
    * deletes a single password reset token in database
    * @param token string
    */
+<<<<<<< HEAD
   public static DeleteSpecificPasswordReset = async (token: string): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
 
   public static DeletePasswordResetForUser = async (user: UserAccount): Promise<DeleteResult> => await PasswordReset.delete({
@@ -633,22 +696,33 @@ export class DataProcessor {
       userId: user.userId
     }
   });
+=======
+  public static DeleteSpecificPasswordReset = async (
+    token: string
+  ): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
+>>>>>>> 4b9125ca1a0144516b6e3a07bd2e242acad5b55d
 
+  public static DeletePasswordResetForUser = async (user: UserAccount): Promise<DeleteResult> => await PasswordReset.delete({
+    user: {
+      userId: user.userId
+    }
+  });
+  
   /**
    * Returning the device of the user.
    * @param userId number
    * @returns array with devices
   */
-  public static UserDevices = async (userId: number) : Promise<Device[]> => {
-    const user : UserAccount = await UserAccount.findOne({
+  public static UserDevices = async (userId: number): Promise<Device[]> => {
+    const user: UserAccount = await UserAccount.findOne({
       relations: {
-        device:true
+        device: true
       },
       where: {
         userId: userId
       }
     });
-    return  user.device;
+    return user.device;
   }
   //#endregion
 }

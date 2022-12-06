@@ -40,7 +40,7 @@ export class DateUtil {
         switch (period) {
             case "Day": return `${date.getHours().toString()} time.hour`;
             case "Week": return this.getTranslationForDay(date.getDay());
-            case "Month": return  `${date.getDate()}/${date.getMonth()}`;
+            case "Month": return  `${date.getDate()}/${date.getMonth() + 1}`;
         }
     }
 

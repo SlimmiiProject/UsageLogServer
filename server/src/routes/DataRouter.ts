@@ -1,6 +1,5 @@
 import { DisplayDataManager } from './../data/DisplayDataManager';
 import { DeviceSpecificData } from './../data/DataProcessing';
-import { RegExpVal } from '../utils/RegexValidator';
 import express, { Request, Response } from "express";
 import { SessionManager } from '../accounts/SessionManager';
 import { DataProcessor } from '../data/DataProcessing';

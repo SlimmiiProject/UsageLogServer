@@ -39,8 +39,8 @@ export const Translations = (): JSX.Element => {
     <TableContainer component={Paper}>
       <Table sx={{minwidth:650}} arial-label="simple table">
         <TableHead>
-          <TableCell>Word</TableCell>
-          <TableCell>Change</TableCell>
+          <TableCell>{I18n.t("translations.word")}</TableCell>
+          <TableCell>{I18n.t("translations.change")}</TableCell>
         </TableHead>
 
         <TableBody>
@@ -51,7 +51,7 @@ export const Translations = (): JSX.Element => {
                     <TableCell><Chip label="change Translation" variant="outlined" style={{backgroundColor:"rgba(0, 170, 20, 255)"}}/></TableCell>
                 </TableRow>
             ))
-        ):<h2>Loading...</h2>}
+        ):<h2>{I18n.t("loading")}</h2>}
         </TableBody>
       </Table>
     </TableContainer>
