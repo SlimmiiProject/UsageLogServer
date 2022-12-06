@@ -9,10 +9,14 @@
     "client": "npm run start --prefix ./client",
     "server": "npm run start --prefix ./server",
     "server:dev": "npm run start:dev --prefix ./server",
-    "build": "npm run build:server && npm run build:client && npm run client:merge",
+    "build": "npm run build:server && npm run client:merge",
     "build:server": "npm run build --prefix ./server",
     "build:client": "npm run build --prefix ./client",
-    "client:merge": "xcopy /e /v /y .\\client\\build\\ .\\server\\public\\"
+    "client:merge": "cp -r ./client/build/ ./server/public/",
+    "tsc": "tsc",
+    "start-linux": "npm run build-linux && npm run server",
+    "build-linux": "npm run build:server && npm run client-linux:merge",
+    "client-linux:merge": "cp -r ./client/build/ ./server/public/"
   },
   "repository": {
     "type": "git",
@@ -25,6 +29,8 @@
   },
   "homepage": "https://github.com/SlimmiiProject/UsageLogServer#readme",
   "dependencies": {
-    "react-router-dom": "^6.4.3"
+    "class-validator": "^0.13.2",
+    "react-router-dom": "^6.4.3",
+    "typescript": "^4.7.3"
   }
 }
