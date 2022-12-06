@@ -138,7 +138,7 @@ export const AllUsers = (): JSX.Element => {
                   </TableRow>
                 ))
               ) : (
-                <h2>{I18n.t("allUsers.loading")}</h2>
+                <h2>{I18n.t("loading")}</h2>
               )}
             </TableBody>
           </Table>

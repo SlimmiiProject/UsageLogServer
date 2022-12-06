@@ -90,15 +90,15 @@
   "allUsers.tableChipRemoveAdmin": "Admin Verwijderen",
   "allUsers.tableChipMakeAdmin": "Admin Aanmaken",
   "allUsers.tableChipRemoveUser": "Gebruiker Verwijderen",
-  "allUsers.loading": "Laden...",
+  "loading": "Laden...",
   "allDevices.tableIndex": "Index",
   "allDevices.tableId": "Id",
   "allDevices.tableAlias": "Alias",
   "allDevices.tableUser": "Gebruiker",
   "allDevices.tableChipRemove": "Verwijderen",
-  "allDevices.loading": "Laden...",
-  "adminPage.profile": "profiel",
-  "adminPage.log": "logboek",
-  "adminPage.device": "apparaat",
-  "adminPage.translate": "vertaling"
+  "logFile.id": "Id",
+  "logFile.account": "Account",
+  "logFile.description": "Beschrijving",
+  "logFile.IP": "IP",
+  "logFile.date": "Datum"
 }
