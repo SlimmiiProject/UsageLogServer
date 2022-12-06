@@ -70,7 +70,7 @@ export const AllDevices = (): JSX.Element => {
                   </TableCell>
                   <TableCell align="right">{device.id}</TableCell>
                   <TableCell align="right">
-                    {device.alias ? <p>{device.alias}</p> : <p>no alias</p>}
+                    {device.alias ? <p>{device.alias}</p> : <p>{I18n.t("allDevices.noAlias")}</p>}
                   </TableCell>
                   <TableCell align="right">
                     {device.owner ? (
@@ -90,7 +90,7 @@ export const AllDevices = (): JSX.Element => {
                         {device.firstname} {device.lastname}
                       </p>
                     ) : (
-                      <p> No user</p>
+                      <p>{I18n.t("allDevices.noUser")}</p>
                     )}
                   </TableCell>
                   <TableCell align="right">
