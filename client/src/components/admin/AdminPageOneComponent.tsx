@@ -10,10 +10,10 @@ export const AdminPageOneComponent = ({ title, icon, link }: { title: string; ic
 
   const getIconForName = (iconName: string) => {
     switch (iconName) {
-      case I18n.t("adminPage.profile"): return <AccountCircleRoundedIcon style={{ fontSize: "6rem", textAlign: "center", color: "white" }} />;
-      case I18n.t("adminPage.log"): return <TextSnippetRoundedIcon style={{ fontSize: "6rem", textAlign: "center", color: "white" }} />;
-      case I18n.t("adminPage.device"): return <SettingsRemoteRoundedIcon style={{ fontSize: "6rem", textAlign: "center", color: "white" }} />;
-      case I18n.t("adminPage.translate"): return <TranslateRoundedIcon style={{ fontSize: "6rem", textAlign: "center", color: "white" }} />
+      case "profile": return <AccountCircleRoundedIcon style={{ fontSize: "6rem", textAlign: "center", color: "white" }} />;
+      case "log": return <TextSnippetRoundedIcon style={{ fontSize: "6rem", textAlign: "center", color: "white" }} />;
+      case "device": return <SettingsRemoteRoundedIcon style={{ fontSize: "6rem", textAlign: "center", color: "white" }} />;
+      case "translate": return <TranslateRoundedIcon style={{ fontSize: "6rem", textAlign: "center", color: "white" }} />
       default: return <AddBoxRoundedIcon style={{ fontSize: "6rem", textAlign: "center", color: "white" }} />
     }
   }
