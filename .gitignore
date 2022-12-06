@@ -16,6 +16,7 @@ server/public/*
 
 # security
 *.env
+Dockerfile
 
 # misc
 .DS_Store
