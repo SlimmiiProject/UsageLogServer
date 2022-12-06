@@ -37,8 +37,8 @@ export const AllUsers = (): JSX.Element => {
 
   useEffect(() => {
     setRender(false);
-    console.log("render");
   }, [render])
+
   return (
     <>
       <Box
@@ -104,7 +104,6 @@ export const AllUsers = (): JSX.Element => {
                               user.isAdmin = false;
                               setRender(true);
                             });
-                            console.log("remove admin");
                           }}
                         />
                       ) : (
@@ -117,7 +116,6 @@ export const AllUsers = (): JSX.Element => {
                               user.isAdmin = true;
                               setRender(true);
                             });
-                            console.log("make admin");
                           }}
                         />
                       )}
@@ -131,7 +129,6 @@ export const AllUsers = (): JSX.Element => {
                           IOUtil.deleteUser(user.userId).then((event)=>{
                             setRender(true);
                           })
-                          console.log("delete user");
                         }}
                       />
                     </TableCell>
