@@ -1,3 +1,4 @@
+import { DataProcessor } from './../data/DataProcessing';
 import { RegExpVal } from './../utils/RegexValidator';
 import { AccountManager } from './../accounts/AccountManager';
 import express, { Request, Response } from "express";
@@ -30,7 +31,7 @@ router.post("/login", async (req: Request, res: Response) => {
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             if (Crypt.matchesEncrypted(data.password, await AccountManager.getEncryptedPassword(undefined, data.email))) {
                 await login(req, data.email)
-                return res.json({ succes: true });
+                return res.json({ succes: true, ...SessionManager.getSessionData(req) });
             }
         };
     }
@@ -43,14 +44,14 @@ router.post("/google-login", async (req: Request, res: Response) => {
 
 
     if (google_token) {
-       return await GoogleAuth.verifyTokenAct(google_token, async (payload) => {
+        return await GoogleAuth.verifyTokenAct(google_token, async (payload) => {
 
             // If they don't have an account, create one
             if (!(await AccountManager.doesAccountExist(undefined, payload.email)))
                 await AccountManager.createAccount(payload.given_name, payload.family_name, payload.email, Crypt.createRandomPassword(24), "");
 
             await login(req, payload.email);
-            res.json({ succes: true });
+            res.json({ succes: true, ...SessionManager.getSessionData(req) });
         });
     }
 
@@ -87,7 +88,7 @@ router.post("/create-profile", async (req: Request, res: Response) => {
         if (data.password.length < 8) return res.json(errorJson("error.password_short", body));
         if (data.password !== data.password_verify) return res.json(errorJson("error.passwords_no_match", body));
         if (await AccountManager.createAccount(data.first_name, data.last_name, data.email, data.password, data.phone_number) > 0) return res.json({ succes: true });
-        
+
         res.json(errorJson("error.undefined_error.", body));
         return;
     }
@@ -102,6 +103,18 @@ router.post("/create-profile", async (req: Request, res: Response) => {
 router.delete("/delete-profile", SessionManager.loginRequired, async (req: Request, res: Response) => {
     // Delete account
 });
+
+router.use(SessionManager.loginRequired);
+
+router.route("/account-data")
+    .get(async (req: Request, res: Response) => {
+        const sessionData = SessionManager.getSessionData(req);
+
+        res.json(await DataProcessor.getUser(undefined, sessionData.user.id));
+    })
+    .post((req: Request, res: Response) => {
+        // TODO update profile after user updates it
+    });
 
 const errorJson = (errorType: string, fields?: { [key: string]: string }, missingFields?: string[]): {} => {
     const errorJson: any = {};

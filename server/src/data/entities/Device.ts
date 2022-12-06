@@ -7,28 +7,40 @@ import { UserAccount } from "./UserAccount";
 @Entity()
 export class Device extends BaseEntity {
 
-  @PrimaryGeneratedColumn()
-  device_index!: number;
+  public static createDevice = (deviceId: string, friendlyName?: string) => {
+    const device: Device = new Device();
+    device.deviceId = deviceId;
+    if (friendlyName) device.setFriendlyName(friendlyName);
+    return device;
+  }
+
+  @PrimaryGeneratedColumn({name:"device_index"})
+  device_index: number;
 
   @PrimaryColumn("varchar", { nullable: false, name: "deviceId", unique: true, length: 64 })
   @IsDefined()
   @Length(64, 64)
-  deviceId!: string;
+  deviceId: string;
 
-  @OneToMany(() => Data, (data) => data.dataId, { nullable: true, cascade: true })
+  @OneToMany(() => Data, (data) => data.dataId, { nullable: true})
   @JoinColumn({ name: "data" })
-  data!: Data[];
+  data: Data[];
 
   @Column("varchar", { nullable: true, length: 50, unique: false, name: "deviceAlias" })
   @IsOptional()
   @Length(1, 50)
-  friendlyName!: string;
+  friendlyName: string;
 
   @ManyToOne(() => UserAccount, (useracount) => useracount.device, { nullable: true, cascade: true, onDelete: "SET NULL", onUpdate: "CASCADE" })
   @JoinColumn({ name: "userId" })
-  user!: UserAccount;
+  user: UserAccount;
 
   @OneToMany(() => TemporaryData, (tempData) => tempData.device, { nullable: true, cascade: true })
   @JoinColumn({ name: "temporary_data" })
   temporary_data: TemporaryData[];
+
+  public setFriendlyName = (alias: string) => {
+    this.friendlyName = alias;
+    return this;
+  };
 }

@@ -1,17 +1,17 @@
 import { IsDefined } from "class-validator";
-import {
-  BaseEntity,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryColumn,
-} from "typeorm";
+import { Entity, BaseEntity, PrimaryColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm";
 import { UserAccount } from "./UserAccount";
 
 @Entity()
 export class PasswordReset extends BaseEntity {
- 
+
+  public static createPasswordReset = (user: UserAccount, token: string) => {
+    const passwordReset = PasswordReset.create();
+    passwordReset.user = user;
+    passwordReset.token = token;
+    return passwordReset;
+  }
+
   @PrimaryColumn("varchar", { name: "token", unique: true, nullable: false })
   @IsDefined()
   token: string;

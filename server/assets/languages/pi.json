@@ -66,5 +66,8 @@
   "field.landcode": "Land Numberrr",
   "field.phone_number": "TODO",
   "field.password": "TODO",
-  "field.password_verify": "TODO"
+  "field.password_verify": "TODO",
+  "allUsers.email": "E-mailname arrr",
+  "allUsers.FullName": "Pirrrate name",
+  "allUsers.graphColors": "Colorrr of the Barrss"
 }

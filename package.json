@@ -32,5 +32,8 @@
     "class-validator": "^0.13.2",
     "react-router-dom": "^6.4.3",
     "typescript": "^4.7.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.2.3"
   }
 }

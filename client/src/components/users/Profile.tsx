@@ -1,10 +1,13 @@
 import { Avatar, Button } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { Link } from "react-router-dom";
+import { userContext } from "../../App";
+import { useContext } from "react";
 
 const Profile = (): JSX.Element => {
-  let fullName = "Raven Van Hove";
-
+  const userContextData = useContext(userContext);
+  let fullName = [userContextData.userAccount?.firstName, userContextData.userAccount?.lastName].join(" ");
+  
   const stringToColor = (string: string) => {
     let hash = 0;
     let i;
@@ -33,7 +36,7 @@ const Profile = (): JSX.Element => {
 
   return (
     <div className="box">
-      <h1>Profiel</h1>
+      <h1>{I18n.t("profile.title")}</h1>
       <div className="flex">
         <Avatar {...stringAvatar(fullName)} />
         <h2>{fullName}</h2>

@@ -51,7 +51,7 @@ export class MailTemplate {
     private static getMainContent() {
         const dir = AssetUtil.getPath(path.join("mail", "templates", "main", "main.html"));
         const content = fs.readFileSync(dir, { encoding: "utf8" });
-       
+
         const root = parse(content);
         root.querySelector("head").appendChild(parse(`<style>${MailTemplate.getStyleSheetContent()}</style>`));
 

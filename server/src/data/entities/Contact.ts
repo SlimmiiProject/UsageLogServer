@@ -4,6 +4,16 @@ import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn } 
 @Entity()
 export class ContactForm extends BaseEntity {
 
+  public static createContactForm = (firstName: string, lastName: string, email: string, topic: string, message: string) => {
+    const form: ContactForm = ContactForm.create();
+    form.firstname = firstName;
+    form.lastname = lastName;
+    form.email = email;
+    form.message_topic = topic;
+    form.message = message;
+    return form;
+  }
+
   @PrimaryGeneratedColumn({ name: "contactId" })
   contactId: number;
 
