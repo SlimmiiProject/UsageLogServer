@@ -82,5 +82,9 @@
   "allDevices.tableAlias": "Alias",
   "allDevices.tableUser": "Benutzer",
   "allDevices.tableChipRemove": "entfernen",
-  "allDevices.loading": "Laden..."
+  "allDevices.loading": "Laden...",
+  "adminPage.profile": "profil",
+  "adminPage.log": "Logbuch",
+  "adminPage.device": "Gerät",
+  "adminPage.translate": "übersetzen"
 }

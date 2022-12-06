@@ -48,6 +48,7 @@ export const AllUsers = (): JSX.Element => {
           justifyContent: "center",
           flexDirection: "column",
           display: "flex",
+          borderWidth:0,
           backgroundColor: "rgba(0,0,0,0.0)",
           height: "fit-content",
           width: "fit-content",
@@ -68,7 +69,10 @@ export const AllUsers = (): JSX.Element => {
                   {I18n.t("allUsers.tableColorsNight")}\)
                 </TableCell>
                 <TableCell>{I18n.t("allUsers.tableAdmin")}</TableCell>
-                <TableCell>{I18n.t("allUsers.tableDevices")}</TableCell>
+                <TableCell><Chip label={I18n.t("allUsers.tableCreateUser")}
+                                 variant="outlined"
+                                 style={{  backgroundColor:'rgba(0, 170, 20, 255)'}}
+                                 onClick={(event)=>{/*create user goes here*/}}/></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -94,7 +98,7 @@ export const AllUsers = (): JSX.Element => {
                         <Chip
                           label={I18n.t("allUsers.tableChipRemoveAdmin")}
                           variant="outlined"
-                          style={{ backgroundColor: "red" }}
+                          style={{ backgroundColor:'rgba(210,18,25,255)'}}
                           onClick={(event) => {
                             AdminUtil.deleteAdmin(user.userId).then((event)=>{
                               user.isAdmin = false;
@@ -106,7 +110,7 @@ export const AllUsers = (): JSX.Element => {
                         <Chip
                           label={I18n.t("allUsers.tableChipMakeAdmin")}
                           variant="outlined"
-                          style={{ backgroundColor: "blue" }}
+                          style={{  backgroundColor:'rgba(25, 118, 210, 255)'}}
                           onClick={(event) => {
                             AdminUtil.createAdmin(user.userId).then((event) => {
                               user.isAdmin = true;
@@ -120,12 +124,11 @@ export const AllUsers = (): JSX.Element => {
                       <Chip
                         label={I18n.t("allUsers.tableChipRemoveUser")}
                         variant="outlined"
-                        style={{ backgroundColor: "red" }}
+                        style={{ backgroundColor:'rgba(210,18,25,255)'}}
                         onClick={(event) => {
                           IOUtil.deleteUser(user.userId).then((event)=>{
-                            setusers((users) => users.filter(u => u.userId !== user.userId))
                             setRender(true);
-                          }) 
+                          })
                         }}
                       />
                     </TableCell>

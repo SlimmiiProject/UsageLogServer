@@ -219,23 +219,6 @@ export class DataProcessor {
   };
 
   /**
-   * This creates a logfile and adds it to the database if Logfile is complete
-   * @param userId number user id
-   * @param description string
-   * @param ipaddress string
-   */
-  public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
-    let user = UserAccount.findOneBy({ userId: userId });
-    let newLog = new Logfile()
-    newLog.account_id = await user;
-    newLog.description = description;
-    newLog.ipaddress = ipaddress;
-    validate(newLog).then(async (result) => {
-      if (result.length <= 0) await Logfile.save(newLog);
-    });
-  }
-
-  /**
    *  you need at least one of the optional values to use this function.
    * throws an Error if input is not valid.
    * @param token string serves as unique id for reset
@@ -249,6 +232,7 @@ export class DataProcessor {
       if (result.length <= 0) return (await newPasswordReset.save()).token;
     });
   }
+  
   //#endregion
 
   //#region Get Data
@@ -345,14 +329,8 @@ export class DataProcessor {
     return await TemporaryData.findOne({ where: { device: Equal(device) } });
   };
 
-  /**
-   * Returns all the data in the logfile
-  */
-  public static async GetLogfileData() {
-    return Logfile.find()
-  }
-
-  public static getDevice = async (deviceId: string) => await Device.findOne({ where: { deviceId: Equal(deviceId) } });
+  public static getDevice = async (deviceId: string) =>
+    await Device.findOne({ where: { deviceId: Equal(deviceId) } });
 
   /**
    * returns an array of objects for each device coupled to the user => look at interface DeviceSpecificData
@@ -609,10 +587,61 @@ export class DataProcessor {
     await Data.delete({ dataId: dataid });
 
   /**
-    * deletes a single contact form.
-    * @param id number
-    */
-  public static DeleteContactForm = async (id: number): Promise<DeleteResult> => await ContactForm.delete({ contactId: id });
+   * deletes a single contact form.
+   * @param id number
+   */
+  public static DeleteContactForm = async (id: number): Promise<DeleteResult> =>
+    await ContactForm.delete({ contactId: id });
+
+  /**
+   * Returns all the data in the logfile
+   */
+  public static GetLogfileData = async (): Promise<ILogData[]> => {
+    let logs : Logfile[] = await Logfile.find({
+      relations: {
+        account_id:true
+      },
+      order: {
+        id: "DESC",
+      },
+    });
+    // console.log(logs)
+    let newLogs : ILogData[] = [];
+    for (let log of logs){
+      let account_id : number | undefined = undefined;
+      if (log.account_id !== null){
+        account_id = log.account_id.userId
+      }
+      newLogs.push({
+        id: log.id,
+        date: log.date,
+        description: log.description,
+        ipaddress: log.ipaddress,
+        account_id: account_id
+    })
+    }
+    return newLogs
+  };
+
+  /**
+   * This creates a logfile and adds it to the database if Logfile is complete
+   * @param userId number user id
+   * @param description string
+   * @param ipaddress string
+   */
+  public static CreateLog = async (
+    userId: number,
+    description: string,
+    ipaddress: string
+  ): Promise<void> => {
+    let user = await UserAccount.findOne({ where: { userId: Equal(userId) } });
+    if (!ObjectUtil.isSet(user)) return;
+
+    let newLog = Logfile.createLogFile(user, description, ipaddress);
+    validate(newLog).then(async (result) => {
+      if (result.length <= 0) await Logfile.save(newLog);
+    });
+  };
 
   /**
    * removes all password reset rows that are older than 30 minutes
@@ -626,13 +655,9 @@ export class DataProcessor {
    * deletes a single password reset token in database
    * @param token string
    */
-  public static DeleteSpecificPasswordReset = async (token: string): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
-
-  public static DeletePasswordResetForUser = async (user: UserAccount): Promise<DeleteResult> => await PasswordReset.delete({
-    user: {
-      userId: user.userId
-    }
-  });
+  private static DeleteSpecificPasswordReset = async (
+    token: string
+  ): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
 
   /**
    * Returning the device of the user.

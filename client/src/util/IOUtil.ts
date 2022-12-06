@@ -13,10 +13,17 @@ export type DataCallback = {
 
 export type Period = "Day" | "Week" | "Month";
 
+/*
+implement this
+user needs to be deleted from device when pressed on a button
+*/
 export class IOUtil {
+  static deleteUserFromDevice(id: string): void {
+    throw new Error("Method not implemented.");
+  }
 
   private static _instance: AxiosInstance;
-  private static get INSTANCE(): AxiosInstance {
+  public static get INSTANCE(): AxiosInstance {
     if (!this._instance) this._instance = axios.create({ baseURL: "/api/", timeout: 5000 });
     return this._instance;
   }
@@ -126,9 +133,9 @@ export class IOUtil {
     }
   }
 
-  public static deleteDevice = async (deviceId:string) => {
+  public static deleteDevice = async (deviceId: string) => {
     try {
-      const res = await this.INSTANCE.delete(`/admin/device`, {data: {deviceId: deviceId}});
+      const res = await this.INSTANCE.delete(`/admin/device`, { data: { deviceId: deviceId } });
       return res.data;
     } catch (err) {
       console.error(err);
@@ -137,7 +144,7 @@ export class IOUtil {
 
   public static addDevice = async (deviceId: string, alias: string) => {
     try {
-      const res = await this.INSTANCE.post("/admin/device", {deviceId: deviceId, alias: alias});
+      const res = await this.INSTANCE.post("/admin/device", { deviceId: deviceId, alias: alias });
       return res.data;
     } catch (err) {
       console.error(err)
