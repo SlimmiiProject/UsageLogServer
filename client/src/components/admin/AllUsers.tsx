@@ -63,9 +63,9 @@ export const AllUsers = (): JSX.Element => {
                 <TableCell>{I18n.t("allUsers.tableName")}</TableCell>
                 <TableCell>{I18n.t("allUsers.tablePhone")}</TableCell>
                 <TableCell>
-                  {I18n.t("allUsers.tableColors")} \(
+                  {I18n.t("allUsers.tableColors")}(
                   {I18n.t("allUsers.tableColorsDay")},{" "}
-                  {I18n.t("allUsers.tableColorsNight")}\)
+                  {I18n.t("allUsers.tableColorsNight")})
                 </TableCell>
                 <TableCell>{I18n.t("allUsers.tableAdmin")}</TableCell>
                 <TableCell><Chip label={I18n.t("allUsers.tableCreateUser")}

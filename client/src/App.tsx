@@ -79,7 +79,7 @@ const App = (): JSX.Element => {
   useEffect(() => {
     // Change Language, in case it's different to what's currently selected
     const urlLang = getLanguageFromUrl();
-    if (I18n.currentLanguage != urlLang) I18n.changeLanguage(urlLang);
+    if (I18n.currentLanguage !== urlLang) I18n.changeLanguage(urlLang);
 
     const controller = new AbortController();
 
