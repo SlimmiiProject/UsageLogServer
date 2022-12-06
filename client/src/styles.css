@@ -49,6 +49,7 @@ antiLink {
   height: 200px;
   padding: 0 2rem;
   border: 3px solid var(--usedBlue);
+  border-radius: 2rem;
   background-color: var(--usedBlue);
 }
 

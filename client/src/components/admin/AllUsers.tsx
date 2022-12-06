@@ -48,14 +48,13 @@ export const AllUsers = (): JSX.Element => {
           justifyContent: "center",
           flexDirection: "column",
           display: "flex",
-          borderWidth:0,
           backgroundColor: "rgba(0,0,0,0.0)",
           height: "fit-content",
           width: "fit-content",
         }}
       >
         <h2>{I18n.t("allUsers.List")}</h2>
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} style={{borderWidth:5,}}>
           <Table sx={{ minWidth: 650 }} arial-label="simple table">
             <TableHead>
               <TableRow>
