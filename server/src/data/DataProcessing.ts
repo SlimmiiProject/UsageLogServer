@@ -70,7 +70,7 @@ export class DataProcessor {
     alias?: string
   ): Promise<void> => {
     const newDevice = Device.createDevice(deviceId, alias);
-    newDevice.save();  
+    newDevice.save();
   };
 
   /**
@@ -232,7 +232,7 @@ export class DataProcessor {
       if (result.length <= 0) return (await newPasswordReset.save()).token;
     });
   }
-  
+
   //#endregion
 
   //#region Get Data
@@ -597,19 +597,19 @@ export class DataProcessor {
    * Returns all the data in the logfile
    */
   public static GetLogfileData = async (): Promise<ILogData[]> => {
-    let logs : Logfile[] = await Logfile.find({
+    let logs: Logfile[] = await Logfile.find({
       relations: {
-        account_id:true
+        account_id: true
       },
       order: {
         id: "DESC",
       },
     });
     // console.log(logs)
-    let newLogs : ILogData[] = [];
-    for (let log of logs){
-      let account_id : number | undefined = undefined;
-      if (log.account_id !== null){
+    let newLogs: ILogData[] = [];
+    for (let log of logs) {
+      let account_id: number | undefined = undefined;
+      if (log.account_id !== null) {
         account_id = log.account_id.userId
       }
       newLogs.push({
@@ -618,7 +618,7 @@ export class DataProcessor {
         description: log.description,
         ipaddress: log.ipaddress,
         account_id: account_id
-    })
+      })
     }
     return newLogs
   };
@@ -655,25 +655,31 @@ export class DataProcessor {
    * deletes a single password reset token in database
    * @param token string
    */
-  private static DeleteSpecificPasswordReset = async (
+  public static DeleteSpecificPasswordReset = async (
     token: string
   ): Promise<DeleteResult> => await PasswordReset.delete({ token: token });
 
+  public static DeletePasswordResetForUser = async (user: UserAccount): Promise<DeleteResult> => await PasswordReset.delete({
+    user: {
+      userId: user.userId
+    }
+  });
+  
   /**
    * Returning the device of the user.
    * @param userId number
    * @returns array with devices
   */
-  public static UserDevices = async (userId: number) : Promise<Device[]> => {
-    const user : UserAccount = await UserAccount.findOne({
+  public static UserDevices = async (userId: number): Promise<Device[]> => {
+    const user: UserAccount = await UserAccount.findOne({
       relations: {
-        device:true
+        device: true
       },
       where: {
         userId: userId
       }
     });
-    return  user.device;
+    return user.device;
   }
   //#endregion
 }
