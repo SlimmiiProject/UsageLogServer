@@ -27,17 +27,11 @@ export default function BasicCard({
           {I18n.t("metercard.deviceIndex")} {deviceIndex}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {I18n.t("metercard.id")}
-          {deviceId}
+          {I18n.t("metercard.id")}{deviceId}
         </Typography>
 
         <Typography variant="subtitle1" component="div" sx={{ opacity: "50%" }}>
-          {I18n.t("metercard.battery")}
-          <Typography>
-            {batteryPercentage === -222
-              ? I18n.t("metercard.bateryData")
-              : batteryPercentage}
-          </Typography>
+          {I18n.t("metercard.battery")}{batteryPercentage === -222? I18n.t("metercard.bateryData"): batteryPercentage}
         </Typography>
       </CardContent>
     </Card>
