@@ -8,6 +8,7 @@ import { deviceData } from './AdminUtil';
 import axios, { AxiosInstance } from "axios";
 import { AccountData, IDevice } from "../App";
 import { ContactInfo } from "../components/Contact";
+import { DeviceCardProps } from '../components/dashboard/MeterCard';
 
 export type Error = {
   succes: boolean;
@@ -178,12 +179,13 @@ export class IOUtil {
    * @param userId number
    * @returns devicedata for the specific user
   */
-  public static getOwnDevice = async (userId: number) => {
+  public static getOwnDevice = async (userId: number): Promise<DeviceCardProps[]> => {
     try {
       const res = await this.INSTANCE.get(`/users/${userId}/device`);
       return res.data;
     } catch (err) {
       console.error(err);
+      return []
     }
   }
 

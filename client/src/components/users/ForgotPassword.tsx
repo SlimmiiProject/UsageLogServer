@@ -58,13 +58,13 @@ const ForgotPassword = () => {
     const password_verify = data.get("password_verify")!.toString();
 
     if (password !== password_verify)
-      return setError("error.passwords_no_match");
+      return setError(I18n.t("passwordReset.noMatch"));
 
     if (token && password.length >= 8 && (await IOUtil.changePassword(token, password))) {
       setInfo("info.password_reset_succesful");  
       setTimeout(() => navigate("/login"), (1000));
     } else {
-      setError("error.password_reset_fail");
+      setError(I18n.t("passwordReset.resetFail"));
     }
   };
 
@@ -82,13 +82,13 @@ const ForgotPassword = () => {
       setExpired(true);
       if (await IOUtil.requestPasswordReset(email_value)) {
         setInfo(
-          I18n.t("info.email_sent_password_reset", {
+          I18n.t("passwordReset.confirmMessage", {
             email: email_value,
           })
         );
       }
     } else {
-      setError("error.email_not_supplied");
+      setError(I18n.t("passwordReset.errorEmailNorSupplied"));
     }
   };
 
@@ -98,13 +98,13 @@ const ForgotPassword = () => {
         {error !== "" && <Alert severity="error">{I18n.t(error)}</Alert>}
         {infoMsg !== "" && <Alert severity="info">{I18n.t(infoMsg)}</Alert>}
 
-        <h1>{I18n.t("page.password_reset")}</h1>
+        <h1>{I18n.t("passwordReset")}</h1>
         <CssBaseline />
 
         {!token && (
           <>
             <h2 style={{ marginBottom: "-0.5rem" }}>
-              {I18n.t("page.password_reset.enter_email")}
+              {I18n.t("passwordReset.EnterEmail")}
             </h2>
             <Box
               component="form"
@@ -130,7 +130,7 @@ const ForgotPassword = () => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                {I18n.t("button.submit")}
+                {I18n.t("passwordReset.submit")}
               </Button>
             </Box>
           </>
@@ -148,7 +148,7 @@ const ForgotPassword = () => {
               required
               fullWidth
               id="password"
-              label={I18n.t("field.password")}
+              label={I18n.t("forgotPassword.password")}
               name="password"
               type="password"
               autoFocus
@@ -158,7 +158,7 @@ const ForgotPassword = () => {
               required
               fullWidth
               name="password_verify"
-              label={I18n.t("field.password_verify")}
+              label={I18n.t("forgotPassword.verify")}
               type="password"
               id="password_verify"
             />
@@ -169,7 +169,7 @@ const ForgotPassword = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              {I18n.t("button.submit")}
+              {I18n.t("passwordReset.submit")}
             </Button>
           </Box>
         )}

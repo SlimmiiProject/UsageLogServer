@@ -36,7 +36,7 @@
   "metercard.name": "Nom de la carte de mesure",
   "metercard.id": "Id de la carte de mesure",
   "metercard.chart": "Insérer le tableau ici",
-  "metercard.battery": "% de la batterie",
+  "metercard.battery": "de la batterie",
   "profile.edit": "Modifier votre profil",
   "register.here": "Inscrivez-vous ici",
   "field.first_name": "Prénom",
@@ -105,10 +105,18 @@
   "dashboard.month": "Mois",
   "dashboard.week": "Semaine",
   "dashboard.day": "Jour",
+  "assignUserDivices.assign": "Attribuer un compte d'utilisateur à l'appareil",
+  "metercard.basicCard": "pas encore défini",
+  "metercard.bateryData": "aucune donnée recue",
+  "metercard.deviceIndex": "Index de l'appareil :",
   "passwordReset": "réinitialiser le mot de passe",
   "passwordReset.EnterEmail": "Entrer votre Email:",
   "passwordReset.submit": "Soumettre",
   "passwordReset.confirmMessage": "Réinitialisation du mot de passe envoyée à {{email}}",
+  "passwordReset.errorEmailNorSupplied": "E-mail non fourni",
   "forgotPassword.password": "Mot de passe",
-  "forgotPassword.verify": "Vérifier le mot de passe"
+  "forgotPassword.verify": "Vérifier le mot de passe",
+  "passwordReset.noMatch": "Les mots de passe ne correspondent pas",
+  "passwordReset.resetSuccesfull": "Mot de passe réinitialisé avec succès",
+  "passwordReset.resetFail": "La réinitialisation du mot de passe a échoué"
 }

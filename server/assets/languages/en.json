@@ -41,7 +41,7 @@
   "metercard.name": "Metercard Name",
   "metercard.id": "Metercard Id",
   "metercard.chart": "Insert chart here",
-  "metercard.battery": "battery %",
+  "metercard.battery": "battery",
   "profile.edit": "Edit your profile",
   "profile.title": "Profile",
   "register.here": "Register here",
@@ -113,10 +113,18 @@
   "dashboard.month": "Month",
   "dashboard.week": "Week",
   "dashboard.day": "Day",
+  "assignUserDivices.assign": "Assign UserAccount to Device",
+  "metercard.basicCard": "not set",
+  "metercard.bateryData": "no data received",
+  "metercard.deviceIndex": "Device Index:",
   "passwordReset": "Reset password",
   "passwordReset.EnterEmail": "Enter your eMail:",
   "passwordReset.submit": "Submit",
   "passwordReset.confirmMessage": "Password reset sent to {{email}}",
+  "passwordReset.errorEmailNorSupplied": "Email not supplied",
   "forgotPassword.password": "Password",
-  "forgotPassword.verify": "Verify password"
+  "forgotPassword.verify": "Verify password",
+  "passwordReset.noMatch": "Passwords don't match",
+  "passwordReset.resetSuccesfull": "Password reset successfully",
+  "passwordReset.resetFail": "Password reset failed"
 }
