@@ -9,19 +9,19 @@ import {
   CssBaseline,
   Alert,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { getPath } from "../../App";
+import { IOUtil } from "../../util/IOUtil";
 import { I18n } from "../../util/language/I18n";
 
 const ForgotPassword = () => {
   const [searchParams] = useSearchParams();
 
   const [error, setError] = useState<string>("");
+  const [infoMsg, setInfo] = useState<string>("");
 
-  const [loading, setLoading] = useState<boolean>(true);
   const [expired, setExpired] = useState<boolean>(false);
-  const [reset, setReset] = useState<boolean>(false);
 
   const token = searchParams.get("token");
   const navigate = useNavigate();
@@ -31,7 +31,9 @@ const ForgotPassword = () => {
     //TODO Check if token is valid or expired
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handlePasswordChangeSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
@@ -47,18 +49,71 @@ const ForgotPassword = () => {
     // setReset(//response)
   };
 
+  const handlePasswordResetRequestSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    setError("");
+    setInfo("");
+
+    const data = new FormData(event.currentTarget);
+    const email_value = data.get("email")?.toString();
+
+    if (email_value) {
+      if (await IOUtil.requestPasswordReset(email_value)) {
+        setInfo(I18n.t("info.email_sent_password_reset", {
+          email: email_value
+        }))
+      }
+    } else {
+      setError("error.email_not_supplied");
+    }
+  };
+
   return (
     <>
       <Container component="main" maxWidth="xs">
         {error !== "" && <Alert severity="error">{I18n.t(error)}</Alert>}
+        {infoMsg !== "" && <Alert severity="info">{I18n.t(infoMsg)}</Alert>}
 
         <h1>{I18n.t("page.password_reset")}</h1>
         <CssBaseline />
 
-        {!expired && (
+        <h2 style={{ marginBottom: "-0.5rem" }}>
+          {I18n.t("page.password_reset.enter_email")}
+        </h2>
+        {!token && (
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handlePasswordResetRequestSubmit}
+            sx={{ mt: 1 }}
+          >
+            <TextField
+              margin="normal"
+              fullWidth
+              id="email"
+              label={I18n.t("field.email")}
+              name="email"
+              type="email"
+              autoComplete="email"
+              autoFocus
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              {I18n.t("button.submit")}
+            </Button>
+          </Box>
+        )}
+
+        {!expired && token && (
+          <Box
+            component="form"
+            onSubmit={handlePasswordChangeSubmit}
             noValidate
             sx={{ mt: 1 }}
           >

@@ -109,7 +109,7 @@ router.post("/submit-forgot-password", async (req: Request, res: Response) => {
         await DataProcessor.DeletePasswordResetForUser(userAccount);
         const token = await DataProcessor.createPasswordReset(Crypt.createUrlSafeHash(41), userAccount);
 
-        const {url, server_port} = Environment.CONFIG;
+        const { url, server_port } = Environment.CONFIG;
         // Send email
         Mailer.INSTANCE.sendMailTo(data.email, "Password Reset", MailTemplates.FORGOT_PASSWORD({
             resetUrl: `${url}:${server_port}/forgot-password?token=${token}`

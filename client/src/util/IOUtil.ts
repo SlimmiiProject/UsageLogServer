@@ -150,4 +150,13 @@ export class IOUtil {
       console.error(err)
     }
   }
+
+  public static requestPasswordReset = async (email: string) => {
+    try {
+      const res = await this.INSTANCE.post("/profiles/submit-forgot-password", {email: email});
+      return res.status === 200;
+    }catch(err) {
+      return false;
+    }
+  }
 }

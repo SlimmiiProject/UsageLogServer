@@ -130,8 +130,6 @@ const App = (): JSX.Element => {
 
   const loggedIn = accountData !== undefined;
 
-  console.log(accountData?.isAdmin);
-
   return (
     <>
       {!loading && (
