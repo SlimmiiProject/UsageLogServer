@@ -8,11 +8,12 @@ antiLink {
 .graph {
   border: 2px solid #ccc;
   border-radius: 2rem;
-  min-width: 300px;
+  min-width: 700px;
   width: 80%;
+  min-height: 30rem;
   padding: 0 2rem;
   margin: 2rem;
-  background-color: rgb(250, 250, 250);
+  background-color: "rgba(0, 0, 0, 0.0)",
 }
 
 .graph h3 {
@@ -39,6 +40,12 @@ antiLink {
 }
 
 .flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.flexDashboard {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;

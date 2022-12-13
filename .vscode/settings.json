@@ -1,5 +1,10 @@
 {
+<<<<<<< HEAD
     "docwriter.style": "Auto-detect",
     "docwriter.progress.trackClasses": false,
     "compile-hero.disable-compile-files-on-did-save-code": true
+=======
+    "docwriter.style": "Javadoc",
+    "docwriter.progress.trackClasses": false
+>>>>>>> 44bc4428ab8fc73876de2a40fe961d09361d9bd5
 }
