@@ -112,5 +112,8 @@
   "dashboard.month": "Month",
   "dashboard.week": "Week",
   "dashboard.day": "Day",
-  "assignUserDivices.assign": "Assign UserAccount to Device"
+  "assignUserDivices.assign": "Assign UserAccount to Device",
+  "metercard.basicCard": "not set",
+  "metercard.bateryData": "no data received",
+  "metercard.deviceIndex": "Device Index:"
 }
