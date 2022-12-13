@@ -5,11 +5,12 @@ import { Device } from "./Device";
 @Entity()
 export class Data extends BaseEntity {
 
-  public static createData = (device:Device, day?:number, night?:number) => {
+  public static createData = (device:Device, day?:number, night?:number, batteryPercentage?: number) => {
     const data:Data = Data.create();
     data.device = device;
     data.Day = day;
     data.Night = night;
+    data.BatteryPercentage = batteryPercentage;
     return data;
   }
 
@@ -29,9 +30,15 @@ export class Data extends BaseEntity {
   @IsOptional()
   @IsInt()
   Night: number;
+  
+  @Column("numeric", {nullable:true, unique: false, name: "batteryPercentage"})
+  @IsOptional()
+  @IsInt()
+  BatteryPercentage: number;
 
   @CreateDateColumn({ name: "created_at" })
   created_at: Date;
+
 
   public add = (day: number, night: number) => {
     this.Day += day;
