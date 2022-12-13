@@ -1,4 +1,5 @@
 {
     "docwriter.style": "Auto-detect",
-    "docwriter.progress.trackClasses": false
+    "docwriter.progress.trackClasses": false,
+    "compile-hero.disable-compile-files-on-did-save-code": true
 }

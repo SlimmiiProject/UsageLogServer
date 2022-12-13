@@ -4,7 +4,7 @@ import { IOUtil } from "../../util/IOUtil";
 import Graph from "./Graph";
 import { CircularProgress } from "@mui/material";
 
-type timePeriod = "Day"|"Week"|"Month";
+type timePeriod = "Day" | "Week" | "Month";
 
 export default function App() {
   const context = useContext(userContext);
@@ -28,9 +28,8 @@ export default function App() {
 
   return (
     <>
-    
-      <div className="flex">
-      <select
+      <div >
+        <select
           className="dropdown"
           onChange={(e) => {
             setLoading(true);
@@ -44,7 +43,7 @@ export default function App() {
           <option value="Week">Week</option>
           <option value="Day">Day</option>
         </select>
-        
+
         {!loading &&
           devices.map((meter) => (
             <section
@@ -52,6 +51,7 @@ export default function App() {
               style={{
                 backgroundColor: "rgba(0, 0, 0, 0.0)",
                 minWidth: "700px",
+                height: "inherit"
               }}
             >
               <Graph
@@ -60,23 +60,23 @@ export default function App() {
                 colorDay={meter.colorDay}
                 colorNight={meter.colorNight}
               />
-
             </section>
           ))}
 
-        {loading && devices.length === 0 && 
-        <section className="graph"
-        style={{
-          backgroundColor: "rgba(0, 0, 0, 0.0)",
-          justifyContent:"center",
-          justifyItems:"center",
-          alignItems:"center",
-          display:"flex",
-          borderWidth:0
-
-        }}>
-          <CircularProgress/>
-          </section>}
+        {loading && devices.length === 0 && (
+          <section
+            className="graph"
+            style={{
+              backgroundColor: "rgba(0, 0, 0, 0.0)",
+              justifyContent: "center",
+              justifyItems: "center",
+              alignItems: "center",
+              borderWidth: 0,
+            }}
+          >
+            <CircularProgress />
+          </section>
+        )}
       </div>
     </>
   );
