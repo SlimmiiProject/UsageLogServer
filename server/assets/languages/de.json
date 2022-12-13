@@ -53,6 +53,7 @@
   "signIn.signIn": "Anmelden",
   "signIn.forgotPassword": "Passwort vergessen?",
   "signIn.register": "Hier registrieren",
+  "signIn.error": "Die Anmeldung ist fehlgeschlagen, versuchen Sie es erneut!",
   "error.missing_fields": "Fehlende Felder:",
   "error.name_minimum_three": "Der Name muss aus mindestens 3 Buchstaben bestehen",
   "error.wrong_e_p_syntax": "Falsche Syntax für E-Mail oder Telefon",

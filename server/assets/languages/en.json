@@ -59,6 +59,7 @@
   "signIn.signIn": "Sign In",
   "signIn.forgotPassword": "Forgot Password?",
   "signIn.register": "Register Here",
+  "signIn.error": "Login has failed, try again!",
   "error.missing_fields": "Missing fields:",
   "error.name_minimum_three": "Name needs to be minimum of 3 letters",
   "error.wrong_e_p_syntax": "Wrong Syntax for email or phone",

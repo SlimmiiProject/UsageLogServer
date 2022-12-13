@@ -59,6 +59,7 @@
   "signIn.signIn": "Log In",
   "signIn.forgotPassword": "Wachtwoord vergeten?",
   "signIn.register": "Registreer je hier",
+  "signIn.error": "Inloggen is mislukt, probeer het opnieuw!",
   "error.missing_fields": "Niet ingevulde velden:",
   "error.name_minimum_three": "Naam moet minimum 3 karakters bevatten",
   "error.wrong_e_p_syntax": "Verkeerd email of telefoon nummer",
