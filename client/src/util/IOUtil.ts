@@ -195,4 +195,6 @@ export class IOUtil {
       return false;
     }
   }
+
+  public static isAborted = (abortController:AbortController) => abortController.signal.aborted;
 }

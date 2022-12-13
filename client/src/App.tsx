@@ -81,33 +81,28 @@ const App = (): JSX.Element => {
   );
 
   useEffect(() => {
+    setLoading(true);
+
     // Change Language, in case it's different to what's currently selected
     const urlLang = getLanguageFromUrl();
     if (I18n.currentLanguage !== urlLang) I18n.changeLanguage(urlLang);
 
     const controller = new AbortController();
-    IOUtil.getSessionData(controller).then((res) => {
-      setAccountData((_accountData) => res);
 
-      if (res) {
-        IOUtil.isAdmin(controller).then((res) => {
-          setAccountData((accountData) => {
-            return { ...accountData!, isAdmin: res };
-          });
-          setLoading(false);
-        });
-      }
-    });
     const fetchLoginData = async () => {
       const accountData = await IOUtil.getSessionData(controller);
       setAccountData((_accoundData) => accountData);
 
-      if (accountData) {
-        const isAdmin = await IOUtil.isAdmin(controller);
-        setAccountData((accountData) => {
-          return { ...accountData!, isAdmin: isAdmin };
-        });
-      }
+      if (IOUtil.isAborted(controller)) return;
+
+      if (!accountData) return setLoading(false);
+
+      const isAdmin = await IOUtil.isAdmin(controller);
+      setAccountData((accountData) => {
+        return { ...accountData!, isAdmin: isAdmin };
+      });
+
+      setLoading(false);
     };
 
     fetchLoginData();
