@@ -15,6 +15,14 @@ router
     //TODO Get user data
   });
 
+  router
+  .route("/password")
+  .put(async (req: Request, res: Response) => {
+    const userId: number = parseInt(req.params.userId);
+    const { password } = req.body;
+    res.json(await DataProcessor.ChangePassword(userId, password));
+  });
+
 router
   .route("/device")
   .post((req: Request, res: Response) => {
