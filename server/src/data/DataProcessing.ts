@@ -687,14 +687,11 @@ export class DataProcessor {
    * @returns array with devices
   */
   public static UserDevices = async (userId: number): Promise<ITempData[]> => {
-    const test :UserAccount = await UserAccount.findOneBy({userId: userId})
-    const user: UserAccount = await UserAccount.findOne({
-      where: {
-        userId: userId
-      },
-      relations: ["device"]
-    });
-    let tempData : ITempData[] = await user.device.map((device)=>{
+    const user :UserAccount = await UserAccount.findOneBy({userId: userId})
+    
+    const devices: Device[] = await this.getDevices(user.userId);
+
+    let tempData : ITempData[] = await devices.map((device:any)=>{
       return {
         deviceIndex: device.device_index,
         deviceId: device.deviceId,
