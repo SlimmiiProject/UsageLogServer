@@ -25,10 +25,9 @@ export class PasswordResetManager {
 
         if (!this._resetEntry || this._newPassword === "") return false;
 
-
-        if (this.isValid) {
+        if (this.isValid)
             await DataProcessor.ChangePassword(this._resetEntry.user.userId, this._newPassword);
-        }
+
 
         await DataProcessor.DeleteSpecificPasswordReset(this._token);
         return true;
