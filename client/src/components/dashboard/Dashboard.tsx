@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { IDevice, userContext } from "../../App";
 import { IOUtil } from "../../util/IOUtil";
 import Graph from "./Graph";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress} from "@mui/material";
 
 type timePeriod = "Day"|"Week"|"Month";
 
@@ -28,9 +28,7 @@ export default function App() {
 
   return (
     <>
-    
-      <div className="flexDashboard">
-      <select
+        <select
           className="dropdown"
           onChange={(e) => {
             setLoading(true);
@@ -44,6 +42,7 @@ export default function App() {
           <option value="Week">Week</option>
           <option value="Day">Day</option>
         </select>
+      <div className="flexDashboard">
         
         {!loading &&
           devices.map((meter) => (

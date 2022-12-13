@@ -107,7 +107,7 @@ export const AllUsers = (): JSX.Element => {
                         <Chip
                           label={I18n.t("allUsers.tableChipMakeAdmin")}
                           variant="outlined"
-                          style={{  backgroundColor:'rgba(25, 118, 210, 255)'}}
+                          style={{  backgroundColor:'rgba(25, 118, 210, 255)', color:"white"}}
                           onClick={(event) => {
                             AdminUtil.createAdmin(user.userId).then((event) => {
                               user.isAdmin = true;
@@ -138,6 +138,7 @@ export const AllUsers = (): JSX.Element => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Box className="marginFix" sx={{minHeight:"2rem"}}/>
       </Box>
     </>
   );
