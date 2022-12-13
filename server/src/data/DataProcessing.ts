@@ -289,13 +289,6 @@ export class DataProcessor {
    * @returns Promise<Device[]>
    */
   public static getDevices = async (userId: number): Promise<Device[]> => {
-    // const devices = await DatabaseConnector.INSTANCE.dataSource
-    //   .getRepository(Device)
-    //   .createQueryBuilder("device")
-    //   .leftJoinAndSelect("device.user", "user")
-    //   .where("user.userid = :id", { id: userId })
-    //   .getMany();
-
     return await Device.find({
       relations: {
         user: true,
@@ -490,9 +483,9 @@ export class DataProcessor {
    */
   public static EditAcount = async (
     userid: number,
-    firstname: string,
-    lastname: string,
-    email: string,
+    firstname?: string,
+    lastname?: string,
+    email?: string,
     phone?: string,
     colorDay?: GraphColors,
     colorNight?: GraphColors
@@ -502,14 +495,21 @@ export class DataProcessor {
       throw new Error(
         `Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`
       );
-    await UserAccount.update(userid, {
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      phone: phone,
-      colorDay: colorDay,
-      colorNight: colorNight,
-    });
+
+      if (firstname) await UserAccount.update(userid, {firstname: firstname})
+      if (lastname) await UserAccount.update(userid, {lastname: lastname})
+      if (email) await UserAccount.update(userid, {email: email})
+      if (phone) await UserAccount.update(userid, {phone: phone})
+      if (colorDay) await UserAccount.update(userid, {colorDay: colorDay})
+      if (colorNight) await UserAccount.update(userid, {colorNight: colorNight})
+    // await UserAccount.update(userid, {
+    //   firstname: firstname,
+    //   lastname: lastname,
+    //   email: email,
+    //   phone: phone,
+    //   colorDay: colorDay,
+    //   colorNight: colorNight,
+    // });
   };
 
   /**
