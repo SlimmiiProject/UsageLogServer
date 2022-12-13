@@ -107,8 +107,6 @@ const App = (): JSX.Element => {
         setAccountData((accountData) => {
           return { ...accountData!, isAdmin: isAdmin };
         });
-
-        setLoading(false);
       }
     };
 
@@ -132,6 +130,7 @@ const App = (): JSX.Element => {
     });
 
   const loggedIn = accountData !== undefined;
+  const isAdmin = loggedIn && accountData.isAdmin;
 
   return (
     <>
@@ -195,7 +194,7 @@ const App = (): JSX.Element => {
 
                     <Route path="devices" element={<Devices />} />
 
-                    {accountData.isAdmin && (
+                    {isAdmin && (
                       <>
                         <Route path="admin">
                           <Route index element={<AdminPage />} />

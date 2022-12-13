@@ -124,7 +124,7 @@ const SignIn = (): JSX.Element => {
           } */}
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="forgot-password" variant="body2">
                 {" "}
                 {I18n.t("signIn.forgotPassword")}
               </Link>
