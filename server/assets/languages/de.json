@@ -94,5 +94,8 @@
   "logFile.account": "Konto",
   "logFile.description": "Beschreibung",
   "logFile.IP": "IP",
-  "logFile.date": "Datum"
+  "logFile.date": "Datum",
+  "dashboard.month": "Monat",
+  "dashboard.week": "Woche",
+  "dashboard.day": "Tag"
 }
