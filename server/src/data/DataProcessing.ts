@@ -447,8 +447,15 @@ export class DataProcessor {
    * @returns Promise<boolean>
    */
   public static GetPasswordReset = async (token: string) => {
-    const resetToken: PasswordReset = await PasswordReset.findOneBy({ token: token });
-    return resetToken;
+    const resetToken: PasswordReset[] = await PasswordReset.find(
+      {
+        relations: {
+          user: true
+        },
+        where: { token: Equal(token) }
+      });
+
+    return resetToken[0];
   }
   //#endregion
 
@@ -680,7 +687,7 @@ export class DataProcessor {
       userId: user.userId
     }
   });
-  
+
   /**
    * Returning the device of the user.
    * @param userId number

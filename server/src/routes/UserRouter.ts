@@ -2,7 +2,7 @@ import { DataProcessor } from "./../data/DataProcessing";
 import express, { Request, Response } from "express";
 import { SessionManager } from "../accounts/SessionManager";
 
-const router = express.Router({mergeParams: true});
+const router = express.Router({ mergeParams: true });
 
 router.use(SessionManager.loginRequired);
 
@@ -29,18 +29,18 @@ router
     //TODO Add meter
   })
   .get(async (req: Request, res: Response) => {
-    const userId : number = parseInt(req.params.userId);
+    const userId: number = parseInt(req.params.userId);
     res.json(await DataProcessor.UserDevices(userId))
   })
   .delete((req: Request, res: Response) => {
-    const userId : number = parseInt(req.params.userId);
+    const userId: number = parseInt(req.params.userId);
     const { deviceId } = req.body;
   });
 
 
 router.delete("/user", async (req: Request, res: Response) => {
-    const userId: number = parseInt(req.params.userId);
-    res.json(await DataProcessor.DeleteUser(userId));
+  const userId: number = parseInt(req.params.userId);
+  res.json(await DataProcessor.DeleteUser(userId));
 });
 
 module.exports = router;
