@@ -105,15 +105,11 @@ router.post("/create-profile", async (req: Request, res: Response) => {
 router.route("/password")
     .put(async (req: Request, res: Response) => {
         const { token, password } = req.body;
-
         const passwordResetProcessor = new PasswordResetManager(token, password);
         res.sendStatus(await passwordResetProcessor.handle() ? 200 : 403);
     }).get(async (req: Request, res: Response) => {
-        const { token } = req.body;
-        return res.sendStatus(await DataProcessor.GetPasswordReset(token) ? 200 : 403);
+       res.sendStatus(await DataProcessor.GetPasswordReset(req.query.token as string) ? 200 : 403);
     });
-
-
 
 router.post("/submit-forgot-password", async (req: Request, res: Response) => {
     const data: ResetData = req.body;
