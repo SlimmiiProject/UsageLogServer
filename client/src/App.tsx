@@ -73,8 +73,12 @@ export const getPath = (path: string) => {
 
 const App = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [accountData, setAccountData] = useState<AccountData | undefined>(undefined);
-  const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem("darkMode")!) || false);
+  const [accountData, setAccountData] = useState<AccountData | undefined>(
+    undefined
+  );
+  const [darkMode, setDarkMode] = useState<boolean>(
+    JSON.parse(localStorage.getItem("darkMode")!) || false
+  );
 
   useEffect(() => {
     // Change Language, in case it's different to what's currently selected
@@ -82,16 +86,15 @@ const App = (): JSX.Element => {
     if (I18n.currentLanguage !== urlLang) I18n.changeLanguage(urlLang);
 
     const controller = new AbortController();
-
     IOUtil.getSessionData(controller).then((res) => {
       setAccountData((_accountData) => res);
-      setLoading(false);
 
       if (res) {
         IOUtil.isAdmin(controller).then((res) => {
           setAccountData((accountData) => {
             return { ...accountData!, isAdmin: res };
           });
+          setLoading(false);
         });
       }
     });
@@ -104,9 +107,9 @@ const App = (): JSX.Element => {
         setAccountData((accountData) => {
           return { ...accountData!, isAdmin: isAdmin };
         });
-      }
 
-      setLoading(false);
+        setLoading(false);
+      }
     };
 
     fetchLoginData();
@@ -147,7 +150,10 @@ const App = (): JSX.Element => {
             <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />
             <Routes>
               <Route path="/" element={<Navigate to={getPath("")} />} />
-              <Route path="/forgot-password" element={<Navigate to={getPath(getFullPath())} />} />
+              <Route
+                path="/forgot-password"
+                element={<Navigate to={getPath(getFullPath())} />}
+              />
               <Route
                 path="/forgot-password"
                 element={<Navigate to={getPath(getFullPath())} />}
