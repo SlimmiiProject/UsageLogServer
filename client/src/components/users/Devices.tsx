@@ -11,9 +11,10 @@ const Devices = (): JSX.Element => {
   const context  = useContext(userContext)
   useEffect (()=>{
   IOUtil.getOwnDevice(context.userAccount!.id).then((res)=>{
+    console.log(res[0])
     setDevices(res)
     setIsloading(false)
-    console.log(res)
+    console.log(devices)
   });
   },[])
   return (
