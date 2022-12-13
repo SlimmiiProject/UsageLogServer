@@ -166,7 +166,7 @@ export default function PersistentDrawerLeft({ lang, mode, onDarkmode }: { lang:
               text: I18n.t("drawercomponent.contact"),
               icon: <MailIcon />,
               link: getPath("contact"),
-              render: isLoggedIn
+              render: true
             },
             {
               text: I18n.t("drawercomponent.admin"),

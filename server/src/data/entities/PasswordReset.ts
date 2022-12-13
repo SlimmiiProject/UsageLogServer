@@ -16,7 +16,7 @@ export class PasswordReset extends BaseEntity {
   @IsDefined()
   token: string;
 
-  @OneToOne(() => UserAccount, { nullable: false, cascade: true })
+  @OneToOne(() => UserAccount, { nullable: false, cascade: true, onDelete: "CASCADE" })
   @JoinColumn({ name: "user" })
   @IsDefined()
   user: UserAccount;

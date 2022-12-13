@@ -2,17 +2,14 @@ import { AdminUtil, deviceData } from "../../util/AdminUtil";
 import { useState, useEffect } from "react";
 import {
   Box,
-  List,
-  ListItem,
-  Typography,
   Chip,
   TableContainer,
-  Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
@@ -41,7 +38,6 @@ export const AllDevices = (): JSX.Element => {
           margin: "auto",
           justifyContent: "center",
           flexDirection: "column",
-          borderWidth:0,
           display: "flex",
           backgroundColor: "rgba(0,0,0,0.0)",
           height: "fit-content",
@@ -71,7 +67,7 @@ export const AllDevices = (): JSX.Element => {
                   </TableCell>
                   <TableCell align="right">{device.id}</TableCell>
                   <TableCell align="right">
-                    {device.alias ? <p>{device.alias}</p> : <p>no alias</p>}
+                    {device.alias ? <p>{device.alias}</p> : <p>{I18n.t("allDevices.noAlias")}</p>}
                   </TableCell>
                   <TableCell align="right">
                     {device.owner ? (
@@ -91,7 +87,7 @@ export const AllDevices = (): JSX.Element => {
                         {device.firstname} {device.lastname}
                       </p>
                     ) : (
-                      <p> No user</p>
+                      <p>{I18n.t("allDevices.noUser")}</p>
                     )}
                   </TableCell>
                   <TableCell align="right">
@@ -107,17 +103,17 @@ export const AllDevices = (): JSX.Element => {
                 </TableRow>
               ))
             ) : (
-              <h2>{I18n.t("allDevices.loading")}</h2>
+              <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>
             )}
             <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell align="left" >
-                    <label>Id:</label>
+                    <label>{I18n.t("allDevices.tableId")}</label>
                 </TableCell>
                 <TableCell align="left">
                     <input type="text" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} />
                 </TableCell>
                 <TableCell align="left">
-                    <label>Alias:</label>
+                    <label>{I18n.t("allDevices.tableAlias")}</label>
                 </TableCell>
                 <TableCell align="left">
                     <input type="text" value={alias} onChange={(e) => setAlias(e.target.value)} />
@@ -126,7 +122,7 @@ export const AllDevices = (): JSX.Element => {
                 <Chip
                       label={I18n.t("allDevices.tableChipAdd")}
                       variant="outlined"
-                      style={{   backgroundColor:'rgba(25, 118, 210, 255)' }}
+                      style={{backgroundColor:'rgba(25, 118, 210, 255)' }}
                       onClick={(event) => {
                         IOUtil.addDevice(deviceId, alias)
                     }

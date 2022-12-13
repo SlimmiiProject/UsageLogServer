@@ -17,6 +17,7 @@ server/public/*
 # security
 *.env
 Dockerfile
+docker-compose.yml
 
 # misc
 .DS_Store

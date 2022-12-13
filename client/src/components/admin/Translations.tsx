@@ -1,7 +1,7 @@
 import { I18n } from "../../util/language/I18n";
 import { AdminUtil, TranslationData, } from "../../util/AdminUtil";
 import { useEffect, useState } from "react";
-import { Box, List, ListItem, Typography, Chip, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@mui/material";
+import { Box, Chip, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
 
 export const Translations = (): JSX.Element => {
   const [files, setFiles] = useState<TranslationData[]>([]);
@@ -39,8 +39,8 @@ export const Translations = (): JSX.Element => {
     <TableContainer component={Paper}>
       <Table sx={{minwidth:650}} arial-label="simple table">
         <TableHead>
-          <TableCell>Word</TableCell>
-          <TableCell>Change</TableCell>
+          <TableCell>{I18n.t("translations.word")}</TableCell>
+          <TableCell>{I18n.t("translations.change")}</TableCell>
         </TableHead>
 
         <TableBody>
@@ -51,7 +51,7 @@ export const Translations = (): JSX.Element => {
                     <TableCell><Chip label="change Translation" variant="outlined" style={{backgroundColor:"rgba(0, 170, 20, 255)"}}/></TableCell>
                 </TableRow>
             ))
-        ):<h2>Loading...</h2>}
+        ): ( <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>)}
         </TableBody>
       </Table>
     </TableContainer>

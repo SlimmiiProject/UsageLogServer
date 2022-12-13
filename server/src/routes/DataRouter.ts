@@ -1,6 +1,5 @@
 import { DisplayDataManager } from './../data/DisplayDataManager';
 import { DeviceSpecificData } from './../data/DataProcessing';
-import { RegExpVal } from '../utils/RegexValidator';
 import express, { Request, Response } from "express";
 import { SessionManager } from '../accounts/SessionManager';
 import { DataProcessor } from '../data/DataProcessing';
@@ -8,7 +7,6 @@ import { User } from '../types/express-session';
 import { DateUtil, Period } from '../utils/DateUtil';
 import {PythonShell} from 'python-shell';
 import { ObjectUtil } from '../utils/ObjectUtil';
-import { Middleware } from '../utils/Middleware';
 
 const router = express.Router();
 router.use(SessionManager.loginRequired);
@@ -30,7 +28,6 @@ router.post("/raw-meter-entry", (req: Request, res: Response) => {
 
 interface MeterEntryData {
     device_id: string;
-
 }
 
 router.post("/meter-entry", async (req: Request, res: Response) => {
@@ -62,10 +59,7 @@ router.get("/data", /*Middleware.onlyAcceptJSON,*/ async (req: Request, res: Res
     const params: DataParams = req.query as DataParams;
     const period = params.period || "Week";
 
-    // Fix so it gets start of period
     const begin: Date = params.beginDate ? new Date(params.beginDate) : DateUtil.getStartOfPeriod(DateUtil.getCurrentDate(), period);
-
-    // Fix so it gets last day properly
     const endDate: Date = DateUtil.getDateOverPeriod(begin, period);
 
     const data: DeviceSpecificData[] = await DataProcessor.getData(userData.id, begin, endDate);

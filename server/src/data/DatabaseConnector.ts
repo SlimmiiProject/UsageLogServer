@@ -9,6 +9,7 @@ import { Device } from "./entities/Device";
 import { PasswordReset } from "./entities/PasswordReset";
 import { TemporaryData } from "./entities/TemporaryData";
 import { UserAccount } from "./entities/UserAccount";
+import { TranslationData } from './entities/TranslationData';
 
 export class DatabaseConnector {
   private static CONNECTORS: Map<string, DatabaseConnector> = new Map();
@@ -49,6 +50,7 @@ export class DatabaseConnector {
       ContactForm,
       PasswordReset,
       Logfile,
+      TranslationData
     ];
   }
 

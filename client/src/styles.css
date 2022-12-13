@@ -49,7 +49,27 @@ antiLink {
   height: 200px;
   padding: 0 2rem;
   border: 3px solid var(--usedBlue);
+  border-radius: 2rem;
   background-color: var(--usedBlue);
+}
+
+.loadspinner {
+  justify-self: center;
+  size-adjust: 3rem;
+  align-self: center;
+}
+
+
+.dropdown {
+  border-radius: 1rem;
+  border:3px,solid,var(--usedBlue);
+  background-color: #ccc;
+  margin-left: auto;
+  padding-left: 1rem;
+  font-size: 1.12rem;
+  margin-right: 9rem;
+  flex:inherit;
+
 }
 
 .center {
@@ -67,4 +87,10 @@ antiLink {
 }
 Button {
   height: 2.5rem;
+}
+
+.MuiLinearProgress-root {
+  width:500;
+  padding-bottom: 20;
+  
 }

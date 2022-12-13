@@ -1,7 +1,7 @@
 import { I18n } from "../../util/language/I18n";
 import { AdminUtil, LogData } from "../../util/AdminUtil";
 import { useEffect, useState } from "react";
-import { Box, List, ListItem, Typography, Chip, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@mui/material";
+import { Box, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
 
 export const LogFile = (): JSX.Element => {
   const [files, setFiles] = useState<LogData[]>([]);
@@ -21,16 +21,16 @@ export const LogFile = (): JSX.Element => {
 
   return (
     <>
-    <Box className="flexbox" style={{margin:"auto", justifyContent:"center",flexDirection:"column", display:"flex", alignItems:"center" , borderWidth:0,borderColor:"grey",borderRadius:15, width:"70%",height:"fit-content", backgroundColor:"rgba(0,0,0,0.0)"}}>
+    <Box className="flexbox" style={{margin:"auto", justifyContent:"center",flexDirection:"column", display:"flex", alignItems:"center" , width:"70%",height:"fit-content", backgroundColor:"rgba(0,0,0,0.0)"}}>
     <h2>{I18n.t("logger.title")}</h2>
     <TableContainer component={Paper}>
       <Table sx={{minwidth:650}} arial-label="simple table">
         <TableHead>
-          <TableCell>Id</TableCell>
-          <TableCell>Account</TableCell>
-          <TableCell>Description</TableCell>
-          <TableCell>IP</TableCell>
-          <TableCell>Date</TableCell>
+          <TableCell>{I18n.t("logFile.id")}</TableCell>
+          <TableCell>{I18n.t("logFile.account")}</TableCell>
+          <TableCell>{I18n.t("logFile.description")}</TableCell>
+          <TableCell>{I18n.t("logFile.IP")}</TableCell>
+          <TableCell>{I18n.t("logFile.date")}</TableCell>
         </TableHead>
 
         <TableBody>
@@ -44,7 +44,7 @@ export const LogFile = (): JSX.Element => {
         <TableCell align="left">{new Date(file.date).toDateString()}</TableCell>
         </TableRow>
             ))
-          ): <h2>Loading...</h2>}
+          ):( <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>)}
         </TableBody>
       </Table>
     </TableContainer>
