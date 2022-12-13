@@ -27,26 +27,25 @@ export default function App() {
     }
   }, [timePeriod]);
 
-  return (
-    <>
-      <div>
-        <select
-          className="dropdown"
-          onChange={(e) => {
-            setLoading(true);
-            setTimePeriod(e.target.value as timePeriod);
-            const abortController = new AbortController();
-            return () => abortController.abort();
-          }}
-          value={timePeriod}
-        >
-          <option value="Month">{I18n.t("dashboard.month")}</option>
-          <option value="Week">{I18n.t("dashboard.week")}</option>
-          <option value="Day">{I18n.t("dashboard.day")}</option>
-        </select>
+  return <>
+    <div>
+      <select
+        className="dropdown"
+        onChange={(e) => {
+          setLoading(true);
+          setTimePeriod(e.target.value as timePeriod);
+          const abortController = new AbortController();
+          return () => abortController.abort();
+        }}
+        value={timePeriod}
+      >
+        <option value="Month">{I18n.t("dashboard.month")}</option>
+        <option value="Week">{I18n.t("dashboard.week")}</option>
+        <option value="Day">{I18n.t("dashboard.day")}</option>
+      </select>
 
       <div className="flexDashboard">
-        
+
         {!loading &&
           devices.map((meter) => (
             <section
@@ -81,6 +80,6 @@ export default function App() {
           </section>
         )}
       </div>
-    </>
-  );
+    </div>
+  </>
 }
