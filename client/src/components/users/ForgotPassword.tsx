@@ -36,7 +36,7 @@ const ForgotPassword = () => {
     } else {
       const validateToken = async () => {
         const valid = await IOUtil.doesPasswordResetExist(token, controller);
-        if(!valid) navigate("/");
+        if (!IOUtil.isAborted(controller) && !valid) navigate("/");
       };
 
       validateToken();

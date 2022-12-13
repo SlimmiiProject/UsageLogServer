@@ -189,8 +189,21 @@ export class IOUtil {
 
   public static changePassword = async (token: string, password: string) => {
     try {
-
       const res = await this.INSTANCE.put(`/profiles/password`, { token: token, password: password });
+      return res.status === 200;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  public static doesPasswordResetExist = async (token: string, controller: AbortController) => {
+    try {
+      const res = await this.INSTANCE.get(`/profiles/password`, {
+        signal: controller.signal,
+        params: {
+          token: token
+        }
+      });
       return res.status === 200;
     } catch (err) {
       return false;

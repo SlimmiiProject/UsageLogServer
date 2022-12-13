@@ -44,6 +44,7 @@ export default function App() {
           <option value="Week">{I18n.t("dashboard.week")}</option>
           <option value="Day">{I18n.t("dashboard.day")}</option>
         </select>
+
       <div className="flexDashboard">
         
         {!loading &&
@@ -79,7 +80,6 @@ export default function App() {
             <CircularProgress />
           </section>
         )}
-        </div>
       </div>
     </>
   );
