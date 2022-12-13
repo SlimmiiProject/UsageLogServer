@@ -22,15 +22,27 @@ const ForgotPassword = () => {
   const [infoMsg, setInfo] = useState<string>("");
 
   const [expired, setExpired] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const token = searchParams.get("token");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) {
-          //TODO Check if token is valid or expired
+    const controller = new AbortController();
+
+    console.log(token);
+    if (!token) {
+      setLoading(false);
+    } else {
+      const validateToken = async () => {
+        const valid = await IOUtil.doesPasswordResetExist(token, controller);
+        if(!valid) navigate("/");
+      };
+
+      validateToken();
     }
 
+    return () => controller.abort();
   }, []);
 
   const handlePasswordChangeSubmit = async (
@@ -86,37 +98,38 @@ const ForgotPassword = () => {
         <h1>{I18n.t("page.password_reset")}</h1>
         <CssBaseline />
 
-        <h2 style={{ marginBottom: "-0.5rem" }}>
-          {I18n.t("page.password_reset.enter_email")}
-        </h2>
         {!token && (
-          <Box
-            component="form"
-            onSubmit={handlePasswordResetRequestSubmit}
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              fullWidth
-              id="email"
-              label={I18n.t("field.email")}
-              name="email"
-              type="email"
-              autoComplete="email"
-              autoFocus
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+          <>
+            <h2 style={{ marginBottom: "-0.5rem" }}>
+              {I18n.t("page.password_reset.enter_email")}
+            </h2>
+            <Box
+              component="form"
+              onSubmit={handlePasswordResetRequestSubmit}
+              sx={{ mt: 1 }}
             >
-              {I18n.t("button.submit")}
-            </Button>
-          </Box>
-        )}
+              <TextField
+                margin="normal"
+                fullWidth
+                id="email"
+                label={I18n.t("field.email")}
+                name="email"
+                type="email"
+                autoComplete="email"
+                autoFocus
+              />
 
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                {I18n.t("button.submit")}
+              </Button>
+            </Box>
+          </>
+        )}
 
         {!expired && token && (
           <Box

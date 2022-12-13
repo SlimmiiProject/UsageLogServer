@@ -196,5 +196,19 @@ export class IOUtil {
     }
   }
 
-  public static isAborted = (abortController:AbortController) => abortController.signal.aborted;
+  public static doesPasswordResetExist = async (token: string, controller: AbortController) => {
+    try {
+      const res = await this.INSTANCE.get(`/profiles/password`, {
+        signal: controller.signal,
+        data: {
+          token: token
+        }
+      });
+      return res.status === 200;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  public static isAborted = (abortController: AbortController) => abortController.signal.aborted;
 }
