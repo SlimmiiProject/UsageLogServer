@@ -105,5 +105,6 @@
   "logFile.date": "Datum",
   "dashboard.month": "Monat",
   "dashboard.week": "Woche",
-  "dashboard.day": "Tag"
+  "dashboard.day": "Tag",
+  "assignUserDivices.assign": "Benutzerkonto dem Gerät zuweisen"
 }

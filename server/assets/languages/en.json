@@ -111,5 +111,6 @@
   "logFile.date": "Date",
   "dashboard.month": "Month",
   "dashboard.week": "Week",
-  "dashboard.day": "Day"
+  "dashboard.day": "Day",
+  "assignUserDivices.assign": "Assign UserAccount to Device"
 }

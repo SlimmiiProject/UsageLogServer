@@ -28,7 +28,7 @@ const assignUserDialog = ({open,selectedValue, onClose,users}:assignUserDialogPr
 return (
     <>
    <Dialog onClose={handleClose} open={open}>
-    <DialogTitle>Assign UserAccount to Device</DialogTitle>
+    <DialogTitle>{I18n.t("assignUserDivices.assign")}</DialogTitle>
     <List sx={{pt:0}}>
         {users.map((u)=>(
             <ListItem button onClick={()=>handleListItemClick(u.userId)} key={u.userId}>

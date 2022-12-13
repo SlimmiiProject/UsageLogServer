@@ -109,5 +109,6 @@
   "logFile.date": "Datum",
   "dashboard.month": "Maand",
   "dashboard.week": "Week",
-  "dashboard.day": "Dag"
+  "dashboard.day": "Dag",
+  "assignUserDivices.assign": "Gebruikersaccount toewijzen aan apparaat"
 }
