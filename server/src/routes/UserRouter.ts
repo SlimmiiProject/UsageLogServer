@@ -16,7 +16,7 @@ router
   });
 
 router
-  .route("/meters")
+  .route("/device")
   .post((req: Request, res: Response) => {
     //TODO Add meter
   })

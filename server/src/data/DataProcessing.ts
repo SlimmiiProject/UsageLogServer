@@ -146,7 +146,7 @@ export class DataProcessor {
   public static createHourlyData = async (
     deviceId: string,
     dataDay?: number,
-    dataNight?: number
+    dataNight?: number,
   ): Promise<void> => {
     const dataDevice = await Device.findOne({
       where: { deviceId: Equal(deviceId) },
@@ -169,7 +169,7 @@ export class DataProcessor {
   public static createTempData = async (
     deviceId: string,
     dataDay?: number,
-    dataNight?: number
+    dataNight?: number,
   ): Promise<void> => {
     const device = await Device.findOne({
       where: { deviceId: Equal(deviceId) },

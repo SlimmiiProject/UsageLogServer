@@ -150,4 +150,13 @@ export class IOUtil {
       console.error(err)
     }
   }
+
+  public static getOwnDevice = async (userId: number) => {
+    try {
+      const res = await this.INSTANCE.get(`/users/${userId}/device`);
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }
