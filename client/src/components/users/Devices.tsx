@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { I18n } from "../../util/language/I18n";
 import MeterCard from "../dashboard/MeterCard";
 import {IOUtil} from "../../util/IOUtil"
@@ -9,21 +9,20 @@ const Devices = (): JSX.Element => {
   const [isloading, setIsloading] = useState(true)
   const [devices, setDevices] = useState<DeviceCardProps[]>()
   const context  = useContext(userContext)
-  console.log(context.userAccount!.id)
-
+  useEffect (()=>{
   IOUtil.getOwnDevice(context.userAccount!.id).then((res)=>{
-    console.log(context.userAccount!.id)
-    console.log(res)
     setDevices(res)
     setIsloading(false)
+    console.log(res)
   });
-  
+  },[])
   return (
     <>
       <h1>{I18n.t("devices.devicemanager")}</h1>
       <h2>{I18n.t("devices.sample")}</h2>
       <Box>
-       {isloading && devices?.map((dev)=><MeterCard BatteryPercentage={dev.BatteryPercentage} device_index={dev.device_index} deviceId={dev.deviceId} friendlyName={dev.friendlyName}/>)}
+
+       {!isloading && devices?.map((dev)=><MeterCard batteryPercentage={dev.batteryPercentage} deviceIndex={dev.deviceIndex} deviceId={dev.deviceId} friendlyName={dev.friendlyName}/>)}
       </Box>
     </>
   );
