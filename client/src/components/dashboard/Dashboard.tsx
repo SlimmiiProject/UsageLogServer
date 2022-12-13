@@ -45,41 +45,42 @@ export default function App() {
           <option value="Day">{I18n.t("dashboard.day")}</option>
         </select>
 
-      <div className="flexDashboard">
-        
-        {!loading &&
-          devices.map((meter) => (
+        <div className="flexDashboard">
+
+          {!loading &&
+            devices.map((meter) => (
+              <section
+                className="graph"
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.0)",
+                  minWidth: "700px",
+                  height: "inherit"
+                }}
+              >
+                <Graph
+                  data={meter.data}
+                  titel={meter.nameDevice}
+                  colorDay={meter.colorDay}
+                  colorNight={meter.colorNight}
+                />
+              </section>
+            ))}
+
+          {loading && devices.length === 0 && (
             <section
               className="graph"
               style={{
                 backgroundColor: "rgba(0, 0, 0, 0.0)",
-                minWidth: "700px",
-                height: "inherit"
+                justifyContent: "center",
+                justifyItems: "center",
+                alignItems: "center",
+                borderWidth: 0,
               }}
             >
-              <Graph
-                data={meter.data}
-                titel={meter.nameDevice}
-                colorDay={meter.colorDay}
-                colorNight={meter.colorNight}
-              />
+              <CircularProgress />
             </section>
-          ))}
-
-        {loading && devices.length === 0 && (
-          <section
-            className="graph"
-            style={{
-              backgroundColor: "rgba(0, 0, 0, 0.0)",
-              justifyContent: "center",
-              justifyItems: "center",
-              alignItems: "center",
-              borderWidth: 0,
-            }}
-          >
-            <CircularProgress />
-          </section>
-        )}
+          )}
+        </div>
       </div>
     </>
   );

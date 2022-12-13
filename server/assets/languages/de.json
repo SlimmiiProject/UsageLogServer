@@ -36,7 +36,7 @@
   "metercard.name": "Zählerkartenname",
   "metercard.id": "Zählerkarten-ID",
   "metercard.chart": "Karte hier einfügen",
-  "metercard.battery": "Batterie %",
+  "metercard.battery": "Batterie",
   "profile.edit": "Bearbeiten Sie Ihr Profil",
   "register.here": "Registrieren Sie sich hier",
   "field.first_name": "Vorname",
@@ -111,6 +111,10 @@
   "passwordReset.EnterEmail": "Geben sie ihre E-Mail Adresse ein:",
   "passwordReset.submit": "Einreichen",
   "passwordReset.confirmMessage": "Passwort zurücksetzen gesendet an {{email}}",
+  "passwordReset.errorEmailNorSupplied": "E-Mail nicht angegeben",
   "forgotPassword.password": "Passwort",
-  "forgotPassword.verify": "Passwort bestätigen"
+  "forgotPassword.verify": "Passwort bestätigen",
+  "passwordReset.noMatch": "Passwörter stimmen nicht überein",
+  "passwordReset.resetSuccesfull": "Passwort erfolgreich zurückgesetzt",
+  "passwordReset.resetFail": "Zurücksetzen des Passworts fehlgeschlagen"
 }
