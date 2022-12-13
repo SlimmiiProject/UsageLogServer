@@ -37,6 +37,20 @@ router
     const { deviceId } = req.body;
   });
 
+  router
+  .route("/account")
+  .get((req: Request, res: Response) => {
+    //TODO Get account data
+  })
+  .post((req: Request, res: Response) => {
+    //TODO Create account
+  })
+  .put(async (req: Request, res: Response) => {
+    const userId : number = parseInt(req.params.userId);
+    const {firstname, lastname, email, phone, colorDay, colorNight, password} = req.body;
+    res.json(await DataProcessor.EditAcount(userId, firstname, lastname, email, phone, colorDay, colorNight, password))
+  })
+
 
 router.delete("/user", async (req: Request, res: Response) => {
   const userId: number = parseInt(req.params.userId);

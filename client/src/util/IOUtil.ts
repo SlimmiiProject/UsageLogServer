@@ -189,6 +189,7 @@ export class IOUtil {
 
   public static changePassword = async (token: string, password: string) => {
     try {
+
       const res = await this.INSTANCE.put(`/profiles/password`, { token: token, password: password });
       return res.status === 200;
     } catch (err) {
