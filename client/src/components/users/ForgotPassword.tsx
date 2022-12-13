@@ -55,7 +55,7 @@ const ForgotPassword = () => {
                     required
                     fullWidth
                     id="password"
-                    label={I18n.t("field.password")}
+                    label={I18n.t("forgotPassword.password")}
                     name="password"
                     type="password"
                     autoFocus
@@ -65,7 +65,7 @@ const ForgotPassword = () => {
                     required
                     fullWidth
                     name="password_verify"
-                    label={I18n.t("field.password_verify")}
+                    label={I18n.t("forgotPassword.verify")}
                     type="password"
                     id="password_verify"
                 />
@@ -76,7 +76,7 @@ const ForgotPassword = () => {
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                 >
-                    {I18n.t("button.submit")}
+                    {I18n.t("passwordReset.submit")}
                 </Button>
             </Box>}
 

@@ -180,7 +180,8 @@ export class IOUtil {
 
   public static changePassword = async (userId: number, password: string) => {
     try {
-      const res = await this.INSTANCE.put(`/users/${userId}/password`, { password: password });
+
+      const res = await this.INSTANCE.put(`/users/${userId}/password`, {password:password});
       return res.data;
     } catch (err) {
       console.error(err);
