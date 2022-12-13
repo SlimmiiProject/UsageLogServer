@@ -3,6 +3,7 @@ import { IDevice, userContext } from "../../App";
 import { IOUtil } from "../../util/IOUtil";
 import Graph from "./Graph";
 import { CircularProgress } from "@mui/material";
+import { I18n } from "../../util/language/I18n";
 
 type timePeriod = "Day"|"Week"|"Month";
 
@@ -28,9 +29,7 @@ export default function App() {
 
   return (
     <>
-    
-      <div className="flexDashboard">
-      <select
+        <select
           className="dropdown"
           onChange={(e) => {
             setLoading(true);
@@ -40,10 +39,11 @@ export default function App() {
           }}
           value={timePeriod}
         >
-          <option value="Month">Month</option>
-          <option value="Week">Week</option>
-          <option value="Day">Day</option>
+          <option value="Month">{I18n.t("dashboard.month")}</option>
+          <option value="Week">{I18n.t("dashboard.week")}</option>
+          <option value="Day">{I18n.t("dashboard.day")}</option>
         </select>
+      <div className="flexDashboard">
         
         {!loading &&
           devices.map((meter) => (
