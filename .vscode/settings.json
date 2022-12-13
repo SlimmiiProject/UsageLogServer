@@ -1,4 +1,4 @@
 {
-    "docwriter.style": "Auto-detect",
+    "docwriter.style": "Javadoc",
     "docwriter.progress.trackClasses": false
 }

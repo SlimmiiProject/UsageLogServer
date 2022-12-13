@@ -1,4 +1,4 @@
-import { IsDefined, IsOptional, Length } from "class-validator";
+import { IsDefined, IsInt, IsOptional, Length } from "class-validator";
 import { Entity, BaseEntity, PrimaryGeneratedColumn, PrimaryColumn, OneToMany, JoinColumn, Column, ManyToOne } from "typeorm";
 import { Data } from "./Data";
 import { TemporaryData } from "./TemporaryData";
@@ -38,6 +38,11 @@ export class Device extends BaseEntity {
   @OneToMany(() => TemporaryData, (tempData) => tempData.device, { nullable: true, cascade: true })
   @JoinColumn({ name: "temporary_data" })
   temporary_data: TemporaryData[];
+
+  @Column("numeric", {nullable:true, unique: false, name: "batteryPercentage"})
+  @IsOptional()
+  @IsInt()
+  BatteryPercentage: number;
 
   public setFriendlyName = (alias: string) => {
     this.friendlyName = alias;

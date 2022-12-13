@@ -30,7 +30,7 @@ export default function App() {
   return (
     <>
     
-      <div className="flex">
+      <div className="flexDashboard">
       <select
           className="dropdown"
           onChange={(e) => {
@@ -50,10 +50,6 @@ export default function App() {
           devices.map((meter) => (
             <section
               className="graph"
-              style={{
-                backgroundColor: "rgba(0, 0, 0, 0.0)",
-                minWidth: "700px",
-              }}
             >
               <Graph
                 data={meter.data}
