@@ -479,6 +479,7 @@ export class DataProcessor {
    * @param phone undefined | string of 12 characters that needs to start with +32
    * @param colorDay GraphColor | undefined enum of colors
    * @param colorNight | undefined enum of colors
+   * @param password undefined | string
    * @returns Promise<void>
    */
   public static EditAcount = async (
@@ -488,7 +489,8 @@ export class DataProcessor {
     email?: string,
     phone?: string,
     colorDay?: GraphColors,
-    colorNight?: GraphColors
+    colorNight?: GraphColors,
+    password?: string
   ): Promise<void> => {
     let userExists = await UserAccount.findAndCountBy({ userId: userid });
     if (userExists[1] < 1 && userExists[1] > 1)
@@ -502,6 +504,7 @@ export class DataProcessor {
       if (phone) await UserAccount.update(userid, {phone: phone})
       if (colorDay) await UserAccount.update(userid, {colorDay: colorDay})
       if (colorNight) await UserAccount.update(userid, {colorNight: colorNight})
+      if (password) await UserAccount.update(userid, {password: password})
     // await UserAccount.update(userid, {
     //   firstname: firstname,
     //   lastname: lastname,
