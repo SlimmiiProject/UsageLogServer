@@ -686,17 +686,28 @@ export class DataProcessor {
    * @param userId number
    * @returns array with devices
   */
-  public static UserDevices = async (userId: number): Promise<Device[]> => {
-    const user: UserAccount = await UserAccount.findOne({
-      relations: {
-        device: true
-      },
-      where: {
-        userId: userId
+  public static UserDevices = async (userId: number): Promise<ITempData[]> => {
+    const user :UserAccount = await UserAccount.findOneBy({userId: userId})
+    
+    const devices: Device[] = await this.getDevices(user.userId);
+
+    let tempData : ITempData[] = await devices.map((device:any)=>{
+      return {
+        deviceIndex: device.device_index,
+        deviceId: device.deviceId,
+        friendlyName: device.friendlyName,
+        batteryPercentage: device.BatteryPercentage
       }
-    });
-    return user.device;
+    })
+    return tempData;
   }
   //#endregion
 
+}
+
+interface ITempData {
+  deviceIndex: number;
+  deviceId: string;
+  friendlyName: string;
+  batteryPercentage: number;
 }

@@ -29,9 +29,7 @@ export default function App() {
 
   return (
     <>
-    
-      <div className="flexDashboard">
-      <select
+        <select
           className="dropdown"
           onChange={(e) => {
             setLoading(true);
@@ -45,6 +43,7 @@ export default function App() {
           <option value="Week">{I18n.t("dashboard.week")}</option>
           <option value="Day">{I18n.t("dashboard.day")}</option>
         </select>
+      <div className="flexDashboard">
         
         {!loading &&
           devices.map((meter) => (
