@@ -59,6 +59,7 @@
   "signIn.signIn": "Sign In",
   "signIn.forgotPassword": "Forgot Password?",
   "signIn.register": "Register Here",
+  "signIn.error": "Login has failed, try again!",
   "error.missing_fields": "Missing fields:",
   "error.name_minimum_three": "Name needs to be minimum of 3 letters",
   "error.wrong_e_p_syntax": "Wrong Syntax for email or phone",
@@ -115,5 +116,11 @@
   "assignUserDivices.assign": "Assign UserAccount to Device",
   "metercard.basicCard": "not set",
   "metercard.bateryData": "no data received",
-  "metercard.deviceIndex": "Device Index:"
+  "metercard.deviceIndex": "Device Index:",
+  "passwordReset": "Reset password",
+  "passwordReset.EnterEmail": "Enter your eMail:",
+  "passwordReset.submit": "Submit",
+  "passwordReset.confirmMessage": "Password reset sent to {{email}}",
+  "forgotPassword.password": "Password",
+  "forgotPassword.verify": "Verify password"
 }

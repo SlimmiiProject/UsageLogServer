@@ -53,6 +53,7 @@
   "signIn.signIn": "Anmelden",
   "signIn.forgotPassword": "Passwort vergessen?",
   "signIn.register": "Hier registrieren",
+  "signIn.error": "Die Anmeldung ist fehlgeschlagen, versuchen Sie es erneut!",
   "error.missing_fields": "Fehlende Felder:",
   "error.name_minimum_three": "Der Name muss aus mindestens 3 Buchstaben bestehen",
   "error.wrong_e_p_syntax": "Falsche Syntax für E-Mail oder Telefon",
@@ -109,5 +110,11 @@
   "assignUserDivices.assign": "Benutzerkonto dem Gerät zuweisen",
   "metercard.basicCard": "nicht festgelegt",
   "metercard.bateryData": "Keine Daten empfangen",
-  "metercard.deviceIndex": "Geräteindex:"
+  "metercard.deviceIndex": "Geräteindex:",
+  "passwordReset": "Passwort zurücksetzen",
+  "passwordReset.EnterEmail": "Geben sie ihre E-Mail Adresse ein:",
+  "passwordReset.submit": "Einreichen",
+  "passwordReset.confirmMessage": "Passwort zurücksetzen gesendet an {{email}}",
+  "forgotPassword.password": "Passwort",
+  "forgotPassword.verify": "Passwort bestätigen"
 }

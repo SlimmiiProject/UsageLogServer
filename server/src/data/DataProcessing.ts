@@ -289,13 +289,6 @@ export class DataProcessor {
    * @returns Promise<Device[]>
    */
   public static getDevices = async (userId: number): Promise<Device[]> => {
-    // const devices = await DatabaseConnector.INSTANCE.dataSource
-    //   .getRepository(Device)
-    //   .createQueryBuilder("device")
-    //   .leftJoinAndSelect("device.user", "user")
-    //   .where("user.userid = :id", { id: userId })
-    //   .getMany();
-
     return await Device.find({
       relations: {
         user: true,
@@ -447,8 +440,15 @@ export class DataProcessor {
    * @returns Promise<boolean>
    */
   public static GetPasswordReset = async (token: string) => {
-    const resetToken: PasswordReset = await PasswordReset.findOneBy({ token: token });
-    return resetToken;
+    const resetToken: PasswordReset[] = await PasswordReset.find(
+      {
+        relations: {
+          user: true
+        },
+        where: { token: Equal(token) }
+      });
+
+    return resetToken[0];
   }
   //#endregion
 
@@ -486,30 +486,40 @@ export class DataProcessor {
    * @param phone undefined | string of 12 characters that needs to start with +32
    * @param colorDay GraphColor | undefined enum of colors
    * @param colorNight | undefined enum of colors
+   * @param password undefined | string
    * @returns Promise<void>
    */
   public static EditAcount = async (
     userid: number,
-    firstname: string,
-    lastname: string,
-    email: string,
+    firstname?: string,
+    lastname?: string,
+    email?: string,
     phone?: string,
     colorDay?: GraphColors,
-    colorNight?: GraphColors
+    colorNight?: GraphColors,
+    password?: string
   ): Promise<void> => {
     let userExists = await UserAccount.findAndCountBy({ userId: userid });
     if (userExists[1] < 1 && userExists[1] > 1)
       throw new Error(
         `Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`
       );
-    await UserAccount.update(userid, {
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      phone: phone,
-      colorDay: colorDay,
-      colorNight: colorNight,
-    });
+
+      if (firstname) await UserAccount.update(userid, {firstname: firstname})
+      if (lastname) await UserAccount.update(userid, {lastname: lastname})
+      if (email) await UserAccount.update(userid, {email: email})
+      if (phone) await UserAccount.update(userid, {phone: phone})
+      if (colorDay) await UserAccount.update(userid, {colorDay: colorDay})
+      if (colorNight) await UserAccount.update(userid, {colorNight: colorNight})
+      if (password) await UserAccount.update(userid, {password: password})
+    // await UserAccount.update(userid, {
+    //   firstname: firstname,
+    //   lastname: lastname,
+    //   email: email,
+    //   phone: phone,
+    //   colorDay: colorDay,
+    //   colorNight: colorNight,
+    // });
   };
 
   /**
@@ -680,7 +690,7 @@ export class DataProcessor {
       userId: user.userId
     }
   });
-  
+
   /**
    * Returning the device of the user.
    * @param userId number

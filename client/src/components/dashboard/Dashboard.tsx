@@ -5,7 +5,7 @@ import Graph from "./Graph";
 import { CircularProgress } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 
-type timePeriod = "Day"|"Week"|"Month";
+type timePeriod = "Day" | "Week" | "Month";
 
 export default function App() {
   const context = useContext(userContext);
@@ -29,6 +29,7 @@ export default function App() {
 
   return (
     <>
+      <div>
         <select
           className="dropdown"
           onChange={(e) => {
@@ -49,6 +50,11 @@ export default function App() {
           devices.map((meter) => (
             <section
               className="graph"
+              style={{
+                backgroundColor: "rgba(0, 0, 0, 0.0)",
+                minWidth: "700px",
+                height: "inherit"
+              }}
             >
               <Graph
                 data={meter.data}
@@ -56,23 +62,24 @@ export default function App() {
                 colorDay={meter.colorDay}
                 colorNight={meter.colorNight}
               />
-
             </section>
           ))}
 
-        {loading && devices.length === 0 && 
-        <section className="graph"
-        style={{
-          backgroundColor: "rgba(0, 0, 0, 0.0)",
-          justifyContent:"center",
-          justifyItems:"center",
-          alignItems:"center",
-          display:"flex",
-          borderWidth:0
-
-        }}>
-          <CircularProgress/>
-          </section>}
+        {loading && devices.length === 0 && (
+          <section
+            className="graph"
+            style={{
+              backgroundColor: "rgba(0, 0, 0, 0.0)",
+              justifyContent: "center",
+              justifyItems: "center",
+              alignItems: "center",
+              borderWidth: 0,
+            }}
+          >
+            <CircularProgress />
+          </section>
+        )}
+        </div>
       </div>
     </>
   );

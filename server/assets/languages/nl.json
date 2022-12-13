@@ -59,6 +59,7 @@
   "signIn.signIn": "Log In",
   "signIn.forgotPassword": "Wachtwoord vergeten?",
   "signIn.register": "Registreer je hier",
+  "signIn.error": "Inloggen is mislukt, probeer het opnieuw!",
   "error.missing_fields": "Niet ingevulde velden:",
   "error.name_minimum_three": "Naam moet minimum 3 karakters bevatten",
   "error.wrong_e_p_syntax": "Verkeerd email of telefoon nummer",
@@ -113,5 +114,11 @@
   "assignUserDivices.assign": "Gebruikersaccount toewijzen aan apparaat",
   "metercard.basicCard": "niet ingesteld",
   "metercard.bateryData": "Geen data ontvangen",
-  "metercard.deviceIndex": "Apparaatindex:"
+  "metercard.deviceIndex": "Apparaatindex:",
+  "passwordReset": "wachtwoord resetten",
+  "passwordReset.EnterEmail": "Geef je email:",
+  "passwordReset.submit": "Indienen",
+  "passwordReset.confirmMessage": "Wachtwoord reset verzonden naar {{email}}",
+  "forgotPassword.password": "Wachtwoord",
+  "forgotPassword.verify": "Wachtwoord verifiëren"
 }

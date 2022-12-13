@@ -166,6 +166,15 @@ export class IOUtil {
     }
   }
 
+  public static requestPasswordReset = async (email: string) => {
+    try {
+      const res = await this.INSTANCE.post("/profiles/submit-forgot-password", { email: email });
+      return res.status === 200;
+    } catch (err) {
+      return false;
+    }
+  }
+
   /** A function that gets the device of the user. 
    * @param userId number
    * @returns devicedata for the specific user
@@ -180,12 +189,29 @@ export class IOUtil {
     }
   }
 
-  public static changePassword = async (userId: number, password: string) => {
+  public static changePassword = async (token: string, password: string) => {
     try {
-      const res = await this.INSTANCE.put(`/users/${userId}/password`, { password: password });
-      return res.data;
+
+      const res = await this.INSTANCE.put(`/profiles/password`, { token: token, password: password });
+      return res.status === 200;
     } catch (err) {
-      console.error(err);
+      return false;
     }
   }
+
+  public static doesPasswordResetExist = async (token: string, controller: AbortController) => {
+    try {
+      const res = await this.INSTANCE.get(`/profiles/password`, {
+        signal: controller.signal,
+        data: {
+          token: token
+        }
+      });
+      return res.status === 200;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  public static isAborted = (abortController: AbortController) => abortController.signal.aborted;
 }
