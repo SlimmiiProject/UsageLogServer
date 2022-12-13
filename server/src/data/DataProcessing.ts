@@ -698,4 +698,5 @@ export class DataProcessor {
     return user.device;
   }
   //#endregion
+
 }
