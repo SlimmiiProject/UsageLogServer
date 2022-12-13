@@ -200,7 +200,7 @@ export class IOUtil {
     try {
       const res = await this.INSTANCE.get(`/profiles/password`, {
         signal: controller.signal,
-        data: {
+        params: {
           token: token
         }
       });
