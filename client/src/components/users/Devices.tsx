@@ -1,10 +1,11 @@
+import { I18n } from "../../util/language/I18n";
 import MeterCard from "../dashboard/MeterCard";
 
 const Devices = (): JSX.Element => {
   return (
     <>
-      <h1>Apparaatbeheer</h1>
-      <h2>Sample metercard</h2>
+      <h1>{I18n.t("devices.devicemanager")}</h1>
+      <h2>{I18n.t("devices.sample")}</h2>
       <MeterCard />
     </>
   );
