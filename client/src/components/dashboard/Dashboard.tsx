@@ -29,11 +29,7 @@ export default function App() {
 
   return (
     <>
-<<<<<<< HEAD
-=======
-
       <div>
->>>>>>> d3a21ecad2558a6d67c93f55360a42027bfa8029
         <select
           className="dropdown"
           onChange={(e) => {
@@ -83,6 +79,7 @@ export default function App() {
             <CircularProgress />
           </section>
         )}
+        </div>
       </div>
     </>
   );
