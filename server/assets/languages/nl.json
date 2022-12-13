@@ -109,5 +109,11 @@
   "logFile.date": "Datum",
   "dashboard.month": "Maand",
   "dashboard.week": "Week",
-  "dashboard.day": "Dag"
+  "dashboard.day": "Dag",
+  "passwordReset": "wachtwoord resetten",
+  "passwordReset.EnterEmail": "Geef je email:",
+  "passwordReset.submit": "Indienen",
+  "passwordReset.confirmMessage": "Wachtwoord reset verzonden naar {{email}}",
+  "forgotPassword.password": "Wachtwoord",
+  "forgotPassword.verify": "Wachtwoord verifiëren"
 }

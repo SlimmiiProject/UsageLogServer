@@ -103,5 +103,11 @@
   "logFile.date": "Date",
   "dashboard.month": "Mois",
   "dashboard.week": "Semaine",
-  "dashboard.day": "Jour"
+  "dashboard.day": "Jour",
+  "passwordReset": "réinitialiser le mot de passe",
+  "passwordReset.EnterEmail": "Entrer votre Email:",
+  "passwordReset.submit": "Soumettre",
+  "passwordReset.confirmMessage": "Réinitialisation du mot de passe envoyée à {{email}}",
+  "forgotPassword.password": "Mot de passe",
+  "forgotPassword.verify": "Vérifier le mot de passe"
 }
