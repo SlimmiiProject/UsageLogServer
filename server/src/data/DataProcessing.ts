@@ -448,7 +448,7 @@ export class DataProcessor {
         where: { token: Equal(token) }
       });
 
-    return resetToken[0];
+    return resetToken.length === 1 && ObjectUtil.isSet(resetToken[0]);
   }
   //#endregion
 

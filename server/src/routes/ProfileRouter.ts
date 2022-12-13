@@ -108,7 +108,7 @@ router.route("/password")
         const passwordResetProcessor = new PasswordResetManager(token, password);
         res.sendStatus(await passwordResetProcessor.handle() ? 200 : 403);
     }).get(async (req: Request, res: Response) => {
-       res.sendStatus(await DataProcessor.GetPasswordReset(req.query.token as string) ? 200 : 403);
+        res.sendStatus(await DataProcessor.GetPasswordReset(req.query.token as string) ? 200 : 403);
     });
 
 router.post("/submit-forgot-password", async (req: Request, res: Response) => {

@@ -140,7 +140,6 @@ const ForgotPassword = () => {
           <Box
             component="form"
             onSubmit={handlePasswordChangeSubmit}
-            noValidate
             sx={{ mt: 1 }}
           >
             <TextField
@@ -148,7 +147,7 @@ const ForgotPassword = () => {
               required
               fullWidth
               id="password"
-              label={I18n.t("forgotPassword.password")}
+              label={I18n.t("field.password")}
               name="password"
               type="password"
               autoFocus
@@ -158,7 +157,7 @@ const ForgotPassword = () => {
               required
               fullWidth
               name="password_verify"
-              label={I18n.t("forgotPassword.verify")}
+              label={I18n.t("field.password_verify")}
               type="password"
               id="password_verify"
             />
