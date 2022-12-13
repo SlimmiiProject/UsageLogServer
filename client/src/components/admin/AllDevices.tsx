@@ -45,7 +45,7 @@ export const AllDevices = (): JSX.Element => {
         }}
       >
         <h2>{I18n.t("allDevices.List")}</h2>
-        <TableContainer component={Paper} arial-label="simple table">
+        <TableContainer component={Paper} arial-label="simple table" sx={{margin:"auto"}}>
           <TableHead>
             <TableRow>
               <TableCell>{I18n.t("allDevices.tableIndex")}</TableCell>
@@ -132,6 +132,8 @@ export const AllDevices = (): JSX.Element => {
             </TableRow>
           </TableBody>
         </TableContainer>
+        <Box className="marginFix" sx={{minHeight:"2rem"}}/>
+
       </Box>
     </>
   );

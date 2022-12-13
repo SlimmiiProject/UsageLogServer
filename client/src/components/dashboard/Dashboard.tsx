@@ -29,7 +29,7 @@ export default function App() {
 
   return (
     <>
-      <div >
+      <div>
         <select
           className="dropdown"
           onChange={(e) => {
@@ -45,6 +45,8 @@ export default function App() {
           <option value="Day">{I18n.t("dashboard.day")}</option>
         </select>
 
+      <div className="flexDashboard">
+        
         {!loading &&
           devices.map((meter) => (
             <section
