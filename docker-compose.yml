@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  itcasetest-db:
+    image: mariadb:10.3.35
+    environment:
+      MYSQL_ROOT_PASSWORD: '7pv90v?6N'
+    ports:
+      - 3306:3306
+    expose:
+      - '3306'
+  usage-log-server:
+    build: ./
+    ports: 
+      - 3001:3001
