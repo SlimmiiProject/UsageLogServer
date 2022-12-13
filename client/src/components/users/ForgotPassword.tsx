@@ -27,8 +27,10 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    //if (!token) navigate(getPath("/"))
-    //TODO Check if token is valid or expired
+    if (token) {
+          //TODO Check if token is valid or expired
+    }
+
   }, []);
 
   const handlePasswordChangeSubmit = async (
@@ -45,8 +47,11 @@ const ForgotPassword = () => {
     if (password !== password_verify)
       return setError("error.passwords_no_match");
 
-    // Send request to server, requesting a boolean reply
-    // setReset(//response)
+    if (token && (await IOUtil.changePassword(token, password))) {
+      setInfo("info.password_reset_succesful");
+    } else {
+      setError("error.password_reset_fail");
+    }
   };
 
   const handlePasswordResetRequestSubmit = async (
@@ -61,9 +66,11 @@ const ForgotPassword = () => {
 
     if (email_value) {
       if (await IOUtil.requestPasswordReset(email_value)) {
-        setInfo(I18n.t("info.email_sent_password_reset", {
-          email: email_value
-        }))
+        setInfo(
+          I18n.t("info.email_sent_password_reset", {
+            email: email_value,
+          })
+        );
       }
     } else {
       setError("error.email_not_supplied");
@@ -109,6 +116,7 @@ const ForgotPassword = () => {
             </Button>
           </Box>
         )}
+
 
         {!expired && token && (
           <Box

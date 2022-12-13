@@ -9,6 +9,7 @@ import { ObjectUtil } from '../utils/ObjectUtil';
 import { Mailer } from '../utils/mail/Mailer';
 import { MailTemplates } from '../utils/mail/MailTemplates';
 import { Environment } from '../utils/Environment';
+import { PasswordResetManager } from '../data/processors/PasswordResetProcessor';
 const router = express.Router();
 
 type CreationData = {
@@ -100,6 +101,15 @@ router.post("/create-profile", async (req: Request, res: Response) => {
         Object.entries(data).filter((entry) => !ObjectUtil.isSet(entry[1])).map((entry) => entry[0]))
     );
 });
+
+router.route("/password")
+    .put(async (req: Request, res: Response) => {
+        const { token, password } = req.body;
+
+        const passwordResetProcessor = new PasswordResetManager(token, password);
+        res.sendStatus(await passwordResetProcessor.handle() ? 200 : 403);
+    });
+
 
 router.post("/submit-forgot-password", async (req: Request, res: Response) => {
     const data: ResetData = req.body;
