@@ -691,9 +691,9 @@ export class DataProcessor {
     const user: UserAccount = await UserAccount.findOne({
       where: {
         userId: userId
-      },
-      relations: ["device"]
+      }
     });
+
     let tempData : ITempData[] = await user.device.map((device)=>{
       return {
         deviceIndex: device.device_index,
