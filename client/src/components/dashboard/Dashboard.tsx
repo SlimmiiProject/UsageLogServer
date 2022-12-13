@@ -29,7 +29,6 @@ export default function App() {
 
   return (
     <>
-
       <div>
         <select
           className="dropdown"
@@ -80,6 +79,7 @@ export default function App() {
             <CircularProgress />
           </section>
         )}
+      </div>
       </div>
     </>
   );
