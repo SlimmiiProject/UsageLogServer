@@ -1,3 +1,10 @@
+import { deviceData } from './AdminUtil';
+/**
+ * IOUtil is a class with a static method deleteUserFromDevice that takes a string and returns void.
+ * @property {boolean} succes - boolean;
+ * @property {string} error - string;
+ * @property {string[]} missing_fields - string[]
+ */
 import axios, { AxiosInstance } from "axios";
 import { AccountData, IDevice } from "../App";
 import { ContactInfo } from "../components/Contact";
@@ -133,6 +140,9 @@ export class IOUtil {
     }
   }
 
+  /**It deletes a device from the database. 
+   * @param deviceId string
+  */
   public static deleteDevice = async (deviceId: string) => {
     try {
       const res = await this.INSTANCE.delete(`/admin/device`, { data: { deviceId: deviceId } });
@@ -142,6 +152,10 @@ export class IOUtil {
     }
   }
 
+  /** It adds a device to the database. 
+   * @param deviceId string
+   * @param alias string
+  */
   public static addDevice = async (deviceId: string, alias: string) => {
     try {
       const res = await this.INSTANCE.post("/admin/device", { deviceId: deviceId, alias: alias });
@@ -151,6 +165,10 @@ export class IOUtil {
     }
   }
 
+  /** A function that gets the device of the user. 
+   * @param userId number
+   * @returns devicedata for the specific user
+  */
   public static getOwnDevice = async (userId: number) => {
     try {
       const res = await this.INSTANCE.get(`/users/${userId}/device`);
