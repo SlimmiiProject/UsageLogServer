@@ -448,7 +448,7 @@ export class DataProcessor {
         where: { token: Equal(token) }
       });
 
-    return resetToken.length === 1 && ObjectUtil.isSet(resetToken[0]);
+    return resetToken[0];
   }
   //#endregion
 
@@ -505,13 +505,13 @@ export class DataProcessor {
         `Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`
       );
 
-      if (firstname) await UserAccount.update(userid, {firstname: firstname})
-      if (lastname) await UserAccount.update(userid, {lastname: lastname})
-      if (email) await UserAccount.update(userid, {email: email})
-      if (phone) await UserAccount.update(userid, {phone: phone})
-      if (colorDay) await UserAccount.update(userid, {colorDay: colorDay})
-      if (colorNight) await UserAccount.update(userid, {colorNight: colorNight})
-      if (password) await UserAccount.update(userid, {password: password})
+    if (firstname) await UserAccount.update(userid, { firstname: firstname })
+    if (lastname) await UserAccount.update(userid, { lastname: lastname })
+    if (email) await UserAccount.update(userid, { email: email })
+    if (phone) await UserAccount.update(userid, { phone: phone })
+    if (colorDay) await UserAccount.update(userid, { colorDay: colorDay })
+    if (colorNight) await UserAccount.update(userid, { colorNight: colorNight })
+    if (password) await UserAccount.update(userid, { password: password })
     // await UserAccount.update(userid, {
     //   firstname: firstname,
     //   lastname: lastname,
@@ -697,11 +697,11 @@ export class DataProcessor {
    * @returns array with devices
   */
   public static UserDevices = async (userId: number): Promise<ITempData[]> => {
-    const user :UserAccount = await UserAccount.findOneBy({userId: userId})
-    
+    const user: UserAccount = await UserAccount.findOneBy({ userId: userId })
+
     const devices: Device[] = await this.getDevices(user.userId);
 
-    let tempData : ITempData[] = await devices.map((device:any)=>{
+    let tempData: ITempData[] = await devices.map((device: any) => {
       return {
         deviceIndex: device.device_index,
         deviceId: device.deviceId,
