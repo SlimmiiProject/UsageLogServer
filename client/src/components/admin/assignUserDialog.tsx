@@ -4,40 +4,39 @@ import { I18n } from "../../util/language/I18n";
 import { userData } from "../../util/AdminUtil";
 import Dialog from "@mui/material/Dialog";
 import List from "@mui/material/List";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import { color } from "@mui/system";
 import ListItemText from "@mui/material/ListItemText";
+import {AdminUtil,deviceData} from "../../util/AdminUtil";
+import {dialogstate} from "./AllDevices"
 
-export interface assignUserDialogProps {
+
+
+interface dialogProps{
     open:boolean
-    selectedValue:number
-    onClose:(value: number)=>void
+    device:deviceData,
+    owner?:userData,
+    onClose:(device:string)=>void,
     users:userData[]
 }
+const AssignUserDialog =({open,device,owner,onClose,users}:dialogProps)=>{
+    const [user,setOwner]=useState<userData|undefined>(owner? owner:undefined)
 
-const assignUserDialog = ({open,selectedValue, onClose,users}:assignUserDialogProps)=>{
-    const [Value, setValue] = useState(selectedValue)
-    const handleClose = ()=>{
-        onClose(Value)
-    };
-    const handleListItemClick = (value:number)=>{
-        onClose(Value)
-    };
-
-return (
+    const handleItemListClick=(u:userData,device:deviceData)=>{
+        setOwner(u)
+        onClose(device.id)
+    }
+    return (
     <>
-   <Dialog onClose={handleClose} open={open}>
-    <DialogTitle>{I18n.t("assignUserDivices.assign")}</DialogTitle>
-    <List sx={{pt:0}}>
+    <Dialog onClose={onClose}open={open}>
+        <DialogTitle>Assign user account</DialogTitle>
+        <List sx={{pt:0}}>
         {users.map((u)=>(
-            <ListItem button onClick={()=>handleListItemClick(u.userId)} key={u.userId}>
-             <ListItemText primary={`${u.firstname} ${u.lastname}`} secondary={u.email}/>
+            <ListItem button onClick={()=>handleItemListClick(u,device)} key={u.userId}>
+                <ListItemText primary={u.email}/>
             </ListItem>
         ))}
-    </List>
-   </Dialog>
+        </List>
+    </Dialog>
     </>
 )
 }
-export default assignUserDialog;
+export default AssignUserDialog;

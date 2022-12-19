@@ -13,26 +13,38 @@ import {
 } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
-
+import AssignUserDialog from "./assignUserDialog"
+export interface dialogstate {
+  open:boolean,
+  device:string,
+  user?:userData,
+}
 export const AllDevices = (): JSX.Element => {
   const [devices, setDevices] = useState<deviceData[]>([]);
   const [users, setUsers] = useState<userData[]>([]);
+  const [dialogs,setDialogs] = useState<dialogstate[]>([])
   const [isloading, setisloading] = useState<boolean>(true);
   const [deviceId, setDeviceId] = useState<string>("");
   const [alias, setAlias] = useState<string>("");
+
   useEffect(() => {
     const controller = new AbortController();
 
     setisloading(true);
-    AdminUtil.getAllDevices(controller).then((result) => {
+    AdminUtil.getAllDevices(controller).then((result:deviceData[]) => {
       setDevices(result);
       setisloading(false);
     });
+    
     AdminUtil.getUsers(controller).then((result)=>{
       setUsers(result);
     })
     return () => controller.abort();
   }, []);
+
+  const onClose = (device:string)=>{
+    console.log(device)
+  }
 
   return (
     <>
@@ -61,7 +73,7 @@ export const AllDevices = (): JSX.Element => {
           </TableHead>
           <TableBody>
             {!isloading ? (
-              devices.map((device) => (
+              devices.map((device,index) => (
                 <TableRow
                   key={device.index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -76,12 +88,21 @@ export const AllDevices = (): JSX.Element => {
                   <TableCell align="right">
                     {device.owner ? (
                       <p>{device.owner}</p>
-                    ) : (
+                    ) : (<>
+                    <AssignUserDialog 
+                        open={dialogs[index].open} 
+                        device={device} 
+                        owner={dialogs[index].user}
+                        users={users}
+                        onClose={onClose}
+                        />
                       <Chip
                         label="assign user"
                         variant="outlined"
                         style={{ backgroundColor:'rgba(0, 170, 20, 255)' }}
-                      />
+                        onClick={()=>{}}/>
+
+                      </>
                     )}
                   </TableCell>
 
@@ -123,6 +144,7 @@ export const AllDevices = (): JSX.Element => {
                     <input type="text" value={alias} onChange={(e) => setAlias(e.target.value)} />
                 </TableCell>
                 <TableCell align="center">
+
                 <Chip
                       label={I18n.t("allDevices.tableChipAdd")}
                       variant="outlined"
