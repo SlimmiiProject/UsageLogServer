@@ -25,7 +25,7 @@ export const AllUsers = (): JSX.Element => {
     //<TableCell align="right">{user.device.map((device)=>(<p>{device}</p>))}</TableCell>
 
     setisloading(true);
-    AdminUtil.getUsers(controller).then((result) => {
+    AdminUtil.getUsers(controller, 0).then((result) => {
       //setusers([{userId:1,firstname:"Kasper",lastname:'Bosteels',email:"Kasperbosteels@hotmail.com",device:[1,2,3,4,5,6],colorDay:GraphColors.RED,colorNight:GraphColors.BLUE,isAdmin:true}]);
       setusers(result);
       setisloading(false);

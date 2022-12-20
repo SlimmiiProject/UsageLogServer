@@ -14,7 +14,8 @@ router.get("/logfile", async (req: Request, res: Response) =>
 
 /* A route that is used to get all the users. */
 router.get("/allusers", async (req: Request, res: Response) => {
-  res.json(await DataProcessor.getAllUsers());
+  const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
+  res.json(await DataProcessor.getAllUsers(skip));
 })
 
 /* A route that is used to get all the devices. */

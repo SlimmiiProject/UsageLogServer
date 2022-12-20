@@ -35,7 +35,6 @@ export interface IUserData {
   lastname: string;
   phone: string;
   email: string;
-  device: number[];
   colorDay: GraphColors;
   colorNight: GraphColors;
   isAdmin: boolean;
@@ -108,8 +107,10 @@ export class DataProcessor {
   /**
    * Getting all the users from the database and returning them in a IUserData[]t.
    */
-  public static getAllUsers = async (): Promise<IUserData[]> => {
+  public static getAllUsers = async (skip: number): Promise<IUserData[]> => {
     const users: UserAccount[] = await UserAccount.find({
+      skip: skip,
+      take: 10,
       select: {
         password: false,
       },
@@ -125,7 +126,6 @@ export class DataProcessor {
         lastname: user.lastname,
         phone: user.phone,
         email: user.email,
-        device: deviceIds,
         colorDay: user.colorDay,
         colorNight: user.colorNight,
         isAdmin: await user.isAdmin(),
