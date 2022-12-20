@@ -42,7 +42,7 @@ export const AllDevices = (): JSX.Element => {
     AdminUtil.getAllDevices(controller, 0).then((result) => {
       setDevices(result.data);
       //populate array with objects for states
-      result.data.forEach((r) => temp.push({
+      result.data.forEach((r:any) => temp.push({
         open: false,
         device: r.id,
         user: r.owner,
