@@ -16,7 +16,7 @@ import { IOUtil } from "../../util/IOUtil";
 
 export const AllDevices = (): JSX.Element => {
   const [devices, setDevices] = useState<deviceData[]>([]);
-  const [users, setUsers] = useState<userData[]>([]);
+  const [_users, setUsers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
   const [deviceId, setDeviceId] = useState<string>("");
   const [alias, setAlias] = useState<string>("");

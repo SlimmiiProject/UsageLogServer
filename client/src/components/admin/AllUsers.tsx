@@ -8,13 +8,11 @@ import {
   TableHead,
   TableRow,
   Paper,
-  LinearProgress,
   CircularProgress,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { AdminUtil, GraphColors, userData } from "../../util/AdminUtil";
+import { AdminUtil, userData } from "../../util/AdminUtil";
 import { I18n } from "../../util/language/I18n";
-import React from "react";
 import { IOUtil } from "../../util/IOUtil";
 export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
