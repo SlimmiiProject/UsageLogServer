@@ -24,7 +24,7 @@ export class UserAccount extends BaseEntity {
     userAccount.lastname = lastName;
     userAccount.email = email;
     userAccount.phone = phone;
-    userAccount.password = password;
+    userAccount.setPassword(password);
     return userAccount;
   }
 
