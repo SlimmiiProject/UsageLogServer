@@ -602,8 +602,10 @@ export class DataProcessor {
   /**
    * Returns all the data in the logfile
    */
-  public static GetLogfileData = async (): Promise<ILogData[]> => {
+  public static GetLogfileData = async (skip: number) => {
     let logs: Logfile[] = await Logfile.find({
+      skip: skip,
+      take: 10,
       relations: {
         account_id: true
       },
@@ -626,7 +628,8 @@ export class DataProcessor {
         account_id: account_id
       })
     }
-    return newLogs
+    const count = await Logfile.count()
+    return { data:newLogs, pages: Math.ceil(count / 10)}
   };
 
   /**
