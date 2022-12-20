@@ -13,18 +13,23 @@ import {
   Stack,
   Button,
   IconButton,
+  Slide,
+  Dialog,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { AdminUtil, userData } from "../../util/AdminUtil";
 import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
+import {TransitionProps} from "@mui/material/transitions"
 export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
   const [render, setRender] = useState<boolean>(false);
   const [pages,setPages] = useState<number>(10)
   const [page,setPage]=useState<number>(1)
+  const [openCreateDialog,setOpenCreateDialog] = useState<boolean>(false);
   useEffect(() => {
     const controller = new AbortController();
 
@@ -51,6 +56,19 @@ const requestAllUsers = (controller:AbortController)=>{
 const HandleResetRequest = (email:string) =>{
   IOUtil.requestPasswordReset(email)
 }
+const HandleClickOpenCreateDialog=()=>{
+  setOpenCreateDialog(true);
+}
+const HandleClickCloseCreateDialog=()=>{
+  setOpenCreateDialog(false);
+}
+const Transition = React.forwardRef(function Transition(
+  props:TransitionProps & {children:React.ReactElement;},
+  ref:React.Ref<unknown>,
+){
+  return <Slide direction="up" ref={ref}{...props}/>
+}
+)
 
   return (
     <>
@@ -77,10 +95,14 @@ const HandleResetRequest = (email:string) =>{
                 <TableCell>{I18n.t("allUsers.tablePhone")}</TableCell>
                 <TableCell>Request Reset</TableCell>
                 <TableCell>{I18n.t("allUsers.tableAdmin")}</TableCell>
-                <TableCell><Chip label={I18n.t("allUsers.tableCreateUser")}
-                                 variant="outlined"
-                                 style={{  backgroundColor:'rgba(0, 170, 20, 255)'}}
-                                 onClick={(event)=>{/*create user goes here*/}}/>
+                <TableCell>
+                  <Button endIcon={<AddCircleIcon/>} color="success">
+                  {I18n.t("allUsers.tableCreateUser")}
+                  </Button>
+                  <Dialog fullScreen TransitionComponent={Transition} onClose={HandleClickCloseCreateDialog} open={openCreateDialog}>
+                      <Button onClick={HandleClickCloseCreateDialog}></Button>
+                  </Dialog>
+
                 </TableCell>
               </TableRow>
             </TableHead>
