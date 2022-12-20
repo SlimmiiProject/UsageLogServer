@@ -40,10 +40,15 @@ export const AllDevices = (): JSX.Element => {
     setisloading(true);
     AdminUtil.getAllDevices(controller).then((result:deviceData[]) => {
       setDevices(result);
-      result.map((r)=>temp.push({open:false,device:r.id,user:r.owner,assign:handleClickClosed,setopen:handleClickOpen}))
-      console.log(temp)
+      //populate array with objects for states
+      result.map((r)=>temp.push({
+        open:false,
+        device:r.id,
+        user:r.owner,
+        assign:handleClickClosed,
+        setopen:handleClickOpen}))
       setDialogs(temp)
-
+      console.log(temp)
       setisloading(false);
     });
     return () => controller.abort();
@@ -60,9 +65,10 @@ export const AllDevices = (): JSX.Element => {
   const handleClickOpen = (deviceid:string)=>{
     console.log("open triggered")
     let temp = dialogs;
-    temp.map((d)=>d.device===deviceid? d.open=true : d.open=false)
+    console.log(dialogs)
     console.log(temp)
-    setDialogs([...temp])
+    temp.map((d)=>d.device===deviceid? d.open=true : d.open=false)
+    setDialogs(temp)
   
   }
   return (
@@ -111,7 +117,7 @@ export const AllDevices = (): JSX.Element => {
                     <Button onClick={()=>dialogs[index].setopen(device.id)}>
                       Assign user to device
                     </Button>
-                    <Dialog open={dialogs[index].open} onClose={()=>dialogs[index].assign(device.id,2)}>
+                    <Dialog open={dialogs[index].open} onClose={()=>dialogs[index].assign(device.id,11)}>
                       <DialogTitle>Assign user to this device</DialogTitle>
                       <TextField autoFocus fullWidth margin="dense" label="user id" type="number" variant="standard"/>
                       <DialogContent>
