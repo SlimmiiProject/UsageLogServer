@@ -60,6 +60,23 @@ export class AdminUtil {
         }
     }
 
+    public static getUser = async (userId: number) : Promise<userData> => {
+        try {
+            const res = await IOUtil.INSTANCE.get(`/admin/user`, {params: {userId: userId}});
+            return res.data;
+        } catch (_ignore) {
+            return {
+                userId: 0,
+                firstname: "",
+                lastname: "",
+                email: "",
+                device: [],
+                phone: "",
+                isAdmin: false
+            }
+        }
+    }
+
     /* A function that is called when a user is created. */
     public static getUsers = async (controller: AbortController, page: number): Promise<userResponseData> => {
         const toSkip = page * 10;
