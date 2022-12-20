@@ -17,7 +17,7 @@ const ForgotPassword = () => {
   const [error, setError] = useState<string>("");
   const [infoMsg, setInfo] = useState<string>("");
 
-  const [expired, setExpired] = useState<boolean>(false);
+  const [expired, _setExpired] = useState<boolean>(false);
   const [_loading, setLoading] = useState<boolean>(true);
 
   const token = searchParams.get("token");

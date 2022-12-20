@@ -41,15 +41,7 @@ export type TranslationData = {
     word: string
 }
 export class AdminUtil {
-    public static getTranslation = async (controller: AbortController): Promise<TranslationData[]> => {
-        try {
-            return [];
-        } catch (_ignored) {
-            return [];
-        }
-    }
-
-    public static getLogs = async (controller: AbortController): Promise<LogData[]> => {
+   public static getLogs = async (controller: AbortController): Promise<LogData[]> => {
         try {
             const res = await IOUtil.INSTANCE.get("/admin/logfile/", { signal: controller.signal });
             return res.data;
