@@ -46,7 +46,6 @@ export const AllDevices = (): JSX.Element => {
 
       setisloading(false);
     });
-    
     return () => controller.abort();
   }, []);
   const handleClickClosed = (deviceid:string,userid:number)=>{

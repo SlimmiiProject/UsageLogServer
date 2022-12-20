@@ -41,7 +41,7 @@
   "metercard.name": "Naam meterkaart",
   "metercard.id": "Id meterkaart",
   "metercard.chart": "Geef hier een grafiek in",
-  "metercard.battery": "batterij %",
+  "metercard.battery": "batterij",
   "profile.edit": "Profiel wijzigen",
   "profile.title": "Profiel",
   "register.here": "Registreer hier",
@@ -119,6 +119,10 @@
   "passwordReset.EnterEmail": "Geef je email:",
   "passwordReset.submit": "Indienen",
   "passwordReset.confirmMessage": "Wachtwoord reset verzonden naar {{email}}",
+  "passwordReset.errorEmailNorSupplied": "E-mail niet opgegeven",
   "forgotPassword.password": "Wachtwoord",
-  "forgotPassword.verify": "Wachtwoord verifiëren"
+  "forgotPassword.verify": "Wachtwoord verifiëren",
+  "passwordReset.noMatch": "Wachtwoorden komen niet overeen",
+  "passwordReset.resetSuccesfull": "Wachtwoord opnieuw ingesteld",
+  "passwordReset.resetFail": "Wachtwoord resetten mislukt"
 }

@@ -191,7 +191,6 @@ export class IOUtil {
 
   public static changePassword = async (token: string, password: string) => {
     try {
-
       const res = await this.INSTANCE.put(`/profiles/password`, { token: token, password: password });
       return res.status === 200;
     } catch (err) {
@@ -203,7 +202,7 @@ export class IOUtil {
     try {
       const res = await this.INSTANCE.get(`/profiles/password`, {
         signal: controller.signal,
-        data: {
+        params: {
           token: token
         }
       });
