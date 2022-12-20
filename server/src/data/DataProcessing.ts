@@ -1,4 +1,3 @@
-import { User } from "./../types/express-session/index.d";
 import { Device } from "./entities/Device";
 import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
@@ -108,7 +107,7 @@ export class DataProcessor {
   /**
    * Getting all the users from the database and returning them in a IUserData[]t.
    */
-  public static getAllUsers = async (skip: number): Promise<IUserData[]> => {
+  public static getAllUsers = async (skip: number) => {
     const users: UserAccount[] = await UserAccount.find({
       skip: skip,
       take: 10,
@@ -131,7 +130,9 @@ export class DataProcessor {
       };
       response.push(newValue);
     }
-    return response;
+
+    const count = await UserAccount.count();
+    return { data: response, pages: Math.ceil(count/10) };
   };
 
   /**
@@ -217,23 +218,6 @@ export class DataProcessor {
       if (result.length <= 0) await ContactForm.save(newContactForm);
     });
   };
-
-  // /**
-  //  * This creates a logfile and adds it to the database if Logfile is complete
-  //  * @param userId number user id
-  //  * @param description string
-  //  * @param ipaddress string
-  //  */
-  // public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
-  //   let user = UserAccount.findOneBy({ userId: userId });
-  //   let newLog = new Logfile()
-  //   newLog.account_id = await user;
-  //   newLog.description = description;
-  //   newLog.ipaddress = ipaddress;
-  //   validate(newLog).then(async (result) => {
-  //     if (result.length <= 0) await Logfile.save(newLog);
-  //   });
-  // }
 
   /**
    *  you need at least one of the optional values to use this function.
@@ -711,6 +695,16 @@ export class DataProcessor {
     return tempData;
   }
   //#endregion
+
+  /* Creating a device and then adding it to a user. */
+  public static RegisterAccountWithUser = async (
+    dev_id: string,
+    user_id: number,
+  ) => {
+    await Device.createDevice(dev_id);
+    DataProcessor.AddDevicetoUser(user_id, dev_id);
+  };
+
 
 }
 

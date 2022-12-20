@@ -74,4 +74,9 @@ router.get("/data", /*Middleware.onlyAcceptJSON,*/ async (req: Request, res: Res
     res.json(output);
 });
 
+router.post("create-device", async (req: Request, res: Response) => {
+    const { dev_id, user_id } = req.body;
+    res.json(await DataProcessor.RegisterAccountWithUser(dev_id, user_id))
+});
+
 module.exports = router;
