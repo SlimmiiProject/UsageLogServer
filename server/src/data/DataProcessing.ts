@@ -706,6 +706,17 @@ export class DataProcessor {
     DataProcessor.AddDevicetoUser(user_id, dev_id);
   };
 
+  public static SendDataFromDevice = async (dev_id : string , battery : number, image: string) => {
+    const device: Device = await Device
+      .findOne({ where: { deviceId: Equal(dev_id) } });
+    if (!ObjectUtil.isSet(device)) return;
+    device.setBatteryPercentage(battery).save();
+
+    const user: UserAccount = await UserAccount
+      .findOne({ where: { userId: Equal(device.user.userId) } });
+    if (!ObjectUtil.isSet(user)) return;
+  };
+
 
 }
 
