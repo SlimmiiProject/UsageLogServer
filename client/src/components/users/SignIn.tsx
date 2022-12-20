@@ -33,7 +33,7 @@ const SignIn = (): JSX.Element => {
       setFailed(false);
       navigate(getPath("dashboard"));
     }
-  }, [authenticated]);
+  }, [authenticated, navigate]);
 
   // On submit it checks the credentials, If authenticated it redirects to the dashboardpage
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

@@ -39,7 +39,7 @@ const ForgotPassword = () => {
     }
 
     return () => controller.abort();
-  },);
+  }, [token, navigate]);
 
   const handlePasswordChangeSubmit = async (
     event: React.FormEvent<HTMLFormElement>
