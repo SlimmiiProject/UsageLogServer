@@ -34,8 +34,6 @@ export interface IUserData {
   lastname: string;
   phone: string;
   email: string;
-  colorDay: GraphColors;
-  colorNight: GraphColors;
   isAdmin: boolean;
 }
 
@@ -125,8 +123,6 @@ export class DataProcessor {
         lastname: user.lastname,
         phone: user.phone,
         email: user.email,
-        colorDay: user.colorDay,
-        colorNight: user.colorNight,
         isAdmin: await user.isAdmin(),
       };
       response.push(newValue);
@@ -704,6 +700,17 @@ export class DataProcessor {
   ) => {
     await Device.createDevice(dev_id);
     DataProcessor.AddDevicetoUser(user_id, dev_id);
+  };
+
+  public static SendDataFromDevice = async (dev_id : string , battery : number, image: string) => {
+    const device: Device = await Device
+      .findOne({ where: { deviceId: Equal(dev_id) } });
+    if (!ObjectUtil.isSet(device)) return;
+    device.setBatteryPercentage(battery).save();
+
+    const user: UserAccount = await UserAccount
+      .findOne({ where: { userId: Equal(device.user.userId) } });
+    if (!ObjectUtil.isSet(user)) return;
   };
 
 

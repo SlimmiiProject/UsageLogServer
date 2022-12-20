@@ -79,4 +79,10 @@ router.post("create-device", async (req: Request, res: Response) => {
     res.json(await DataProcessor.RegisterAccountWithUser(dev_id, user_id))
 });
 
+router.post("send-data", async  (req: Request, res: Response) => {
+    const { image, battery, dev_id } = req.body;
+    res.json(await DataProcessor.SendDataFromDevice(dev_id, battery, image))
+});
+
+
 module.exports = router;

@@ -48,4 +48,9 @@ export class Device extends BaseEntity {
     this.friendlyName = alias;
     return this;
   };
+
+  public setBatteryPercentage = (percentage: number) => {
+    this.BatteryPercentage = percentage;
+    return this;
+  };
 }
