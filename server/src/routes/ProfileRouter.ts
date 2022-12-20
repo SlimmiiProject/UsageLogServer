@@ -10,6 +10,7 @@ import { Mailer } from '../utils/mail/Mailer';
 import { MailTemplates } from '../utils/mail/MailTemplates';
 import { Environment } from '../utils/Environment';
 import { PasswordResetManager } from '../data/processors/PasswordResetProcessor';
+
 const router = express.Router();
 
 type CreationData = {
@@ -141,8 +142,39 @@ router.route("/account-data")
 
         res.json(await DataProcessor.getUser(undefined, sessionData.user.id));
     })
-    .post((req: Request, res: Response) => {
-        // TODO update profile after user updates it
+    .post(SessionManager.loginRequired, async (req: Request, res: Response) => {
+        const data: CreationData = req.body;
+
+        if (data.first_name && data.last_name && data.email) {
+            const userId = SessionManager.getSessionData(req).user.id;
+            const account = await DataProcessor.getUser(undefined, userId);
+
+            account.email = data.email;
+            account.firstname = data.first_name;
+            account.lastname = data.last_name;
+            account.phone = data.phone_number;
+
+            if (data.password && data.password_verify)
+                if (data.password === data.password_verify) account.setPassword(data.password);
+                else return res.json(errorJson("error.passwords_no_match", req.body));
+
+            await account.save();
+            await SessionManager.updateSessionData(req, async (data) => {
+                data.user = {
+                    id: account.userId,
+                    firstName: account.firstname,
+                    lastName: account.lastname,
+                    email: account.email,
+                };
+            });
+            return res.json({ succes: true });
+        }
+
+        res.json(errorJson(
+            "error.missing_fields",
+            req.body,
+            Object.entries(data).filter((entry) => !ObjectUtil.isSet(entry[1])).map((entry) => entry[0]))
+        );
     });
 
 const errorJson = (errorType: string, fields?: { [key: string]: string }, missingFields?: string[]): {} => {

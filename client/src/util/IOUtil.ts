@@ -1,3 +1,4 @@
+import { CreationData } from './../components/users/EditProfile';
 import { deviceData } from './AdminUtil';
 /**
  * IOUtil is a class with a static method deleteUserFromDevice that takes a string and returns void.
@@ -131,6 +132,7 @@ export class IOUtil {
   }
 
   public static sendContactData = async (data: ContactInfo) => await this.INSTANCE.post("/contact/", data);
+  public static sendChangeProfileData = async (data: CreationData) => await this.INSTANCE.post("/profiles/account-data", data);
 
   public static deleteUser = async (userId: number) => {
     try {
