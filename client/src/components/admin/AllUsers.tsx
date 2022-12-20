@@ -1,6 +1,5 @@
 import {
   Box,
-  Chip,
   TableContainer,
   Table,
   TableBody,
@@ -12,8 +11,6 @@ import {
   Pagination,
   Stack,
   Button,
-  IconButton,
-  Slide,
   Dialog,
   DialogContentText,
   DialogTitle,
@@ -30,7 +27,8 @@ import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import {TransitionProps} from "@mui/material/transitions"
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
@@ -157,7 +155,6 @@ function passMatch():boolean{
                       <Button onClick={CreateUser} disabled={!passMatch} color="success">Save</Button>
                     </DialogActions>
                   </Dialog>
-
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -181,43 +178,36 @@ function passMatch():boolean{
                      endIcon={<SettingsBackupRestoreIcon/>}>Password reset</Button></TableCell>
                     <TableCell align="right">
                       {user.isAdmin ? (
-                        <Chip
-                          label={I18n.t("allUsers.tableChipRemoveAdmin")}
-                          variant="outlined"
-                          style={{ backgroundColor: 'rgba(210,18,25,255)', color: "white" }}
-                          onClick={(event) => {
-                            AdminUtil.deleteAdmin(user.userId).then((event) => {
-                              user.isAdmin = false;
-                              setRender(true);
-                            });
-                          }}
-                        />
+                        <Button endIcon={<MilitaryTechIcon/>} color="error" size="small" onClick={()=>{
+                          AdminUtil.deleteAdmin(user.userId).then((event) => {
+                            user.isAdmin = false;
+                            setRender(true);
+                          });
+                        }
+                      }>
+                        {I18n.t("allUsers.tableChipRemoveAdmin")}
+                      </Button>
                       ) : (
-                        <Chip
-                          label={I18n.t("allUsers.tableChipMakeAdmin")}
-                          variant="outlined"
-                          style={{ backgroundColor: 'rgba(25, 118, 210, 255)', color: "white" }}
-                          onClick={(event) => {
-                            AdminUtil.createAdmin(user.userId).then((event) => {
-                              user.isAdmin = true;
-                              setRender(true);
-                            });
-                          }}
-                        />
+                        <Button endIcon={<MilitaryTechIcon/>} color="primary" size="small" onClick={()=>{
+                          AdminUtil.createAdmin(user.userId).then(() => {
+                            user.isAdmin = true;
+                            setRender(true);
+                        });
+                      }
+                    }>
+                          {I18n.t("allUsers.tableChipMakeAdmin")}
+                        </Button>
                       )}
                     </TableCell>
                     <TableCell align="right">
-                      <Chip
-                        label={I18n.t("allUsers.tableChipRemoveUser")}
-                        variant="outlined"
-                        style={{ backgroundColor: 'rgba(210,18,25,255)', color: "white" }}
-                        onClick={(event) => {
-                          IOUtil.deleteUser(user.userId).then((event) => {
-                            setRender(true);
-                            requestAllUsers(new AbortController())
-                          })
-                        }}
-                      />
+                      <Button endIcon={<PersonRemoveIcon/>} color="error" size="small" onClick={()=>{
+                      IOUtil.deleteUser(user.userId).then(() => {
+                        setRender(true);
+                        requestAllUsers(new AbortController())
+                        })
+                      }}>
+                        {I18n.t("allUsers.tableChipRemoveUser")}
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
