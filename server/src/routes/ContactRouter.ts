@@ -21,6 +21,8 @@ router.post("/", async (req: Request, res: Response) => {
     name: [data.firstName, data.lastName].join(" "),
     time: Date.now()
   }));
+
+  res.sendStatus(200);
 });
 
 module.exports = router;
