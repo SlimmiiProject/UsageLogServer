@@ -68,17 +68,20 @@ export class UserAccount extends BaseEntity {
   @Column("enum", { enum: GraphColors, default: GraphColors.PURPLE, name: "color_night", nullable: true, unique: false })
   @IsOptional()
   colorNight: GraphColors;
-  
+
+  private shouldChangePassword = false;
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    return this.password && await new Promise((resolve, reject) => {
+    return this.shouldChangePassword && this.password && await new Promise((resolve, reject) => {
       const hashedPassword = Crypt.encrypt(this.password);
       hashedPassword ? resolve((this.password = hashedPassword)) : reject(Logger.error("Hashing password failed"))
     });
   }
 
   public setPassword = (password: string) => {
+    this.shouldChangePassword = true;
     this.password = password
     return this;
   };

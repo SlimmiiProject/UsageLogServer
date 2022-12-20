@@ -29,6 +29,7 @@ export interface dialogstate {
 }
 export const AllDevices = (): JSX.Element => {
   const [devices, setDevices] = useState<deviceData[]>([]);
+  const [_users, setUsers] = useState<userData[]>([]);
   const [dialogs, setDialogs] = useState<dialogstate[]>([])
   const [isloading, setisloading] = useState<boolean>(true);
   const [deviceId, setDeviceId] = useState<string>("");

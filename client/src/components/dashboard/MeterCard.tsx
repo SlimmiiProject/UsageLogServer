@@ -20,7 +20,7 @@ export default function BasicCard({
         <Typography variant="h5" component="div">
           <>
             {I18n.t("metercard.name")}:{" "}
-            {friendlyName == null ? friendlyName  : <>{I18n.t("metercard.basicCard")}</>}
+            {friendlyName === null ? friendlyName  : <>{I18n.t("metercard.basicCard")}</>}
           </>
         </Typography>
         <Typography variant="h6">
@@ -31,7 +31,7 @@ export default function BasicCard({
         </Typography>
 
         <Typography variant="subtitle1" component="div" sx={{ opacity: "50%" }}>
-          {I18n.t("metercard.battery")}{batteryPercentage == undefined? I18n.t("metercard.bateryData"): batteryPercentage + "%"}
+          {I18n.t("metercard.battery")}{batteryPercentage === undefined? I18n.t("metercard.bateryData"): batteryPercentage + "%"}
         </Typography>
       </CardContent>
     </Card>

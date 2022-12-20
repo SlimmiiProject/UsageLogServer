@@ -1,17 +1,14 @@
 import {
   Box,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Button,
-  Grid,
   Container,
   CssBaseline,
   Alert,
 } from "@mui/material";
+import exp from "constants";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { getPath } from "../../App";
+import {useNavigate, useSearchParams } from "react-router-dom";
 import { IOUtil } from "../../util/IOUtil";
 import { I18n } from "../../util/language/I18n";
 
@@ -30,20 +27,20 @@ const ForgotPassword = () => {
   useEffect(() => {
     const controller = new AbortController();
 
-    console.log(token);
     if (!token) {
       setLoading(false);
     } else {
       const validateToken = async () => {
         const valid = await IOUtil.doesPasswordResetExist(token, controller);
-        if (!IOUtil.isAborted(controller) && !valid) navigate("/");
+        if (!IOUtil.isAborted(controller) && !valid) return navigate("/");
+        setLoading(false);
       };
 
       validateToken();
     }
 
     return () => controller.abort();
-  }, []);
+  }, [token, navigate]);
 
   const handlePasswordChangeSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -59,8 +56,9 @@ const ForgotPassword = () => {
     if (password !== password_verify)
       return setError(I18n.t("passwordReset.noMatch"));
 
-    if (token && (await IOUtil.changePassword(token, password))) {
-      setInfo(I18n.t("passwordReset.resetSuccesfull"));
+    if (token && password.length >= 8 && (await IOUtil.changePassword(token, password))) {
+      setInfo("info.password_reset_succesful");  
+      setTimeout(() => navigate("/login"), (1000));
     } else {
       setError(I18n.t("passwordReset.resetFail"));
     }
@@ -77,6 +75,7 @@ const ForgotPassword = () => {
     const email_value = data.get("email")?.toString();
 
     if (email_value) {
+      setExpired(true);
       if (await IOUtil.requestPasswordReset(email_value)) {
         setInfo(
           I18n.t("passwordReset.confirmMessage", {
@@ -91,7 +90,7 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <Container component="main" maxWidth="xs">
+      {!loading && <Container component="main" maxWidth="xs">
         {error !== "" && <Alert severity="error">{I18n.t(error)}</Alert>}
         {infoMsg !== "" && <Alert severity="info">{I18n.t(infoMsg)}</Alert>}
 
@@ -117,11 +116,13 @@ const ForgotPassword = () => {
                 type="email"
                 autoComplete="email"
                 autoFocus
+                disabled={expired}
               />
 
               <Button
                 type="submit"
                 fullWidth
+                disabled={expired}
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
@@ -135,7 +136,6 @@ const ForgotPassword = () => {
           <Box
             component="form"
             onSubmit={handlePasswordChangeSubmit}
-            noValidate
             sx={{ mt: 1 }}
           >
             <TextField
@@ -143,7 +143,7 @@ const ForgotPassword = () => {
               required
               fullWidth
               id="password"
-              label={I18n.t("forgotPassword.password")}
+              label={I18n.t("field.password")}
               name="password"
               type="password"
               autoFocus
@@ -153,7 +153,7 @@ const ForgotPassword = () => {
               required
               fullWidth
               name="password_verify"
-              label={I18n.t("forgotPassword.verify")}
+              label={I18n.t("field.password_verify")}
               type="password"
               id="password_verify"
             />
@@ -168,7 +168,7 @@ const ForgotPassword = () => {
             </Button>
           </Box>
         )}
-      </Container>
+      </Container>}
     </>
   );
 };

@@ -1,7 +1,12 @@
 :root {
   --usedBlue: rgba(25, 118, 210, 255);
 }
-antiLink {
+
+a {
+  text-decoration: none;
+}
+
+.antiLink {
   text-decoration: none;
 }
 

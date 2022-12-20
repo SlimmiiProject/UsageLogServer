@@ -4,7 +4,6 @@ import SettingsRemoteRoundedIcon from "@mui/icons-material/SettingsRemoteRounded
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import TranslateRoundedIcon from "@mui/icons-material/TranslateRounded";
 import { NavLink } from "react-router-dom";
-import { I18n } from "../../util/language/I18n";
 
 export const AdminPageOneComponent = ({ title, icon, link }: { title: string; icon: string; link: string; }): JSX.Element => {
 
