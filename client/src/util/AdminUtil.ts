@@ -22,8 +22,6 @@ export type userData = {
     lastname: string;
     email: string;
     device: number[];
-    colorDay: GraphColors;
-    colorNight: GraphColors;
     phone: string;
     isAdmin: boolean;
 }
