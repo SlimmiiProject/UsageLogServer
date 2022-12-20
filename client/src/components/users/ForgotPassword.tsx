@@ -18,8 +18,8 @@ const ForgotPassword = () => {
   const [error, setError] = useState<string>("");
   const [infoMsg, setInfo] = useState<string>("");
 
-  const [expired, _setExpired] = useState<boolean>(false);
-  const [_loading, setLoading] = useState<boolean>(true);
+  const [expired, setExpired] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const token = searchParams.get("token");
   const navigate = useNavigate();
