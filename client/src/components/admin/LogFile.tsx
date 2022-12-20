@@ -11,8 +11,8 @@ export const LogFile = (): JSX.Element => {
     const controller = new AbortController();
 
     setisloading(true);
-    AdminUtil.getLogs(controller).then((result) => {
-      setFiles(result)
+    AdminUtil.getLogs(controller, 0).then((result) => {
+      setFiles(result.data)
       setisloading(false);
     });
     return () => controller.abort();
