@@ -11,6 +11,7 @@ import {
   CircularProgress,
   Pagination,
   Stack,
+  Button,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { AdminUtil, userData } from "../../util/AdminUtil";
@@ -45,6 +46,9 @@ const requestAllUsers = (controller:AbortController)=>{
     setisloading(false);
   });
 }
+const HandleResetRequest = (email:string) =>{
+  IOUtil.requestPasswordReset(email)
+}
 
   return (
     <>
@@ -69,16 +73,13 @@ const requestAllUsers = (controller:AbortController)=>{
                 <TableCell>{I18n.t("allUsers.tableEmail")}</TableCell>
                 <TableCell>{I18n.t("allUsers.tableName")}</TableCell>
                 <TableCell>{I18n.t("allUsers.tablePhone")}</TableCell>
-                <TableCell>
-                  {I18n.t("allUsers.tableColors")}(
-                  {I18n.t("allUsers.tableColorsDay")},{" "}
-                  {I18n.t("allUsers.tableColorsNight")})
-                </TableCell>
+                <TableCell>Request Reset</TableCell>
                 <TableCell>{I18n.t("allUsers.tableAdmin")}</TableCell>
                 <TableCell><Chip label={I18n.t("allUsers.tableCreateUser")}
                                  variant="outlined"
                                  style={{  backgroundColor:'rgba(0, 170, 20, 255)'}}
-                                 onClick={(event)=>{/*create user goes here*/}}/></TableCell>
+                                 onClick={(event)=>{/*create user goes here*/}}/>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -97,8 +98,7 @@ const requestAllUsers = (controller:AbortController)=>{
                     </TableCell>
                     <TableCell align="right">{user.phone}</TableCell>
                     <TableCell align="right">
-                      {user.colorDay}, {user.colorNight}
-                    </TableCell>
+                     <Button onClick={()=>{HandleResetRequest(user.email)}}></Button></TableCell>
                     <TableCell align="right">
                       {user.isAdmin ? (
                         <Chip
