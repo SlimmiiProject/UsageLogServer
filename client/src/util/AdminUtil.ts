@@ -37,11 +37,6 @@ export type deviceData = {
     lastname: string | undefined;
 }
 
-export type TranslationData = {
-    //TODO idk what to do with this.
-    language: string,
-    word: string
-}
 export class AdminUtil {
    public static getLogs = async (controller: AbortController): Promise<LogData[]> => {
         try {
@@ -65,9 +60,10 @@ export class AdminUtil {
         }
     }
 
-    public static getAllDevices = async (controller: AbortController) => {
+    public static getAllDevices = async (controller: AbortController, page: number) => {
+        const toSkip = page * 10;
         try {
-            const res = await IOUtil.INSTANCE.get("admin/allDevices");
+            const res = await IOUtil.INSTANCE.get("admin/allDevices", {params: { skip: toSkip }});
             console.log(res.data)
             return res.data;
         } catch (_ignored) {
