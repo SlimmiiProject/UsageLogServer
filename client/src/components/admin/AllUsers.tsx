@@ -21,12 +21,10 @@ export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
   const [render, setRender] = useState<boolean>(false);
-  const [pages,setPages] = useState<number>(10)
-  const [page,setPage]=useState<number>(1)
+  const [pages, setPages] = useState<number>(10)
+  const [page, setPage] = useState<number>(1)
   useEffect(() => {
     const controller = new AbortController();
-
-   
     requestAllUsers(controller)
     return () => controller.abort();
   }, [page]);
@@ -35,17 +33,17 @@ export const AllUsers = (): JSX.Element => {
     setRender(false);
   }, [render])
 
-const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
-  setPage(page)
-}
-const requestAllUsers = (controller:AbortController)=>{
-  setisloading(true);
-  AdminUtil.getUsers(controller, page-1).then((result) => {
-    setusers(result.data);
-    setPages(result.pages)
-    setisloading(false);
-  });
-}
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setPage(page)
+  }
+  const requestAllUsers = (controller: AbortController) => {
+  //  setisloading(true);
+    AdminUtil.getUsers(controller, page - 1).then((result) => {
+      setusers(result.data);
+      setPages(result.pages)
+      setisloading(false);
+    });
+  }
 
   return (
     <>
@@ -62,7 +60,7 @@ const requestAllUsers = (controller:AbortController)=>{
         }}
       >
         <h2>{I18n.t("allUsers.List")}</h2>
-        <TableContainer component={Paper} style={{borderWidth:5,}}>
+        <TableContainer component={Paper} style={{ borderWidth: 5, }}>
           <Table sx={{ minWidth: 650 }} arial-label="simple table">
             <TableHead>
               <TableRow>
@@ -77,9 +75,9 @@ const requestAllUsers = (controller:AbortController)=>{
                 </TableCell>
                 <TableCell>{I18n.t("allUsers.tableAdmin")}</TableCell>
                 <TableCell><Chip label={I18n.t("allUsers.tableCreateUser")}
-                                 variant="outlined"
-                                 style={{  backgroundColor:'rgba(0, 170, 20, 255)'}}
-                                 onClick={(event)=>{/*create user goes here*/}}/></TableCell>
+                  variant="outlined"
+                  style={{ backgroundColor: 'rgba(0, 170, 20, 255)' }}
+                  onClick={(event) => {/*create user goes here*/ }} /></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -98,18 +96,18 @@ const requestAllUsers = (controller:AbortController)=>{
                     </TableCell>
                     <TableCell align="right">{user.phone}</TableCell>
                     <TableCell align="right">
-                    <Button >
-                      TODO
-                    </Button>
+                      <Button >
+                        TODO
+                      </Button>
                     </TableCell>
                     <TableCell align="right">
                       {user.isAdmin ? (
                         <Chip
                           label={I18n.t("allUsers.tableChipRemoveAdmin")}
                           variant="outlined"
-                          style={{ backgroundColor:'rgba(210,18,25,255)', color:"white"}}
+                          style={{ backgroundColor: 'rgba(210,18,25,255)', color: "white" }}
                           onClick={(event) => {
-                            AdminUtil.deleteAdmin(user.userId).then(()=>{
+                            AdminUtil.deleteAdmin(user.userId).then((event) => {
                               user.isAdmin = false;
                               setRender(true);
                             });
@@ -119,7 +117,7 @@ const requestAllUsers = (controller:AbortController)=>{
                         <Chip
                           label={I18n.t("allUsers.tableChipMakeAdmin")}
                           variant="outlined"
-                          style={{  backgroundColor:'rgba(25, 118, 210, 255)', color:"white"}}
+                          style={{ backgroundColor: 'rgba(25, 118, 210, 255)', color: "white" }}
                           onClick={(event) => {
                             AdminUtil.createAdmin(user.userId).then((event) => {
                               user.isAdmin = true;
@@ -133,11 +131,11 @@ const requestAllUsers = (controller:AbortController)=>{
                       <Chip
                         label={I18n.t("allUsers.tableChipRemoveUser")}
                         variant="outlined"
-                        style={{ backgroundColor:'rgba(210,18,25,255)', color:"white"}}
+                        style={{ backgroundColor: 'rgba(210,18,25,255)', color: "white" }}
                         onClick={(event) => {
-                          IOUtil.deleteUser(user.userId).then((event)=>{
+                          IOUtil.deleteUser(user.userId).then((event) => {
                             setRender(true);
-                          requestAllUsers(new AbortController())
+                            requestAllUsers(new AbortController())
                           })
                         }}
                       />
@@ -145,26 +143,26 @@ const requestAllUsers = (controller:AbortController)=>{
                   </TableRow>
                 ))
               ) : (
-                <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>
+                <section className="graph" style={{ borderWidth: 0, alignItems: "center", justifyItems: "center", justifyContent: "center", display: "flex" }}><CircularProgress className="circularprogress" /></section>
               )}
             </TableBody>
           </Table>
         </TableContainer>
-        <Box sx={{width:"100%", marginTop:"1rem", display:"flex", justifyContent:"center"}}>
-        <Stack spacing={2} sx={{bgColor:"red"}}>
-          <Pagination 
-            count={pages} 
-            color="secondary" 
-            size="large" 
-            showFirstButton 
-            showLastButton 
-            defaultPage={1} 
-            boundaryCount={15}
-            onChange={handlePageChange}
+        <Box sx={{ width: "100%", marginTop: "1rem", display: "flex", justifyContent: "center" }}>
+          <Stack spacing={2} sx={{ bgColor: "red" }}>
+            <Pagination
+              count={pages}
+              color="secondary"
+              size="large"
+              showFirstButton
+              showLastButton
+              defaultPage={1}
+              boundaryCount={15}
+              onChange={handlePageChange}
             />
-        </Stack>
+          </Stack>
         </Box>
-        <Box className="marginFix" sx={{minHeight:"2rem"}}/>
+        <Box className="marginFix" sx={{ minHeight: "2rem" }} />
       </Box>
     </>
   );

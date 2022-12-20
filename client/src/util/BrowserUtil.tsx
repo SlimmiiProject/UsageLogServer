@@ -6,7 +6,7 @@ export const reloadBrowser = () => window.location.reload();
  * @param {string} newLang - The new language to change to.
  */
 export const replaceLanguageUrl = (prevLang: string, newLang: string) => {
-    const newLocation = window.location.origin + window.location.pathname.replace(`/${prevLang}/`, `/${newLang}/`);
+    const newLocation = window.location.toString().replace(`/${prevLang}/`, `/${newLang}/`);
     window.location.replace(newLocation);
 }
 
