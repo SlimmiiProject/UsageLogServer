@@ -45,7 +45,12 @@ export const AllDevices = (): JSX.Element => {
     setisloading(false);
     return () => controller.abort();
   }, []);
-
+  useEffect(()=>{
+    const controller = new AbortController();
+    requestAllDevices(controller)
+    return ()=> controller.abort();
+  },[page])
+  
   const handleClickClosed = (deviceid: string, userid: number) => {
     console.log("close triggered")
     console.log(deviceid)
