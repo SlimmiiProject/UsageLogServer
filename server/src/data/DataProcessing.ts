@@ -34,8 +34,6 @@ export interface IUserData {
   lastname: string;
   phone: string;
   email: string;
-  colorDay: GraphColors;
-  colorNight: GraphColors;
   isAdmin: boolean;
 }
 
@@ -125,8 +123,6 @@ export class DataProcessor {
         lastname: user.lastname,
         phone: user.phone,
         email: user.email,
-        colorDay: user.colorDay,
-        colorNight: user.colorNight,
         isAdmin: await user.isAdmin(),
       };
       response.push(newValue);
