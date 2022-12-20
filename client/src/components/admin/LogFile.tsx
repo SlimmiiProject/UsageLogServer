@@ -48,6 +48,7 @@ export const LogFile = (): JSX.Element => {
         </TableBody>
       </Table>
     </TableContainer>
+    <Box className="marginFix" sx={{minHeight:"2rem"}}/>
     </Box>
     </>
   );

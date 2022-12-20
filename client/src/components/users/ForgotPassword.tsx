@@ -1,87 +1,176 @@
-import { Box, TextField, FormControlLabel, Checkbox, Button, Grid, Container, CssBaseline, Alert } from "@mui/material";
-import { useEffect, useState } from "react";
+import {
+  Box,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Button,
+  Grid,
+  Container,
+  CssBaseline,
+  Alert,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { getPath } from "../../App";
+import { IOUtil } from "../../util/IOUtil";
 import { I18n } from "../../util/language/I18n";
 
 const ForgotPassword = () => {
+  const [searchParams] = useSearchParams();
 
-    const [searchParams] = useSearchParams();
+  const [error, setError] = useState<string>("");
+  const [infoMsg, setInfo] = useState<string>("");
 
-    const [error, setError] = useState<string>("");
+  const [expired, setExpired] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-    const [loading, setLoading] = useState<boolean>(true);
-    const [expired, setExpired] = useState<boolean>(false);
-    const [reset, setReset] = useState<boolean>(false);
+  const token = searchParams.get("token");
+  const navigate = useNavigate();
 
-    const token = searchParams.get("token");
-    const navigate = useNavigate();
+  useEffect(() => {
+    const controller = new AbortController();
 
-    useEffect(() => {
-        //if (!token) navigate(getPath("/"))
+    console.log(token);
+    if (!token) {
+      setLoading(false);
+    } else {
+      const validateToken = async () => {
+        const valid = await IOUtil.doesPasswordResetExist(token, controller);
+        if (!IOUtil.isAborted(controller) && !valid) navigate("/");
+      };
 
-        //TODO Check if token is valid or expired
-
-    }, [])
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        const data = new FormData(event.currentTarget);
-
-        // TODO Improve data capture
-        const password = data.get("password")!.toString();
-        const password_verify = data.get("password_verify")!.toString();
-
-        if (password !== password_verify)
-            return setError("error.passwords_no_match");
-
-        // Send request to server, requesting a boolean reply 
-        // setReset(//response)
+      validateToken();
     }
 
-    return <>
-        <Container component="main" maxWidth="xs">
+    return () => controller.abort();
+  }, []);
 
-            {error !== "" && (
-                <Alert severity="error">{I18n.t(error)}</Alert>
-            )}
+  const handlePasswordChangeSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
 
-            <CssBaseline />
+    const data = new FormData(event.currentTarget);
 
-            {!expired && <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="password"
-                    label={I18n.t("field.password")}
-                    name="password"
-                    type="password"
-                    autoFocus
-                />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password_verify"
-                    label={I18n.t("field.password_verify")}
-                    type="password"
-                    id="password_verify"
-                />
+    // TODO Improve data capture
+    const password = data.get("password")!.toString();
+    const password_verify = data.get("password_verify")!.toString();
 
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                >
-                    {I18n.t("button.submit")}
-                </Button>
-            </Box>}
+    if (password !== password_verify)
+      return setError(I18n.t("passwordReset.noMatch"));
 
-        </Container>
+    if (token && (await IOUtil.changePassword(token, password))) {
+      setInfo(I18n.t("passwordReset.resetSuccesfull"));
+    } else {
+      setError(I18n.t("passwordReset.resetFail"));
+    }
+  };
+
+  const handlePasswordResetRequestSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    setError("");
+    setInfo("");
+
+    const data = new FormData(event.currentTarget);
+    const email_value = data.get("email")?.toString();
+
+    if (email_value) {
+      if (await IOUtil.requestPasswordReset(email_value)) {
+        setInfo(
+          I18n.t("passwordReset.confirmMessage", {
+            email: email_value,
+          })
+        );
+      }
+    } else {
+      setError(I18n.t("passwordReset.errorEmailNorSupplied"));
+    }
+  };
+
+  return (
+    <>
+      <Container component="main" maxWidth="xs">
+        {error !== "" && <Alert severity="error">{I18n.t(error)}</Alert>}
+        {infoMsg !== "" && <Alert severity="info">{I18n.t(infoMsg)}</Alert>}
+
+        <h1>{I18n.t("passwordReset")}</h1>
+        <CssBaseline />
+
+        {!token && (
+          <>
+            <h2 style={{ marginBottom: "-0.5rem" }}>
+              {I18n.t("passwordReset.EnterEmail")}
+            </h2>
+            <Box
+              component="form"
+              onSubmit={handlePasswordResetRequestSubmit}
+              sx={{ mt: 1 }}
+            >
+              <TextField
+                margin="normal"
+                fullWidth
+                id="email"
+                label={I18n.t("field.email")}
+                name="email"
+                type="email"
+                autoComplete="email"
+                autoFocus
+              />
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                {I18n.t("passwordReset.submit")}
+              </Button>
+            </Box>
+          </>
+        )}
+
+        {!expired && token && (
+          <Box
+            component="form"
+            onSubmit={handlePasswordChangeSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="password"
+              label={I18n.t("forgotPassword.password")}
+              name="password"
+              type="password"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password_verify"
+              label={I18n.t("forgotPassword.verify")}
+              type="password"
+              id="password_verify"
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              {I18n.t("passwordReset.submit")}
+            </Button>
+          </Box>
+        )}
+      </Container>
     </>
-}
+  );
+};
 
 export default ForgotPassword;

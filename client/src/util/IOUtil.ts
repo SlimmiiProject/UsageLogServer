@@ -8,6 +8,7 @@ import { deviceData } from './AdminUtil';
 import axios, { AxiosInstance } from "axios";
 import { AccountData, IDevice } from "../App";
 import { ContactInfo } from "../components/Contact";
+import { DeviceCardProps } from '../components/dashboard/MeterCard';
 
 export type Error = {
   succes: boolean;
@@ -165,16 +166,51 @@ export class IOUtil {
     }
   }
 
+  public static requestPasswordReset = async (email: string) => {
+    try {
+      const res = await this.INSTANCE.post("/profiles/submit-forgot-password", { email: email });
+      return res.status === 200;
+    } catch (err) {
+      return false;
+    }
+  }
+
   /** A function that gets the device of the user. 
    * @param userId number
    * @returns devicedata for the specific user
   */
-  public static getOwnDevice = async (userId: number) => {
+  public static getOwnDevice = async (userId: number): Promise<DeviceCardProps[]> => {
     try {
       const res = await this.INSTANCE.get(`/users/${userId}/device`);
       return res.data;
     } catch (err) {
       console.error(err);
+      return []
     }
   }
+
+  public static changePassword = async (token: string, password: string) => {
+    try {
+      const res = await this.INSTANCE.put(`/profiles/password`, { token: token, password: password });
+      return res.status === 200;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  public static doesPasswordResetExist = async (token: string, controller: AbortController) => {
+    try {
+      const res = await this.INSTANCE.get(`/profiles/password`, {
+        signal: controller.signal,
+        params: {
+          token: token
+        }
+      });
+      return res.status === 200;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  public static isAborted = (abortController: AbortController) => abortController.signal.aborted;
 }

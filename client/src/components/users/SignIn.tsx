@@ -61,7 +61,7 @@ const SignIn = (): JSX.Element => {
 
   return (
     <Container component="main" maxWidth="xs">
-      {isFailed && <Alert severity="error">Login has failed, try again!</Alert>}
+      {isFailed && <Alert severity="error">{I18n.t("signIn.error")}</Alert>}
 
       <CssBaseline />
       <Box
@@ -124,7 +124,7 @@ const SignIn = (): JSX.Element => {
           } */}
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="forgot-password" variant="body2">
                 {" "}
                 {I18n.t("signIn.forgotPassword")}
               </Link>

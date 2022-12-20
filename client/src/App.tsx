@@ -73,38 +73,34 @@ export const getPath = (path: string) => {
 
 const App = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [accountData, setAccountData] = useState<AccountData | undefined>(undefined);
-  const [darkMode, setDarkMode] = useState<boolean>(JSON.parse(localStorage.getItem("darkMode")!) || false);
+  const [accountData, setAccountData] = useState<AccountData | undefined>(
+    undefined
+  );
+  const [darkMode, setDarkMode] = useState<boolean>(
+    JSON.parse(localStorage.getItem("darkMode")!) || false
+  );
 
   useEffect(() => {
+    setLoading(true);
+
     // Change Language, in case it's different to what's currently selected
     const urlLang = getLanguageFromUrl();
     if (I18n.currentLanguage !== urlLang) I18n.changeLanguage(urlLang);
 
     const controller = new AbortController();
 
-    IOUtil.getSessionData(controller).then((res) => {
-      setAccountData((_accountData) => res);
-      setLoading(false);
-
-      if (res) {
-        IOUtil.isAdmin(controller).then((res) => {
-          setAccountData((accountData) => {
-            return { ...accountData!, isAdmin: res };
-          });
-        });
-      }
-    });
     const fetchLoginData = async () => {
       const accountData = await IOUtil.getSessionData(controller);
       setAccountData((_accoundData) => accountData);
 
-      if (accountData) {
-        const isAdmin = await IOUtil.isAdmin(controller);
-        setAccountData((accountData) => {
-          return { ...accountData!, isAdmin: isAdmin };
-        });
-      }
+      if (IOUtil.isAborted(controller)) return;
+
+      if (!accountData) return setLoading(false);
+
+      const isAdmin = await IOUtil.isAdmin(controller);
+      setAccountData((accountData) => {
+        return { ...accountData!, isAdmin: isAdmin };
+      });
 
       setLoading(false);
     };
@@ -129,8 +125,7 @@ const App = (): JSX.Element => {
     });
 
   const loggedIn = accountData !== undefined;
-
-  console.log(accountData?.isAdmin);
+  const isAdmin = loggedIn && accountData.isAdmin;
 
   return (
     <>
@@ -149,7 +144,10 @@ const App = (): JSX.Element => {
             <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />
             <Routes>
               <Route path="/" element={<Navigate to={getPath("")} />} />
-              <Route path="/forgot-password" element={<Navigate to={getPath(getFullPath())} />} />
+              <Route
+                path="/forgot-password"
+                element={<Navigate to={getPath(getFullPath())} />}
+              />
               <Route
                 path="/forgot-password"
                 element={<Navigate to={getPath(getFullPath())} />}
@@ -191,7 +189,7 @@ const App = (): JSX.Element => {
 
                     <Route path="devices" element={<Devices />} />
 
-                    {accountData.isAdmin && (
+                    {isAdmin && (
                       <>
                         <Route path="admin">
                           <Route index element={<AdminPage />} />

@@ -1,4 +1,4 @@
-import { AdminUtil, deviceData } from "../../util/AdminUtil";
+import { AdminUtil, deviceData,userData } from "../../util/AdminUtil";
 import { useState, useEffect } from "react";
 import {
   Box,
@@ -16,6 +16,7 @@ import { IOUtil } from "../../util/IOUtil";
 
 export const AllDevices = (): JSX.Element => {
   const [devices, setDevices] = useState<deviceData[]>([]);
+  const [users, setUsers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
   const [deviceId, setDeviceId] = useState<string>("");
   const [alias, setAlias] = useState<string>("");
@@ -27,6 +28,9 @@ export const AllDevices = (): JSX.Element => {
       setDevices(result);
       setisloading(false);
     });
+    AdminUtil.getUsers(controller).then((result)=>{
+      setUsers(result);
+    })
     return () => controller.abort();
   }, []);
 
@@ -45,7 +49,7 @@ export const AllDevices = (): JSX.Element => {
         }}
       >
         <h2>{I18n.t("allDevices.List")}</h2>
-        <TableContainer component={Paper} arial-label="simple table">
+        <TableContainer component={Paper} arial-label="simple table" sx={{margin:"auto"}}>
           <TableHead>
             <TableRow>
               <TableCell>{I18n.t("allDevices.tableIndex")}</TableCell>
@@ -132,6 +136,8 @@ export const AllDevices = (): JSX.Element => {
             </TableRow>
           </TableBody>
         </TableContainer>
+        <Box className="marginFix" sx={{minHeight:"2rem"}}/>
+
       </Box>
     </>
   );

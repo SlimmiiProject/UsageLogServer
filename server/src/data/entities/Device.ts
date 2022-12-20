@@ -14,7 +14,7 @@ export class Device extends BaseEntity {
     return device;
   }
 
-  @PrimaryGeneratedColumn({name:"device_index"})
+  @PrimaryGeneratedColumn({ name: "device_index" })
   device_index: number;
 
   @PrimaryColumn("varchar", { nullable: false, name: "deviceId", unique: true, length: 64 })
@@ -22,7 +22,7 @@ export class Device extends BaseEntity {
   @Length(64, 64)
   deviceId: string;
 
-  @OneToMany(() => Data, (data) => data.dataId, { nullable: true})
+  @OneToMany(() => Data, (data) => data.dataId, { nullable: true })
   @JoinColumn({ name: "data" })
   data: Data[];
 
@@ -39,7 +39,7 @@ export class Device extends BaseEntity {
   @JoinColumn({ name: "temporary_data" })
   temporary_data: TemporaryData[];
 
-  @Column("numeric", {nullable:true, unique: false, name: "batteryPercentage"})
+  @Column("numeric", { nullable: true, unique: false, name: "batteryPercentage" })
   @IsOptional()
   @IsInt()
   BatteryPercentage: number;

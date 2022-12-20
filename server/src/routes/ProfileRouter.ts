@@ -9,6 +9,7 @@ import { ObjectUtil } from '../utils/ObjectUtil';
 import { Mailer } from '../utils/mail/Mailer';
 import { MailTemplates } from '../utils/mail/MailTemplates';
 import { Environment } from '../utils/Environment';
+import { PasswordResetManager } from '../data/processors/PasswordResetProcessor';
 const router = express.Router();
 
 type CreationData = {
@@ -101,6 +102,15 @@ router.post("/create-profile", async (req: Request, res: Response) => {
     );
 });
 
+router.route("/password")
+    .put(async (req: Request, res: Response) => {
+        const { token, password } = req.body;
+        const passwordResetProcessor = new PasswordResetManager(token, password);
+        res.sendStatus(await passwordResetProcessor.handle() ? 200 : 403);
+    }).get(async (req: Request, res: Response) => {
+       res.sendStatus(await DataProcessor.GetPasswordReset(req.query.token as string) ? 200 : 403);
+    });
+
 router.post("/submit-forgot-password", async (req: Request, res: Response) => {
     const data: ResetData = req.body;
     const userAccount = await AccountManager.getAccount(undefined, data.email);
@@ -109,7 +119,7 @@ router.post("/submit-forgot-password", async (req: Request, res: Response) => {
         await DataProcessor.DeletePasswordResetForUser(userAccount);
         const token = await DataProcessor.createPasswordReset(Crypt.createUrlSafeHash(41), userAccount);
 
-        const {url, server_port} = Environment.CONFIG;
+        const { url, server_port } = Environment.CONFIG;
         // Send email
         Mailer.INSTANCE.sendMailTo(data.email, "Password Reset", MailTemplates.FORGOT_PASSWORD({
             resetUrl: `${url}:${server_port}/forgot-password?token=${token}`
