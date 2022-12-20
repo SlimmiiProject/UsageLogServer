@@ -17,7 +17,7 @@ export class Device extends BaseEntity {
   @PrimaryGeneratedColumn({ name: "device_index" })
   device_index: number;
 
-  @PrimaryColumn("varchar", { nullable: false, name: "deviceId", unique: true, length: 64 })
+  @Column("varchar", { nullable: false, name: "deviceId", unique: true, length: 64 })
   @IsDefined()
   @Length(64, 64)
   deviceId: string;
