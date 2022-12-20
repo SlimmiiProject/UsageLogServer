@@ -12,11 +12,13 @@ import {
   Pagination,
   Stack,
   Button,
+  IconButton,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { AdminUtil, userData } from "../../util/AdminUtil";
 import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
@@ -98,7 +100,8 @@ const HandleResetRequest = (email:string) =>{
                     </TableCell>
                     <TableCell align="right">{user.phone}</TableCell>
                     <TableCell align="right">
-                     <Button onClick={()=>{HandleResetRequest(user.email)}}></Button></TableCell>
+                     <Button onClick={()=>{HandleResetRequest(user.email)}}
+                     endIcon={<SettingsBackupRestoreIcon/>}>Password reset</Button></TableCell>
                     <TableCell align="right">
                       {user.isAdmin ? (
                         <Chip
