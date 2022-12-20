@@ -24,6 +24,10 @@ export type userData = {
     phone: string;
     isAdmin: boolean;
 }
+export type responseData = {
+    data: userData[]
+    pages: number
+}
 export type deviceData = {
     index: number;
     id: string;
@@ -49,15 +53,15 @@ export class AdminUtil {
     }
 
     /* A function that is called when a user is created. */
-    public static getUsers = async (controller: AbortController, page:number): Promise<userData[]> => {
+    public static getUsers = async (controller: AbortController, page: number): Promise<responseData> => {
         const toSkip = page * 10;
         console.log("received allusers request");
         try {
-            const res = await IOUtil.INSTANCE.get("/admin/allusers/", { params: {skip: toSkip}, signal: controller.signal });
+            const res = await IOUtil.INSTANCE.get("/admin/allusers/", { params: { skip: toSkip }, signal: controller.signal });
             return res.data;
         } catch (err) {
             console.error(err);
-            return [];
+            return { data: [], pages: 0 };
         }
     }
 
@@ -82,7 +86,7 @@ export class AdminUtil {
     }
     public static deleteAdmin = async (userId: number) => {
         try {
-            const res = await IOUtil.INSTANCE.delete("admin/account", { data :{ userId: userId} });
+            const res = await IOUtil.INSTANCE.delete("admin/account", { data: { userId: userId } });
             return res.data;
         } catch (err) {
             console.error(err)
