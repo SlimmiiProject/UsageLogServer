@@ -50,7 +50,20 @@ export const AllDevices = (): JSX.Element => {
     requestAllDevices(controller)
     return ()=> controller.abort();
   },[page])
-  
+  useEffect(()=>{
+    const temp:deviceData[] = devices
+    let dialogs:dialogstate[]=[]
+    temp.forEach((d)=>{
+      dialogs.push({
+        open:false,
+        device:d.id,
+        user:d.owner,
+        assign:handleClickClosed,
+        setopen:handleClickOpen
+      })
+    })
+    setDialogs([...dialogs])
+  },[devices])
   const handleClickClosed = (deviceid: string, userid: number) => {
     console.log("close triggered")
     console.log(deviceid)
@@ -70,29 +83,15 @@ export const AllDevices = (): JSX.Element => {
     setDialogs(temp)
 
   }
-
   const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
     setPage(page)
   }
   const requestAllDevices = (controller:AbortController)=>{
-    let temp:deviceData[] = []
     AdminUtil.getAllDevices(controller,page-1).then((result:deviceResponseData)=>{
       setDevices(result.data);
-      temp = result.data
       setPages(result.pages)
     });
-    let dialogs:dialogstate[]=[]
-    temp.forEach((d)=>{
-      dialogs.push({
-        open:false,
-        device:d.id,
-        user:d.owner,
-        assign:handleClickClosed,
-        setopen:handleClickOpen
-      })
-    })
   }
-
   /**
    *                    <Dialog open={dialogs[index].open} onClose={() => dialogs[index].assign(device.id, 11)}>
                         <DialogTitle>Assign user to this device</DialogTitle>
@@ -150,7 +149,7 @@ export const AllDevices = (): JSX.Element => {
                       <Button onClick={() => dialogs[index].setopen(device.id)}>
                         Assign user to device
                       </Button>
-   
+                     {console.log(dialogs)}
                     </>
                     )}
                   </TableCell>
