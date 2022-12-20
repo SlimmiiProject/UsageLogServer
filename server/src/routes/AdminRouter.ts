@@ -31,29 +31,30 @@ router.get("/allDevices", async (req: Request, res: Response) => {
 router
   .route("/account")
   .post(async (req: Request, res: Response) => {
-    const {userId}:{userId:number} = req.body;
-    res.json(await DataProcessor.createAdministrator(userId))}
+    const { userId }: { userId: number } = req.body;
+    res.json(await DataProcessor.createAdministrator(userId))
+  }
   )
-  .delete(async (req: Request, res:Response) => {
-    const {userId} : {userId:number} = req.body;
+  .delete(async (req: Request, res: Response) => {
+    const { userId }: { userId: number } = req.body;
     res.json(await DataProcessor.DeleteAdministrator(userId))
-    }
+  }
   )
 
 /* A route that is used to delete and create devices. */
 router
   .route("/device")
   .delete(async (req: Request, res: Response) => {
-    const {deviceId} = req.body;
+    const { deviceId } = req.body;
     res.json(await DataProcessor.DeleteDevice(deviceId));
   })
-  .post(async (req: Request, res: Response)=> {
-    const {deviceId, alias} = req.body;
+  .post(async (req: Request, res: Response) => {
+    const { deviceId, alias } = req.body;
     res.json(await DataProcessor.createDevice(deviceId, alias))
   })
 
-router.put("/add-device-user", async (req:Request, res:Response)=>{
-  const {deviceId, userId} = req.body;
+router.put("/add-device-user", async (req: Request, res: Response) => {
+  const { deviceId, userId } = req.body;
   res.json(await DataProcessor.AddDevicetoUser(userId, deviceId))
 })
 

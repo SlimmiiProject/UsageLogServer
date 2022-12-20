@@ -23,7 +23,16 @@ export const AllUsers = (): JSX.Element => {
   const [render, setRender] = useState<boolean>(false);
   const [pages, setPages] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
-  
+
+  const requestAllUsers = (controller: AbortController) => {
+    //  setisloading(true);
+    AdminUtil.getUsers(controller, page - 1).then((result) => {
+      setusers(result.data);
+      setPages(result.pages)
+      setisloading(false);
+    });
+  }
+
   useEffect(() => {
     const controller = new AbortController();
     requestAllUsers(controller)
@@ -36,14 +45,6 @@ export const AllUsers = (): JSX.Element => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setPage(page)
-  }
-  const requestAllUsers = (controller: AbortController) => {
-  //  setisloading(true);
-    AdminUtil.getUsers(controller, page - 1).then((result) => {
-      setusers(result.data);
-      setPages(result.pages)
-      setisloading(false);
-    });
   }
 
   return (

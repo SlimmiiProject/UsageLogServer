@@ -60,9 +60,12 @@ export const AllDevices = (): JSX.Element => {
     console.log("close triggered")
     console.log(deviceid)
     console.log(dialogs.filter((d) => d.device = deviceid))
+    
+    // TODO This doesn't do anything, state isn't updated
     dialogs.filter((d) => d.device === deviceid).map((di) => {
       console.log(di)
       di.open = false;
+      return di;
     })
     //TODO: assign user to device
   }
