@@ -35,7 +35,7 @@ export interface IUserData {
   lastname: string;
   phone: string;
   email: string;
-  device: number[];
+  device?: number[];
   colorDay: GraphColors;
   colorNight: GraphColors;
   isAdmin: boolean;
@@ -117,15 +117,12 @@ export class DataProcessor {
     let response: IUserData[] = [];
 
     for await (let user of users) {
-      const devices: Device[] = await this.getDevices(user.userId);
-      const deviceIds: number[] = devices.map((device) => device.device_index);
       let newValue: IUserData = {
         userId: user.userId,
         firstname: user.firstname,
         lastname: user.lastname,
         phone: user.phone,
         email: user.email,
-        device: deviceIds,
         colorDay: user.colorDay,
         colorNight: user.colorNight,
         isAdmin: await user.isAdmin(),

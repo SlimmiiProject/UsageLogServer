@@ -32,7 +32,7 @@ export class IOUtil {
 
   private static _instance: AxiosInstance;
   public static get INSTANCE(): AxiosInstance {
-    if (!this._instance) this._instance = axios.create({ baseURL: "/api/", timeout: 5000 });
+    if (!this._instance) this._instance = axios.create({ baseURL: "/api/", timeout: 30000 });
     return this._instance;
   }
 

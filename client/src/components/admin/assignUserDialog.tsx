@@ -4,9 +4,6 @@ import { I18n } from "../../util/language/I18n";
 import { userData } from "../../util/AdminUtil";
 import Dialog from "@mui/material/Dialog";
 import List from "@mui/material/List";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import { color } from "@mui/system";
 import ListItemText from "@mui/material/ListItemText";
 
 export interface assignUserDialogProps {

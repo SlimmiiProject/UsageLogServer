@@ -26,10 +26,11 @@ export const AllUsers = (): JSX.Element => {
 
     setisloading(true);
     AdminUtil.getUsers(controller).then((result) => {
-      //setusers([{userId:1,firstname:"Kasper",lastname:'Bosteels',email:"Kasperbosteels@hotmail.com",device:[1,2,3,4,5,6],colorDay:GraphColors.RED,colorNight:GraphColors.BLUE,isAdmin:true}]);
       setusers(result);
+      console.log(result)
       setisloading(false);
     });
+
     return () => controller.abort();
   }, []);
 
@@ -52,7 +53,7 @@ export const AllUsers = (): JSX.Element => {
         }}
       >
         <h2>{I18n.t("allUsers.List")}</h2>
-        <TableContainer component={Paper} style={{borderWidth:5,}}>
+        <TableContainer component={Paper} style={{ borderWidth: 5, }}>
           <Table sx={{ minWidth: 650 }} arial-label="simple table">
             <TableHead>
               <TableRow>
@@ -67,9 +68,9 @@ export const AllUsers = (): JSX.Element => {
                 </TableCell>
                 <TableCell>{I18n.t("allUsers.tableAdmin")}</TableCell>
                 <TableCell><Chip label={I18n.t("allUsers.tableCreateUser")}
-                                 variant="outlined"
-                                 style={{  backgroundColor:'rgba(0, 170, 20, 255)'}}
-                                 onClick={(event)=>{/*create user goes here*/}}/></TableCell>
+                  variant="outlined"
+                  style={{ backgroundColor: 'rgba(0, 170, 20, 255)' }}
+                  onClick={(event) => {/*create user goes here*/ }} /></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -95,9 +96,9 @@ export const AllUsers = (): JSX.Element => {
                         <Chip
                           label={I18n.t("allUsers.tableChipRemoveAdmin")}
                           variant="outlined"
-                          style={{ backgroundColor:'rgba(210,18,25,255)', color:"white"}}
+                          style={{ backgroundColor: 'rgba(210,18,25,255)', color: "white" }}
                           onClick={(event) => {
-                            AdminUtil.deleteAdmin(user.userId).then((event)=>{
+                            AdminUtil.deleteAdmin(user.userId).then((event) => {
                               user.isAdmin = false;
                               setRender(true);
                             });
@@ -107,7 +108,7 @@ export const AllUsers = (): JSX.Element => {
                         <Chip
                           label={I18n.t("allUsers.tableChipMakeAdmin")}
                           variant="outlined"
-                          style={{  backgroundColor:'rgba(25, 118, 210, 255)', color:"white"}}
+                          style={{ backgroundColor: 'rgba(25, 118, 210, 255)', color: "white" }}
                           onClick={(event) => {
                             AdminUtil.createAdmin(user.userId).then((event) => {
                               user.isAdmin = true;
@@ -121,9 +122,9 @@ export const AllUsers = (): JSX.Element => {
                       <Chip
                         label={I18n.t("allUsers.tableChipRemoveUser")}
                         variant="outlined"
-                        style={{ backgroundColor:'rgba(210,18,25,255)', color:"white"}}
+                        style={{ backgroundColor: 'rgba(210,18,25,255)', color: "white" }}
                         onClick={(event) => {
-                          IOUtil.deleteUser(user.userId).then((event)=>{
+                          IOUtil.deleteUser(user.userId).then((event) => {
                             setRender(true);
                           })
                         }}
@@ -132,13 +133,13 @@ export const AllUsers = (): JSX.Element => {
                   </TableRow>
                 ))
               ) : (
-                <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>
+                <section className="graph" style={{ borderWidth: 0, alignItems: "center", justifyItems: "center", justifyContent: "center", display: "flex" }}><CircularProgress className="circularprogress" /></section>
               )}
-              
+
             </TableBody>
           </Table>
         </TableContainer>
-        <Box className="marginFix" sx={{minHeight:"2rem"}}/>
+        <Box className="marginFix" sx={{ minHeight: "2rem" }} />
       </Box>
     </>
   );
