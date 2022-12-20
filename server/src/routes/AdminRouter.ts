@@ -9,8 +9,10 @@ router.use(SessionManager.loginRequired);
 router.use(Middleware.requireAdminpermission);
 
 /* A route that is used to get the logfile data. */
-router.get("/logfile", async (req: Request, res: Response) => 
-  res.json(await DataProcessor.GetLogfileData()));
+router.get("/logfile", async (req: Request, res: Response) => {
+  const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
+  res.json(await DataProcessor.GetLogfileData(skip));
+})
 
 /* A route that is used to get all the users. */
 router.get("/allusers", async (req: Request, res: Response) => {
@@ -20,7 +22,8 @@ router.get("/allusers", async (req: Request, res: Response) => {
 
 /* A route that is used to get all the devices. */
 router.get("/allDevices", async (req: Request, res: Response) => {
-  res.json(await DataProcessor.getAllDevices());
+  const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
+  res.json(await DataProcessor.getAllDevices(skip));
 })
 
 

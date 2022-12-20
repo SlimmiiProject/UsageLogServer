@@ -24,10 +24,22 @@ export type userData = {
     phone: string;
     isAdmin: boolean;
 }
-export type responseData = {
+
+export type userResponseData = {
     data: userData[]
     pages: number
 }
+
+export type deviceResponseData = {
+    data: deviceData[]
+    pages: number
+}
+
+export type logResponseData = {
+    data: LogData[]
+    pages: number
+}
+
 export type deviceData = {
     index: number;
     id: string;
@@ -38,17 +50,18 @@ export type deviceData = {
 }
 
 export class AdminUtil {
-   public static getLogs = async (controller: AbortController): Promise<LogData[]> => {
-        try {
-            const res = await IOUtil.INSTANCE.get("/admin/logfile/", { signal: controller.signal });
+   public static getLogs = async (controller: AbortController, page: number): Promise<logResponseData> => {
+    const toSkip = page * 10;    
+    try {
+            const res = await IOUtil.INSTANCE.get("/admin/logfile/", { params : {skip: toSkip}, signal: controller.signal });
             return res.data;
         } catch (_ignored) {
-            return [];
+            return {data: [], pages: 0};
         }
     }
 
     /* A function that is called when a user is created. */
-    public static getUsers = async (controller: AbortController, page: number): Promise<responseData> => {
+    public static getUsers = async (controller: AbortController, page: number): Promise<userResponseData> => {
         const toSkip = page * 10;
         console.log("received allusers request");
         try {
@@ -61,13 +74,14 @@ export class AdminUtil {
     }
 
     public static getAllDevices = async (controller: AbortController, page: number) => {
+
         const toSkip = page * 10;
         try {
             const res = await IOUtil.INSTANCE.get("admin/allDevices", {params: { skip: toSkip }});
             console.log(res.data)
             return res.data;
         } catch (_ignored) {
-            return [];
+            return {data: [], pages: 0};
         }
     }
 
