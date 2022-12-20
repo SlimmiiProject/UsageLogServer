@@ -47,7 +47,7 @@ export default function App() {
       <div className="flexDashboard">
         
         {!loading &&
-          devices.map((meter) => (
+          devices.map((meter,index) => (
             <section
               className="graph"
               style={{

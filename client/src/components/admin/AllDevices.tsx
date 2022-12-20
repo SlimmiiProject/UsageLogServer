@@ -10,18 +10,25 @@ import {
   TableRow,
   Paper,
   CircularProgress,
+  Button,
+  Dialog,
+  DialogTitle,
+  TextField,
+  DialogContent,
 } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
-import AssignUserDialog from "./assignUserDialog"
+
 export interface dialogstate {
   open:boolean,
   device:string,
-  user?:userData,
+  user?:number,
+  assign:(deviceid:string,userid:number)=>void,
+  setopen:(deviceid:string)=>void;
+
 }
 export const AllDevices = (): JSX.Element => {
   const [devices, setDevices] = useState<deviceData[]>([]);
-  const [users, setUsers] = useState<userData[]>([]);
   const [dialogs,setDialogs] = useState<dialogstate[]>([])
   const [isloading, setisloading] = useState<boolean>(true);
   const [deviceId, setDeviceId] = useState<string>("");
@@ -29,23 +36,36 @@ export const AllDevices = (): JSX.Element => {
 
   useEffect(() => {
     const controller = new AbortController();
-
+    let temp:dialogstate[] = [];
     setisloading(true);
     AdminUtil.getAllDevices(controller).then((result:deviceData[]) => {
       setDevices(result);
+      result.map((r)=>temp.push({open:false,device:r.id,user:r.owner,assign:handleClickClosed,setopen:handleClickOpen}))
+      console.log(temp)
+      setDialogs(temp)
+
       setisloading(false);
     });
     
-    AdminUtil.getUsers(controller).then((result)=>{
-      setUsers(result);
-    })
     return () => controller.abort();
   }, []);
-
-  const onClose = (device:string)=>{
-    console.log(device)
+  const handleClickClosed = (deviceid:string,userid:number)=>{
+    console.log("close triggered")
+    console.log(deviceid)
+    console.log(dialogs.filter((d)=>d.device=deviceid))
+    dialogs.filter((d)=>d.device===deviceid).map((di)=>{
+      console.log(di)
+      di.open=false;})
+    //TODO: assign user to device
   }
-
+  const handleClickOpen = (deviceid:string)=>{
+    console.log("open triggered")
+    let temp = dialogs;
+    temp.map((d)=>d.device===deviceid? d.open=true : d.open=false)
+    console.log(temp)
+    setDialogs([...temp])
+  
+  }
   return (
     <>
       <Box
@@ -89,20 +109,17 @@ export const AllDevices = (): JSX.Element => {
                     {device.owner ? (
                       <p>{device.owner}</p>
                     ) : (<>
-                    <AssignUserDialog 
-                        open={dialogs[index].open} 
-                        device={device} 
-                        owner={dialogs[index].user}
-                        users={users}
-                        onClose={onClose}
-                        />
-                      <Chip
-                        label="assign user"
-                        variant="outlined"
-                        style={{ backgroundColor:'rgba(0, 170, 20, 255)' }}
-                        onClick={()=>{}}/>
-
-                      </>
+                    <Button onClick={()=>dialogs[index].setopen(device.id)}>
+                      Assign user to device
+                    </Button>
+                    <Dialog open={dialogs[index].open} onClose={()=>dialogs[index].assign(device.id,2)}>
+                      <DialogTitle>Assign user to this device</DialogTitle>
+                      <TextField autoFocus fullWidth margin="dense" label="user id" type="number" variant="standard"/>
+                      <DialogContent>
+                      <Button>temp stuff i place here, users will be displayed here later on</Button>
+                      </DialogContent>
+                    </Dialog>
+                     </>
                     )}
                   </TableCell>
 
