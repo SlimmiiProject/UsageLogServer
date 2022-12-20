@@ -280,8 +280,10 @@ export class DataProcessor {
   };
 
   /* A static method that returns a promise of an array of Device objects. */
-  public static getAllDevices = async (): Promise<IDevice[]> => {
+  public static getAllDevices = async (skip: number) => {
     const devices: Device[] = await Device.find({
+      skip: skip,
+      take: 10,
       relations: {
         user: true,
       },
@@ -308,8 +310,8 @@ export class DataProcessor {
         lastname: lastname,
       });
     }
-
-    return newDevices;
+    const count = await Device.count();
+    return {data: newDevices, pages: Math.ceil(count / 10)};
   };
 
   public static getTempEntry = async (deviceId: string) => {
