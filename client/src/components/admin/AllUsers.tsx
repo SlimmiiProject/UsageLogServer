@@ -9,8 +9,10 @@ import {
   TableRow,
   Paper,
   CircularProgress,
+  Pagination,
+  Stack,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { AdminUtil, userData } from "../../util/AdminUtil";
 import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
@@ -18,23 +20,29 @@ export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
   const [render, setRender] = useState<boolean>(false);
+  const [pages,setPages] = useState<number>(10)
+  const [page,setPage]=useState<number>(1)
   useEffect(() => {
     const controller = new AbortController();
-    //<TableCell align="right">{user.device.map((device)=>(<p>{device}</p>))}</TableCell>
-
-    setisloading(true);
-    AdminUtil.getUsers(controller, 0).then((result) => {
-      setusers(result);
-      console.log(result)
-      setisloading(false);
-    });
-
+    requestAllUsers(controller)
     return () => controller.abort();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     setRender(false);
   }, [render])
+
+const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
+  setPage(page)
+}
+const requestAllUsers = (controller:AbortController)=>{
+  setisloading(true);
+  AdminUtil.getUsers(controller, page-1).then((result) => {
+    setusers(result.data);
+    setPages(result.pages)
+    setisloading(false);
+  });
+}
 
   return (
     <>
@@ -124,6 +132,7 @@ export const AllUsers = (): JSX.Element => {
                         onClick={(event) => {
                           IOUtil.deleteUser(user.userId).then((event) => {
                             setRender(true);
+                          requestAllUsers(new AbortController())
                           })
                         }}
                       />
@@ -133,11 +142,24 @@ export const AllUsers = (): JSX.Element => {
               ) : (
                 <section className="graph" style={{ borderWidth: 0, alignItems: "center", justifyItems: "center", justifyContent: "center", display: "flex" }}><CircularProgress className="circularprogress" /></section>
               )}
-
             </TableBody>
           </Table>
         </TableContainer>
-        <Box className="marginFix" sx={{ minHeight: "2rem" }} />
+        <Box sx={{width:"100%", marginTop:"1rem", display:"flex", justifyContent:"center"}}>
+        <Stack spacing={2} sx={{bgColor:"red"}}>
+          <Pagination 
+            count={pages} 
+            color="secondary" 
+            size="large" 
+            showFirstButton 
+            showLastButton 
+            defaultPage={1} 
+            boundaryCount={15}
+            onChange={handlePageChange}
+            />
+        </Stack>
+        </Box>
+        <Box className="marginFix" sx={{minHeight:"2rem"}}/>
       </Box>
     </>
   );
