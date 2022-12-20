@@ -21,8 +21,9 @@ export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
   const [render, setRender] = useState<boolean>(false);
-  const [pages, setPages] = useState<number>(10)
-  const [page, setPage] = useState<number>(1)
+  const [pages, setPages] = useState<number>(10);
+  const [page, setPage] = useState<number>(1);
+  
   useEffect(() => {
     const controller = new AbortController();
     requestAllUsers(controller)
