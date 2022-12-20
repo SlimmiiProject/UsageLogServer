@@ -29,6 +29,7 @@ export interface dialogstate {
 }
 export const AllDevices = (): JSX.Element => {
   const [devices, setDevices] = useState<deviceData[]>([]);
+  const [_users, setUsers] = useState<userData[]>([]);
   const [dialogs, setDialogs] = useState<dialogstate[]>([])
   const [isloading, setisloading] = useState<boolean>(true);
   const [deviceId, setDeviceId] = useState<string>("");
@@ -38,7 +39,7 @@ export const AllDevices = (): JSX.Element => {
     const controller = new AbortController();
     let temp: dialogstate[] = [];
     setisloading(true);
-    AdminUtil.getAllDevices(controller).then((result: deviceData[]) => {
+    AdminUtil.getAllDevices(0).then((result: deviceData[]) => {
       setDevices(result);
       //populate array with objects for states
       result.forEach((r) => temp.push({

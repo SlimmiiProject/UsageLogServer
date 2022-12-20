@@ -14,7 +14,7 @@ const Devices = (): JSX.Element => {
       setDevices(res);
       setIsloading(false);
     });
-  }, []);
+  }, [context.userAccount]);
   return (
     <>
       <h1>{I18n.t("devices.devicemanager")}</h1>

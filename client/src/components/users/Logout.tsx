@@ -17,7 +17,7 @@ const Logout = () => {
 
       navigate(getPath("dashboard"));
     });
-  }, []);
+  },);
 
   return <h1>Loggin out ...</h1>;
 };

@@ -25,7 +25,7 @@ export default function App() {
 
       return () => abortController.abort();
     }
-  }, [timePeriod]);
+  }, [timePeriod, context.isLoggedIn]);
 
   return (
     <>
@@ -82,6 +82,5 @@ export default function App() {
           )}
         </div>
       </div>
-    </>
-  );
+    </>)
 }
