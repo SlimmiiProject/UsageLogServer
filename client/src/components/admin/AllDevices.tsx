@@ -39,10 +39,10 @@ export const AllDevices = (): JSX.Element => {
     const controller = new AbortController();
     let temp: dialogstate[] = [];
     setisloading(true);
-    AdminUtil.getAllDevices(0).then((result: deviceData[]) => {
-      setDevices(result);
+    AdminUtil.getAllDevices(controller, 0).then((result) => {
+      setDevices(result.data);
       //populate array with objects for states
-      result.forEach((r) => temp.push({
+      result.data.forEach((r) => temp.push({
         open: false,
         device: r.id,
         user: r.owner,

@@ -73,10 +73,10 @@ export class AdminUtil {
         }
     }
 
-    public static getAllDevices = async (page: number): Promise<deviceResponseData> => {
+    public static getAllDevices = async (controller: AbortController, page: number): Promise<deviceResponseData> => {
         const toSkip = page * 10;
         try {
-            const res = await IOUtil.INSTANCE.get("admin/allDevices", {params: { skip: toSkip }});
+            const res = await IOUtil.INSTANCE.get("admin/allDevices", {params: { skip: toSkip }, signal: controller.signal});
             console.log(res.data)
             return res.data;
         } catch (_ignored) {
