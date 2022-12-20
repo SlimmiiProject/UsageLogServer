@@ -21,8 +21,6 @@ export type userData = {
     lastname: string;
     email: string;
     device: number[];
-    colorDay: GraphColors;
-    colorNight: GraphColors;
     phone: string;
     isAdmin: boolean;
 }
@@ -52,7 +50,7 @@ export class AdminUtil {
 
     /* A function that is called when a user is created. */
     public static getUsers = async (controller: AbortController, page:number): Promise<userData[]> => {
-        const toSkip = page * 20;
+        const toSkip = page * 10;
         console.log("received allusers request");
         try {
             const res = await IOUtil.INSTANCE.get("/admin/allusers/", { params: {skip: toSkip}, signal: controller.signal });
