@@ -11,6 +11,7 @@ import {
   CircularProgress,
   Pagination,
   Stack,
+  Button,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { AdminUtil, userData } from "../../util/AdminUtil";
@@ -95,7 +96,9 @@ const requestAllUsers = (controller:AbortController)=>{
                     </TableCell>
                     <TableCell align="right">{user.phone}</TableCell>
                     <TableCell align="right">
-                      {user.colorDay}, {user.colorNight}
+                    <Button >
+                      TODO
+                    </Button>
                     </TableCell>
                     <TableCell align="right">
                       {user.isAdmin ? (
