@@ -14,6 +14,12 @@ router.get("/logfile", async (req: Request, res: Response) => {
   res.json(await DataProcessor.GetLogfileData(skip));
 })
 
+/* A route that is used to get a user. */
+router.get("/user", async (req: Request, res: Response) => {
+  const userId = req.query.userId ? parseInt(req.query.userId as string) : 0;
+  res.json(await DataProcessor.getUser(undefined, userId, undefined));
+})
+
 /* A route that is used to get all the users. */
 router.get("/allusers", async (req: Request, res: Response) => {
   const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
