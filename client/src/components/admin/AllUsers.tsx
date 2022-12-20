@@ -25,7 +25,7 @@ export const AllUsers = (): JSX.Element => {
     //<TableCell align="right">{user.device.map((device)=>(<p>{device}</p>))}</TableCell>
 
     setisloading(true);
-    AdminUtil.getUsers(controller).then((result) => {
+    AdminUtil.getUsers(controller, 0).then((result) => {
       setusers(result);
       console.log(result)
       setisloading(false);

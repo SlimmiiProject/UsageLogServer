@@ -108,8 +108,10 @@ export class DataProcessor {
   /**
    * Getting all the users from the database and returning them in a IUserData[]t.
    */
-  public static getAllUsers = async (): Promise<IUserData[]> => {
+  public static getAllUsers = async (skip: number): Promise<IUserData[]> => {
     const users: UserAccount[] = await UserAccount.find({
+      skip: skip,
+      take: 10,
       select: {
         password: false,
       },

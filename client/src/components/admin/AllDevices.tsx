@@ -28,7 +28,7 @@ export const AllDevices = (): JSX.Element => {
       setDevices(result);
       setisloading(false);
     });
-    AdminUtil.getUsers(controller).then((result)=>{
+    AdminUtil.getUsers(controller,0).then((result)=>{
       setUsers(result);
     })
     return () => controller.abort();
