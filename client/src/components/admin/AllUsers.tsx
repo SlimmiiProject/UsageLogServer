@@ -219,7 +219,7 @@ function passMatch():boolean{
           </Table>
         </TableContainer>
         <Box sx={{ width: "100%", marginTop: "1rem", display: "flex", justifyContent: "center" }}>
-          <Stack spacing={2} sx={{ bgColor: "red" }}>
+          <Stack spacing={2}>
             <Pagination
               count={pages}
               color="secondary"

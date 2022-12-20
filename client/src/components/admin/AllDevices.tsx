@@ -1,4 +1,4 @@
-import { AdminUtil, deviceData, userData } from "../../util/AdminUtil";
+import { AdminUtil, deviceData, deviceResponseData } from "../../util/AdminUtil";
 import { useState, useEffect } from "react";
 import {
   Box,
@@ -15,6 +15,8 @@ import {
   DialogTitle,
   TextField,
   DialogContent,
+  Pagination,
+  Stack,
 } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
@@ -29,30 +31,18 @@ export interface dialogstate {
 }
 export const AllDevices = (): JSX.Element => {
   const [devices, setDevices] = useState<deviceData[]>([]);
-  const [_users, setUsers] = useState<userData[]>([]);
   const [dialogs, setDialogs] = useState<dialogstate[]>([])
   const [isloading, setisloading] = useState<boolean>(true);
   const [deviceId, setDeviceId] = useState<string>("");
   const [alias, setAlias] = useState<string>("");
-
+  const [pages,setPages]=useState<number>(10);
+  const [page,setPage]=useState<number>(1)
   useEffect(() => {
     const controller = new AbortController();
     let temp: dialogstate[] = [];
     setisloading(true);
-    AdminUtil.getAllDevices(controller, 0).then((result) => {
-      setDevices(result.data);
-      //populate array with objects for states
-      result.data.forEach((r:any) => temp.push({
-        open: false,
-        device: r.id,
-        user: r.owner,
-        assign: handleClickClosed,
-        setopen: handleClickOpen
-      }));
-      
-      setDialogs(temp)
-      setisloading(false);
-    });
+    requestAllDevices(controller)
+    setisloading(false);
     return () => controller.abort();
   }, []);
 
@@ -75,6 +65,40 @@ export const AllDevices = (): JSX.Element => {
     setDialogs(temp)
 
   }
+
+  const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
+    setPage(page)
+  }
+  const requestAllDevices = (controller:AbortController)=>{
+    let temp:deviceData[] = []
+    AdminUtil.getAllDevices(controller,page-1).then((result:deviceResponseData)=>{
+      setDevices(result.data);
+      temp = result.data
+      setPages(result.pages)
+    });
+    let dialogs:dialogstate[]=[]
+    temp.forEach((d)=>{
+      dialogs.push({
+        open:false,
+        device:d.id,
+        user:d.owner,
+        assign:handleClickClosed,
+        setopen:handleClickOpen
+      })
+    })
+  }
+
+  /**
+   *                    <Dialog open={dialogs[index].open} onClose={() => dialogs[index].assign(device.id, 11)}>
+                        <DialogTitle>Assign user to this device</DialogTitle>
+                        <TextField autoFocus fullWidth margin="dense" label="user id" type="number" variant="standard" />
+                        <DialogContent>
+                          <Button>temp stuff i place here, users will be displayed here later on</Button>
+                        </DialogContent>
+                      </Dialog>
+   * 
+   * 
+   */
   return (
     <>
       <Box
@@ -121,13 +145,7 @@ export const AllDevices = (): JSX.Element => {
                       <Button onClick={() => dialogs[index].setopen(device.id)}>
                         Assign user to device
                       </Button>
-                      <Dialog open={dialogs[index].open} onClose={() => dialogs[index].assign(device.id, 11)}>
-                        <DialogTitle>Assign user to this device</DialogTitle>
-                        <TextField autoFocus fullWidth margin="dense" label="user id" type="number" variant="standard" />
-                        <DialogContent>
-                          <Button>temp stuff i place here, users will be displayed here later on</Button>
-                        </DialogContent>
-                      </Dialog>
+   
                     </>
                     )}
                   </TableCell>
@@ -184,6 +202,20 @@ export const AllDevices = (): JSX.Element => {
             </TableRow>
           </TableBody>
         </TableContainer>
+        <Box sx={{ width: "100%", marginTop: "1rem", display: "flex", justifyContent: "center" }}>
+          <Stack spacing={2}>
+            <Pagination
+              count={pages}
+              color="secondary"
+              size="large"
+              showFirstButton
+              showLastButton
+              defaultPage={1}
+              boundaryCount={15}
+              onChange={handlePageChange}
+            />
+          </Stack>
+        </Box>
         <Box className="marginFix" sx={{ minHeight: "2rem" }} />
 
       </Box>
