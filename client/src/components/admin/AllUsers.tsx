@@ -21,8 +21,8 @@ export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
   const [render, setRender] = useState<boolean>(false);
-  const [pages,setPages] = useState<number>(10)
-  const [page,setPage]=useState<number>(1)
+  const [pages, setPages] = useState<number>(10)
+  const [page, setPage] = useState<number>(1)
   useEffect(() => {
     const controller = new AbortController();
     requestAllUsers(controller)
@@ -33,17 +33,17 @@ export const AllUsers = (): JSX.Element => {
     setRender(false);
   }, [render])
 
-const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
-  setPage(page)
-}
-const requestAllUsers = (controller:AbortController)=>{
-  setisloading(true);
-  AdminUtil.getUsers(controller, page-1).then((result) => {
-    setusers(result.data);
-    setPages(result.pages)
-    setisloading(false);
-  });
-}
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setPage(page)
+  }
+  const requestAllUsers = (controller: AbortController) => {
+  //  setisloading(true);
+    AdminUtil.getUsers(controller, page - 1).then((result) => {
+      setusers(result.data);
+      setPages(result.pages)
+      setisloading(false);
+    });
+  }
 
   return (
     <>
@@ -96,9 +96,9 @@ const requestAllUsers = (controller:AbortController)=>{
                     </TableCell>
                     <TableCell align="right">{user.phone}</TableCell>
                     <TableCell align="right">
-                    <Button >
-                      TODO
-                    </Button>
+                      <Button >
+                        TODO
+                      </Button>
                     </TableCell>
                     <TableCell align="right">
                       {user.isAdmin ? (
@@ -135,7 +135,7 @@ const requestAllUsers = (controller:AbortController)=>{
                         onClick={(event) => {
                           IOUtil.deleteUser(user.userId).then((event) => {
                             setRender(true);
-                          requestAllUsers(new AbortController())
+                            requestAllUsers(new AbortController())
                           })
                         }}
                       />
@@ -148,21 +148,21 @@ const requestAllUsers = (controller:AbortController)=>{
             </TableBody>
           </Table>
         </TableContainer>
-        <Box sx={{width:"100%", marginTop:"1rem", display:"flex", justifyContent:"center"}}>
-        <Stack spacing={2} sx={{bgColor:"red"}}>
-          <Pagination 
-            count={pages} 
-            color="secondary" 
-            size="large" 
-            showFirstButton 
-            showLastButton 
-            defaultPage={1} 
-            boundaryCount={15}
-            onChange={handlePageChange}
+        <Box sx={{ width: "100%", marginTop: "1rem", display: "flex", justifyContent: "center" }}>
+          <Stack spacing={2} sx={{ bgColor: "red" }}>
+            <Pagination
+              count={pages}
+              color="secondary"
+              size="large"
+              showFirstButton
+              showLastButton
+              defaultPage={1}
+              boundaryCount={15}
+              onChange={handlePageChange}
             />
-        </Stack>
+          </Stack>
         </Box>
-        <Box className="marginFix" sx={{minHeight:"2rem"}}/>
+        <Box className="marginFix" sx={{ minHeight: "2rem" }} />
       </Box>
     </>
   );
