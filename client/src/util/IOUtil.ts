@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 import { CreationData } from './../components/users/EditProfile';
 
->>>>>>> 523dae7e6d3370fb97b0465a094dbba7a79969d5
 /**
  * IOUtil is a class with a static method deleteUserFromDevice that takes a string and returns void.
  * @property {boolean} succes - boolean;
