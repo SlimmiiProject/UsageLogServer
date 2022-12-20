@@ -8,34 +8,40 @@ import {
   TableHead,
   TableRow,
   Paper,
-  LinearProgress,
   CircularProgress,
+  Pagination,
+  Stack,
 } from "@mui/material";
-import { useState, useEffect } from "react";
-import { AdminUtil, GraphColors, userData } from "../../util/AdminUtil";
+import React, { useState, useEffect } from "react";
+import { AdminUtil, userData } from "../../util/AdminUtil";
 import { I18n } from "../../util/language/I18n";
-import React from "react";
 import { IOUtil } from "../../util/IOUtil";
 export const AllUsers = (): JSX.Element => {
   const [users, setusers] = useState<userData[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
   const [render, setRender] = useState<boolean>(false);
+  const [pages,setPages] = useState<number>(10)
+  const [page,setPage]=useState<number>(1)
   useEffect(() => {
     const controller = new AbortController();
     //<TableCell align="right">{user.device.map((device)=>(<p>{device}</p>))}</TableCell>
 
     setisloading(true);
-    AdminUtil.getUsers(controller, 0).then((result) => {
+    AdminUtil.getUsers(controller, page-1).then((result) => {
       //setusers([{userId:1,firstname:"Kasper",lastname:'Bosteels',email:"Kasperbosteels@hotmail.com",device:[1,2,3,4,5,6],colorDay:GraphColors.RED,colorNight:GraphColors.BLUE,isAdmin:true}]);
-      setusers(result);
+      setusers(result.data);
+      setPages(result.pages)
       setisloading(false);
     });
     return () => controller.abort();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     setRender(false);
   }, [render])
+const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
+  setPage(page)
+}
 
   return (
     <>
@@ -134,10 +140,23 @@ export const AllUsers = (): JSX.Element => {
               ) : (
                 <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>
               )}
-              
             </TableBody>
           </Table>
         </TableContainer>
+        <Box sx={{width:"100%", marginTop:"1rem", display:"flex", justifyContent:"center"}}>
+        <Stack spacing={2} sx={{bgColor:"red"}}>
+          <Pagination 
+            count={pages} 
+            color="secondary" 
+            size="large" 
+            showFirstButton 
+            showLastButton 
+            defaultPage={1} 
+            boundaryCount={15}
+            onChange={handlePageChange}
+            />
+        </Stack>
+        </Box>
         <Box className="marginFix" sx={{minHeight:"2rem"}}/>
       </Box>
     </>
