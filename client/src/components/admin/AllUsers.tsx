@@ -24,23 +24,26 @@ export const AllUsers = (): JSX.Element => {
   const [page,setPage]=useState<number>(1)
   useEffect(() => {
     const controller = new AbortController();
-    //<TableCell align="right">{user.device.map((device)=>(<p>{device}</p>))}</TableCell>
 
-    setisloading(true);
-    AdminUtil.getUsers(controller, page-1).then((result) => {
-      //setusers([{userId:1,firstname:"Kasper",lastname:'Bosteels',email:"Kasperbosteels@hotmail.com",device:[1,2,3,4,5,6],colorDay:GraphColors.RED,colorNight:GraphColors.BLUE,isAdmin:true}]);
-      setusers(result.data);
-      setPages(result.pages)
-      setisloading(false);
-    });
+   
+    requestAllUsers(controller)
     return () => controller.abort();
   }, [page]);
 
   useEffect(() => {
     setRender(false);
   }, [render])
+
 const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
   setPage(page)
+}
+const requestAllUsers = (controller:AbortController)=>{
+  setisloading(true);
+  AdminUtil.getUsers(controller, page-1).then((result) => {
+    setusers(result.data);
+    setPages(result.pages)
+    setisloading(false);
+  });
 }
 
   return (
@@ -103,7 +106,7 @@ const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
                           variant="outlined"
                           style={{ backgroundColor:'rgba(210,18,25,255)', color:"white"}}
                           onClick={(event) => {
-                            AdminUtil.deleteAdmin(user.userId).then((event)=>{
+                            AdminUtil.deleteAdmin(user.userId).then(()=>{
                               user.isAdmin = false;
                               setRender(true);
                             });
@@ -131,6 +134,7 @@ const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
                         onClick={(event) => {
                           IOUtil.deleteUser(user.userId).then((event)=>{
                             setRender(true);
+                          requestAllUsers(new AbortController())
                           })
                         }}
                       />
