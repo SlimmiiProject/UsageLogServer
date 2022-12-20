@@ -1,17 +1,13 @@
 import {
   Box,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Button,
-  Grid,
   Container,
   CssBaseline,
   Alert,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { getPath } from "../../App";
+import {useNavigate, useSearchParams } from "react-router-dom";
 import { IOUtil } from "../../util/IOUtil";
 import { I18n } from "../../util/language/I18n";
 
@@ -22,7 +18,7 @@ const ForgotPassword = () => {
   const [infoMsg, setInfo] = useState<string>("");
 
   const [expired, setExpired] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [_loading, setLoading] = useState<boolean>(true);
 
   const token = searchParams.get("token");
   const navigate = useNavigate();
@@ -43,7 +39,7 @@ const ForgotPassword = () => {
     }
 
     return () => controller.abort();
-  }, []);
+  },);
 
   const handlePasswordChangeSubmit = async (
     event: React.FormEvent<HTMLFormElement>

@@ -1,5 +1,4 @@
 import { IOUtil } from './IOUtil';
-import axios, { AxiosInstance } from "axios";
 
 export enum GraphColors {
     RED = "red",

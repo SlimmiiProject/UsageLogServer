@@ -1,4 +1,3 @@
-import { deviceData } from './AdminUtil';
 /**
  * IOUtil is a class with a static method deleteUserFromDevice that takes a string and returns void.
  * @property {boolean} succes - boolean;
