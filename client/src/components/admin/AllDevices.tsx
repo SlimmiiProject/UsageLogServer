@@ -1,8 +1,7 @@
-import { AdminUtil, deviceData, deviceResponseData } from "../../util/AdminUtil";
+import { AdminUtil, deviceData, deviceResponseData, userData, userResponseData } from "../../util/AdminUtil";
 import { useState, useEffect } from "react";
 import {
   Box,
-  Chip,
   TableContainer,
   TableBody,
   TableCell,
@@ -17,6 +16,13 @@ import {
   DialogContent,
   Pagination,
   Stack,
+  DialogActions,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
 } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
@@ -33,7 +39,10 @@ export interface dialogstate {
 }
 export const AllDevices = (): JSX.Element => {
   const [devices, setDevices] = useState<deviceData[]>([]);
-  const [dialogs, setDialogs] = useState<dialogstate[]>([])
+  const [users,setUsers] = useState<userData[]>([]);
+  const [open, setOpen] = useState<boolean>(false)
+  const [selectedUser,setSelectedUser]=useState<userData>()
+  const [clickedDevice, setClickedDevice] = useState<string>("");
   const [isloading, setisloading] = useState<boolean>(true);
   const [deviceId, setDeviceId] = useState<string>("");
   const [alias, setAlias] = useState<string>("");
@@ -41,9 +50,9 @@ export const AllDevices = (): JSX.Element => {
   const [page,setPage]=useState<number>(1)
   useEffect(() => {
     const controller = new AbortController();
-    let temp: dialogstate[] = [];
     setisloading(true);
     requestAllDevices(controller)
+    requestAllUsers(controller)
     setisloading(false);
     return () => controller.abort();
   }, []);
@@ -52,38 +61,12 @@ export const AllDevices = (): JSX.Element => {
     requestAllDevices(controller)
     return ()=> controller.abort();
   },[page])
-  useEffect(()=>{
-    const temp:deviceData[] = devices
-    let dialogs:dialogstate[]=[]
-    temp.forEach((d)=>{
-      dialogs.push({
-        open:false,
-        device:d.id,
-        user:d.owner,
-        assign:handleClickClosed,
-        setopen:handleClickOpen
-      })
-    })
-    setDialogs([...dialogs])
-  },[devices])
-  const handleClickClosed = (deviceid: string, userid: number) => {
-    console.log("close triggered")
-    console.log(deviceid)
-    console.log(dialogs.filter((d) => d.device = deviceid))
-    dialogs.filter((d) => d.device === deviceid).map((di) => {
-      console.log(di)
-      di.open = false;
-    })
-    //TODO: assign user to device
+  const handleClickClosed = () => {
+    setOpen(false)
   }
   const handleClickOpen = (deviceid: string) => {
-    console.log("open triggered")
-    let temp = dialogs;
-    console.log(dialogs)
-    console.log(temp)
-    temp.map((d) => d.device === deviceid ? d.open = true : d.open = false)
-    setDialogs(temp)
-
+    setClickedDevice(deviceid)
+    setOpen(true)
   }
   const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
     setPage(page)
@@ -94,17 +77,26 @@ export const AllDevices = (): JSX.Element => {
       setPages(result.pages)
     });
   }
-  /**
-   *                    <Dialog open={dialogs[index].open} onClose={() => dialogs[index].assign(device.id, 11)}>
-                        <DialogTitle>Assign user to this device</DialogTitle>
-                        <TextField autoFocus fullWidth margin="dense" label="user id" type="number" variant="standard" />
-                        <DialogContent>
-                          <Button>temp stuff i place here, users will be displayed here later on</Button>
-                        </DialogContent>
-                      </Dialog>
-   * 
-   * 
-   */
+  const requestAllUsers = (controller:AbortController)=>{
+    AdminUtil.getAllUsers(controller).then((result:userResponseData)=>{
+      setUsers(result.data)
+    });
+  }
+  const handleSelect = (event:SelectChangeEvent)=>{
+    const temp = users.filter((a)=> a.userId.toString()===event.target.value.split(" ")[0])
+    console.log(temp)
+    setSelectedUser(temp[0])
+  }
+  const handleSave = ()=>{
+    if(selectedUser&& clickedDevice){
+    AdminUtil.addDeviceToUser(selectedUser.userId,clickedDevice)
+    const controller = new AbortController();
+    requestAllDevices(controller)
+  }
+  console.log(selectedUser)
+  console.log(clickedDevice)
+  handleClickClosed()
+}
   return (
     <>
       <Box
@@ -117,8 +109,7 @@ export const AllDevices = (): JSX.Element => {
           backgroundColor: "rgba(0,0,0,0.0)",
           height: "fit-content",
           width: "fit-content",
-        }}
-      >
+        }}>
         <h2>{I18n.t("allDevices.List")}</h2>
         <TableContainer component={Paper} arial-label="simple table" sx={{ margin: "auto" }}>
           <TableHead>
@@ -135,8 +126,7 @@ export const AllDevices = (): JSX.Element => {
               devices.map((device, index) => (
                 <TableRow
                   key={device.index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {device.index}
                   </TableCell>
@@ -148,14 +138,12 @@ export const AllDevices = (): JSX.Element => {
                     {device.owner ? (
                       <p>{device.owner}</p>
                     ) : (<>
-                      <Button startIcon={<PersonIcon/>} onClick={() => dialogs[index].setopen(device.id)}>
+                      <Button startIcon={<PersonIcon/>} onClick={() =>handleClickOpen(device.id)}>
                         Assign user to device
                       </Button>
-                     {console.log(dialogs)}
                     </>
                     )}
                   </TableCell>
-
                   <TableCell align="right">
                     {device.firstname ? (
                       <p>
@@ -200,15 +188,46 @@ export const AllDevices = (): JSX.Element => {
                   color="primary"
                   variant="outlined"
                   startIcon={<AddBoxIcon/>}
-                  onClick={(event) => {
-                    IOUtil.addDevice(deviceId, alias)
-                  }
-                  }
+                  onClick={(event) => {IOUtil.addDevice(deviceId, alias)}}
                 >{I18n.t("allDevices.tableChipAdd")}</Button>
               </TableCell>
             </TableRow>
           </TableBody>
         </TableContainer>
+        <Dialog open={open} onClose={handleClickClosed} maxWidth="lg">
+                        <DialogTitle>Assign user to this device</DialogTitle>
+                        <DialogContent>
+                        <FormControl>
+                          <InputLabel id="select-user-label">Select User</InputLabel>
+                          <Select
+                            labelId="select-user-label"
+                            multiple={false}
+                            label="User"
+                            value={selectedUser? `${selectedUser.userId} - ${selectedUser.firstname} ${selectedUser.lastname}`:''}
+                            onChange={(e)=>handleSelect(e)}
+                            sx={{maxHeight: 48 * 4.5 + 8, width:250}}
+                            input={<OutlinedInput label="User"/>}
+                            >
+                              {
+                                users.map((u)=>(
+                                  <>
+                                  <MenuItem
+                                    key={u.userId}
+                                    value={u.userId}
+                                  >
+                                  {u.userId} - {u.firstname} {u.lastname}
+                                  </MenuItem>
+                                  </>
+                                ))
+                              }
+                          </Select>
+                        </FormControl>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleClickClosed} color="error" variant="outlined">Cancel</Button>
+                        <Button onClick={handleSave} color="success" variant="outlined">Save</Button>
+                      </DialogActions>
+                      </Dialog>
         <Box sx={{ width: "100%", marginTop: "1rem", display: "flex", justifyContent: "center" }}>
           <Stack spacing={2}>
             <Pagination
