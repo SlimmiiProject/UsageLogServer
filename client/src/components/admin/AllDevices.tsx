@@ -20,7 +20,9 @@ import {
 } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { IOUtil } from "../../util/IOUtil";
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import PersonIcon from '@mui/icons-material/Person';
 export interface dialogstate {
   open: boolean,
   device: string,
@@ -146,7 +148,7 @@ export const AllDevices = (): JSX.Element => {
                     {device.owner ? (
                       <p>{device.owner}</p>
                     ) : (<>
-                      <Button onClick={() => dialogs[index].setopen(device.id)}>
+                      <Button startIcon={<PersonIcon/>} onClick={() => dialogs[index].setopen(device.id)}>
                         Assign user to device
                       </Button>
                      {console.log(dialogs)}
@@ -164,14 +166,16 @@ export const AllDevices = (): JSX.Element => {
                     )}
                   </TableCell>
                   <TableCell align="right">
-                    <Chip
-                      label={I18n.t("allDevices.tableChipRemove")}
+                    <Button
                       variant="outlined"
-                      style={{ backgroundColor: 'rgba(210,18,25,255)' }}
+                      color="error"
+                      startIcon={<DeleteIcon/>}
                       onClick={(event) =>
                         IOUtil.deleteDevice(device.id)
                       }
-                    />
+                    >
+                      {I18n.t("allDevices.tableChipRemove")}
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))
@@ -183,25 +187,24 @@ export const AllDevices = (): JSX.Element => {
                 <label>{I18n.t("allDevices.tableId")}</label>
               </TableCell>
               <TableCell align="left">
-                <input type="text" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} />
+                <TextField type="text" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} />
               </TableCell>
               <TableCell align="left">
                 <label>{I18n.t("allDevices.tableAlias")}</label>
               </TableCell>
               <TableCell align="left">
-                <input type="text" value={alias} onChange={(e) => setAlias(e.target.value)} />
+                <TextField type="text" value={alias} onChange={(e) => setAlias(e.target.value)} />
               </TableCell>
               <TableCell align="center">
-
-                <Chip
-                  label={I18n.t("allDevices.tableChipAdd")}
+                <Button
+                  color="primary"
                   variant="outlined"
-                  style={{ backgroundColor: 'rgba(25, 118, 210, 255)' }}
+                  startIcon={<AddBoxIcon/>}
                   onClick={(event) => {
                     IOUtil.addDevice(deviceId, alias)
                   }
                   }
-                />
+                >{I18n.t("allDevices.tableChipAdd")}</Button>
               </TableCell>
             </TableRow>
           </TableBody>
