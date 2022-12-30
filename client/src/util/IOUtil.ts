@@ -214,5 +214,21 @@ export class IOUtil {
     }
   }
 
+  public static changeDeviceAlias = async (deviceIndex: number, alias: string, controller: AbortController) => {
+    try {
+      const res = await this.INSTANCE.get("/profiles/device-alias", {
+        signal: controller.signal,
+        params: {
+          deviceIndex: deviceIndex,
+          alias: alias
+        }
+      });
+      return res.status === 201
+    } catch (err) {
+      console.error(err)
+      return false;
+    }
+  }
+
   public static isAborted = (abortController: AbortController) => abortController.signal.aborted;
 }

@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import Chip from "@mui/material/Chip";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
 import { useState } from "react";
+import { IOUtil } from "../../util/IOUtil";
 export interface DeviceCardProps {
   deviceIndex: number;
   deviceId: string;
@@ -31,8 +32,9 @@ export default function BasicCard({
   const HandleClickOpenDialog = ()=>{
     setOpen(true)
   }
-  const saveAlias = ()=>{
-
+  const saveAlias = async()=>{
+    const controller = new AbortController()
+    await IOUtil.changeDeviceAlias(deviceIndex,alias,controller);
     reloadDevices()
     HandleClickCloseDialog()
   }
