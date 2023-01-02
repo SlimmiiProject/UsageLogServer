@@ -192,4 +192,11 @@ const errorJson = (errorType: string, fields?: { [key: string]: string }, missin
     }
 }
 
+router.route("/device-alias")
+    .post(async (req: Request, res: Response) => {
+        const deviceIndex: number = parseInt(req.params.deviceIndex);
+        const alias: string = req.params.alias;
+        await DataProcessor.ChangeDeviceAlias(deviceIndex, alias)
+    })
+
 module.exports = router;

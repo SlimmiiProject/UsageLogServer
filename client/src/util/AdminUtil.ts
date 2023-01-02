@@ -50,19 +50,19 @@ export type deviceData = {
 }
 
 export class AdminUtil {
-   public static getLogs = async (controller: AbortController, page: number): Promise<logResponseData> => {
-    const toSkip = page * 10;    
-    try {
-            const res = await IOUtil.INSTANCE.get("/admin/logfile/", { params : {skip: toSkip}, signal: controller.signal });
+    public static getLogs = async (controller: AbortController, page: number): Promise<logResponseData> => {
+        const toSkip = page * 10;
+        try {
+            const res = await IOUtil.INSTANCE.get("/admin/logfile/", { params: { skip: toSkip }, signal: controller.signal });
             return res.data;
         } catch (_ignored) {
-            return {data: [], pages: 0};
+            return { data: [], pages: 0 };
         }
     }
 
-    public static getUser = async (userId: number) : Promise<userData> => {
+    public static getUser = async (userId: number): Promise<userData> => {
         try {
-            const res = await IOUtil.INSTANCE.get(`/admin/user`, {params: {userId: userId}});
+            const res = await IOUtil.INSTANCE.get(`/admin/user`, { params: { userId: userId } });
             return res.data;
         } catch (_ignore) {
             return {
@@ -80,9 +80,18 @@ export class AdminUtil {
     /* A function that is called when a user is created. */
     public static getUsers = async (controller: AbortController, page: number): Promise<userResponseData> => {
         const toSkip = page * 10;
-        console.log("received allusers request");
         try {
             const res = await IOUtil.INSTANCE.get("/admin/allusers/", { params: { skip: toSkip }, signal: controller.signal });
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            return { data: [], pages: 0 };
+        }
+    }
+
+    public static getAllUsers = async (controller: AbortController): Promise<userResponseData> => {
+        try {
+            const res = await IOUtil.INSTANCE.get("/admin/allusers", { signal: controller.signal });
             return res.data;
         } catch (err) {
             console.error(err);
@@ -94,11 +103,10 @@ export class AdminUtil {
 
         const toSkip = page * 10;
         try {
-            const res = await IOUtil.INSTANCE.get("admin/allDevices", {params: { skip: toSkip }, signal: controller.signal});
-            console.log(res.data)
+            const res = await IOUtil.INSTANCE.get("admin/allDevices", { params: { skip: toSkip }, signal: controller.signal });
             return res.data;
         } catch (_ignored) {
-            return {data: [], pages: 0};
+            return { data: [], pages: 0 };
         }
     }
 
