@@ -53,7 +53,7 @@ export default function BasicCard({
           </>
         </Typography>
         <Typography variant="h6">
-          {I18n.t("metercard.deviceIndex")}: {deviceIndex}
+          {I18n.t("metercard.deviceIndex")} {deviceIndex}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {I18n.t("metercard.id")}: {deviceId}
