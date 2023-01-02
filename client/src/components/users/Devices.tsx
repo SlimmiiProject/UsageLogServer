@@ -23,7 +23,7 @@ const Devices = (): JSX.Element => {
   }
   return (
     <>
-    <Box>
+    <Box sx={{width:"90%", display:"flex", margin:"auto", alignItems:"center", flexDirection:"column"}}>
     <Typography variant="h4" marginLeft="1rem">
         {I18n.t("devices.devicemanager")}
         </Typography>
