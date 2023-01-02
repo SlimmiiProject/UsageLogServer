@@ -94,6 +94,7 @@ export const AllDevices = (): JSX.Element => {
             });
         }
 
+
         handleClickClosed()
     }
     return (
