@@ -33,19 +33,21 @@ export default function BasicCard({
     setOpen(true)
   }
   const saveAlias = async()=>{
+    if(alias === undefined)return;
     const controller = new AbortController()
     await IOUtil.changeDeviceAlias(deviceIndex,alias,controller);
     reloadDevices()
     HandleClickCloseDialog()
+    
   }
   return (
     <Card 
-    elevation={8} 
+    elevation={10} 
       sx={{ 
         minWidth: 275, 
         maxWidth:500, 
         margin:".5rem"}}>
-      <CardContent sx={{maxHeight:150}}>
+      <CardContent sx={{maxHeight:180, minHeight:170}}>
         <Typography variant="h5" component="div">
           <>
             {I18n.t("metercard.name")}:{" "}
