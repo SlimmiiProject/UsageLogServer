@@ -1,26 +1,24 @@
-import { useState, } from "react";
+import { useState } from "react";
 import { I18n } from "../util/language/I18n";
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import { IOUtil } from "../util/IOUtil";
 import { Alert } from "@mui/material";
 
 export interface ContactInfo {
-    firstName: string,
-    lastName: string,
-    email: string,
-    subject: string,
-    description: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  subject: string;
+  description: string;
 }
 
 const Contact = (): JSX.Element => {
-
     const [infoMsg, setInfoMsg] = useState<string>("");
     const [canSend, setCanSend] = useState<boolean>(true);
     const [contactData, setContactData] = useState<ContactInfo>({ firstName: "", lastName: "", email: "", subject: "", description: "" });
@@ -34,11 +32,39 @@ const Contact = (): JSX.Element => {
                     <AssignmentIcon />
                 </Avatar>
 
-                <Typography variant="h6" gutterBottom>
-                    {I18n.t("contact.form")}
-                </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              required
+              id="firstName"
+              name="firstName"
+              label={I18n.t("contact.firstname")}
+              fullWidth
+              autoComplete="given-name"
+              variant="standard"
+              onChange={(event) =>
+                setContactData({
+                  ...contactData,
+                  firstName: event.target.value,
+                })
+              }
+            />
+          </Grid>
 
-                <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              required
+              id="lastName"
+              name="lastName"
+              label={I18n.t("contact.lastname")}
+              fullWidth
+              autoComplete="family-name"
+              variant="standard"
+              onChange={(event) =>
+                setContactData({ ...contactData, lastName: event.target.value })
+              }
+            />
+          </Grid>
 
                     <Grid item xs={12} sm={6}>
                         <TextField required id="firstName" name="firstName" label={I18n.t("contact.firstname")} fullWidth
