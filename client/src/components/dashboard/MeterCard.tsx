@@ -32,8 +32,11 @@ export default function BasicCard({
   const HandleClickOpenDialog = ()=>{
     setOpen(true)
   }
-  const saveAlias = async()=>{
-    if(alias === undefined)return;
+  const saveAlias = async () => {
+    if (alias === undefined)
+    {
+      return
+    };
     const controller = new AbortController()
     await IOUtil.changeDeviceAlias(deviceIndex,alias,controller);
     reloadDevices()
