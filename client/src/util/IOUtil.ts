@@ -216,7 +216,7 @@ export class IOUtil {
 
   public static changeDeviceAlias = async (deviceIndex: number, alias: string, controller: AbortController) => {
     try {
-      console.log(deviceIndex, alias)
+      // console.log(deviceIndex, alias)
       const res = await this.INSTANCE.put("/profiles/device-alias", {
           deviceIndex: deviceIndex,
           alias: alias
