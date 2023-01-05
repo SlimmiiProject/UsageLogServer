@@ -531,13 +531,12 @@ export class DataProcessor {
     device_index: number,
     alias: string
   ): Promise<void> => {
-    let device: Device = await Device.findOne({
-      where: {
-        device_index: Equal(device_index),
-      },
+    let device = await Device.findOne({
+      where: { device_index: Equal(device_index) },
     });
     if (!ObjectUtil.isSet(device)) return;
-    device.setFriendlyName(alias).save();
+    await device.setFriendlyName(alias);
+    await device.save();
   };
   //#endregion
 

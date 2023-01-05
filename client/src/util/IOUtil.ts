@@ -216,13 +216,12 @@ export class IOUtil {
 
   public static changeDeviceAlias = async (deviceIndex: number, alias: string, controller: AbortController) => {
     try {
-      await this.INSTANCE.get("/profiles/device-alias", {
-        signal: controller.signal,
-        params: {
+      console.log(deviceIndex, alias)
+      const res = await this.INSTANCE.post("/profiles/device-alias", {
           deviceIndex: deviceIndex,
           alias: alias
-        }
       });
+      return res.data;
     } catch (err) {
       console.error(err)
       return false;
