@@ -121,7 +121,7 @@ function passMatch():boolean{
                 <TableCell align="center">{I18n.t("allUsers.tableEmail")}</TableCell>
                 <TableCell align="center">{I18n.t("allUsers.tableName")}</TableCell>
                 <TableCell align="center">{I18n.t("allUsers.tablePhone")}</TableCell>
-                <TableCell align="center">Request Reset</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tableRequestReset")}</TableCell>
                 <TableCell align="center">{I18n.t("allUsers.tableAdmin")}</TableCell>
                 <TableCell>
                   <Button endIcon={<AddCircleIcon/>} color="success" onClick={HandleClickOpenCreateDialog}>
@@ -228,8 +228,8 @@ function passMatch():boolean{
                         setpasswordisValid(passMatch());}}/>
                     </DialogContent>
                     <DialogActions>
-                      <Button onClick={HandleClickCloseCreateDialog} color="error">Cancel</Button>
-                      <Button onClick={CreateUser} disabled={!passMatch} color="success">Save</Button>
+                      <Button onClick={HandleClickCloseCreateDialog} color="error">{I18n.t("metercard.cancel")}</Button>
+                      <Button onClick={CreateUser} disabled={!passMatch} color="success">{I18n.t("metercard.save")}</Button>
                     </DialogActions>
                   </Dialog>
         <Box className="marginFix" sx={{ minHeight: "2rem" }} />
