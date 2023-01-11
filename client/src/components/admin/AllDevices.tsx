@@ -56,7 +56,6 @@ export const AllDevices = (): JSX.Element => {
     //TODO: assign user to device
   }
   const handleClickOpen = (deviceid: string) => {
-    console.log("open triggered")
     let temp = dialogs;
     console.log(dialogs)
     console.log(temp)
@@ -116,11 +115,11 @@ export const AllDevices = (): JSX.Element => {
         <TableContainer component={Paper} arial-label="simple table" sx={{ margin: "auto" }}>
           <TableHead>
             <TableRow>
-              <TableCell>{I18n.t("allDevices.tableIndex")}</TableCell>
-              <TableCell>{I18n.t("allDevices.tableId")}</TableCell>
-              <TableCell>{I18n.t("allDevices.tableAlias")}</TableCell>
-              <TableCell>{I18n.t("allDevices.tableUser")}</TableCell>
-              <TableCell>{I18n.t("allDevices.fullname")}</TableCell>
+              <TableCell align="center">{I18n.t("allDevices.tableIndex")}</TableCell>
+              <TableCell align="center">{I18n.t("allDevices.tableId")}</TableCell>
+              <TableCell align="center">{I18n.t("allDevices.tableAlias")}</TableCell>
+              <TableCell align="center">{I18n.t("allDevices.tableUser")}</TableCell>
+              <TableCell align="center">{I18n.t("allDevices.fullname")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -130,14 +129,14 @@ export const AllDevices = (): JSX.Element => {
                   key={device.index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell align="center" component="th" scope="row">
                     {device.index}
                   </TableCell>
-                  <TableCell align="right">{device.id}</TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">{device.id}</TableCell>
+                  <TableCell align="center">
                     {device.alias ? <p>{device.alias}</p> : <p>{I18n.t("allDevices.noAlias")}</p>}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     {device.owner ? (
                       <p>{device.owner}</p>
                     ) : (<>
@@ -149,7 +148,7 @@ export const AllDevices = (): JSX.Element => {
                     )}
                   </TableCell>
 
-                  <TableCell align="right">
+                  <TableCell align="center">
                     {device.firstname ? (
                       <p>
                         {device.firstname} {device.lastname}
@@ -158,7 +157,7 @@ export const AllDevices = (): JSX.Element => {
                       <p>{I18n.t("allDevices.noUser")}</p>
                     )}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     <Chip
                       label={I18n.t("allDevices.tableChipRemove")}
                       variant="outlined"

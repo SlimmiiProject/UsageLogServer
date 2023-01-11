@@ -117,12 +117,12 @@ function passMatch():boolean{
           <Table sx={{ minWidth: 650 }} arial-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>{I18n.t("allUsers.tableId")}</TableCell>
-                <TableCell>{I18n.t("allUsers.tableEmail")}</TableCell>
-                <TableCell>{I18n.t("allUsers.tableName")}</TableCell>
-                <TableCell>{I18n.t("allUsers.tablePhone")}</TableCell>
-                <TableCell>Request Reset</TableCell>
-                <TableCell>{I18n.t("allUsers.tableAdmin")}</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tableId")}</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tableEmail")}</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tableName")}</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tablePhone")}</TableCell>
+                <TableCell align="center">Request Reset</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tableAdmin")}</TableCell>
                 <TableCell>
                   <Button endIcon={<AddCircleIcon/>} color="success" onClick={HandleClickOpenCreateDialog}>
                   {I18n.t("allUsers.tableCreateUser")}
@@ -169,15 +169,15 @@ function passMatch():boolean{
                     <TableCell component="th" scope="row">
                       {user.userId}
                     </TableCell>
-                    <TableCell align="right">{user.email}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">{user.email}</TableCell>
+                    <TableCell align="center">
                       {user.firstname} {user.lastname}
                     </TableCell>
-                    <TableCell align="right">{user.phone}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">{user.phone}</TableCell>
+                    <TableCell align="center">
                      <Button onClick={()=>{HandleResetRequest(user.email)}}
                      endIcon={<SettingsBackupRestoreIcon/>}>Password reset</Button></TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
                       {user.isAdmin ? (
                         <Button endIcon={<MilitaryTechIcon/>} color="error" size="small" onClick={()=>{
                           AdminUtil.deleteAdmin(user.userId).then((event) => {
