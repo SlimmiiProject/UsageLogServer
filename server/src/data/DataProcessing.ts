@@ -104,9 +104,9 @@ export class DataProcessor {
   /**
    * Getting all the users from the database and returning them in a IUserData[]t.
    */
-  public static getAllUsers = async (offset: number, limit :number) => {
+  public static getAllUsers = async (skip: number, limit? :number) => {
     const users: UserAccount[] = await UserAccount.find({
-      skip: offset,
+      skip: skip,
       take: limit,
       select: {
         password: false,
@@ -127,7 +127,7 @@ export class DataProcessor {
     }
 
     const count = await UserAccount.count();
-    return { data: response, pages: Math.ceil(count/10) };
+    return { data: response, pages: Math.ceil(count/limit) };
   };
 
   /**
@@ -210,7 +210,7 @@ export class DataProcessor {
       message
     );
     validate(newContactForm).then(async (result) => {
-      if (result.length <= 0) await ContactForm.save(newContactForm);
+      if (result.length <= 0) await newContactForm.save();
     });
   };
 
@@ -280,10 +280,10 @@ export class DataProcessor {
   };
 
   /* A static method that returns a promise of an array of Device objects. */
-  public static getAllDevices = async (skip: number) => {
+  public static getAllDevices = async (skip: number, limit: number) => {
     const devices: Device[] = await Device.find({
       skip: skip,
-      take: 10,
+      take: limit,
       relations: {
         user: true,
       },
@@ -311,7 +311,7 @@ export class DataProcessor {
       });
     }
     const count = await Device.count();
-    return {data: newDevices, pages: Math.ceil(count / 10)};
+    return {data: newDevices, pages: Math.ceil(count / limit)};
   };
 
   public static getTempEntry = async (deviceId: string) => {

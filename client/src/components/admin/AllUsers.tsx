@@ -61,7 +61,7 @@ const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
 }
 const requestAllUsers = (controller:AbortController)=>{
   setisloading(true);
-  AdminUtil.getUsers(controller, page-1).then((result) => {
+  AdminUtil.getUsers(controller, page, 10).then((result) => {
     setusers(result.data);
     setPages(result.pages)
     setisloading(false);
@@ -117,13 +117,13 @@ function passMatch():boolean{
           <Table sx={{ minWidth: 650 }} arial-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="left">{I18n.t("allUsers.tableId")}</TableCell>
-                <TableCell align="left">{I18n.t("allUsers.tableEmail")}</TableCell>
-                <TableCell align="left">{I18n.t("allUsers.tableName")}</TableCell>
-                <TableCell align="left">{I18n.t("allUsers.tablePhone")}</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tableId")}</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tableEmail")}</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tableName")}</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tablePhone")}</TableCell>
                 <TableCell align="center">Request Reset</TableCell>
                 <TableCell align="center">{I18n.t("allUsers.tableAdmin")}</TableCell>
-                <TableCell align="right">
+                <TableCell>
                   <Button endIcon={<AddCircleIcon/>} color="success" onClick={HandleClickOpenCreateDialog}>
                   {I18n.t("allUsers.tableCreateUser")}
                   </Button>
@@ -140,12 +140,12 @@ function passMatch():boolean{
                     <TableCell align="left" component="th" scope="row">
                       {user.userId}
                     </TableCell>
-                    <TableCell align="left">{user.email}</TableCell>
-                    <TableCell align="left">
+                    <TableCell align="center">{user.email}</TableCell>
+                    <TableCell align="center">
                       {user.firstname} {user.lastname}
                     </TableCell>
-                    <TableCell align="left">{user.phone}</TableCell>
-                    <TableCell align="left">
+                    <TableCell align="center">{user.phone}</TableCell>
+                    <TableCell align="center">
                      <Button onClick={()=>{HandleResetRequest(user.email)}}
                      endIcon={<SettingsBackupRestoreIcon/>}>Password reset</Button></TableCell>
                     <TableCell align="center">

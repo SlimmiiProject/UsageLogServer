@@ -78,10 +78,10 @@ export class AdminUtil {
     }
 
     /* A function that is called when a user is created. */
-    public static getUsers = async (controller: AbortController, page: number, howManyPerPage : number): Promise<userResponseData> => {
-        const toSkip = page * howManyPerPage;
+    public static getUsers = async (controller: AbortController, page: number, howManyPerPage? : number): Promise<userResponseData> => {
+        const toSkip = page * howManyPerPage!;
         try {
-            const res = await IOUtil.INSTANCE.get("/admin/allusers/", { params: { skip: toSkip, limit: howManyPerPage }, signal: controller.signal });
+            const res = await IOUtil.INSTANCE.get("/admin/allusers/", { params: { skip: toSkip, limit: howManyPerPage}, signal: controller.signal });
             return res.data;
         } catch (err) {
             console.error(err);
@@ -99,11 +99,11 @@ export class AdminUtil {
         }
     }
 
-    public static getAllDevices = async (controller: AbortController, page: number) => {
+    public static getAllDevices = async (controller: AbortController, page: number, HowManyPerPage: number) => {
 
-        const toSkip = page * 10;
+        const toSkip = page * HowManyPerPage;
         try {
-            const res = await IOUtil.INSTANCE.get("admin/allDevices", { params: { skip: toSkip }, signal: controller.signal });
+            const res = await IOUtil.INSTANCE.get("admin/allDevices", { params: { skip: toSkip, limit: HowManyPerPage }, signal: controller.signal });
             return res.data;
         } catch (_ignored) {
             return { data: [], pages: 0 };

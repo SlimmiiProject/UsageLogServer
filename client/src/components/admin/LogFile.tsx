@@ -38,10 +38,10 @@ export const LogFile = (): JSX.Element => {
             files.map((file)=>(
     <TableRow key={file.id} sx={{'&:last-child td, &:last-child th':{border:0}}}>
         <TableCell component="th" scope="row"> {file.id}</TableCell>
-        <TableCell align="left">{file.account_id}</TableCell>
+        <TableCell align="center">{file.account_id}</TableCell>
         <TableCell align="left" >{file.description}</TableCell>
-        <TableCell align="left">{file.ipaddress}</TableCell>
-        <TableCell align="left">{new Date(file.date).toDateString()}</TableCell>
+        <TableCell align="center">{file.ipaddress}</TableCell>
+        <TableCell align="center">{new Date(file.date).toDateString()}</TableCell>
         </TableRow>
             ))
           ):( <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>)}

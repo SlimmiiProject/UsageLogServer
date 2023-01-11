@@ -23,9 +23,9 @@ export class ContactForm extends BaseEntity {
   message_topic: string;
 
   @Column("varchar", { nullable: false, unique: false, length: 50, name: "email" })
+  @IsEmail()
   @MaxLength(50)
   @IsDefined()
-  @IsEmail()
   email: string;
 
   @Column("text", { nullable: false, unique: false, name: "message" })
