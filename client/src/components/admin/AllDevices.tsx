@@ -77,9 +77,10 @@ export const AllDevices = (): JSX.Element => {
             setPages(result.pages)
         });
     }
-    const requestAllUsers = (controller: AbortController) => {
-        AdminUtil.getAllUsers(controller).then((result: userResponseData) => {
-            setUsers(result.data)
+    const requestAllUsers =async  (controller: AbortController) => {
+        await AdminUtil.getAllUsers(controller).then((result: userResponseData) => {
+           console.log(result)
+            setUsers(result.data);
         });
     }
     const handleSelect = (event: SelectChangeEvent) => {
@@ -203,6 +204,7 @@ export const AllDevices = (): JSX.Element => {
                                 labelId="select-user-label"
                                 multiple={false}
                                 label="User"
+                                native
                                 value={selectedUser ? `${selectedUser.userId}` : ''}
                                 onChange={(e) => handleSelect(e)}
                                 sx={{ maxHeight: 48 * 4.5 + 8, width: 250 }}
