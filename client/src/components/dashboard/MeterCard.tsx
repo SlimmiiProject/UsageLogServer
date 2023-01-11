@@ -76,18 +76,18 @@ export default function BasicCard({
           ):<></>}
         </CardActions>
             <Dialog onClose={HandleClickCloseDialog} open={open} maxWidth="lg">
-              <DialogTitle>Change Device Alias</DialogTitle>
+              <DialogTitle>{I18n.t("metercard.changeAlias")}</DialogTitle>
               <DialogContent sx={{display:"flex", flexDirection:"column", rowGap:".3rem"}}>
 <DialogContentText>
   <Typography>
-    Change the display name for this device
+    {I18n.t("metercard.changeDisplay")}
   </Typography>
 </DialogContentText>
 <TextField label="alias" required onChange={(e)=>setAlias(e.target.value)}/>
               </DialogContent>
               <DialogActions>
-                <Button onClick={HandleClickCloseDialog} color="error">Cancel</Button>
-                <Button onClick={saveAlias} color="success">Save</Button>
+                <Button onClick={HandleClickCloseDialog} color="error">{I18n.t("metercard.cancel")}</Button>
+                <Button onClick={saveAlias} color="success">{I18n.t("metercard.save")}</Button>
               </DialogActions>
             </Dialog>
       </Box>

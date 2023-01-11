@@ -195,10 +195,10 @@ export const AllDevices = (): JSX.Element => {
                     </TableBody>
                 </TableContainer>
                 <Dialog open={open} onClose={handleClickClosed} maxWidth="lg">
-                    <DialogTitle>Assign user to this device</DialogTitle>
+                    <DialogTitle>{I18n.t("allDevices.assignUserDialog")}</DialogTitle>
                     <DialogContent>
                         <FormControl>
-                            <InputLabel id="select-user-label">Select User</InputLabel>
+                            <InputLabel id="select-user-label">{I18n.t("allDevices.assignUserButton")}</InputLabel>
                             <Select
                                 labelId="select-user-label"
                                 multiple={false}
