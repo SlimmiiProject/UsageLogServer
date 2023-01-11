@@ -42,7 +42,15 @@ export class Device extends BaseEntity {
   @Column("numeric", { nullable: true, unique: false, name: "batteryPercentage" })
   @IsOptional()
   @IsInt()
-  BatteryPercentage: number;
+  BatteryPercentage: number = 0;
+
+  @Column("numeric", {name: "oldDay"})
+  @IsInt()
+  OldDay: number;
+
+  @Column("numeric", {name: "oldNight"})
+  @IsInt()
+  OldNight: number;
 
   public setFriendlyName = (alias: string) => {
     this.friendlyName = alias;
