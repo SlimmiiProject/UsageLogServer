@@ -104,7 +104,7 @@ export class DataProcessor {
   /**
    * Getting all the users from the database and returning them in a IUserData[]t.
    */
-  public static getAllUsers = async (skip: number, limit? :number) => {
+  public static getUsers = async (skip: number, limit? :number) => {
     const users: UserAccount[] = await UserAccount.find({
       skip: skip,
       take: limit,
@@ -127,7 +127,7 @@ export class DataProcessor {
     }
 
     const count = await UserAccount.count();
-    return { data: response, pages: Math.ceil(count/limit) };
+    return { data: response, pages: Math.ceil(await count / limit) };
   };
 
   /**
@@ -279,6 +279,8 @@ export class DataProcessor {
     });
   };
 
+  public static getContactForms = async () => await ContactForm.find();
+
   /* A static method that returns a promise of an array of Device objects. */
   public static getAllDevices = async (skip: number, limit: number) => {
     const devices: Device[] = await Device.find({
@@ -311,6 +313,7 @@ export class DataProcessor {
       });
     }
     const count = await Device.count();
+    console.log("get device data")
     return {data: newDevices, pages: Math.ceil(count / limit)};
   };
 
@@ -715,7 +718,27 @@ export class DataProcessor {
     if (!ObjectUtil.isSet(user)) return;
   };
 
+  public static AddTestData = async (deviceIndex: number, day?: number, night?: number) => {
+    const device = await Device.findOne({ where: { device_index: Equal(deviceIndex) } });
+    if (!ObjectUtil.isSet(device)) return;
+    if (day === undefined) day = null;
+    if (night === undefined) night = null;
+    const data = Data.createData(device, day, night);
+    await Data.save(data);
+  }
 
+  public static GetAllUsers = async ()=> {
+    const users = await UserAccount.find(
+      {
+        select: {
+          userId: true,
+          firstname: true,
+          lastname: true,
+        }
+      }
+    );
+    return users;
+  }
 }
 
 interface ITempData {

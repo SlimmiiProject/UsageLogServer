@@ -11,7 +11,7 @@ export default function App() {
   const context = useContext(userContext);
   const [loading, setLoading] = useState<boolean>(false);
   const [devices, setDevices] = useState<IDevice[]>([]);
-  const [timePeriod, setTimePeriod] = useState<timePeriod>("Week");
+  const [timePeriod, setTimePeriod] = useState<timePeriod>(localStorage.getItem("timePeriod_dashboard") as timePeriod || "Week");
 
   useEffect(() => {
     if (context.isLoggedIn) {
@@ -27,6 +27,11 @@ export default function App() {
     }
   }, [timePeriod, context.isLoggedIn]);
 
+  const changeTimePeriod = (period: string) => {
+    localStorage.setItem("timePeriod_dashboard", period)
+    setTimePeriod(period as timePeriod);
+  }
+
   return (
     <>
       <div>
@@ -34,7 +39,7 @@ export default function App() {
           className="dropdown"
           onChange={(e) => {
             setLoading(true);
-            setTimePeriod(e.target.value as timePeriod);
+            changeTimePeriod(e.target.value);
             const abortController = new AbortController();
             return () => abortController.abort();
           }}
@@ -55,7 +60,7 @@ export default function App() {
                   backgroundColor: "rgba(0, 0, 0, 0.0)",
                   minWidth: "700px",
                   height: "inherit",
-                  color:"black"
+                  color: "black"
                 }}
               >
                 <Graph
