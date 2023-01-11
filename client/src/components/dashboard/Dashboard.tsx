@@ -54,7 +54,8 @@ export default function App() {
                 style={{
                   backgroundColor: "rgba(0, 0, 0, 0.0)",
                   minWidth: "700px",
-                  height: "inherit"
+                  height: "inherit",
+                  color:"black"
                 }}
               >
                 <Graph

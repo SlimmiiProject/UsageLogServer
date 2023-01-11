@@ -104,10 +104,10 @@ export class DataProcessor {
   /**
    * Getting all the users from the database and returning them in a IUserData[]t.
    */
-  public static getAllUsers = async (skip: number) => {
+  public static getAllUsers = async (skip: number, limit? :number) => {
     const users: UserAccount[] = await UserAccount.find({
       skip: skip,
-      take: 10,
+      take: limit,
       select: {
         password: false,
       },
@@ -127,7 +127,7 @@ export class DataProcessor {
     }
 
     const count = await UserAccount.count();
-    return { data: response, pages: Math.ceil(count/10) };
+    return { data: response, pages: Math.ceil(count/limit) };
   };
 
   /**
@@ -280,10 +280,10 @@ export class DataProcessor {
   };
 
   /* A static method that returns a promise of an array of Device objects. */
-  public static getAllDevices = async (skip: number) => {
+  public static getAllDevices = async (skip: number, limit: number) => {
     const devices: Device[] = await Device.find({
       skip: skip,
-      take: 10,
+      take: limit,
       relations: {
         user: true,
       },
@@ -311,7 +311,7 @@ export class DataProcessor {
       });
     }
     const count = await Device.count();
-    return {data: newDevices, pages: Math.ceil(count / 10)};
+    return {data: newDevices, pages: Math.ceil(count / limit)};
   };
 
   public static getTempEntry = async (deviceId: string) => {
@@ -531,13 +531,12 @@ export class DataProcessor {
     device_index: number,
     alias: string
   ): Promise<void> => {
-    let device: Device = await Device.findOne({
-      where: {
-        device_index: Equal(device_index),
-      },
+    let device = await Device.findOne({
+      where: { device_index: Equal(device_index) },
     });
     if (!ObjectUtil.isSet(device)) return;
-    device.setFriendlyName(alias).save();
+    await device.setFriendlyName(alias);
+    await device.save();
   };
   //#endregion
 

@@ -1,5 +1,10 @@
 :root {
   --usedBlue: rgba(25, 118, 210, 255);
+  transition: all .5s;
+
+}
+body{
+  transition: all .5s;
 }
 
 a {
@@ -54,6 +59,7 @@ a {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  transition: all .5s;
 }
 
 .flexbox {
