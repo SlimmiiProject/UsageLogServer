@@ -33,38 +33,6 @@ const Contact = (): JSX.Element => {
                 </Avatar>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              id="firstName"
-              name="firstName"
-              label={I18n.t("contact.firstname")}
-              fullWidth
-              autoComplete="given-name"
-              variant="standard"
-              onChange={(event) =>
-                setContactData({
-                  ...contactData,
-                  firstName: event.target.value,
-                })
-              }
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              id="lastName"
-              name="lastName"
-              label={I18n.t("contact.lastname")}
-              fullWidth
-              autoComplete="family-name"
-              variant="standard"
-              onChange={(event) =>
-                setContactData({ ...contactData, lastName: event.target.value })
-              }
-            />
-          </Grid>
 
                     <Grid item xs={12} sm={6}>
                         <TextField required id="firstName" name="firstName" label={I18n.t("contact.firstname")} fullWidth
