@@ -111,6 +111,7 @@ export const AllDevices = (): JSX.Element => {
       AdminUtil.addDeviceToUser(selectedUser.userId, clickedDevice).then(() => {
         const controller = new AbortController();
         requestAllDevices(controller);
+        setSelectedUser(undefined);
       });
     }
 
