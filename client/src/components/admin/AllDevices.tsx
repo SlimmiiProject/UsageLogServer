@@ -72,7 +72,7 @@ export const AllDevices = (): JSX.Element => {
         setPage(page)
     }
     const requestAllDevices = (controller: AbortController) => {
-        AdminUtil.getAllDevices(controller, page - 1).then((result: deviceResponseData) => {
+        AdminUtil.getAllDevices(controller, page - 1, 10).then((result: deviceResponseData) => {
             setDevices(result.data);
             setPages(result.pages)
         });

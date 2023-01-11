@@ -30,7 +30,8 @@ router.get("/allusers", async (req: Request, res: Response) => {
 /* A route that is used to get all the devices. */
 router.get("/allDevices", async (req: Request, res: Response) => {
   const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
-  res.json(await DataProcessor.getAllDevices(skip));
+  const limit = req.query.limit ? parseInt(req.query.limit as string) : 0;
+  res.json(await DataProcessor.getAllDevices(skip, limit));
 })
 
 
