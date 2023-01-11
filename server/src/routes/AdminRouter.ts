@@ -1,4 +1,3 @@
-import { UserAccount } from './../data/entities/UserAccount';
 import express, { Request, Response } from "express";
 import { SessionManager } from "../accounts/SessionManager";
 import { DataProcessor } from "../data/DataProcessing";

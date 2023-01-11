@@ -127,7 +127,7 @@ export class DataProcessor {
     }
 
     const count = await UserAccount.count();
-    return { data: response, pages: Math.ceil(count/10) };
+    return { data: response, pages: Math.ceil(count/limit) };
   };
 
   /**
@@ -311,7 +311,7 @@ export class DataProcessor {
       });
     }
     const count = await Device.count();
-    return {data: newDevices, pages: Math.ceil(count / 10)};
+    return {data: newDevices, pages: Math.ceil(count / limit)};
   };
 
   public static getTempEntry = async (deviceId: string) => {
