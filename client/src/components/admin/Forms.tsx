@@ -2,18 +2,30 @@ import { I18n } from "../../util/language/I18n";
 import { AdminUtil, LogData } from "../../util/AdminUtil";
 import { useEffect, useState } from "react";
 import { Box, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
-
-export const ContactFile = (): JSX.Element => {
-  const [files, setFiles] = useState<LogData[]>([]);
+export interface response {
+  data:contactdata[],
+}
+export interface contactdata{
+contactId: number
+created_at: string
+email: string,
+firstname: string
+lastname: string
+message: string
+message_topic: string
+}
+export const Forms = (): JSX.Element => {
+  const [files, setFiles] = useState<contactdata[]>([]);
   const [isloading, setisloading] = useState<boolean>(true);
  
   useEffect(() => {
     const controller = new AbortController();
 
     setisloading(true);
-    AdminUtil.getLogs(controller, 0).then((result) => {
-      setFiles(result.data)
-      setisloading(false);
+    AdminUtil.getContactData().then((result:response) => {
+     console.table(result)
+     setFiles(result.data)
+     setisloading(false)
     });
     return () => controller.abort();
 
@@ -36,12 +48,14 @@ export const ContactFile = (): JSX.Element => {
         <TableBody>
           {!isloading ? (
             files.map((file)=>(
-    <TableRow key={file.id} sx={{'&:last-child td, &:last-child th':{border:0}}}>
-        <TableCell component="th" scope="row"> {file.id}</TableCell>
-        <TableCell align="left">{file.account_id}</TableCell>
-        <TableCell align="left" >{file.description}</TableCell>
-        <TableCell align="left">{file.ipaddress}</TableCell>
-        <TableCell align="left">{new Date(file.date).toDateString()}</TableCell>
+    <TableRow key={file.contactId.toString()} sx={{'&:last-child td, &:last-child th':{border:0}}}>
+        <TableCell component="th" scope="row"> {file.contactId}</TableCell>
+        <TableCell align="left">{file.created_at}</TableCell>
+        <TableCell align="left" >{file.email}</TableCell>
+        <TableCell align="left">{file.firstname} {file.lastname}</TableCell>
+        <TableCell align="left">{new Date(file.created_at).toDateString()}</TableCell>
+        <TableCell align="left">{file.message_topic}</TableCell>
+        <TableCell align="left">{file.message}</TableCell>
         </TableRow>
             ))
           ):( <section className="graph" style={{borderWidth:0,alignItems:"center",justifyItems:"center",justifyContent:"center",display:"flex"}}><CircularProgress className="circularprogress"/></section>)}

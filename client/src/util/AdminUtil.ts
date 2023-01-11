@@ -1,5 +1,5 @@
 import { IOUtil } from './IOUtil';
-
+import { contactdata, response } from '../components/admin/Forms';
 export enum GraphColors {
     RED = "red",
     GREEN = "green",
@@ -122,7 +122,7 @@ export class AdminUtil {
             const res = await IOUtil.INSTANCE.delete("admin/account", { data: { userId: userId } });
             return res.data;
         } catch (_ignored) {
-           
+
         }
     }
 
@@ -135,21 +135,12 @@ export class AdminUtil {
         }
     }
 
-    public static getContactData = async () => {
+    public static getContactData = async (): Promise<response> => {
         try {
             const res = await IOUtil.INSTANCE.get("/contact");
             return res.data;
         } catch (_ignore) {
-            return false
+            return { data: [] }
         }
     }
-    public static getAllContactForms = async () => {
-        try {
-            const res = await IOUtil.INSTANCE.get("contact/contact-forms");
-            return res.data;
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
 }
