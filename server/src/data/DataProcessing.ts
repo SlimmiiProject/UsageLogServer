@@ -210,7 +210,7 @@ export class DataProcessor {
       message
     );
     validate(newContactForm).then(async (result) => {
-      if (result.length <= 0) await ContactForm.save(newContactForm);
+      if (result.length <= 0) await newContactForm.save();
     });
   };
 
@@ -715,7 +715,14 @@ export class DataProcessor {
     if (!ObjectUtil.isSet(user)) return;
   };
 
-
+  public static AddTestData = async (deviceIndex: number, day?: number, night?: number) => {
+    const device = await Device.findOne({ where: { device_index: Equal(deviceIndex) } });
+    if (!ObjectUtil.isSet(device)) return;
+    if (day === undefined) day = null;
+    if (night === undefined) night = null;
+    const data = Data.createData(device, day, night);
+    await Data.save(data);
+  }
 }
 
 interface ITempData {
