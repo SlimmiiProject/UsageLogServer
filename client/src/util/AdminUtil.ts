@@ -131,7 +131,16 @@ export class AdminUtil {
             const res = await IOUtil.INSTANCE.put("/admin/add-device-user", { userId: userId, deviceId: deviceId });
             return res.data;
         } catch (_ignored) {
-           
+            return false
+        }
+    }
+
+    public static getContactData = async () => {
+        try {
+            const res = await IOUtil.INSTANCE.get("/contact");
+            return res.data;
+        } catch (_ignore) {
+            return false
         }
     }
 
