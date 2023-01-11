@@ -39,7 +39,7 @@
   "logger.Description": "Beschrijving",
   "logger.Address": "Adres",
   "metercard.name": "Alias Apparaat",
-  "metercard.id": "Id: ",
+  "metercard.id": "Id ",
   "metercard.chart": "Geef hier een grafiek in",
   "metercard.cancel": "Annuleren",
   "metercard.save": "Opslaan",
