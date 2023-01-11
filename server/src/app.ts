@@ -88,6 +88,7 @@ export class App {
 
         apiRouter.use("/contact", require("./routes/ContactRouter"));
         apiRouter.use("/admin", require("./routes/AdminRouter"));
+        apiRouter.use("/test", require("./routes/TestRouter"));
 
         // !! This has to stay at the end of this method to assure it's only executed if the url doesn't match any of the above cases
         this.App.get("*", (_req: Request, res: Response) => res.sendFile(path.join(__dirname, "../public/", "index.html")));
