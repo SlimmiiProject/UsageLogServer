@@ -53,7 +53,7 @@ export const Forms = (): JSX.Element => {
         <TableCell align="left">{file.created_at}</TableCell>
         <TableCell align="left" >{file.email}</TableCell>
         <TableCell align="left">{file.firstname} {file.lastname}</TableCell>
-        <TableCell align="left">{new Date(file.created_at).toDateString()}</TableCell>
+        <TableCell align="left">{file.created_at}</TableCell>
         <TableCell align="left">{file.message_topic}</TableCell>
         <TableCell align="left">{file.message}</TableCell>
         </TableRow>
