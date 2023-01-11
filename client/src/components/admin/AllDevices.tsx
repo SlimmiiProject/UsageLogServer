@@ -77,13 +77,14 @@ export const AllDevices = (): JSX.Element => {
             setPages(result.pages)
         });
     }
-    const requestAllUsers = (controller: AbortController) => {
-        AdminUtil.getAllUsers(controller).then((result: userResponseData) => {
-            setUsers(result.data)
+    const requestAllUsers =async  (controller: AbortController) => {
+        await AdminUtil.getAllUsers(controller).then((result: userResponseData) => {
+           console.log(result)
+            setUsers(result.data);
         });
     }
     const handleSelect = (event: SelectChangeEvent) => {
-        const temp = users.filter((a) => a.userId.toString() == event.target.value);
+        const temp = users.filter((a) => a.userId.toString() === event.target.value);
         setSelectedUser(temp[0]);
     }
     const handleSave = () => {
@@ -139,7 +140,7 @@ export const AllDevices = (): JSX.Element => {
                                             <p>{device.owner}</p>
                                         ) : (<>
                                             <Button startIcon={<PersonIcon />} onClick={() => handleClickOpen(device.id)}>
-                                                Assign user to device
+                                              {I18n.t("allDevices.assignUser")}
                                             </Button>
                                         </>
                                         )}
@@ -195,14 +196,15 @@ export const AllDevices = (): JSX.Element => {
                     </TableBody>
                 </TableContainer>
                 <Dialog open={open} onClose={handleClickClosed} maxWidth="lg">
-                    <DialogTitle>Assign user to this device</DialogTitle>
+                    <DialogTitle>{I18n.t("allDevices.assignUserDialog")}</DialogTitle>
                     <DialogContent>
                         <FormControl>
-                            <InputLabel id="select-user-label">Select User</InputLabel>
+                            <InputLabel id="select-user-label">{I18n.t("allDevices.assignUserButton")}</InputLabel>
                             <Select
                                 labelId="select-user-label"
                                 multiple={false}
                                 label="User"
+                                native
                                 value={selectedUser ? `${selectedUser.userId}` : ''}
                                 onChange={(e) => handleSelect(e)}
                                 sx={{ maxHeight: 48 * 4.5 + 8, width: 250 }}
@@ -222,8 +224,8 @@ export const AllDevices = (): JSX.Element => {
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClickClosed} color="error" variant="outlined">Cancel</Button>
-                        <Button onClick={handleSave} color="success" variant="outlined">Save</Button>
+                        <Button onClick={handleClickClosed} color="error" variant="outlined">{I18n.t("metercard.cancel")}</Button>
+                        <Button onClick={handleSave} color="success" variant="outlined">{I18n.t("metercard.save")}</Button>
                     </DialogActions>
                 </Dialog>
                 <Box sx={{ width: "100%", marginTop: "1rem", display: "flex", justifyContent: "center" }}>
