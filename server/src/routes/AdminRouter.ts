@@ -14,6 +14,12 @@ router.get("/logfile", async (req: Request, res: Response) => {
   res.json(await DataProcessor.GetLogfileData(skip));
 })
 
+/* A route that is used to get a user. */
+router.get("/user", async (req: Request, res: Response) => {
+  const userId = req.query.userId ? parseInt(req.query.userId as string) : 0;
+  res.json(await DataProcessor.getUser(undefined, userId, undefined));
+})
+
 /* A route that is used to get all the users. */
 router.get("/allusers", async (req: Request, res: Response) => {
   const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
@@ -31,29 +37,30 @@ router.get("/allDevices", async (req: Request, res: Response) => {
 router
   .route("/account")
   .post(async (req: Request, res: Response) => {
-    const {userId}:{userId:number} = req.body;
-    res.json(await DataProcessor.createAdministrator(userId))}
+    const { userId }: { userId: number } = req.body;
+    res.json(await DataProcessor.createAdministrator(userId))
+  }
   )
-  .delete(async (req: Request, res:Response) => {
-    const {userId} : {userId:number} = req.body;
+  .delete(async (req: Request, res: Response) => {
+    const { userId }: { userId: number } = req.body;
     res.json(await DataProcessor.DeleteAdministrator(userId))
-    }
+  }
   )
 
 /* A route that is used to delete and create devices. */
 router
   .route("/device")
   .delete(async (req: Request, res: Response) => {
-    const {deviceId} = req.body;
+    const { deviceId } = req.body;
     res.json(await DataProcessor.DeleteDevice(deviceId));
   })
-  .post(async (req: Request, res: Response)=> {
-    const {deviceId, alias} = req.body;
+  .post(async (req: Request, res: Response) => {
+    const { deviceId, alias } = req.body;
     res.json(await DataProcessor.createDevice(deviceId, alias))
   })
 
-router.put("/add-device-user", async (req:Request, res:Response)=>{
-  const {deviceId, userId} = req.body;
+router.put("/add-device-user", async (req: Request, res: Response) => {
+  const { deviceId, userId } = req.body;
   res.json(await DataProcessor.AddDevicetoUser(userId, deviceId))
 })
 

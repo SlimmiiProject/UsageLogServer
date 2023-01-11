@@ -33,12 +33,14 @@ router.post("/login", async (req: Request, res: Response) => {
         password: body.password
     }
 
+    const requiresPlainText = req.headers["accept"] === "text/plain";
+
     if (Object.values(data).every(ObjectUtil.isSet)) {
 
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             if (Crypt.matchesEncrypted(data.password, await AccountManager.getEncryptedPassword(undefined, data.email))) {
                 await login(req, data.email)
-                return res.json({ succes: true, ...SessionManager.getSessionData(req) });
+                return !requiresPlainText ? res.json({ succes: true, ...SessionManager.getSessionData(req), sessionToken: req.sessionID}) : res.send(req.sessionID);
             }
         };
     }
@@ -189,5 +191,13 @@ const errorJson = (errorType: string, fields?: { [key: string]: string }, missin
         ...errorJson
     }
 }
+
+router.route("/device-alias")
+    .post(async (req: Request, res: Response) => {
+        const {deviceIndex, alias} = req.body;
+        let index : number = parseInt(deviceIndex); 
+        // console.log(`The deviceindex = ${index} and the alias = ${alias}`)
+        await DataProcessor.ChangeDeviceAlias(index, alias)
+    })
 
 module.exports = router;
