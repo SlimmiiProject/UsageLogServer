@@ -24,6 +24,7 @@ export const Forms = (): JSX.Element => {
     setisloading(true);
     AdminUtil.getContactData().then((result:response) => {
      console.table(result)
+     console.log(typeof result)
      setFiles(result.data)
      setisloading(false)
     });
