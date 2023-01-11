@@ -22,10 +22,9 @@ export const Forms = (): JSX.Element => {
     const controller = new AbortController();
 
     setisloading(true);
-    AdminUtil.getContactData().then((result:response) => {
-     console.table(result)
-     console.log(typeof result)
-     setFiles(result.data)
+    AdminUtil.getContactData().then((result:any) => {
+     console.log(result)
+     setFiles(result)
      setisloading(false)
     });
     return () => controller.abort();
