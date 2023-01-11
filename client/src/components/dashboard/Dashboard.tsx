@@ -25,7 +25,7 @@ export default function App() {
 
       return () => abortController.abort();
     }
-  }, [timePeriod]);
+  }, [timePeriod, context.isLoggedIn]);
 
   return (
     <>
@@ -54,7 +54,8 @@ export default function App() {
                 style={{
                   backgroundColor: "rgba(0, 0, 0, 0.0)",
                   minWidth: "700px",
-                  height: "inherit"
+                  height: "inherit",
+                  color:"black"
                 }}
               >
                 <Graph
@@ -82,6 +83,5 @@ export default function App() {
           )}
         </div>
       </div>
-    </>
-  );
+    </>)
 }

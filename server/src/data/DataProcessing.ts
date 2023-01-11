@@ -1,4 +1,3 @@
-import { User } from "./../types/express-session/index.d";
 import { Device } from "./entities/Device";
 import { ObjectUtil } from "./../utils/ObjectUtil";
 import { Administrator } from "./entities/Administrator";
@@ -35,9 +34,6 @@ export interface IUserData {
   lastname: string;
   phone: string;
   email: string;
-  device: number[];
-  colorDay: GraphColors;
-  colorNight: GraphColors;
   isAdmin: boolean;
 }
 
@@ -108,8 +104,10 @@ export class DataProcessor {
   /**
    * Getting all the users from the database and returning them in a IUserData[]t.
    */
-  public static getAllUsers = async (): Promise<IUserData[]> => {
+  public static getAllUsers = async (skip: number, limit? :number) => {
     const users: UserAccount[] = await UserAccount.find({
+      skip: skip,
+      take: limit,
       select: {
         password: false,
       },
@@ -117,22 +115,19 @@ export class DataProcessor {
     let response: IUserData[] = [];
 
     for await (let user of users) {
-      const devices: Device[] = await this.getDevices(user.userId);
-      const deviceIds: number[] = devices.map((device) => device.device_index);
       let newValue: IUserData = {
         userId: user.userId,
         firstname: user.firstname,
         lastname: user.lastname,
         phone: user.phone,
         email: user.email,
-        device: deviceIds,
-        colorDay: user.colorDay,
-        colorNight: user.colorNight,
         isAdmin: await user.isAdmin(),
       };
       response.push(newValue);
     }
-    return response;
+
+    const count = await UserAccount.count();
+    return { data: response, pages: Math.ceil(count/limit) };
   };
 
   /**
@@ -215,26 +210,9 @@ export class DataProcessor {
       message
     );
     validate(newContactForm).then(async (result) => {
-      if (result.length <= 0) await ContactForm.save(newContactForm);
+      if (result.length <= 0) await newContactForm.save();
     });
   };
-
-  // /**
-  //  * This creates a logfile and adds it to the database if Logfile is complete
-  //  * @param userId number user id
-  //  * @param description string
-  //  * @param ipaddress string
-  //  */
-  // public static CreateLog = async (userId: number, description: string, ipaddress: string): Promise<void> => {
-  //   let user = UserAccount.findOneBy({ userId: userId });
-  //   let newLog = new Logfile()
-  //   newLog.account_id = await user;
-  //   newLog.description = description;
-  //   newLog.ipaddress = ipaddress;
-  //   validate(newLog).then(async (result) => {
-  //     if (result.length <= 0) await Logfile.save(newLog);
-  //   });
-  // }
 
   /**
    *  you need at least one of the optional values to use this function.
@@ -302,8 +280,10 @@ export class DataProcessor {
   };
 
   /* A static method that returns a promise of an array of Device objects. */
-  public static getAllDevices = async (): Promise<IDevice[]> => {
+  public static getAllDevices = async (skip: number, limit: number) => {
     const devices: Device[] = await Device.find({
+      skip: skip,
+      take: limit,
       relations: {
         user: true,
       },
@@ -330,8 +310,8 @@ export class DataProcessor {
         lastname: lastname,
       });
     }
-
-    return newDevices;
+    const count = await Device.count();
+    return {data: newDevices, pages: Math.ceil(count / limit)};
   };
 
   public static getTempEntry = async (deviceId: string) => {
@@ -505,13 +485,13 @@ export class DataProcessor {
         `Acount does not exist or there is an Indexing fault. looking for acount: ${userid}`
       );
 
-      if (firstname) await UserAccount.update(userid, {firstname: firstname})
-      if (lastname) await UserAccount.update(userid, {lastname: lastname})
-      if (email) await UserAccount.update(userid, {email: email})
-      if (phone) await UserAccount.update(userid, {phone: phone})
-      if (colorDay) await UserAccount.update(userid, {colorDay: colorDay})
-      if (colorNight) await UserAccount.update(userid, {colorNight: colorNight})
-      if (password) await UserAccount.update(userid, {password: password})
+    if (firstname) await UserAccount.update(userid, { firstname: firstname })
+    if (lastname) await UserAccount.update(userid, { lastname: lastname })
+    if (email) await UserAccount.update(userid, { email: email })
+    if (phone) await UserAccount.update(userid, { phone: phone })
+    if (colorDay) await UserAccount.update(userid, { colorDay: colorDay })
+    if (colorNight) await UserAccount.update(userid, { colorNight: colorNight })
+    if (password) await UserAccount.update(userid, { password: password })
     // await UserAccount.update(userid, {
     //   firstname: firstname,
     //   lastname: lastname,
@@ -551,13 +531,12 @@ export class DataProcessor {
     device_index: number,
     alias: string
   ): Promise<void> => {
-    let device: Device = await Device.findOne({
-      where: {
-        device_index: Equal(device_index),
-      },
+    let device = await Device.findOne({
+      where: { device_index: Equal(device_index) },
     });
     if (!ObjectUtil.isSet(device)) return;
-    device.setFriendlyName(alias).save();
+    await device.setFriendlyName(alias);
+    await device.save();
   };
   //#endregion
 
@@ -622,8 +601,10 @@ export class DataProcessor {
   /**
    * Returns all the data in the logfile
    */
-  public static GetLogfileData = async (): Promise<ILogData[]> => {
+  public static GetLogfileData = async (skip: number) => {
     let logs: Logfile[] = await Logfile.find({
+      skip: skip,
+      take: 10,
       relations: {
         account_id: true
       },
@@ -646,7 +627,8 @@ export class DataProcessor {
         account_id: account_id
       })
     }
-    return newLogs
+    const count = await Logfile.count()
+    return { data:newLogs, pages: Math.ceil(count / 10)}
   };
 
   /**
@@ -697,11 +679,11 @@ export class DataProcessor {
    * @returns array with devices
   */
   public static UserDevices = async (userId: number): Promise<ITempData[]> => {
-    const user :UserAccount = await UserAccount.findOneBy({userId: userId})
-    
+    const user: UserAccount = await UserAccount.findOneBy({ userId: userId })
+
     const devices: Device[] = await this.getDevices(user.userId);
 
-    let tempData : ITempData[] = await devices.map((device:any)=>{
+    let tempData: ITempData[] = await devices.map((device: any) => {
       return {
         deviceIndex: device.device_index,
         deviceId: device.deviceId,
@@ -712,6 +694,27 @@ export class DataProcessor {
     return tempData;
   }
   //#endregion
+
+  /* Creating a device and then adding it to a user. */
+  public static RegisterAccountWithUser = async (
+    dev_id: string,
+    user_id: number,
+  ) => {
+    await Device.createDevice(dev_id);
+    DataProcessor.AddDevicetoUser(user_id, dev_id);
+  };
+
+  public static SendDataFromDevice = async (dev_id : string , battery : number, image: string) => {
+    const device: Device = await Device
+      .findOne({ where: { deviceId: Equal(dev_id) } });
+    if (!ObjectUtil.isSet(device)) return;
+    device.setBatteryPercentage(battery).save();
+
+    const user: UserAccount = await UserAccount
+      .findOne({ where: { userId: Equal(device.user.userId) } });
+    if (!ObjectUtil.isSet(user)) return;
+  };
+
 
 }
 

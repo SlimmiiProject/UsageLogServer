@@ -1,5 +1,4 @@
 import { IOUtil } from './IOUtil';
-import axios, { AxiosInstance } from "axios";
 
 export enum GraphColors {
     RED = "red",
@@ -22,11 +21,25 @@ export type userData = {
     lastname: string;
     email: string;
     device: number[];
-    colorDay: GraphColors;
-    colorNight: GraphColors;
     phone: string;
     isAdmin: boolean;
 }
+
+export type userResponseData = {
+    data: userData[]
+    pages: number
+}
+
+export type deviceResponseData = {
+    data: deviceData[]
+    pages: number
+}
+
+export type logResponseData = {
+    data: LogData[]
+    pages: number
+}
+
 export type deviceData = {
     index: number;
     id: string;
@@ -36,47 +49,64 @@ export type deviceData = {
     lastname: string | undefined;
 }
 
-export type TranslationData = {
-    //TODO idk what to do with this.
-    language: string,
-    word: string
-}
 export class AdminUtil {
-    public static getTranslation = async (controller: AbortController): Promise<TranslationData[]> => {
+    public static getLogs = async (controller: AbortController, page: number): Promise<logResponseData> => {
+        const toSkip = page * 10;
         try {
-            return [];
+            const res = await IOUtil.INSTANCE.get("/admin/logfile/", { params: { skip: toSkip }, signal: controller.signal });
+            return res.data;
         } catch (_ignored) {
-            return [];
+            return { data: [], pages: 0 };
         }
     }
 
-    public static getLogs = async (controller: AbortController): Promise<LogData[]> => {
+    public static getUser = async (userId: number): Promise<userData> => {
         try {
-            const res = await IOUtil.INSTANCE.get("/admin/logfile/", { signal: controller.signal });
+            const res = await IOUtil.INSTANCE.get(`/admin/user`, { params: { userId: userId } });
             return res.data;
-        } catch (_ignored) {
-            return [];
+        } catch (_ignore) {
+            return {
+                userId: 0,
+                firstname: "",
+                lastname: "",
+                email: "",
+                device: [],
+                phone: "",
+                isAdmin: false
+            }
         }
     }
 
     /* A function that is called when a user is created. */
-    public static getUsers = async (controller: AbortController): Promise<userData[]> => {
-        console.log("received allusers request");
+    public static getUsers = async (controller: AbortController, page: number, howManyPerPage? : number): Promise<userResponseData> => {
+        const toSkip = page * howManyPerPage!;
         try {
-            const res = await IOUtil.INSTANCE.get("/admin/allusers/", { signal: controller.signal });
+            const res = await IOUtil.INSTANCE.get("/admin/allusers/", { params: { skip: toSkip, limit: howManyPerPage}, signal: controller.signal });
             return res.data;
-        } catch (_ignored) {
-            return [];
+        } catch (err) {
+            console.error(err);
+            return { data: [], pages: 0 };
         }
     }
 
-    public static getAllDevices = async (controller: AbortController) => {
+    public static getAllUsers = async (controller: AbortController): Promise<userResponseData> => {
         try {
-            const res = await IOUtil.INSTANCE.get("admin/allDevices");
-            console.log(res.data)
+            const res = await IOUtil.INSTANCE.get("/admin/allusers", { signal: controller.signal });
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            return { data: [], pages: 0 };
+        }
+    }
+
+    public static getAllDevices = async (controller: AbortController, page: number, HowManyPerPage: number) => {
+
+        const toSkip = page * HowManyPerPage;
+        try {
+            const res = await IOUtil.INSTANCE.get("admin/allDevices", { params: { skip: toSkip, limit: HowManyPerPage }, signal: controller.signal });
             return res.data;
         } catch (_ignored) {
-            return [];
+            return { data: [], pages: 0 };
         }
     }
 
@@ -91,7 +121,7 @@ export class AdminUtil {
     }
     public static deleteAdmin = async (userId: number) => {
         try {
-            const res = await IOUtil.INSTANCE.delete("admin/account", { data :{ userId: userId} });
+            const res = await IOUtil.INSTANCE.delete("admin/account", { data: { userId: userId } });
             return res.data;
         } catch (err) {
             console.error(err)

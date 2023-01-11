@@ -4,23 +4,34 @@ import MeterCard from "../dashboard/MeterCard";
 import { IOUtil } from "../../util/IOUtil";
 import { userContext } from "../../App";
 import { DeviceCardProps } from "../dashboard/MeterCard";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress"
+import Typography from "@mui/material/Typography";
 const Devices = (): JSX.Element => {
   const [isloading, setIsloading] = useState(true);
   const [devices, setDevices] = useState<DeviceCardProps[]>([]);
   const context = useContext(userContext);
   useEffect(() => {
-    IOUtil.getOwnDevice(context.userAccount!.id).then((res) => {
-      setDevices(res);
+      loadDevices();
       setIsloading(false);
+  }, [context.userAccount]);
+
+  const loadDevices = ()=>{
+    IOUtil.getOwnDevice(context.userAccount!.id).then((res) => {
+    setDevices(res);
     });
-  }, []);
+  }
   return (
     <>
-      <h1>{I18n.t("devices.devicemanager")}</h1>
-      <h2>{I18n.t("devices.sample")}</h2>
-      <Box>
-
+    <Box sx={{width:"90%", display:"flex", margin:"auto", alignItems:"center", flexDirection:"column"}}>
+    <Typography variant="h4" marginLeft="1rem">
+        {I18n.t("devices.devicemanager")}
+        </Typography>
+        <Typography variant="h6" marginLeft="1rem">
+        {I18n.t("devices.sample")}
+        </Typography>
+      <Box sx={{display:"flex",margin:"auto",  aligntItems:"center",alignContent:"center", maxWidth:"90%", flexFlow:"wrap"}}>
+        {isloading===true? (<CircularProgress/>):<></>}
         {!isloading &&
           devices.map((dev) => (
             <MeterCard
@@ -28,10 +39,13 @@ const Devices = (): JSX.Element => {
             deviceIndex={dev.deviceIndex}
             deviceId={dev.deviceId}
             friendlyName={dev.friendlyName}
+            reloadDevices={loadDevices}
           />
           ))}
+
+          </Box>
       </Box>
-    </>
+      </>
   );
 };
 

@@ -19,11 +19,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { IOUtil } from "./util/IOUtil";
 import { getFullPath, getLanguageFromUrl } from "./util/BrowserUtil";
-import { url } from "inspector";
 import { LogFile } from "./components/admin/LogFile";
 import { AllUsers } from "./components/admin/AllUsers";
 import { AllDevices } from "./components/admin/AllDevices";
-import { Translations } from "./components/admin/Translations";
 import ForgotPassword from "./components/users/ForgotPassword";
 
 export interface ITestData {
@@ -55,6 +53,7 @@ interface IUserContext {
   userAccount?: AccountData;
   isLoggedIn: boolean;
   isAdmin: boolean;
+  update: () => void;
   setAccountData: React.Dispatch<SetStateAction<AccountData | undefined>>;
   logout: () => void;
 }
@@ -62,8 +61,9 @@ interface IUserContext {
 export const userContext = React.createContext<IUserContext>({
   isLoggedIn: false,
   isAdmin: false,
-  setAccountData: (data) => {},
-  logout: () => {},
+  update: () => { },
+  setAccountData: (data) => { },
+  logout: () => { },
 });
 
 // Get path with current language prefix
@@ -76,12 +76,14 @@ const App = (): JSX.Element => {
   const [accountData, setAccountData] = useState<AccountData | undefined>(
     undefined
   );
+  const [updateData, setUpdateData] = useState<boolean>(false);
+
   const [darkMode, setDarkMode] = useState<boolean>(
     JSON.parse(localStorage.getItem("darkMode")!) || false
   );
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
 
     // Change Language, in case it's different to what's currently selected
     const urlLang = getLanguageFromUrl();
@@ -89,7 +91,7 @@ const App = (): JSX.Element => {
 
     const controller = new AbortController();
 
-    const fetchLoginData = async () => {
+    const fetchLoginData = async (controller: AbortController) => {
       const accountData = await IOUtil.getSessionData(controller);
       setAccountData((_accoundData) => accountData);
 
@@ -103,12 +105,14 @@ const App = (): JSX.Element => {
       });
 
       setLoading(false);
+      setUpdateData(false);
     };
 
-    fetchLoginData();
+    fetchLoginData(controller);
 
     return () => controller.abort();
-  }, []);
+  }, [updateData]);
+
 
   const lang = I18n.currentLanguage;
 
@@ -139,6 +143,7 @@ const App = (): JSX.Element => {
               userAccount: accountData,
               setAccountData: setAccountData,
               logout: () => setAccountData(undefined),
+              update: () => setUpdateData(true)
             }}
           >
             <Drawer lang={lang} onDarkmode={handleDarkMode} mode={darkMode} />

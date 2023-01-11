@@ -1,4 +1,5 @@
-import { deviceData } from './AdminUtil';
+import { CreationData } from './../components/users/EditProfile';
+
 /**
  * IOUtil is a class with a static method deleteUserFromDevice that takes a string and returns void.
  * @property {boolean} succes - boolean;
@@ -32,7 +33,7 @@ export class IOUtil {
 
   private static _instance: AxiosInstance;
   public static get INSTANCE(): AxiosInstance {
-    if (!this._instance) this._instance = axios.create({ baseURL: "/api/", timeout: 5000 });
+    if (!this._instance) this._instance = axios.create({ baseURL: "/api/", timeout: 30000 });
     return this._instance;
   }
 
@@ -131,6 +132,7 @@ export class IOUtil {
   }
 
   public static sendContactData = async (data: ContactInfo) => await this.INSTANCE.post("/contact/", data);
+  public static sendChangeProfileData = async (data: CreationData) => await this.INSTANCE.post("/profiles/account-data", data);
 
   public static deleteUser = async (userId: number) => {
     try {
@@ -208,6 +210,20 @@ export class IOUtil {
       });
       return res.status === 200;
     } catch (err) {
+      return false;
+    }
+  }
+
+  public static changeDeviceAlias = async (deviceIndex: number, alias: string, controller: AbortController) => {
+    try {
+      // console.log(deviceIndex, alias)
+      const res = await this.INSTANCE.post("/profiles/device-alias", {
+          deviceIndex: deviceIndex,
+          alias: alias
+      });
+      return res.status === 200;
+    } catch (err) {
+      console.error(err)
       return false;
     }
   }

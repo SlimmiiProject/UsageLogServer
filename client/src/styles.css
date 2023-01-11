@@ -1,7 +1,17 @@
 :root {
   --usedBlue: rgba(25, 118, 210, 255);
+  transition: all .5s;
+
 }
-antiLink {
+body{
+  transition: all .5s;
+}
+
+a {
+  text-decoration: none;
+}
+
+.antiLink {
   text-decoration: none;
 }
 
@@ -49,6 +59,7 @@ antiLink {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  transition: all .5s;
 }
 
 .flexbox {

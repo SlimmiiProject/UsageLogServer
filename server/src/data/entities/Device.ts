@@ -17,7 +17,7 @@ export class Device extends BaseEntity {
   @PrimaryGeneratedColumn({ name: "device_index" })
   device_index: number;
 
-  @PrimaryColumn("varchar", { nullable: false, name: "deviceId", unique: true, length: 64 })
+  @Column("varchar", { nullable: false, name: "deviceId", unique: true, length: 64 })
   @IsDefined()
   @Length(64, 64)
   deviceId: string;
@@ -42,10 +42,23 @@ export class Device extends BaseEntity {
   @Column("numeric", { nullable: true, unique: false, name: "batteryPercentage" })
   @IsOptional()
   @IsInt()
-  BatteryPercentage: number;
+  BatteryPercentage: number = 0;
+
+  @Column("numeric", {name: "oldDay"})
+  @IsInt()
+  OldDay: number;
+
+  @Column("numeric", {name: "oldNight"})
+  @IsInt()
+  OldNight: number;
 
   public setFriendlyName = (alias: string) => {
     this.friendlyName = alias;
+    return this;
+  };
+
+  public setBatteryPercentage = (percentage: number) => {
+    this.BatteryPercentage = percentage;
     return this;
   };
 }

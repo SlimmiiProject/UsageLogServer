@@ -1,6 +1,7 @@
 import { DataProcessor } from "./../data/DataProcessing";
 import express, { Request, Response } from "express";
 import { SessionManager } from "../accounts/SessionManager";
+import { request } from "http";
 
 const router = express.Router({ mergeParams: true });
 
@@ -15,7 +16,7 @@ router
     //TODO Get user data
   });
 
-  router
+router
   .route("/password")
   .put(async (req: Request, res: Response) => {
     const userId: number = parseInt(req.params.userId);
@@ -37,17 +38,16 @@ router
     const { deviceId } = req.body;
   });
 
-  router
+router
   .route("/account")
-  .get((req: Request, res: Response) => {
-    //TODO Get account data
-  })
-  .post((req: Request, res: Response) => {
-    //TODO Create account
+  .get(async (req: Request, res: Response) => {
+    const userId: number = parseInt(req.params.userId);
+    const { email, phone } = req.body;
+    res.json(await DataProcessor.getUser(email, userId, phone))
   })
   .put(async (req: Request, res: Response) => {
-    const userId : number = parseInt(req.params.userId);
-    const {firstname, lastname, email, phone, colorDay, colorNight, password} = req.body;
+    const userId: number = parseInt(req.params.userId);
+    const { firstname, lastname, email, phone, colorDay, colorNight, password } = req.body;
     res.json(await DataProcessor.EditAcount(userId, firstname, lastname, email, phone, colorDay, colorNight, password))
   })
 

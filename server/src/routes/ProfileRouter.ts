@@ -10,6 +10,7 @@ import { Mailer } from '../utils/mail/Mailer';
 import { MailTemplates } from '../utils/mail/MailTemplates';
 import { Environment } from '../utils/Environment';
 import { PasswordResetManager } from '../data/processors/PasswordResetProcessor';
+
 const router = express.Router();
 
 type CreationData = {
@@ -32,12 +33,14 @@ router.post("/login", async (req: Request, res: Response) => {
         password: body.password
     }
 
+    const requiresPlainText = req.headers["accept"] === "text/plain";
+
     if (Object.values(data).every(ObjectUtil.isSet)) {
 
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             if (Crypt.matchesEncrypted(data.password, await AccountManager.getEncryptedPassword(undefined, data.email))) {
                 await login(req, data.email)
-                return res.json({ succes: true, ...SessionManager.getSessionData(req) });
+                return !requiresPlainText ? res.json({ succes: true, ...SessionManager.getSessionData(req), sessionToken: req.sessionID}) : res.send(req.sessionID);
             }
         };
     }
@@ -108,7 +111,7 @@ router.route("/password")
         const passwordResetProcessor = new PasswordResetManager(token, password);
         res.sendStatus(await passwordResetProcessor.handle() ? 200 : 403);
     }).get(async (req: Request, res: Response) => {
-       res.sendStatus(await DataProcessor.GetPasswordReset(req.query.token as string) ? 200 : 403);
+        res.sendStatus(await DataProcessor.GetPasswordReset(req.query.token as string) ? 200 : 403);
     });
 
 router.post("/submit-forgot-password", async (req: Request, res: Response) => {
@@ -141,8 +144,39 @@ router.route("/account-data")
 
         res.json(await DataProcessor.getUser(undefined, sessionData.user.id));
     })
-    .post((req: Request, res: Response) => {
-        // TODO update profile after user updates it
+    .post(SessionManager.loginRequired, async (req: Request, res: Response) => {
+        const data: CreationData = req.body;
+
+        if (data.first_name && data.last_name && data.email) {
+            const userId = SessionManager.getSessionData(req).user.id;
+            const account = await DataProcessor.getUser(undefined, userId);
+
+            account.email = data.email;
+            account.firstname = data.first_name;
+            account.lastname = data.last_name;
+            account.phone = data.phone_number;
+
+            if (data.password && data.password_verify)
+                if (data.password === data.password_verify) account.setPassword(data.password);
+                else return res.json(errorJson("error.passwords_no_match", req.body));
+
+            await account.save();
+            await SessionManager.updateSessionData(req, async (data) => {
+                data.user = {
+                    id: account.userId,
+                    firstName: account.firstname,
+                    lastName: account.lastname,
+                    email: account.email,
+                };
+            });
+            return res.json({ succes: true });
+        }
+
+        res.json(errorJson(
+            "error.missing_fields",
+            req.body,
+            Object.entries(data).filter((entry) => !ObjectUtil.isSet(entry[1])).map((entry) => entry[0]))
+        );
     });
 
 const errorJson = (errorType: string, fields?: { [key: string]: string }, missingFields?: string[]): {} => {
@@ -157,5 +191,14 @@ const errorJson = (errorType: string, fields?: { [key: string]: string }, missin
         ...errorJson
     }
 }
+
+router.route("/device-alias")
+    .post(async (req: Request, res: Response) => {
+        const {deviceIndex, alias} = req.body;
+        let index : number = parseInt(deviceIndex); 
+        // console.log(`The deviceindex = ${index} and the alias = ${alias}`)
+        await DataProcessor.ChangeDeviceAlias(index, alias)
+        res.sendStatus(200);
+    })
 
 module.exports = router;

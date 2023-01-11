@@ -10,7 +10,7 @@
   "contact.form": "Contact Form",
   "contact.firstname": "First Name",
   "contact.lastname": "Last Name",
-  "contact.email": "E-Mail",
+  "contact.email": "E-mail",
   "contact.subject": "Subject",
   "contact.description": "Description",
   "contact.send": "Send",
@@ -120,11 +120,12 @@
   "passwordReset": "Reset password",
   "passwordReset.EnterEmail": "Enter your eMail:",
   "passwordReset.submit": "Submit",
-  "passwordReset.confirmMessage": "Password reset sent to {{email}}",
+  "passwordReset.confirmMessage": "Password reset sent to: {{email}}",
   "passwordReset.errorEmailNorSupplied": "Email not supplied",
   "forgotPassword.password": "Password",
   "forgotPassword.verify": "Verify password",
   "passwordReset.noMatch": "Passwords don't match",
   "passwordReset.resetSuccesfull": "Password reset successfully",
-  "passwordReset.resetFail": "Password reset failed"
+  "passwordReset.resetFail": "Password reset failed",
+  "message.sent-contact": "Your contact form has been submitted"
 }
