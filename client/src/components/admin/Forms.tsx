@@ -39,10 +39,11 @@ export const Forms = (): JSX.Element => {
       <Table sx={{minwidth:650}} arial-label="simple table">
         <TableHead>
           <TableCell>{I18n.t("logFile.id")}</TableCell>
-          <TableCell>{I18n.t("logFile.account")}</TableCell>
-          <TableCell>{I18n.t("logFile.description")}</TableCell>
-          <TableCell>{I18n.t("logFile.IP")}</TableCell>
-          <TableCell>{I18n.t("logFile.date")}</TableCell>
+          <TableCell>date</TableCell>
+          <TableCell>email</TableCell>
+          <TableCell>name</TableCell>
+          <TableCell>topic</TableCell>
+          <TableCell>message</TableCell>
         </TableHead>
 
         <TableBody>
@@ -53,7 +54,6 @@ export const Forms = (): JSX.Element => {
         <TableCell align="left">{file.created_at}</TableCell>
         <TableCell align="left" >{file.email}</TableCell>
         <TableCell align="left">{file.firstname} {file.lastname}</TableCell>
-        <TableCell align="left">{file.created_at}</TableCell>
         <TableCell align="left">{file.message_topic}</TableCell>
         <TableCell align="left">{file.message}</TableCell>
         </TableRow>
