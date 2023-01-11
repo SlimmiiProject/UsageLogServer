@@ -23,7 +23,11 @@ export const Forms = (): JSX.Element => {
 
     setisloading(true);
     AdminUtil.getContactData().then((result:any) => {
+<<<<<<< HEAD
      console.table(result)
+=======
+     console.log(result)
+>>>>>>> cf5791443ef4dfcb915f4bdf97d230bb40ddb641
      setFiles(result)
      setisloading(false)
     });
@@ -53,7 +57,7 @@ export const Forms = (): JSX.Element => {
         <TableCell align="left">{file.created_at}</TableCell>
         <TableCell align="left" >{file.email}</TableCell>
         <TableCell align="left">{file.firstname} {file.lastname}</TableCell>
-        <TableCell align="left">{new Date(file.created_at).toDateString()}</TableCell>
+        <TableCell align="left">{file.created_at}</TableCell>
         <TableCell align="left">{file.message_topic}</TableCell>
         <TableCell align="left">{file.message}</TableCell>
         </TableRow>
