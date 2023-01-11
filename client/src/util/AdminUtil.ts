@@ -78,10 +78,10 @@ export class AdminUtil {
     }
 
     /* A function that is called when a user is created. */
-    public static getUsers = async (controller: AbortController, page: number, howManyPerPage? : number): Promise<userResponseData> => {
+    public static getUsers = async (controller: AbortController, page: number, howManyPerPage?: number): Promise<userResponseData> => {
         const toSkip = page * howManyPerPage!;
         try {
-            const res = await IOUtil.INSTANCE.get("/admin/allusers/", { params: { skip: toSkip, limit: howManyPerPage}, signal: controller.signal });
+            const res = await IOUtil.INSTANCE.get("/admin/allusers/", { params: { skip: toSkip, limit: howManyPerPage }, signal: controller.signal });
             return res.data;
         } catch (err) {
             console.error(err);
@@ -134,6 +134,14 @@ export class AdminUtil {
             return res.data;
         } catch (err) {
             console.error(err)
+        }
+    }
+    public static getAllContactForms = async () => {
+        try {
+            const res = await IOUtil.INSTANCE.get("contact/contact-forms");
+            return res.data;
+        } catch (error) {
+            console.error(error);
         }
     }
 
