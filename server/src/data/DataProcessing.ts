@@ -104,9 +104,9 @@ export class DataProcessor {
   /**
    * Getting all the users from the database and returning them in a IUserData[]t.
    */
-  public static getAllUsers = async (offset: number, limit :number) => {
+  public static getAllUsers = async (skip: number, limit? :number) => {
     const users: UserAccount[] = await UserAccount.find({
-      skip: offset,
+      skip: skip,
       take: limit,
       select: {
         password: false,
