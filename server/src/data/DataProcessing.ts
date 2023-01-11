@@ -104,7 +104,7 @@ export class DataProcessor {
   /**
    * Getting all the users from the database and returning them in a IUserData[]t.
    */
-  public static getAllUsers = async (skip: number, limit? :number) => {
+  public static getUsers = async (skip: number, limit? :number) => {
     const users: UserAccount[] = await UserAccount.find({
       skip: skip,
       take: limit,
@@ -722,6 +722,19 @@ export class DataProcessor {
     if (night === undefined) night = null;
     const data = Data.createData(device, day, night);
     await Data.save(data);
+  }
+
+  public static GetAllUsers = async ()=> {
+    const users = await UserAccount.find(
+      {
+        select: {
+          userId: true,
+          firstname: true,
+          lastname: true,
+        }
+      }
+    );
+    return users;
   }
 }
 
