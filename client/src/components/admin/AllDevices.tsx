@@ -83,7 +83,7 @@ export const AllDevices = (): JSX.Element => {
         });
     }
     const handleSelect = (event: SelectChangeEvent) => {
-        const temp = users.filter((a) => a.userId.toString() == event.target.value);
+        const temp = users.filter((a) => a.userId.toString() === event.target.value);
         setSelectedUser(temp[0]);
     }
     const handleSave = () => {
