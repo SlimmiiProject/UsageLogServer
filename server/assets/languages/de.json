@@ -34,7 +34,7 @@
   "graph.night": "Nacht",
   "logger.title": "Logger",
   "metercard.name": "Alias Gerät",
-  "metercard.id": "ID: ",
+  "metercard.id": "ID ",
   "metercard.chart": "Karte hier einfügen",
   "metercard.cancel": "Abbrechen",
   "metercard.save": "Speichern",

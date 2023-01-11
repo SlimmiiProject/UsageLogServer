@@ -39,7 +39,7 @@
   "logger.Address":"Address",
   "logger.Account_id":"Account",
   "metercard.name": "Alias Device",
-  "metercard.id": "Id: ",
+  "metercard.id": "Id ",
   "metercard.chart": "Insert chart here",
   "metercard.cancel": "Cancel",
   "metercard.save": "Save",

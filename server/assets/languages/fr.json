@@ -34,7 +34,7 @@
   "graph.night": "nuit",
   "logger.title": "Enregistreur",
   "metercard.name": "Dispositif alias",
-  "metercard.id": "Id: ",
+  "metercard.id": "Id ",
   "metercard.chart": "Insérer le tableau ici",
   "metercard.cancel": "Annuler",
   "metercard.save": "Save",
