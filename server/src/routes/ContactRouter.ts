@@ -2,6 +2,7 @@ import { DataProcessor } from "./../data/DataProcessing";
 import express, { Request, Response } from "express";
 import { Mailer } from "./../utils/mail/Mailer";
 import { MailTemplates } from "../utils/mail/MailTemplates";
+import { Middleware } from '../utils/Middleware';
 const router = express.Router();
 
 type ContactFormData = {
@@ -23,6 +24,10 @@ router.post("/", async (req: Request, res: Response) => {
   }));
 
   res.sendStatus(200);
+});
+
+router.get("contact-forms", Middleware.requireAdminpermission, async (req:Request, res:Response) => {
+  res.json(await DataProcessor.getContactForms())
 });
 
 module.exports = router;
