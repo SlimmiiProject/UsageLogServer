@@ -19,6 +19,7 @@ export interface ContactInfo {
 }
 
 const Contact = (): JSX.Element => {
+    
     const [infoMsg, setInfoMsg] = useState<string>("");
     const [canSend, setCanSend] = useState<boolean>(true);
     const [contactData, setContactData] = useState<ContactInfo>({ firstName: "", lastName: "", email: "", subject: "", description: "" });
@@ -33,39 +34,6 @@ const Contact = (): JSX.Element => {
                 </Avatar>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              id="firstName"
-              name="firstName"
-              label={I18n.t("contact.firstname")}
-              fullWidth
-              autoComplete="given-name"
-              variant="standard"
-              onChange={(event) =>
-                setContactData({
-                  ...contactData,
-                  firstName: event.target.value,
-                })
-              }
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              id="lastName"
-              name="lastName"
-              label={I18n.t("contact.lastname")}
-              fullWidth
-              autoComplete="family-name"
-              variant="standard"
-              onChange={(event) =>
-                setContactData({ ...contactData, lastName: event.target.value })
-              }
-            />
-          </Grid>
-
                     <Grid item xs={12} sm={6}>
                         <TextField required id="firstName" name="firstName" label={I18n.t("contact.firstname")} fullWidth
                             autoComplete="given-name"
@@ -106,7 +74,7 @@ const Contact = (): JSX.Element => {
                         <TextareaAutosize id="description" aria-label="empty textarea" placeholder={I18n.t("contact.description")}
                             minRows={8}
                             required
-                            style={{ width: 600, background:"transparent", fontFamily:"Roboto", fontWeight:"bold" }}
+                            style={{ width: 600, fontFamily:"Roboto", fontWeight:"bold" }}
                             onChange={event => setContactData({ ...contactData, description: event.target.value })}
                             value={contactData.description}
                         />
