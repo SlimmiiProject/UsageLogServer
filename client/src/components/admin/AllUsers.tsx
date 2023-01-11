@@ -121,7 +121,7 @@ function passMatch():boolean{
                 <TableCell align="left">{I18n.t("allUsers.tableEmail")}</TableCell>
                 <TableCell align="left">{I18n.t("allUsers.tableName")}</TableCell>
                 <TableCell align="left">{I18n.t("allUsers.tablePhone")}</TableCell>
-                <TableCell align="center">Request Reset</TableCell>
+                <TableCell align="center">{I18n.t("allUsers.tableRequestReset")}</TableCell>
                 <TableCell align="center">{I18n.t("allUsers.tableAdmin")}</TableCell>
                 <TableCell align="right">
                   <Button endIcon={<AddCircleIcon/>} color="success" onClick={HandleClickOpenCreateDialog}>
@@ -147,7 +147,7 @@ function passMatch():boolean{
                     <TableCell align="left">{user.phone}</TableCell>
                     <TableCell align="left">
                      <Button onClick={()=>{HandleResetRequest(user.email)}}
-                     endIcon={<SettingsBackupRestoreIcon/>}>Password reset</Button></TableCell>
+                     endIcon={<SettingsBackupRestoreIcon/>}>{I18n.t("allUsers.passwordReset")}</Button></TableCell>
                     <TableCell align="center">
                       {user.isAdmin ? (
                         <Button endIcon={<MilitaryTechIcon/>} color="error" size="small" onClick={()=>{
@@ -204,15 +204,15 @@ function passMatch():boolean{
           </Stack>
         </Box>
         <Dialog onClose={HandleClickCloseCreateDialog} open={openCreateDialog} maxWidth="lg" >
-                    <DialogTitle>Create New User</DialogTitle>
+                    <DialogTitle>{I18n.t("allUsers.createNew")}</DialogTitle>
                     <DialogContent sx={{display:"flex",flexDirection:"inherit", rowGap:".5rem"}}>
                       <DialogContentText>
-                        Create a new user in the database.<br></br>
-                        Make sure all required fields are filled in.
+                      {I18n.t("allUsers.createInDatabase")}<br></br>
+                      {I18n.t("allUsers.allFilledIn")}
                       </DialogContentText>
-                      <TextField label="First name" required onChange={(e)=>setfname(e.target.value)}/>
-                      <TextField label="Last name" required onChange={(e)=>setlname(e.target.value)}/>
-                      <TextField label="email" required onChange={(e)=>setmail(e.target.value)}/>
+                      <TextField label={I18n.t("editprofile.firstname")} required onChange={(e)=>setfname(e.target.value)}/>
+                      <TextField label={I18n.t("editprofile.lastname")} required onChange={(e)=>setlname(e.target.value)}/>
+                      <TextField label={I18n.t("editprofile.email")} required onChange={(e)=>setmail(e.target.value)}/>
                       <Box sx={{display:"inherit",}}>
                       <Select labelId="Land Code" value={landCode} onChange={(e:SelectChangeEvent)=>{setLandCode(e.target.value as string)}}>
                         <MenuItem value="+31">+31</MenuItem>
@@ -220,10 +220,10 @@ function passMatch():boolean{
                         <MenuItem value="+33">+33</MenuItem>
                         <MenuItem value="+49">+49</MenuItem>
                       </Select>
-                      <TextField label="Phone Number" required type="number" onChange={(e)=>setphnumber(parseInt(e.target.value))}/>
+                      <TextField label={I18n.t("field.phone_number")} required type="number" onChange={(e)=>setphnumber(parseInt(e.target.value))}/>
                       </Box>
-                      <TextField label="Password" required onChange={(e)=>setpass(e.target.value)}/>
-                      <TextField label="Verify password" required onChange={(e)=>{
+                      <TextField label={I18n.t("field.password")} required onChange={(e)=>setpass(e.target.value)}/>
+                      <TextField label={I18n.t("field.password_verify")} required onChange={(e)=>{
                         setvpass(e.target.value);
                         setpasswordisValid(passMatch());}}/>
                     </DialogContent>

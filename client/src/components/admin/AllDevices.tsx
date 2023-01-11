@@ -139,7 +139,7 @@ export const AllDevices = (): JSX.Element => {
                                             <p>{device.owner}</p>
                                         ) : (<>
                                             <Button startIcon={<PersonIcon />} onClick={() => handleClickOpen(device.id)}>
-                                                Assign user to device
+                                              {I18n.t("allDevices.assignUser")}
                                             </Button>
                                         </>
                                         )}
@@ -222,8 +222,8 @@ export const AllDevices = (): JSX.Element => {
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClickClosed} color="error" variant="outlined">Cancel</Button>
-                        <Button onClick={handleSave} color="success" variant="outlined">Save</Button>
+                        <Button onClick={handleClickClosed} color="error" variant="outlined">{I18n.t("metercard.cancel")}</Button>
+                        <Button onClick={handleSave} color="success" variant="outlined">{I18n.t("metercard.save")}</Button>
                     </DialogActions>
                 </Dialog>
                 <Box sx={{ width: "100%", marginTop: "1rem", display: "flex", justifyContent: "center" }}>
