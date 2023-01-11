@@ -280,10 +280,10 @@ export class DataProcessor {
   };
 
   /* A static method that returns a promise of an array of Device objects. */
-  public static getAllDevices = async (skip: number) => {
+  public static getAllDevices = async (skip: number, limit: number) => {
     const devices: Device[] = await Device.find({
       skip: skip,
-      take: 10,
+      take: limit,
       relations: {
         user: true,
       },
