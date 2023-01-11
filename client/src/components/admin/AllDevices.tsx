@@ -69,6 +69,7 @@ export const AllDevices = (): JSX.Element => {
   }, [page])
   const handleClickClosed = () => {
     setOpen(false)
+    setSelectedUser(undefined);
   }
   const handleClickOpen = (deviceid: string) => {
     setClickedDevice(deviceid)
