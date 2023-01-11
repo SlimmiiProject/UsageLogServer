@@ -31,7 +31,7 @@ export default function BasicCard({
         </Typography>
 
         <Typography variant="subtitle1" component="div" sx={{ opacity: "50%" }}>
-          {I18n.t("metercard.battery")}{batteryPercentage === undefined? I18n.t("metercard.bateryData"): batteryPercentage + "%"}
+          {batteryPercentage === null? I18n.t("metercard.bateryData"): batteryPercentage + "%"}
         </Typography>
       </CardContent>
     </Card>

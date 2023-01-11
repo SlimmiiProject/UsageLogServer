@@ -119,13 +119,13 @@ export const AllDevices = (): JSX.Element => {
                       <p>{device.owner}</p>
                     ) : (<>
                       <Button onClick={() => dialogs[index].setopen(device.id)}>
-                        Assign user to device
+                        {I18n.t("allDevices.assignUser")}
                       </Button>
                       <Dialog open={dialogs[index].open} onClose={() => dialogs[index].assign(device.id, 11)}>
-                        <DialogTitle>Assign user to this device</DialogTitle>
+                        <DialogTitle>{I18n.t("allDevices.assignUser")}</DialogTitle>
                         <TextField autoFocus fullWidth margin="dense" label="user id" type="number" variant="standard" />
                         <DialogContent>
-                          <Button>temp stuff i place here, users will be displayed here later on</Button>
+                          <Button>{I18n.t("allDevices.assignUser")}</Button>
                         </DialogContent>
                       </Dialog>
                     </>
