@@ -99,11 +99,11 @@ export class AdminUtil {
         }
     }
 
-    public static getAllDevices = async (controller: AbortController, page: number, HowManyPerPage: number) => {
+    public static getAllDevices = async (controller: AbortController, page: number, howManyPerPage: number) => {
 
-        const toSkip = page * HowManyPerPage;
+        const toSkip = page * howManyPerPage;
         try {
-            const res = await IOUtil.INSTANCE.get("admin/allDevices", { params: { skip: toSkip, limit: HowManyPerPage }, signal: controller.signal });
+            const res = await IOUtil.INSTANCE.get("admin/allDevices", { params: { skip: toSkip, limit: howManyPerPage }, signal: controller.signal });
             return res.data;
         } catch (_ignored) {
             return { data: [], pages: 0 };

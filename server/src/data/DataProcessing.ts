@@ -127,7 +127,7 @@ export class DataProcessor {
     }
 
     const count = await UserAccount.count();
-    return { data: response, pages: Math.ceil(count/limit) };
+    return { data: response, pages: Math.ceil(await count / limit) };
   };
 
   /**
@@ -313,6 +313,7 @@ export class DataProcessor {
       });
     }
     const count = await Device.count();
+    console.log("get device data")
     return {data: newDevices, pages: Math.ceil(count / limit)};
   };
 
