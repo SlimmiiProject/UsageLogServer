@@ -210,7 +210,7 @@ export class DataProcessor {
       message
     );
     validate(newContactForm).then(async (result) => {
-      if (result.length <= 0) await ContactForm.save(newContactForm);
+      if (result.length <= 0) await newContactForm.save();
     });
   };
 

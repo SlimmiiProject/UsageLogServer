@@ -15,7 +15,7 @@ type ContactFormData = {
 router.post("/", async (req: Request, res: Response) => {
   const data: ContactFormData = req.body;
   
-  await DataProcessor.createContactForm(data.email, data.description, data.subject, data.firstName, data.lastName);
+  await DataProcessor.createContactForm(data.firstName, data.lastName, data.email, data.description, data.subject);
   
   await Mailer.INSTANCE.sendMailTo(data.email, data.subject, MailTemplates.FORM_CONFIRM({
     name: [data.firstName, data.lastName].join(" "),
