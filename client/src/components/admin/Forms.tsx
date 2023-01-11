@@ -23,11 +23,6 @@ export const Forms = (): JSX.Element => {
 
     setisloading(true);
     AdminUtil.getContactData().then((result:any) => {
-<<<<<<< HEAD
-     console.table(result)
-=======
-     console.log(result)
->>>>>>> cf5791443ef4dfcb915f4bdf97d230bb40ddb641
      setFiles(result)
      setisloading(false)
     });
