@@ -69,6 +69,7 @@ export const AllDevices = (): JSX.Element => {
   }, [page])
   const handleClickClosed = () => {
     setOpen(false)
+    setSelectedUser(undefined);
   }
   const handleClickOpen = (deviceid: string) => {
     setClickedDevice(deviceid)
@@ -111,6 +112,7 @@ export const AllDevices = (): JSX.Element => {
       AdminUtil.addDeviceToUser(selectedUser.userId, clickedDevice).then(() => {
         const controller = new AbortController();
         requestAllDevices(controller);
+        setSelectedUser(undefined);
       });
     }
 
