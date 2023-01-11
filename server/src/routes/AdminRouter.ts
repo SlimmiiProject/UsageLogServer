@@ -23,7 +23,8 @@ router.get("/user", async (req: Request, res: Response) => {
 /* A route that is used to get all the users. */
 router.get("/allusers", async (req: Request, res: Response) => {
   const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
-  res.json(await DataProcessor.getAllUsers(skip));
+  const limit = req.query.offset ? parseInt(req.query.offset as string) : 0;
+  res.json(await DataProcessor.getAllUsers(skip, limit));
 })
 
 /* A route that is used to get all the devices. */

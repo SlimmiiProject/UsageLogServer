@@ -198,6 +198,7 @@ router.route("/device-alias")
         let index : number = parseInt(deviceIndex); 
         // console.log(`The deviceindex = ${index} and the alias = ${alias}`)
         await DataProcessor.ChangeDeviceAlias(index, alias)
+        res.sendStatus(200);
     })
 
 module.exports = router;
