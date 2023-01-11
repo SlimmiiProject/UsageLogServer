@@ -106,7 +106,7 @@ const Contact = (): JSX.Element => {
                         <TextareaAutosize id="description" aria-label="empty textarea" placeholder={I18n.t("contact.description")}
                             minRows={8}
                             required
-                            style={{ width: 600 }}
+                            style={{ width: 600, background:"transparent", fontFamily:"Roboto", fontWeight:"bold" }}
                             onChange={event => setContactData({ ...contactData, description: event.target.value })}
                             value={contactData.description}
                         />
