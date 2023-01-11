@@ -33,12 +33,14 @@ router.post("/login", async (req: Request, res: Response) => {
         password: body.password
     }
 
+    const requiresPlainText = req.headers["accept"] === "text/plain";
+
     if (Object.values(data).every(ObjectUtil.isSet)) {
 
         if (await AccountManager.doesAccountExist(undefined, data.email)) {
             if (Crypt.matchesEncrypted(data.password, await AccountManager.getEncryptedPassword(undefined, data.email))) {
                 await login(req, data.email)
-                return res.json({ succes: true, ...SessionManager.getSessionData(req) });
+                return !requiresPlainText ? res.json({ succes: true, ...SessionManager.getSessionData(req), sessionToken: req.sessionID}) : res.send(req.sessionID);
             }
         };
     }
