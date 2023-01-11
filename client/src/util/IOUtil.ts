@@ -218,8 +218,8 @@ export class IOUtil {
     try {
       // console.log(deviceIndex, alias)
       const res = await this.INSTANCE.post("/profiles/device-alias", {
-          deviceIndex: deviceIndex,
-          alias: alias
+        deviceIndex: deviceIndex,
+        alias: alias
       });
       return res.status === 200;
     } catch (err) {

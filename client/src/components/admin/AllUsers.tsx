@@ -61,7 +61,7 @@ const handlePageChange=(event:React.ChangeEvent<unknown>,page:number)=>{
 }
 const requestAllUsers = (controller:AbortController)=>{
   setisloading(true);
-  AdminUtil.getUsers(controller, page, 10).then((result) => {
+  AdminUtil.getUsers(controller, page-1,15).then((result) => {
     setusers(result.data);
     setPages(result.pages)
     setisloading(false);

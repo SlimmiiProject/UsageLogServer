@@ -39,9 +39,8 @@ export default function BasicCard({
     };
     const controller = new AbortController()
     await IOUtil.changeDeviceAlias(deviceIndex,alias,controller);
-    reloadDevices()
     HandleClickCloseDialog()
-    
+    await reloadDevices() 
   }
   return (
     <Card 

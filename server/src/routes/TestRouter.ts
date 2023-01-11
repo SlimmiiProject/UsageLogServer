@@ -4,9 +4,6 @@ import { DataProcessor } from "../data/DataProcessing";
 import { Middleware } from "../utils/Middleware";
 const router = express.Router();
 
-router.use(SessionManager.loginRequired);
-router.use(Middleware.requireAdminpermission);
-
 /** A post request to the server. */
 router.post("/addData", async (req: Request, res: Response)=> {
     const { day, night, deviceIndex } = req.body;
