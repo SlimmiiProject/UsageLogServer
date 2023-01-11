@@ -279,6 +279,8 @@ export class DataProcessor {
     });
   };
 
+  public static getContactForms = async () => await ContactForm.find();
+
   /* A static method that returns a promise of an array of Device objects. */
   public static getAllDevices = async (skip: number, limit: number) => {
     const devices: Device[] = await Device.find({

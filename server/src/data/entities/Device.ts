@@ -44,11 +44,11 @@ export class Device extends BaseEntity {
   @IsInt()
   BatteryPercentage: number = 0;
 
-  @Column("numeric", {name: "oldDay"})
+  @Column("numeric", {name: "oldDay", default: 0})
   @IsInt()
   OldDay: number;
 
-  @Column("numeric", {name: "oldNight"})
+  @Column("numeric", {name: "oldNight", default: 0})
   @IsInt()
   OldNight: number;
 
