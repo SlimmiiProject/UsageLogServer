@@ -83,8 +83,7 @@ export class AdminUtil {
         try {
             const res = await IOUtil.INSTANCE.get("/admin/allusers/", { params: { skip: toSkip, limit: howManyPerPage}, signal: controller.signal });
             return res.data;
-        } catch (err) {
-            console.error(err);
+        } catch (_ignored) {
             return { data: [], pages: 0 };
         }
     }
@@ -93,8 +92,7 @@ export class AdminUtil {
         try {
             const res = await IOUtil.INSTANCE.get("/admin/allusers", { signal: controller.signal });
             return res.data;
-        } catch (err) {
-            console.error(err);
+        } catch (_ignored) {
             return { data: [], pages: 0 };
         }
     }
@@ -115,7 +113,7 @@ export class AdminUtil {
         try {
             const res = await IOUtil.INSTANCE.post("admin/account", { userId: userId });
             return res.data;
-        } catch (_ignore) {
+        } catch (_ignored) {
             return
         }
     }
@@ -123,8 +121,8 @@ export class AdminUtil {
         try {
             const res = await IOUtil.INSTANCE.delete("admin/account", { data: { userId: userId } });
             return res.data;
-        } catch (err) {
-            console.error(err)
+        } catch (_ignored) {
+           
         }
     }
 
@@ -132,8 +130,8 @@ export class AdminUtil {
         try {
             const res = await IOUtil.INSTANCE.put("/admin/add-device-user", { userId: userId, deviceId: deviceId });
             return res.data;
-        } catch (err) {
-            console.error(err)
+        } catch (_ignored) {
+           
         }
     }
 
