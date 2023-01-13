@@ -33,11 +33,11 @@ export const Forms = (): JSX.Element => {
   return (
     <>
     <Box className="flexbox" style={{margin:"auto", justifyContent:"center",flexDirection:"column", display:"flex", alignItems:"center" , width:"70%",height:"fit-content", backgroundColor:"rgba(0,0,0,0.0)"}}>
-    <h2>{I18n.t("logger.title")}</h2>
+    <h2>contact forms</h2>
     <TableContainer component={Paper}>
       <Table sx={{minwidth:650}} arial-label="simple table">
         <TableHead>
-          <TableCell>{I18n.t("logFile.id")}</TableCell>
+          <TableCell>form id</TableCell>
           <TableCell>date</TableCell>
           <TableCell>email</TableCell>
           <TableCell>name</TableCell>
