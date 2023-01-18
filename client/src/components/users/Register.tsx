@@ -33,6 +33,7 @@ const Register = (): JSX.Element => {
   const [error, setError] = useState<Error>();
   const [passwordMatch, setPasswordMatch] = useState<boolean>(true);
   const [landcodeError, setLandcodeError] = useState<boolean>(false);
+  const [landCode,setLandCode] = useState("+32");
   const [formData, setFormData] = useState<RegisterFormData>({
     first_name: "",
     last_name: "",
@@ -67,12 +68,12 @@ const Register = (): JSX.Element => {
           phone_number: (phone += formData.phone_number.slice(1)),
         };
       });
-
+      formData.landcode=landCode;
     if (formData.landcode !== "") {
       if (formData.landcode.startsWith("+")) {
         phone = formData.landcode + formData.phone_number;
       } else if (formData.landcode[0] === "0" && formData.landcode[1] === "0") {
-        phone = "+" + formData.landcode.slice(2) + formData.phone_number;
+        phone = formData.landcode.slice(2) + formData.phone_number;
       }
     } else {
       setLandcodeError(true);
@@ -98,7 +99,6 @@ const Register = (): JSX.Element => {
     });
   };
 
-  const [landCode,setLandCode] = useState("+32");
 
   return (
     <Container component="main" maxWidth="xs">
