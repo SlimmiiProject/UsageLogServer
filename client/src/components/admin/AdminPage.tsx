@@ -13,6 +13,7 @@ export const AdminPage = (): JSX.Element => {
           <AdminPageOneComponent title={I18n.t("admin.allUsers")} link={location("allusers")} icon="profile" />
           <AdminPageOneComponent title={I18n.t("admin.logfile")} link={location("logfile")} icon="log" />
           <AdminPageOneComponent title={I18n.t("admin.allDevices")} link={location("alldevices")} icon="device" />
+          <AdminPageOneComponent title="placeholder" link={location("contactforms")} icon="log"/>
         </div>
       </div>
     </>

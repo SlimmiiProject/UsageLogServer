@@ -19,122 +19,125 @@ export interface ContactInfo {
 }
 
 const Contact = (): JSX.Element => {
-    const [infoMsg, setInfoMsg] = useState<string>("");
-    const [canSend, setCanSend] = useState<boolean>(true);
-    const [contactData, setContactData] = useState<ContactInfo>({ firstName: "", lastName: "", email: "", subject: "", description: "" });
+  const [infoMsg, setInfoMsg] = useState<string>("");
+  const [canSend, setCanSend] = useState<boolean>(true);
+  const [contactData, setContactData] = useState<ContactInfo>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    subject: "",
+    description: "",
+  });
 
-    return (
-        <Box sx={{ marginTop: 10, width: 600, display: 'flex', flexDirection: 'column', alignItems: 'center', margin: "auto" }} >
-            <>
-                {infoMsg !== "" && <Alert severity="info" style={{marginBottom:"1rem"}}>{I18n.t(infoMsg)}</Alert>}
+  return (
+    <Box
+      sx={{
+        marginTop: 10,
+        width: 600,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        margin: "auto",
+      }}
+    >
+      <>
+        {infoMsg !== "" && (
+          <Alert severity="info" style={{ marginBottom: "1rem" }}>
+            {I18n.t(infoMsg)}
+          </Alert>
+        )}
 
-                <Avatar sx={{ m: 1, bgcolor: 'rgba(25,118,210,255)' }}>
-                    <AssignmentIcon />
-                </Avatar>
+        <Avatar sx={{ m: 1, bgcolor: "rgba(25,118,210,255)" }}>
+          <AssignmentIcon />
+        </Avatar>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
+
+          <Grid item xs={12}>
             <TextField
               required
-              id="firstName"
-              name="firstName"
-              label={I18n.t("contact.firstname")}
+              id="email"
+              name="email"
+              label={I18n.t("contact.email")}
               fullWidth
-              autoComplete="given-name"
+              autoComplete="email"
               variant="standard"
+              onChange={(event) =>
+                setContactData({ ...contactData, email: event.target.value })
+              }
+              value={contactData.email}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              required
+              id="subject"
+              name="subject"
+              label={I18n.t("contact.subject")}
+              fullWidth
+              autoComplete="ProblemWith"
+              variant="standard"
+              onChange={(event) =>
+                setContactData({ ...contactData, subject: event.target.value })
+              }
+              value={contactData.subject}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextareaAutosize
+              id="description"
+              aria-label="empty textarea"
+              placeholder={I18n.t("contact.description")}
+              minRows={8}
+              required
+              style={{
+                width: 600,
+                background: "transparent",
+                fontFamily: "Roboto",
+                fontWeight: "bold",
+              }}
               onChange={(event) =>
                 setContactData({
                   ...contactData,
-                  firstName: event.target.value,
+                  description: event.target.value,
                 })
               }
+              value={contactData.description}
             />
           </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              id="lastName"
-              name="lastName"
-              label={I18n.t("contact.lastname")}
-              fullWidth
-              autoComplete="family-name"
-              variant="standard"
-              onChange={(event) =>
-                setContactData({ ...contactData, lastName: event.target.value })
-              }
-            />
-          </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <TextField required id="firstName" name="firstName" label={I18n.t("contact.firstname")} fullWidth
-                            autoComplete="given-name"
-                            variant="standard"
-                            onChange={event => setContactData({ ...contactData, firstName: event.target.value })}
-                            value={contactData.firstName}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <TextField required id="lastName" name="lastName" label={I18n.t("contact.lastname")} fullWidth
-                            autoComplete="family-name"
-                            variant="standard"
-                            onChange={event => setContactData({ ...contactData, lastName: event.target.value })}
-                            value={contactData.lastName}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <TextField required id="email" name="email" label={I18n.t("contact.email")} fullWidth
-                            autoComplete="email"
-                            variant="standard"
-                            onChange={event => setContactData({ ...contactData, email: event.target.value })}
-                            value={contactData.email}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <TextField required id="subject" name="subject" label={I18n.t("contact.subject")} fullWidth
-                            autoComplete="ProblemWith"
-                            variant="standard"
-                            onChange={event => setContactData({ ...contactData, subject: event.target.value })}
-                            value={contactData.subject}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <TextareaAutosize id="description" aria-label="empty textarea" placeholder={I18n.t("contact.description")}
-                            minRows={8}
-                            required
-                            style={{ width: 600, background:"transparent", fontFamily:"Roboto", fontWeight:"bold" }}
-                            onChange={event => setContactData({ ...contactData, description: event.target.value })}
-                            value={contactData.description}
-                        />
-                    </Grid>
-                    <Button type="submit" sx={{ mt: 2, mb: 2, bgcolor: 'rgba(25,118,210,255)', color: "white" }}
-                        style={{ width: 600, marginLeft: 23, }}
-                        disabled={!canSend}
-                        onClick={() => {
-                            setCanSend(false);
-                            IOUtil.sendContactData(contactData).then(() => {
-                                setCanSend(true);
-                                setInfoMsg("message.sent-contact")
-                                setContactData({
-                                    firstName: "",
-                                    lastName: "",
-                                    email: "",
-                                    subject: "",
-                                    description: ""
-                                });
-                            });
-                        }}
-                    >
-                        {I18n.t("contact.send")}
-                    </Button>
-                </Grid>
-            </>
-        </Box>
-    );
+          <Button
+            type="submit"
+            sx={{
+              mt: 2,
+              mb: 2,
+              bgcolor: "rgba(25,118,210,255)",
+              color: "white",
+            }}
+            style={{ width: 600, marginLeft: 23 }}
+            disabled={!canSend}
+            onClick={() => {
+              setCanSend(false);
+              IOUtil.sendContactData(contactData).then(() => {
+                setCanSend(true);
+                setInfoMsg("message.sent-contact");
+                setContactData({
+                  firstName: "",
+                  lastName: "",
+                  email: "",
+                  subject: "",
+                  description: "",
+                });
+              });
+            }}
+          >
+            {I18n.t("contact.send")}
+          </Button>
+        </Grid>
+      </>
+    </Box>
+  );
 };
 
 export default Contact;
