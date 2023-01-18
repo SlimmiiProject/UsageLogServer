@@ -35,6 +35,8 @@ export class App {
 
     private setup = async () => {
         await DatabaseConnector.INSTANCE.initialize();
+
+        
     }
 
     private appSetup = () => {

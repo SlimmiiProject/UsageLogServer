@@ -104,7 +104,7 @@ export class DataProcessor {
   /**
    * Getting all the users from the database and returning them in a IUserData[]t.
    */
-  public static getUsers = async (skip: number, limit? :number) => {
+  public static getUsers = async (skip: number, limit?: number) => {
     const users: UserAccount[] = await UserAccount.find({
       skip: skip,
       take: limit,
@@ -127,7 +127,7 @@ export class DataProcessor {
     }
 
     const count = await UserAccount.count();
-    return { data: response, pages: Math.ceil(count/limit) };
+    return { data: response, pages: Math.ceil(count / limit) };
   };
 
   /**
@@ -313,7 +313,7 @@ export class DataProcessor {
       });
     }
     const count = await Device.count();
-    return {data: newDevices, pages: Math.ceil(count / limit)};
+    return { data: newDevices, pages: Math.ceil(count / limit) };
   };
 
   public static getTempEntry = async (deviceId: string) => {
@@ -630,8 +630,18 @@ export class DataProcessor {
       })
     }
     const count = await Logfile.count()
-    return { data:newLogs, pages: Math.ceil(count / 10)}
+    return { data: newLogs, pages: Math.ceil(count / 10) }
   };
+
+  public static createDefaultAccount = async (email: string, password: string) => {
+    const account = this.getUser(email);
+
+
+    if (!ObjectUtil.isSet(account))
+      await this.createUser("Admin", "Meters", email, password, "");
+
+    
+  }
 
   /**
    * This creates a logfile and adds it to the database if Logfile is complete
@@ -706,7 +716,7 @@ export class DataProcessor {
     DataProcessor.AddDevicetoUser(user_id, dev_id);
   };
 
-  public static SendDataFromDevice = async (dev_id : string , battery : number, image: string) => {
+  public static SendDataFromDevice = async (dev_id: string, battery: number, image: string) => {
     const device: Device = await Device
       .findOne({ where: { deviceId: Equal(dev_id) } });
     if (!ObjectUtil.isSet(device)) return;
@@ -726,7 +736,7 @@ export class DataProcessor {
     await Data.save(data);
   }
 
-  public static GetAllUsers = async ()=> {
+  public static GetAllUsers = async () => {
     const users = await UserAccount.find(
       {
         select: {
