@@ -1,3 +1,4 @@
+import { DataProcessor } from './data/DataProcessing';
 import express, { Request, Response, Router } from "express";
 
 import { Express } from "express-serve-static-core";
@@ -36,7 +37,9 @@ export class App {
     private setup = async () => {
         await DatabaseConnector.INSTANCE.initialize();
 
-        
+        // Create root account
+        const {email, password} = Environment.CONFIG.rootAccount;
+        await DataProcessor.createDefaultAccount(email, password);
     }
 
     private appSetup = () => {

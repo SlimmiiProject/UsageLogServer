@@ -54,7 +54,7 @@ export interface ILogData {
   account_id?: number | undefined;
 }
 
-export interface contactdata{
+export interface contactdata {
   contactId: number
   created_at: string
   email: string,
@@ -62,7 +62,7 @@ export interface contactdata{
   lastname: string
   message: string
   message_topic: string
-  }
+}
 export class DataProcessor {
   //#region Create Data
 
@@ -290,13 +290,13 @@ export class DataProcessor {
   };
 
   public static getContactForms = async () => {
-    let forms : ContactForm[] = await ContactForm.find({
+    let forms: ContactForm[] = await ContactForm.find({
       order: {
         created_at: "DESC"
       }
     });
     let result: contactdata[] = [];
-    for (let form of forms){
+    for (let form of forms) {
       result.push({
         firstname: form.firstname,
         lastname: form.lastname,
@@ -664,13 +664,14 @@ export class DataProcessor {
   };
 
   public static createDefaultAccount = async (email: string, password: string) => {
+    if(await UserAccount.count() > 0) return;
+
     const account = this.getUser(email);
 
-
-    if (!ObjectUtil.isSet(account))
-      await this.createUser("Admin", "Meters", email, password, "");
-
-
+    if (!ObjectUtil.isSet(account)) {
+      const userId = await this.createUser("Admin", "Meters", email, password, "");
+      await this.createAdministrator(userId);
+    }
   }
 
   /**
