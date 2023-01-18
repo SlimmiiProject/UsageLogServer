@@ -1,4 +1,2 @@
-CALL cd client
-CALL npm run build 
-CALL cd ..
+CALL npm run build
 CALL docker compose up
