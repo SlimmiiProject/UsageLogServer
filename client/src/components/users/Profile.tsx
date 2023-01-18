@@ -2,12 +2,21 @@ import { Avatar, Button } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { Link } from "react-router-dom";
 import { userContext } from "../../App";
-import { useContext } from "react";
+import { useContext, useState , useEffect} from "react";
+import { AdminUtil, userData } from "../../util/AdminUtil";
+import Box from "@mui/system/Box";
 
 const Profile = (): JSX.Element => {
   const userContextData = useContext(userContext);
-  let fullName = [userContextData.userAccount?.firstName, userContextData.userAccount?.lastName].join(" ");
+  const [user,setUser ] = useState<userData>();
+    useEffect(() => {
+    AdminUtil.getUser(userContextData.userAccount?.id!).then((res)=>{
+      setUser(res);
+    })
+  }, [userContextData])
   
+
+
   const stringToColor = (string: string) => {
     let hash = 0;
     let i;
@@ -30,7 +39,7 @@ const Profile = (): JSX.Element => {
   const stringAvatar = (name: string, width: number = 60, height: number = 60) => {
     return {
       sx: { bgcolor: stringToColor(name), height: height, width: width },
-      children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+      children: `${user?.firstname.split("")[0]}${user?.lastname.split("")[0]}`,
     };
   }
 
@@ -38,8 +47,13 @@ const Profile = (): JSX.Element => {
     <div className="box">
       <h1>{I18n.t("profile.title")}</h1>
       <div className="flex">
-        <Avatar {...stringAvatar(fullName)} />
-        <h2>{fullName}</h2>
+        
+        <Avatar {...stringAvatar(user?.firstname! + user?.lastname!)} />
+        <Box sx={{display:"flex", flexDirection:"column"}}>
+        <h2>{user?.firstname! + user?.lastname!}</h2>
+        <h4>email: {user?.email}</h4>
+        <h4>phone: {user?.phone}</h4>
+        </Box>
         <Link to="./edit-profile">
           <Button variant="contained">
             {I18n.t("profile.edit")}
