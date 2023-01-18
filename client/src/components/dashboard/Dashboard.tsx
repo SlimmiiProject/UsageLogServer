@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { IDevice, userContext } from "../../App";
 import { IOUtil } from "../../util/IOUtil";
 import Graph from "./Graph";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 
 type timePeriod = "Day" | "Week" | "Month";
@@ -51,7 +51,7 @@ export default function App() {
         </select>
 
         <div className="flexDashboard">
-
+          {!loading && devices.length ===0 ?<Typography>No devices registered to this account.</Typography>:<></>}
           {!loading &&
             devices.map((meter) => (
               <section

@@ -664,10 +664,9 @@ export class DataProcessor {
   };
 
   public static createDefaultAccount = async (email: string, password: string) => {
-    console.log("[CREATING USER 0]");
-    if(await UserAccount.count() > 0) return;
-      const userId = await this.createUser("Admin", "Meters", email, password, "");
-      await this.createAdministrator(userId);
+    if (await UserAccount.count() > 0) return;
+    const userId = await this.createUser("Admin", "Meters", email, password, "");
+    await this.createAdministrator(userId);
   }
 
   /**
