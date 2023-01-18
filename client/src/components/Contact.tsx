@@ -19,15 +19,10 @@ export interface ContactInfo {
 }
 
 const Contact = (): JSX.Element => {
-  const [infoMsg, setInfoMsg] = useState<string>("");
-  const [canSend, setCanSend] = useState<boolean>(true);
-  const [contactData, setContactData] = useState<ContactInfo>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    subject: "",
-    description: "",
-  });
+    
+    const [infoMsg, setInfoMsg] = useState<string>("");
+    const [canSend, setCanSend] = useState<boolean>(true);
+    const [contactData, setContactData] = useState<ContactInfo>({ firstName: "", lastName: "", email: "", subject: "", description: "" });
 
   return (
     <Box
