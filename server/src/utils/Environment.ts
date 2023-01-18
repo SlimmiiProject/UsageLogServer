@@ -46,6 +46,11 @@ export class Environment {
 
             google: {
                 client_id: process.env.GOOGLE_CLIENT_ID
+            },
+
+            rootAccount: {
+                email: process.env.ROOT_EMAIL,
+                password: process.env.ROOT_PASSWORD
             }
         }
     }
