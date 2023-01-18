@@ -15,7 +15,7 @@
     "client:merge": "xcopy /e /v /y .\\client\\build\\ .\\server\\public\\",
     "tsc": "tsc",
     "start-linux": "npm run build-linux && npm run server",
-    "build-linux": "npm run build:server && npm run client-linux:merge",
+    "build-linux": "npm run build:server && npm run client-linux:merge ",
     "client-linux:merge": "cp -r ./client/build/ ./server/public/"
   },
   "repository": {
