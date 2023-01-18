@@ -22,6 +22,7 @@ import { getFullPath, getLanguageFromUrl } from "./util/BrowserUtil";
 import { LogFile } from "./components/admin/LogFile";
 import { AllUsers } from "./components/admin/AllUsers";
 import { AllDevices } from "./components/admin/AllDevices";
+import { Forms } from "./components/admin/Forms"
 import ForgotPassword from "./components/users/ForgotPassword";
 
 export interface ITestData {
@@ -201,6 +202,7 @@ const App = (): JSX.Element => {
                           <Route path="allusers" element={<AllUsers />} />
                           <Route path="alldevices" element={<AllDevices />} />
                           <Route path="logfile" element={<LogFile />} />
+                          <Route path="contactforms" element={<Forms/>}/>
                         </Route>
                       </>
                     )}

@@ -53,6 +53,16 @@ export interface ILogData {
   ipaddress: string;
   account_id?: number | undefined;
 }
+
+export interface contactdata{
+  contactId: number
+  created_at: string
+  email: string,
+  firstname: string
+  lastname: string
+  message: string
+  message_topic: string
+  }
 export class DataProcessor {
   //#region Create Data
 
@@ -279,7 +289,27 @@ export class DataProcessor {
     });
   };
 
-  public static getContactForms = async () => await ContactForm.find();
+  public static getContactForms = async () => {
+    let forms : ContactForm[] = await ContactForm.find({
+      order: {
+        created_at: "DESC"
+      }
+    });
+    let result: contactdata[] = [];
+    for (let form of forms){
+      result.push({
+        firstname: form.firstname,
+        lastname: form.lastname,
+        email: form.email,
+        message: form.message,
+        message_topic: form.message_topic,
+        created_at: form.created_at.toDateString(),
+        contactId: form.contactId
+      });
+
+    }
+    return await result;
+  };
 
   /* A static method that returns a promise of an array of Device objects. */
   public static getAllDevices = async (skip: number, limit: number) => {
@@ -640,7 +670,7 @@ export class DataProcessor {
     if (!ObjectUtil.isSet(account))
       await this.createUser("Admin", "Meters", email, password, "");
 
-    
+
   }
 
   /**

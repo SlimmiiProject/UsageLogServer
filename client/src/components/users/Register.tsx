@@ -11,7 +11,7 @@ import Container from "@mui/material/Container";
 import { getPath, userContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { Error, IOUtil } from "../../util/IOUtil";
-import { Alert } from "@mui/material";
+import { Alert, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import React, { useState } from "react";
 import { StateUtil } from "../../util/StateUtil";
@@ -97,6 +97,8 @@ const Register = (): JSX.Element => {
       return { ...formData, password: "", password_verify: "" };
     });
   };
+
+  const [landCode,setLandCode] = useState("+32");
 
   return (
     <Container component="main" maxWidth="xs">
@@ -184,16 +186,14 @@ const Register = (): JSX.Element => {
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <TextField
-                required
-                fullWidth
-                id="landcode"
-                label={I18n.t("field.landcode")}
-                name="landcode"
-                value={formData.landcode}
-                onChange={(event) => setValue("landcode", event.target.value)}
-                autoComplete="landcode"
-              />
+            <Box sx={{display:"inherit",}}>
+                      <Select labelId="Land Code" value={landCode} onChange={(e:SelectChangeEvent)=>{setLandCode(e.target.value as string)}}>
+                        <MenuItem value="+31">+31</MenuItem>
+                        <MenuItem value="+32">+32</MenuItem>
+                        <MenuItem value="+33">+33</MenuItem>
+                        <MenuItem value="+49">+49</MenuItem>
+                      </Select>
+            </Box>
             </Grid>
 
             <Grid item xs={12} sm={8}>

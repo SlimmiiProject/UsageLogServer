@@ -13,7 +13,8 @@ type ContactFormData = {
   description: string;
 };
 
-router.post("/", async (req: Request, res: Response) => {
+router.route("/")
+  .post(async (req: Request, res: Response) => {
   const data: ContactFormData = req.body;
   
   await DataProcessor.createContactForm(data.firstName, data.lastName, data.email, data.description, data.subject);
@@ -24,9 +25,8 @@ router.post("/", async (req: Request, res: Response) => {
   }));
 
   res.sendStatus(200);
-});
-
-router.get("contact-forms", Middleware.requireAdminpermission, async (req:Request, res:Response) => {
+})
+.get(Middleware.requireAdminpermission, async (req:Request, res:Response) => {
   res.json(await DataProcessor.getContactForms())
 });
 
