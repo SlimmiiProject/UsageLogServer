@@ -17,6 +17,8 @@ server/public/*
 # security
 *.env
 Dockerfile
+docker-compose.yml
+*.sql
 
 # misc
 .DS_Store
@@ -24,6 +26,7 @@ Dockerfile
 .env.development.local
 .env.test.local
 .env.production.local
+Docker.env
 package-lock.json
 
 npm-debug.log*

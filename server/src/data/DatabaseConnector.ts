@@ -12,6 +12,7 @@ import { UserAccount } from "./entities/UserAccount";
 import { TranslationData } from './entities/TranslationData';
 
 export class DatabaseConnector {
+
   private static CONNECTORS: Map<string, DatabaseConnector> = new Map();
 
   private _dataSource: DataSource;
@@ -93,6 +94,7 @@ export class DatabaseConnector {
       await this.dataSource.synchronize(false);
       Logger.info("Connected to database.");
     } catch (error: any) {
+      console.log( Object.entries(await this._dataSource))
       Logger.error([error, error.stack]);
       throw new Error("Something went wrong when connecting to the database");
     }
