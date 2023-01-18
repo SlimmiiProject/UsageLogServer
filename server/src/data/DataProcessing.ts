@@ -664,14 +664,9 @@ export class DataProcessor {
   };
 
   public static createDefaultAccount = async (email: string, password: string) => {
-    if(await UserAccount.count() > 0) return;
-
-    const account = this.getUser(email);
-
-    if (!ObjectUtil.isSet(account)) {
-      const userId = await this.createUser("Admin", "Meters", email, password, "");
-      await this.createAdministrator(userId);
-    }
+    if (await UserAccount.count() > 0) return;
+    const userId = await this.createUser("Admin", "Meters", email, password, "");
+    await this.createAdministrator(userId);
   }
 
   /**
