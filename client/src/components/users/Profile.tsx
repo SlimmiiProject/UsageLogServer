@@ -1,4 +1,4 @@
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Button, CircularProgress } from "@mui/material";
 import { I18n } from "../../util/language/I18n";
 import { Link } from "react-router-dom";
 import { userContext } from "../../App";
@@ -47,8 +47,9 @@ const Profile = (): JSX.Element => {
     <div className="box">
       <h1>{I18n.t("profile.title")}</h1>
       <div className="flex">
-        
-        <Avatar {...stringAvatar(user?.firstname! + user?.lastname!)} />
+        {user ? (
+          <>
+          <Avatar {...stringAvatar(user?.firstname! + user?.lastname!)} />
         <Box sx={{display:"flex", flexDirection:"column"}}>
         <h2>{user?.firstname! + user?.lastname!}</h2>
         <h4>email: {user?.email}</h4>
@@ -59,6 +60,9 @@ const Profile = (): JSX.Element => {
             {I18n.t("profile.edit")}
           </Button>
         </Link>
+          </>
+        ):<CircularProgress/>}
+        
       </div>
     </div>
   );
