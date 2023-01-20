@@ -11,6 +11,7 @@ import path from "path";
 import bodyParser from "body-parser";
 import { SessionManager } from "./accounts/SessionManager";
 import session from 'express-session';
+import { Console } from 'console';
 
 const cors = require("cors");
 const { server_port, url, developmentEnv } = Environment.CONFIG;
@@ -29,6 +30,7 @@ export class App {
     private constructor() {
         this._app = express();
         this.setup();
+        console.info("SETTING UP");
         this.appSetup();
         this.setupSession();
         this.setupRoutes();
@@ -39,6 +41,7 @@ export class App {
 
         // Create root account
         const {email, password} = Environment.CONFIG.rootAccount;
+        console.info("[Creating user from " + email + " " + password+ "]" );
         await DataProcessor.createDefaultAccount(email, password);
     }
 
