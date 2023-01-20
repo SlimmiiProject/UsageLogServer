@@ -37,12 +37,12 @@ export const Forms = (): JSX.Element => {
     <TableContainer component={Paper}>
       <Table sx={{minwidth:650}} arial-label="simple table">
         <TableHead>
-          <TableCell>form id</TableCell>
-          <TableCell>date</TableCell>
-          <TableCell>email</TableCell>
-          <TableCell>name</TableCell>
-          <TableCell>topic</TableCell>
-          <TableCell>message</TableCell>
+          <TableCell>{I18n.t("forms.id")}</TableCell>
+          <TableCell>{I18n.t("forms.date")}</TableCell>
+          <TableCell>{I18n.t("forms.email")}</TableCell>
+          <TableCell>{I18n.t("forms.name")}</TableCell>
+          <TableCell>{I18n.t("forms.topic")}</TableCell>
+          <TableCell>{I18n.t("forms.message")}</TableCell>
         </TableHead>
 
         <TableBody>

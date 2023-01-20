@@ -138,5 +138,11 @@
   "passwordReset.noMatch": "Passwords don't match",
   "passwordReset.resetSuccesfull": "Password reset successfully",
   "passwordReset.resetFail": "Password reset failed",
-  "message.sent-contact": "Your contact form has been submitted"
+  "message.sent-contact": "Your contact form has been submitted",
+  "forms.id": "form id",
+  "forms.date": "date",
+  "forms.email": "email",
+  "forms.name": "name",
+  "forms.topic": "topic",
+  "forms.message": "message"
 }

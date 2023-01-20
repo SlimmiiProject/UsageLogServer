@@ -129,5 +129,11 @@
   "forgotPassword.verify": "Vérifier le mot de passe",
   "passwordReset.noMatch": "Les mots de passe ne correspondent pas",
   "passwordReset.resetSuccesfull": "Mot de passe réinitialisé avec succès",
-  "passwordReset.resetFail": "La réinitialisation du mot de passe a échoué"
+  "passwordReset.resetFail": "La réinitialisation du mot de passe a échoué",
+  "forms.id": "id du formulaire",
+  "forms.date": "date",
+  "forms.email": "email",
+  "forms.name": "nom",
+  "forms.topic": "sujet",
+  "forms.message": "message"
 }

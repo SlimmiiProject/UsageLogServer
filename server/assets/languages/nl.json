@@ -136,5 +136,11 @@
   "passwordReset.noMatch": "Wachtwoorden komen niet overeen",
   "passwordReset.resetSuccesfull": "Wachtwoord opnieuw ingesteld",
   "passwordReset.resetFail": "Wachtwoord resetten mislukt",
-  "message.sent-contact": "Je Contactformulier is verstuurd"
+  "message.sent-contact": "Je Contactformulier is verstuurd",
+  "forms.id": "form id",
+  "forms.date": "datum",
+  "forms.email": "email",
+  "forms.name": "naam",
+  "forms.topic": "onderwerp",
+  "forms.message": "bericht"
 }
