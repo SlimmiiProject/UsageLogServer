@@ -7,27 +7,22 @@ import { User } from '../types/express-session';
 import { DateUtil, Period } from '../utils/DateUtil';
 import {PythonShell} from 'python-shell';
 import { ObjectUtil } from '../utils/ObjectUtil';
+import { MeterEntryProcessor } from '../data/processors/MeterEntryProcessor';
 
 const router = express.Router();
 router.use(SessionManager.loginRequired);
 
 router.post("/raw-meter-entry", (req: Request, res: Response) => {
     // TODO Redirect Raw Base64 image to local Python OCR Program
-    /*const imageBase64 = req.body.image;
-    if (imageBase64 && RegExpVal.validate(imageBase64, RegExpVal.base64Encoded)) {
-        PythonShell.run(__dirname+'/test.py', null, function (err: any) {
-            if (err) throw err;
-            console.log('finished');
-          });
-    }*/
     PythonShell.run(__dirname+'/test.py', null, function (err: any) {
         if (err) throw err;
-        console.log('finished');
       });
 });
 
 interface MeterEntryData {
     device_id: string;
+    day: number;
+    night: number;
 }
 
 router.post("/meter-entry", async (req: Request, res: Response) => {
@@ -35,6 +30,10 @@ router.post("/meter-entry", async (req: Request, res: Response) => {
 
     if (!Object.values(data).every(ObjectUtil.isSet))
         return res.json({ error: true });
+
+    const meterEntry = new MeterEntryProcessor(data.device_id, data.day, data.night);
+    await meterEntry.process();
+    res.sendStatus(200);
 });
 
 
