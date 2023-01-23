@@ -1,5 +1,5 @@
 import { IsDefined, IsInt, IsOptional, Length } from "class-validator";
-import { Entity, BaseEntity, PrimaryGeneratedColumn, PrimaryColumn, OneToMany, JoinColumn, Column, ManyToOne } from "typeorm";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, PrimaryColumn, OneToMany, JoinColumn, Column, ManyToOne, Equal } from "typeorm";
 import { Data } from "./Data";
 import { TemporaryData } from "./TemporaryData";
 import { UserAccount } from "./UserAccount";
@@ -8,10 +8,17 @@ import { UserAccount } from "./UserAccount";
 export class Device extends BaseEntity {
 
   public static createDevice = (deviceId: string, friendlyName?: string) => {
+    const deviceExists = Device.findOne({ 
+      where: {
+        deviceId: Equal(deviceId)
+      }
+      });
+    if (!deviceExists) {
     const device: Device = new Device();
     device.deviceId = deviceId;
     if (friendlyName) device.setFriendlyName(friendlyName);
     return device;
+    }
   }
 
   @PrimaryGeneratedColumn({ name: "device_index" })
