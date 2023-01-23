@@ -51,7 +51,7 @@ const Profile = (): JSX.Element => {
           <>
           <Avatar {...stringAvatar(user?.firstname! + user?.lastname!)} />
         <Box sx={{display:"flex", flexDirection:"column"}}>
-        <h2>{user?.firstname! + user?.lastname!}</h2>
+        <h2>{user?.firstname! +" "+ user?.lastname!}</h2>
         <h4>{I18n.t("field.email")}: {user?.email}</h4>
         <h4>{I18n.t("field.phone_number")}: {user?.phone}</h4>
         </Box>
