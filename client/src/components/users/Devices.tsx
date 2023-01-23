@@ -28,7 +28,6 @@ const Devices = (): JSX.Element => {
         {I18n.t("devices.devicemanager")}
         </Typography>
         <Typography variant="h6" marginLeft="1rem">
-        {I18n.t("devices.sample")}
         </Typography>
       <Box sx={{display:"flex",margin:"auto",  aligntItems:"center",alignContent:"center", maxWidth:"90%", flexFlow:"wrap"}}>
         {isloading===true? (<CircularProgress/>):<></>}
