@@ -5,7 +5,7 @@
   "admin.allUsers": "Alle Benutzer",
   "admin.logfile": "Logdatei",
   "admin.allDevices": "Alle Geräte",
-  "admin.translations": "Übersetzungen",
+  "admin.contactForms": "KontaktFormulare",
   "allUsers.List": "Übersicht aller Benutzer",
   "contact.form": "Kontaktformular",
   "contact.firstname": "Vorname",
@@ -118,6 +118,7 @@
   "dashboard.month": "Monat",
   "dashboard.week": "Woche",
   "dashboard.day": "Tag",
+  "dashboard.noDevice": "Für dieses Konto sind keine Geräte registriert.",
   "assignUserDivices.assign": "Benutzerkonto dem Gerät zuweisen",
   "metercard.basicCard": "nicht festgelegt",
   "metercard.bateryData": "Keine Daten empfangen",
@@ -131,5 +132,11 @@
   "forgotPassword.verify": "Passwort bestätigen",
   "passwordReset.noMatch": "Passwörter stimmen nicht überein",
   "passwordReset.resetSuccesfull": "Passwort erfolgreich zurückgesetzt",
-  "passwordReset.resetFail": "Zurücksetzen des Passworts fehlgeschlagen"
+  "passwordReset.resetFail": "Zurücksetzen des Passworts fehlgeschlagen",
+  "forms.id": "formular-ID",
+  "forms.date": "datum",
+  "forms.email": "email",
+  "forms.name": "name",
+  "forms.topic": "thema",
+  "forms.message": "nachricht"
 }

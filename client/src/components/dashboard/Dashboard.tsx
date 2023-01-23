@@ -51,7 +51,7 @@ export default function App() {
         </select>
 
         <div className="flexDashboard">
-          {!loading && devices.length ===0 ?<Typography>No devices registered to this account.</Typography>:<></>}
+          {!loading && devices.length ===0 ?<Typography>{I18n.t("dashboard.noDevice")}</Typography>:<></>}
           {!loading &&
             devices.map((meter) => (
               <section
